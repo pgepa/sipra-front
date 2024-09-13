@@ -1,6 +1,8 @@
 import { createHashRouter } from "react-router-dom";
 import { SignIn } from '@/pages/auth/Sign-in';
 import { AuthLayout } from '@/pages/_layouts/auth';
+import { AppLayout } from '@/pages/_layouts/app';
+import { Home } from '@/pages/app/Home';
 
 
 export const Router = createHashRouter([
@@ -10,6 +12,14 @@ export const Router = createHashRouter([
         element: <AuthLayout/>,
         children: [
             { path: '/', element: <SignIn /> },
+        ],
+    },
+
+    {
+        path: '/',
+        element: <AppLayout/>,
+        children: [
+            { path: '/home', element: <Home /> },
         ],
     }
 

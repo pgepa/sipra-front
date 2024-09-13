@@ -11,7 +11,7 @@ export function AuthLayout() {
         </div>
         
 
-        <footer className="text-sm text-muted-foreground text-gray-50 text-center mt-8">
+        <footer className="text-sm text-muted text-gray-100 text-center mt-8">
           Copyright &copy; PGE-PA {new Date().getFullYear()} | DTIGD - Todos os direitos reservados. 
         </footer>
       
