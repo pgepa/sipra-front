@@ -3,6 +3,7 @@ import { SignIn } from '@/pages/auth/Sign-in';
 import { AuthLayout } from '@/pages/_layouts/auth';
 import { AppLayout } from '@/pages/_layouts/app';
 import { Home } from '@/pages/app/Home';
+import { Protesto } from '@/pages/app/Protesto';
 
 
 export const Router = createHashRouter([
@@ -20,6 +21,7 @@ export const Router = createHashRouter([
         element: <AppLayout/>,
         children: [
             { path: '/home', element: <Home /> },
+            { path: '/protesto', element: <Protesto /> },
         ],
     }
 
