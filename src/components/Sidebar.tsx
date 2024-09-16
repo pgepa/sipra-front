@@ -9,7 +9,7 @@ export function Sidebar() {
     return (
         <aside className={`bg-gray-200 p-3 relative transition-all duration-300 ${open ? 'w-64' : 'w-20'}`}>
             <ChevronFirst 
-                className={`absolute cursor-pointer right-0 top-4 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${open ? '' : 'rotate-180'}`}
+                className={`absolute cursor-pointer -right-3 top-4 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${open ? '' : 'rotate-180'}`}
                 onClick={() => setOpen(!open)} 
             />
             <nav className="space-y-2 mt-4 flex flex-col">
