@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Scale, Mails  } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Scale, Mails, CloudUpload  } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -34,12 +34,21 @@ export function Sidebar() {
                     <Mails className="h-6 w-6" />
                     {open && <span className='font-medium'>Carta Cobrança</span>}
                 </Link>
+                
                 <Link
                     to="/home"
                     className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "#" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                 >
                     <Scale className="h-6 w-6" />
                     {open && <span className='font-medium'>Ajuizamento</span>}
+                </Link>
+
+                <Link
+                    to="/home"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "#" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                >
+                    <CloudUpload className="h-6 w-6" />
+                    {open && <span className='font-medium'>Upload</span>}
                 </Link>
             </nav>
         </aside>
