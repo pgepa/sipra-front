@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Scale, Mails, CloudUpload, ChevronDown } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Scale, Mails, CloudUpload, ChevronDown, DatabaseBackup } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -59,51 +59,59 @@ export function Sidebar() {
                         <div className="ml-6 space-y-1">
                             <Link
                                 to="/upload/docs"
-                                className={`block p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/docs" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/docs" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
+                                <DatabaseBackup className="h-4 w-4" />
                                 Semas
                             </Link>
                             <Link
                                 to="/upload/images"
-                                className={`block p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/images" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/images" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
+                                <DatabaseBackup className="h-4 w-4" />
                                 Adepara
                             </Link>
                             <Link
                                 to="/upload/videos"
-                                className={`block p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
+                                <DatabaseBackup className="h-4 w-4" />
                                 Jucepa PJ
                             </Link>
 
                             <Link
                                 to="/upload/videos"
-                                className={`block p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
+                                <DatabaseBackup className="h-4 w-4" />
                                 Jucepa vínculo
                             </Link>
                             <Link
                                 to="/upload/videos"
-                                className={`block p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
+                                <DatabaseBackup className="h-4 w-4" />
                                 Detran - renach
                             </Link>
                             <Link
                                 to="/upload/videos"
-                                className={`block p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
+                                <DatabaseBackup className="h-4 w-4" />
                                 Detran - sidet
                             </Link>
                             <Link
                                 to="/upload/videos"
-                                className={`block p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
+                                <DatabaseBackup className="h-4 w-4" />
                                 Detran carga veículo
                             </Link>
                             <Link
                                 to="/upload/videos"
-                                className={`block p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
+                                <DatabaseBackup className="h-4 w-4" />
                                 Detran carga modelo
                             </Link>
                         </div>
