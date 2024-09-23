@@ -48,7 +48,7 @@ export function UploadDetranSidet() {
         <>
             <Helmet title="Detran Sidet" />
             <div className="flex justify-center items-start min-h-screen">
-                <div className="w-full max-w-lg p-8 bg-white rounded shadow-md">
+                <div className="w-full max-w-lg p-8 bg-white rounded-md shadow-md">
                     <h1 className="text-2xl text-slate-800 text-center mb-6">Upload base de dados - Detran Sidet</h1>
 
                     {/* Input para selecionar o arquivo */}
