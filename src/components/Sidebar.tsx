@@ -58,61 +58,61 @@ export function Sidebar() {
                     {uploadOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
-                                to="/upload/docs"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/docs" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/upload/semas"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/semas" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
                                 Semas
                             </Link>
                             <Link
-                                to="/upload/images"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/images" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/upload/adepara"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/adepara" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
                                 Adepara
                             </Link>
                             <Link
-                                to="/upload/videos"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/upload/jucepapj"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/jucepapj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
                                 Jucepa PJ
                             </Link>
 
                             <Link
-                                to="/upload/videos"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/upload/jucepavinculo"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/jucepavinculo" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
                                 Jucepa vínculo
                             </Link>
                             <Link
-                                to="/upload/videos"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/upload/detranrenach"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/detranrenach" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
                                 Detran - renach
                             </Link>
                             <Link
-                                to="/upload/videos"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/upload/detransidet"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/detransidet" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
                                 Detran - sidet
                             </Link>
                             <Link
-                                to="/upload/videos"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/upload/detranveiculo"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/detranveiculo" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
-                                Detran carga veículo
+                                Detran veículo
                             </Link>
                             <Link
-                                to="/upload/videos"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/videos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/upload/detranmodelo"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/detranmodelo" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
-                                Detran carga modelo
+                                Detran modelo
                             </Link>
                         </div>
                     )}
