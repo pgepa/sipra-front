@@ -4,6 +4,7 @@ import { AuthLayout } from '@/pages/_layouts/auth';
 import { AppLayout } from '@/pages/_layouts/app';
 import { Home } from '@/pages/app/Home';
 import { Protesto } from '@/pages/app/Protesto';
+import { Upload } from '@/pages/app/Upload';
 
 
 export const Router = createHashRouter([
@@ -22,6 +23,7 @@ export const Router = createHashRouter([
         children: [
             { path: '/home', element: <Home /> },
             { path: '/protesto', element: <Protesto /> },
+            { path: '/upload', element: <Upload /> },
         ],
     }
 

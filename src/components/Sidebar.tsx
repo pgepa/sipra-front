@@ -44,8 +44,8 @@ export function Sidebar() {
                 </Link>
 
                 <Link
-                    to="/home"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "#" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    to="/upload"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                 >
                     <CloudUpload className="h-6 w-6" />
                     {open && <span className='font-medium'>Upload</span>}
