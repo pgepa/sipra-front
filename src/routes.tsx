@@ -7,7 +7,7 @@ import { Protesto } from '@/pages/app/Protesto';
 import { UploadSemas } from '@/pages/app/UploadSemas';
 import { UploadAdepara } from '@/pages/app/UploadAdepara';
 import { UploadJucepaPj } from '@/pages/app/UploadJucepaPj';
-import { UploadJucepaVínculo } from '@/pages/app/UploadJucepaVinculo';
+import { UploadJucepaVinculo } from '@/pages/app/UploadJucepaVinculo';
 import { UploadDetranRenach } from '@/pages/app/UploadDetranRenach';
 import { UploadDetranSidet } from '@/pages/app/UploadDetranSidet';
 import { UploadDetranCargaVeiculo } from '@/pages/app/UploadDetranVeiculo';
@@ -37,7 +37,7 @@ export const Router = createHashRouter([
             { path: '/upload/semas', element: <UploadSemas /> },
             { path: '/upload/adepara', element: <UploadAdepara /> },
             { path: '/upload/jucepapj', element: <UploadJucepaPj /> },
-            { path: '/upload/jucepavinculo', element: <UploadJucepaVínculo /> },
+            { path: '/upload/jucepavinculo', element: <UploadJucepaVinculo /> },
             { path: '/upload/detranrenach', element: <UploadDetranRenach /> },
             { path: '/upload/detransidet', element: <UploadDetranSidet /> },
             { path: '/upload/detranveiculo', element: <UploadDetranCargaVeiculo /> },
