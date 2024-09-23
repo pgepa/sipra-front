@@ -1,5 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
+import BarLoader from "react-spinners/BarLoader";
+import { Button } from '@/components/ui/button';
 
 export function UploadSemas() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null); 
@@ -142,18 +144,18 @@ export function UploadSemas() {
                     )}
 
                     {isLoading && (
-                        <div className="mb-4">
-                            <p className="text-blue-600 font-medium">Carregando... Aguarde.</p>
+                        <div className="mb-4 w-full flex items-center">
+                            <BarLoader className='flex-grow' color="#9655eb" />
                         </div>
                     )}
 
-                    <button
+                    <Button
                         onClick={handleSubmit}
                         disabled={isLoading} 
-                        className="w-full py-2 px-4 bg-indigo-600 text-white text-sm font-medium rounded hover:bg-indigo-700 disabled:opacity-50"
+                        className="w-full py-2 px-4 text-sm font-medium rounded-lg disabled:opacity-50"
                     >
                         Enviar Arquivo
-                    </button>
+                    </Button>
                 </div>
             </div>
         </>

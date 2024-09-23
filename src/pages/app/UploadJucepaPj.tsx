@@ -1,13 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
+import BarLoader from 'react-spinners/BarLoader';
+import { Button } from '@/components/ui/button';
 
 export function UploadJucepaPj() {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null); 
-    const [fileName, setFileName] = useState<string | null>(null); 
-    const [uploadProgress, setUploadProgress] = useState<number>(0); 
-    const [uploadSuccess, setUploadSuccess] = useState<boolean>(false); 
-    const [uploadError, setUploadError] = useState<boolean>(false); 
-    const [isLoading, setIsLoading] = useState<boolean>(false); 
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [fileName, setFileName] = useState<string | null>(null);
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
+    const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
+    const [uploadError, setUploadError] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -16,7 +18,7 @@ export function UploadJucepaPj() {
             setFileName(file.name);
             setUploadSuccess(false);
             setUploadProgress(0);
-            setUploadError(false); 
+            setUploadError(false);
         }
     };
 
@@ -25,7 +27,7 @@ export function UploadJucepaPj() {
         setFileName(null);
         setUploadProgress(0);
         setUploadSuccess(false);
-        setUploadError(false); 
+        setUploadError(false);
     };
 
     const handleSubmit = async () => {
@@ -142,18 +144,18 @@ export function UploadJucepaPj() {
                     )}
 
                     {isLoading && (
-                        <div className="mb-4">
-                            <p className="text-blue-600 font-medium">Carregando... Aguarde.</p>
+                        <div className="mb-4 w-full flex items-center">
+                            <BarLoader className='flex-grow' color="#9655eb" />
                         </div>
                     )}
 
-                    <button
+                    <Button
                         onClick={handleSubmit}
-                        disabled={isLoading} 
-                        className="w-full py-2 px-4 bg-indigo-600 text-white text-sm font-medium rounded hover:bg-indigo-700 disabled:opacity-50"
+                        disabled={isLoading}
+                        className="w-full py-2 px-4  text-white text-sm font-medium rounded-lg disabled:opacity-50"
                     >
                         Enviar Arquivo
-                    </button>
+                    </Button>
                 </div>
             </div>
         </>
