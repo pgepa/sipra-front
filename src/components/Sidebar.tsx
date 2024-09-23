@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Scale, Mails, CloudUpload, ChevronDown, TreePine } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Scale, Mails, CloudUpload, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
