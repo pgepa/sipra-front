@@ -12,6 +12,8 @@ import { UploadDetranRenach } from '@/pages/app/UploadDetranRenach';
 import { UploadDetranSidet } from '@/pages/app/UploadDetranSidet';
 import { UploadDetranCargaVeiculo } from '@/pages/app/UploadDetranVeiculo';
 import { UploadDetranModelo } from '@/pages/app/UploadDetranModelo';
+import { CartaCobranca } from '@/pages/app/CartaCobranca';
+import { Ajuizamento } from '@/pages/app/Ajuizamento';
 
 
 export const Router = createHashRouter([
@@ -30,6 +32,8 @@ export const Router = createHashRouter([
         children: [
             { path: '/home', element: <Home /> },
             { path: '/protesto', element: <Protesto /> },
+            { path: '/cartacobranca', element: <CartaCobranca /> },
+            { path: '/ajuizamento', element: <Ajuizamento /> },
             { path: '/upload/semas', element: <UploadSemas /> },
             { path: '/upload/adepara', element: <UploadAdepara /> },
             { path: '/upload/jucepapj', element: <UploadJucepaPj /> },

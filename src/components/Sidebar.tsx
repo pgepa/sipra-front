@@ -29,16 +29,16 @@ export function Sidebar() {
                     {open && <span className='font-medium'>Protesto</span>}
                 </Link>
                 <Link
-                    to="/home"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "#" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    to="/cartacobranca"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                 >
                     <Mails className="h-6 w-6" />
                     {open && <span className='font-medium'>Carta Cobrança</span>}
                 </Link>
                 
                 <Link
-                    to="/home"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "#" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    to="/ajuizamento"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                 >
                     <Scale className="h-6 w-6" />
                     {open && <span className='font-medium'>Ajuizamento</span>}
