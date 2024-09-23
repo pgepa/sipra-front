@@ -92,7 +92,7 @@ export function UploadJucepaPj() {
             <Helmet title="Jucepa PJ" />
             <div className="flex justify-center items-start min-h-screen">
                 <div className="w-full max-w-lg p-8 bg-white rounded-md shadow-md">
-                    <h1 className="text-2xl text-slate-800 text-center mb-6">Upload base de dados - JUCEPA</h1>
+                    <h1 className="text-2xl font-semibold text-slate-800 text-center mb-6">Upload base de dados - JUCEPA</h1>
 
                     <div className="mb-4">
                         <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700">
@@ -103,7 +103,7 @@ export function UploadJucepaPj() {
                             type="file"
                             accept=".csv, .xlsx, .xls"
                             onChange={handleFileChange}
-                            className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                            className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                         />
                     </div>
 
@@ -123,11 +123,11 @@ export function UploadJucepaPj() {
                         <div className="mb-4">
                             <div className="w-full bg-gray-200 rounded-full h-2.5">
                                 <div
-                                    className="bg-indigo-600 h-2.5 rounded-full"
+                                    className="bg-violet-600 h-2.5 rounded-full"
                                     style={{ width: `${uploadProgress}%` }}
                                 ></div>
                             </div>
-                            <p className="text-sm text-gray-700 mt-1">{uploadProgress}% enviado</p>
+                            <p className="text-sm font-semibold text-gray-700 mt-1">{uploadProgress}% enviado</p>
                         </div>
                     )}
 
