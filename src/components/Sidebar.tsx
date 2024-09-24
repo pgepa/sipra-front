@@ -50,7 +50,7 @@ export function Sidebar() {
                         className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/upload") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
                         <CloudUpload className="h-6 w-6" />
-                        {open && <span className='font-medium'>Upload</span>}
+                        {open && <span className='font-medium'>Upload Database</span>}
                         {open && <ChevronDown className={`ml-auto transition-transform ${uploadOpen ? "rotate-180" : ""}`} />}
                     </button>
 
