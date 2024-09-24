@@ -84,35 +84,35 @@ export function Sidebar() {
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/jucepavinculo" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
-                                Jucepa vínculo
+                                Jucepa Vínculo
                             </Link>
                             <Link
                                 to="/upload/detranrenach"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/detranrenach" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
-                                Detran - renach
+                                Detran - Renach
                             </Link>
                             <Link
                                 to="/upload/detransidet"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/detransidet" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
-                                Detran - sidet
+                                Detran - Sidet
                             </Link>
                             <Link
                                 to="/upload/detranveiculo"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/detranveiculo" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
-                                Detran veículo
+                                Detran - Veículo
                             </Link>
                             <Link
                                 to="/upload/detranmodelo"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/detranmodelo" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <DatabaseBackup className="h-4 w-4" />
-                                Detran modelo
+                                Detran - Modelo
                             </Link>
                         </div>
                     )}
