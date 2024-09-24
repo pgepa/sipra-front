@@ -1,15 +1,16 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
-import BarLoader from 'react-spinners/BarLoader';
+import BarLoader from "react-spinners/BarLoader";
 import { Button } from '@/components/ui/button';
+import { api } from '@/lib/axios';
 
 export function UploadJucepaPj() {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [fileName, setFileName] = useState<string | null>(null);
-    const [uploadProgress, setUploadProgress] = useState<number>(0);
-    const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
-    const [uploadError, setUploadError] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null); 
+    const [fileName, setFileName] = useState<string | null>(null); 
+    const [uploadProgress, setUploadProgress] = useState<number>(0); 
+    const [uploadSuccess, setUploadSuccess] = useState<boolean>(false); 
+    const [uploadError, setUploadError] = useState<boolean>(false); 
+    const [isLoading, setIsLoading] = useState<boolean>(false); 
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -18,7 +19,7 @@ export function UploadJucepaPj() {
             setFileName(file.name);
             setUploadSuccess(false);
             setUploadProgress(0);
-            setUploadError(false);
+            setUploadError(false); 
         }
     };
 
@@ -27,7 +28,7 @@ export function UploadJucepaPj() {
         setFileName(null);
         setUploadProgress(0);
         setUploadSuccess(false);
-        setUploadError(false);
+        setUploadError(false); 
     };
 
     const handleSubmit = async () => {
@@ -35,52 +36,33 @@ export function UploadJucepaPj() {
             const formData = new FormData();
             formData.append('file', selectedFile);
 
-            setIsLoading(true); // Inicia loading
+            setIsLoading(true); 
 
             try {
-                const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Tempo de espera excedido')), 300000) // 5 minutos
-                );
-
-                const responsePromise = fetch('http://10.96.0.61:5000/uploadjucepapj', {
-                    method: 'POST',
-                    body: formData,
+                const response = await api.post('/uploadjucepapj', formData, {
                     headers: {
-                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data',
                     },
+                    onUploadProgress: (progressEvent) => {
+                        const total = progressEvent.total || 1; 
+                        const progress = Math.round((progressEvent.loaded / total) * 100);
+                        setUploadProgress(progress);
+                    },
+                    timeout: 300000, 
                 });
 
-                const response = await Promise.race([responsePromise, timeoutPromise]);
-
-                // Verifica se o response é do tipo Response
-                if (!(response instanceof Response)) {
-                    throw new Error('Resposta inválida da API');
-                }
-
-                if (!response.ok) {
+                if (response.status === 200) {
+                    setUploadSuccess(true);
+                    setUploadError(false);
+                } else {
                     throw new Error('Erro no envio do arquivo');
                 }
-
-                const reader = response.body?.getReader();
-                if (reader) {
-                    let receivedLength = 0;
-                    const contentLength = Number(response.headers.get('Content-Length')) || 1;
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-                        receivedLength += value?.length || 0;
-                        setUploadProgress(Math.round((receivedLength / contentLength) * 100));
-                    }
-                }
-
-                setUploadSuccess(true);
-                setUploadError(false);
             } catch (error) {
                 console.error('Erro de upload:', error);
                 setUploadError(true);
                 setUploadSuccess(false);
             } finally {
-                setIsLoading(false); // Finaliza loading
+                setIsLoading(false);
             }
         } else {
             alert('Selecione um arquivo antes de enviar.');
@@ -89,10 +71,10 @@ export function UploadJucepaPj() {
 
     return (
         <>
-            <Helmet title="Jucepa PJ" />
+            <Helmet title="Jucepa Vinculo" />
             <div className="flex justify-center items-start min-h-screen">
                 <div className="w-full max-w-lg p-8 bg-white rounded-md shadow-md">
-                    <h1 className="text-2xl font-semibold text-slate-800 text-center mb-6">Upload base de dados - JUCEPA</h1>
+                    <h1 className="text-2xl font-semibold text-slate-800 text-center mb-6">Upload base de dados - Jucepa Vínculo</h1>
 
                     <div className="mb-4">
                         <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700">
@@ -133,7 +115,7 @@ export function UploadJucepaPj() {
 
                     {uploadSuccess && (
                         <div className="mb-4">
-                            <p className="text-green-600 font-medium">Arquivo enviado com sucesso!</p>
+                            <p className="text-green-600 font-medium">Banco de dados atualizado com sucesso!</p>
                         </div>
                     )}
 
@@ -144,15 +126,19 @@ export function UploadJucepaPj() {
                     )}
 
                     {isLoading && (
-                        <div className="mb-4 w-full flex items-center">
-                            <BarLoader className='flex-grow' color="#9655eb" />
+                        <div className="mb-4 w-full flex flex-col gap-2">
+                        <p className="text-sm font-semibold text-gray-700 mt-1">Migrando dados...</p>
+                        <div className="w-full flex">
+                            <BarLoader  className="flex-grow" color="#9655eb"   />
                         </div>
+                    </div>
+                    
                     )}
 
                     <Button
                         onClick={handleSubmit}
-                        disabled={isLoading}
-                        className="w-full py-2 px-4  text-white text-sm font-medium rounded-lg disabled:opacity-50"
+                        disabled={isLoading} 
+                        className="w-full py-2 px-4 text-sm font-medium rounded-lg disabled:opacity-50"
                     >
                         Enviar Arquivo
                     </Button>
