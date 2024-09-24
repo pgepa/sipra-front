@@ -78,7 +78,7 @@ export function UploadDetranCargaVeiculo() {
 
                     <div className="mb-4">
                         <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700">
-                            Selecione um arquivo CSV ou Excel:
+                            Selecione um arquivo ".txt":
                         </label>
                         <input
                             id="file-upload"
