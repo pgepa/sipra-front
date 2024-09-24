@@ -1,57 +1,81 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
+import BarLoader from "react-spinners/BarLoader";
+import { Button } from '@/components/ui/button';
+import { api } from '@/lib/axios';
 
 export function UploadDetranCargaVeiculo() {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null); // Estado para armazenar o arquivo selecionado
-    const [fileName, setFileName] = useState<string | null>(null); // Estado para o nome do arquivo
+    const [selectedFile, setSelectedFile] = useState<File | null>(null); 
+    const [fileName, setFileName] = useState<string | null>(null); 
+    const [uploadProgress, setUploadProgress] = useState<number>(0); 
+    const [uploadSuccess, setUploadSuccess] = useState<boolean>(false); 
+    const [uploadError, setUploadError] = useState<boolean>(false); 
+    const [isLoading, setIsLoading] = useState<boolean>(false); 
 
-    // Função para manipular a seleção de arquivo
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setSelectedFile(file);
             setFileName(file.name);
+            setUploadSuccess(false);
+            setUploadProgress(0);
+            setUploadError(false); 
         }
     };
 
-    // Função para desfazer o upload
     const handleRemoveFile = () => {
         setSelectedFile(null);
         setFileName(null);
+        setUploadProgress(0);
+        setUploadSuccess(false);
+        setUploadError(false); 
     };
 
-    // Função para enviar o arquivo (mock para enviar para a API)
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (selectedFile) {
             const formData = new FormData();
             formData.append('file', selectedFile);
 
-            // Substitua pelo seu código de envio da API
-            console.log('Enviando o arquivo para a API:', selectedFile);
+            setIsLoading(true); 
 
-            // Exemplo de requisição usando fetch:
-            /*
-            fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => console.log('Sucesso:', data))
-            .catch(error => console.error('Erro:', error));
-            */
+            try {
+                const response = await api.post('/uploaddetrancargaveiculo', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    onUploadProgress: (progressEvent) => {
+                        const total = progressEvent.total || 1; 
+                        const progress = Math.round((progressEvent.loaded / total) * 100);
+                        setUploadProgress(progress);
+                    },
+                    timeout: 300000, 
+                });
+
+                if (response.status === 200) {
+                    setUploadSuccess(true);
+                    setUploadError(false);
+                } else {
+                    throw new Error('Erro no envio do arquivo');
+                }
+            } catch (error) {
+                console.error('Erro de upload:', error);
+                setUploadError(true);
+                setUploadSuccess(false);
+            } finally {
+                setIsLoading(false);
+            }
         } else {
-            alert("Selecione um arquivo antes de enviar.");
+            alert('Selecione um arquivo antes de enviar.');
         }
     };
 
     return (
         <>
-            <Helmet title="Detran Veículo" />
+            <Helmet title="Detran Veiculo" />
             <div className="flex justify-center items-start min-h-screen">
                 <div className="w-full max-w-lg p-8 bg-white rounded-md shadow-md">
-                    <h1 className="text-2xl text-slate-800 text-center mb-6">Upload base de dados - Detran Carga Veículo</h1>
+                    <h1 className="text-2xl font-semibold text-slate-800 text-center mb-6">Upload base de dados - Detran Veículo</h1>
 
-                    {/* Input para selecionar o arquivo */}
                     <div className="mb-4">
                         <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700">
                             Selecione um arquivo CSV ou Excel:
@@ -59,17 +83,15 @@ export function UploadDetranCargaVeiculo() {
                         <input
                             id="file-upload"
                             type="file"
-                            accept=".csv, .xlsx, .xls"
+                            accept=".txt"
                             onChange={handleFileChange}
-                            className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                            className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                         />
                     </div>
 
-                    {/* Exibe o nome do arquivo selecionado */}
                     {fileName && (
                         <div className="mb-4">
                             <p className="text-sm text-gray-700">Arquivo selecionado: <strong>{fileName}</strong></p>
-                            {/* Botão para remover o arquivo */}
                             <button
                                 onClick={handleRemoveFile}
                                 className="text-red-600 text-sm underline hover:text-red-800"
@@ -79,13 +101,47 @@ export function UploadDetranCargaVeiculo() {
                         </div>
                     )}
 
-                    {/* Botão para enviar o arquivo */}
-                    <button
+                    {uploadProgress > 0 && (
+                        <div className="mb-4">
+                            <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                <div
+                                    className="bg-violet-600 h-2.5 rounded-full"
+                                    style={{ width: `${uploadProgress}%` }}
+                                ></div>
+                            </div>
+                            <p className="text-sm font-semibold text-gray-700 mt-1">{uploadProgress}% enviado</p>
+                        </div>
+                    )}
+
+                    {uploadSuccess && (
+                        <div className="mb-4">
+                            <p className="text-green-600 font-medium">Banco de dados atualizado com sucesso!</p>
+                        </div>
+                    )}
+
+                    {uploadError && (
+                        <div className="mb-4">
+                            <p className="text-red-600 font-medium">Erro ao enviar o arquivo.</p>
+                        </div>
+                    )}
+
+                    {isLoading && (
+                        <div className="mb-4 w-full flex flex-col gap-2">
+                        <p className="text-sm font-semibold text-gray-700 mt-1">Migrando dados...</p>
+                        <div className="w-full flex">
+                            <BarLoader  className="flex-grow" color="#9655eb"   />
+                        </div>
+                    </div>
+                    
+                    )}
+
+                    <Button
                         onClick={handleSubmit}
-                        className="w-full py-2 px-4 bg-indigo-600 text-white text-sm font-medium rounded hover:bg-indigo-700"
+                        disabled={isLoading} 
+                        className="w-full py-2 px-4 text-sm font-medium rounded-lg disabled:opacity-50"
                     >
                         Enviar Arquivo
-                    </button>
+                    </Button>
                 </div>
             </div>
         </>
