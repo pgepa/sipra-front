@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import BarLoader from "react-spinners/BarLoader";
 import { Button } from '@/components/ui/button';
+import { api } from '@/lib/axios';
 
 export function UploadSemas() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null); 
@@ -35,52 +36,33 @@ export function UploadSemas() {
             const formData = new FormData();
             formData.append('file', selectedFile);
 
-            setIsLoading(true); // Inicia loading
+            setIsLoading(true); 
 
             try {
-                const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Tempo de espera excedido')), 300000) // 5 minutos
-                );
-
-                const responsePromise = fetch('http://10.96.0.61:5000/uploadsemas', {
-                    method: 'POST',
-                    body: formData,
+                const response = await api.post('/uploadsemas', formData, {
                     headers: {
-                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data',
                     },
+                    onUploadProgress: (progressEvent) => {
+                        const total = progressEvent.total || 1; 
+                        const progress = Math.round((progressEvent.loaded / total) * 100);
+                        setUploadProgress(progress);
+                    },
+                    timeout: 300000, 
                 });
 
-                const response = await Promise.race([responsePromise, timeoutPromise]);
-
-                // Verifica se o response é do tipo Response
-                if (!(response instanceof Response)) {
-                    throw new Error('Resposta inválida da API');
-                }
-
-                if (!response.ok) {
+                if (response.status === 200) {
+                    setUploadSuccess(true);
+                    setUploadError(false);
+                } else {
                     throw new Error('Erro no envio do arquivo');
                 }
-
-                const reader = response.body?.getReader();
-                if (reader) {
-                    let receivedLength = 0;
-                    const contentLength = Number(response.headers.get('Content-Length')) || 1;
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-                        receivedLength += value?.length || 0;
-                        setUploadProgress(Math.round((receivedLength / contentLength) * 100));
-                    }
-                }
-
-                setUploadSuccess(true);
-                setUploadError(false);
             } catch (error) {
                 console.error('Erro de upload:', error);
                 setUploadError(true);
                 setUploadSuccess(false);
             } finally {
-                setIsLoading(false); // Finaliza loading
+                setIsLoading(false);
             }
         } else {
             alert('Selecione um arquivo antes de enviar.');
@@ -133,7 +115,7 @@ export function UploadSemas() {
 
                     {uploadSuccess && (
                         <div className="mb-4">
-                            <p className="text-green-600 font-medium">Arquivo enviado com sucesso!</p>
+                            <p className="text-green-600 font-medium">Banco de dados atualizado com sucesso!</p>
                         </div>
                     )}
 
@@ -144,9 +126,13 @@ export function UploadSemas() {
                     )}
 
                     {isLoading && (
-                        <div className="mb-4 w-full flex items-center">
-                            <BarLoader className='flex-grow' color="#9655eb" />
+                        <div className="mb-4 w-full flex flex-col gap-2">
+                        <p className="text-sm font-semibold text-gray-700 mt-1">Migrando dados...</p>
+                        <div className="w-full flex">
+                            <BarLoader  className="flex-grow" color="#9655eb"   />
                         </div>
+                    </div>
+                    
                     )}
 
                     <Button
