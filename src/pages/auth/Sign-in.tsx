@@ -58,7 +58,7 @@ export function SignIn() {
         <div className="w-[350px] flex flex-col justify-center gap-6 mx-auto">
           <div className="flex flex-col gap-2 text-center">
             <h1 className="text-2xl text-gray-800 font-semibold tracking-tighter">Acesse o Painel</h1>
-            <p className="text-sm text-gray-600 ">SIPRA - Sistema de Investigação Patrimonial e Recuperação de Ativos</p>
+            <p className="text-sm text-gray-600 ">SiDA - Sistema de Inteligência da Dívida Ativa</p>
           </div>
 
           <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">

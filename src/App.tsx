@@ -11,7 +11,7 @@ export function App() {
 
     <HelmetProvider>
       
-        <Helmet titleTemplate="SIPRA | %s" />
+        <Helmet titleTemplate="SiDA | %s" />
         <Toaster richColors />
         <RouterProvider router={ Router } />
 
