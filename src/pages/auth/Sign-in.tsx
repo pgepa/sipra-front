@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { api } from '@/lib/axios';
 
 const signInFormSchema = z.object({
   email: z.string().email('E-mail inválido'),
@@ -25,15 +26,15 @@ export function SignIn() {
 
   const handleLogin = async (form: SignInForm) => {
     try {
-      const response = await api.post('/auth/login', { email: form.email, senha: form.senha });
-      const { access_token, id_perfil } = response.data;
+      const response = await api.post('/login', { email: form.email, senha: form.senha });
+      const { token, perfil } = response.data;
 
-      localStorage.setItem('token', access_token);
-      localStorage.setItem('userProfile', JSON.stringify(id_perfil));
+      localStorage.setItem('token', token);
+      localStorage.setItem('userProfile', JSON.stringify(perfil));
 
-      switch (id_perfil) {
-        case 1:
-          navigate('/admin', { replace: true });
+      switch (perfil) {
+        case "Administrador":
+          navigate('/home', { replace: true });
           break;
           case 2:
           navigate('/chefia', { replace: true });

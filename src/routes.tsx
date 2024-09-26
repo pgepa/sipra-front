@@ -14,42 +14,36 @@ import { UploadDetranCargaVeiculo } from '@/pages/app/UploadDetranVeiculo';
 import { UploadDetranModelo } from '@/pages/app/UploadDetranModelo';
 import { CartaCobranca } from '@/pages/app/CartaCobranca';
 import { Ajuizamento } from '@/pages/app/Ajuizamento';
-
+import PrivateRoute from '@/utils/PrivateRoute';
 
 export const Router = createHashRouter([
-  
+
+    // Rotas de autenticação
     {
         path: '/',
-        element: <AuthLayout/>,
+        element: <AuthLayout />,
         children: [
             { path: '/', element: <SignIn /> },
         ],
     },
 
+    // Rotas do App (protegidas por autenticação)
     {
         path: '/',
-        element: <AppLayout/>,
+        element: <AppLayout />,
         children: [
-            { path: '/home', element: <Home /> },
-            { path: '/protesto', element: <Protesto /> },
-            { path: '/cartacobranca', element: <CartaCobranca /> },
-            { path: '/ajuizamento', element: <Ajuizamento /> },
-            { path: '/upload/semas', element: <UploadSemas /> },
-            { path: '/upload/adepara', element: <UploadAdepara /> },
-            { path: '/upload/jucepapj', element: <UploadJucepaPj /> },
-            { path: '/upload/jucepavinculo', element: <UploadJucepaVinculo /> },
-            { path: '/upload/detranrenach', element: <UploadDetranRenach /> },
-            { path: '/upload/detransidet', element: <UploadDetranSidet /> },
-            { path: '/upload/detranveiculo', element: <UploadDetranCargaVeiculo /> },
-            { path: '/upload/detranmodelo', element: <UploadDetranModelo /> },
+            { path: '/home', element: <PrivateRoute allowedProfiles={['Administrador']}><Home /></PrivateRoute> },
+            { path: '/protesto', element: <PrivateRoute><Protesto /></PrivateRoute> },
+            { path: '/cartacobranca', element: <PrivateRoute><CartaCobranca /></PrivateRoute> },
+            { path: '/ajuizamento', element: <PrivateRoute><Ajuizamento /></PrivateRoute> },
+            { path: '/upload/semas', element: <PrivateRoute><UploadSemas /></PrivateRoute> },
+            { path: '/upload/adepara', element: <PrivateRoute><UploadAdepara /></PrivateRoute> },
+            { path: '/upload/jucepapj', element: <PrivateRoute><UploadJucepaPj /></PrivateRoute> },
+            { path: '/upload/jucepavinculo', element: <PrivateRoute><UploadJucepaVinculo /></PrivateRoute> },
+            { path: '/upload/detranrenach', element: <PrivateRoute><UploadDetranRenach /></PrivateRoute> },
+            { path: '/upload/detransidet', element: <PrivateRoute><UploadDetranSidet /></PrivateRoute> },
+            { path: '/upload/detranveiculo', element: <PrivateRoute><UploadDetranCargaVeiculo /></PrivateRoute> },
+            { path: '/upload/detranmodelo', element: <PrivateRoute><UploadDetranModelo /></PrivateRoute> },
         ],
-    }
-
-
-
-
-
-      //{ path: '/', element: <Home /> },
-      //{ path: '/sign-in', element: <SignIn /> },
-    
+    },
 ]);
