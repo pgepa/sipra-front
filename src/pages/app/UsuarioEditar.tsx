@@ -12,108 +12,96 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from 'zod';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { CirclePlus } from 'lucide-react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-const signUpForm = z.object({
+const updateUserSchema = z.object({
     nome: z.string(),
-    perfil: z.string(),
     email: z.string().email(),
-    senha: z.string(),
+    perfil: z.string(),
+    senha: z.string().optional(),
 });
 
-type SignUpForm = z.infer<typeof signUpForm>;
+type UpdateUserForm = z.infer<typeof updateUserSchema>;
 
-export function SignUp() {
+interface User {
+    id: number;
+    nome: string; // Alterado para 'nome' para coincidir com o formulário
+    email: string;
+    perfil: string; // Adicionado para coincidir com o ID do perfil
+}
+
+interface UserEditarProps {
+    user: User;
+}
+
+export function UserEditar({ user }: UserEditarProps) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const navigate = useNavigate();
 
-    const { register, handleSubmit, control, formState: { isSubmitting } } = useForm<SignUpForm>({
-        resolver: zodResolver(signUpForm),
+    const { register, handleSubmit, control, formState: { isSubmitting } } = useForm<UpdateUserForm>({
+        resolver: zodResolver(updateUserSchema),
+        defaultValues: {
+            nome: user.nome,
+            email: user.email,
+            perfil: user.perfil,
+        },
     });
 
-    async function handleSignUp(data: SignUpForm) {
+    async function handleUpdate(data: UpdateUserForm) {
         try {
-            const payload = {
-                nome: data.nome,
-                perfil: data.perfil,
-                email: data.email,
-                senha: data.senha,
-            };
-
             const token = localStorage.getItem('token');
-            const response = await fetch(import.meta.env.VITE_API_URL + '/create_user', {
-                method: 'POST',
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/edit_user/${user.id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(data),
             });
 
-            const result = await response.json();
-
             if (response.ok) {
-                toast.success('Usuário cadastrado com sucesso.');
-                setIsDialogOpen(false); 
-                navigate('/usuarios'); 
-                window.location.reload(); 
+                toast.success('Usuário atualizado com sucesso.');
+                setIsDialogOpen(false);
+                window.location.reload();
             } else {
-                toast.error(result.error || 'Cadastro inválido, favor verificar todos os campos.');
+                const result = await response.json();
+                toast.error(result.error || 'Erro ao atualizar usuário.');
             }
         } catch (error) {
             console.error('Error:', error);
-            toast.error('Erro ao cadastrar usuário, favor tentar novamente.');
+            toast.error('Erro ao atualizar usuário, favor tentar novamente.');
         }
     }
 
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" onClick={() => setIsDialogOpen(true)}>
-                    <CirclePlus className="mr-2 h-4 w-4" />
-                    Novo Usuário
-                </Button>
+                <Button variant="outline" onClick={() => setIsDialogOpen(true)}>Editar usuário</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
-                <form onSubmit={handleSubmit(handleSignUp)}>
+                <form onSubmit={handleSubmit(handleUpdate)}>
                     <DialogHeader>
-                        <DialogTitle>Novo Usuário</DialogTitle>
+                        <DialogTitle>Editar Usuário</DialogTitle>
                         <DialogDescription>
-                            Cadastre um novo usuário aqui. Clique em finalizar cadastro quando terminar.
+                            Faça as alterações do usuário aqui. Clique em salvar quando terminar.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="nome" className="text-right">
-                                Nome
-                            </Label>
-                            <Input
-                                id="nome"
-                                {...register('nome')}
-                                className="col-span-3"
-                            />
+                            <Label htmlFor="nome" className="text-right">Nome</Label>
+                            <Input id="nome" {...register('nome')} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="email" className="text-right">
-                                E-mail
-                            </Label>
-                            <Input
-                                id="email"
-                                {...register('email')}
-                                className="col-span-3"
-                            />
+                            <Label htmlFor="email" className="text-right">E-mail</Label>
+                            <Input id="email" {...register('email')} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="id_perfil" className="text-right">Perfil:</Label>
                             <Controller
                                 name="perfil"
                                 control={control}
-                                defaultValue=""
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <SelectTrigger className="col-span-3">
@@ -129,19 +117,12 @@ export function SignUp() {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="senha" className="text-right">
-                                Nova Senha
-                            </Label>
-                            <Input
-                                id="senha"
-                                type="password"
-                                {...register('senha')}
-                                className="col-span-3"
-                            />
+                            <Label htmlFor="senha" className="text-right">Nova Senha</Label>
+                            <Input id="senha" type="password" {...register('senha')} className="col-span-3" />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button disabled={isSubmitting} type="submit">Finalizar Cadastro</Button>
+                        <Button type="submit" disabled={isSubmitting}>Salvar</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

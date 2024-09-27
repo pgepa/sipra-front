@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Mails, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Mails, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -142,8 +142,18 @@ export function Sidebar() {
                                 Detran - Modelo
                             </Link>
                         </div>
+
+                        
                     )}
                 </div>
+
+                <Link
+                    to="/usuarios"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/usuarios" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                >
+                    <Users className="h-6 w-6" />
+                    {open && <span className='font-medium'>Usuários</span>}
+                </Link>
             </nav>
         </aside>
     );

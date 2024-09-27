@@ -15,6 +15,7 @@ import { UploadDetranModelo } from '@/pages/app/UploadDetranModelo';
 import { CartaCobranca } from '@/pages/app/CartaCobranca';
 import { Ajuizamento } from '@/pages/app/Ajuizamento';
 import PrivateRoute from '@/utils/PrivateRoute';
+import { Usuarios } from '@/pages/app/Usuarios';
 
 export const Router = createHashRouter([
 
@@ -43,6 +44,7 @@ export const Router = createHashRouter([
             { path: '/upload/detransidet', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranSidet /></PrivateRoute> },
             { path: '/upload/detranveiculo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranCargaVeiculo /></PrivateRoute> },
             { path: '/upload/detranmodelo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranModelo /></PrivateRoute> },
+            { path: '/usuarios', element: <PrivateRoute allowedProfiles={['Administrador']}><Usuarios /></PrivateRoute> },
         ],
     },
 ]);
