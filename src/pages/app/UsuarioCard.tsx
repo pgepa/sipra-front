@@ -73,14 +73,14 @@ export const UserCard = () => {
         <>
             {loading && (
                 <div className="flex justify-center items-center h-screen">
-                    <GridLoader size={16} color="#3727c9" />
+                    <GridLoader size={16} color="#9655eb" />
                 </div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
                 {users.map((user) => (
                     <Card key={user.id} className="flex flex-col p-4 bg-white rounded-lg shadow-xl">
                         <CardHeader className="flex flex-col space-y-2 pb-4">
-                            <CardTitle className="text-2xl font-semibold text-indigo-700">
+                            <CardTitle className="text-xl font-semibold text-indigo-700">
                                 {user.nome}
                             </CardTitle>
                             <CardDescription className="text-md text-gray-500">
