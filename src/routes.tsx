@@ -18,7 +18,6 @@ import PrivateRoute from '@/utils/PrivateRoute';
 
 export const Router = createHashRouter([
 
-    // Rotas de autenticação
     {
         path: '/',
         element: <AuthLayout />,
@@ -33,17 +32,17 @@ export const Router = createHashRouter([
         element: <AppLayout />,
         children: [
             { path: '/home', element: <PrivateRoute allowedProfiles={['Administrador']}><Home /></PrivateRoute> },
-            { path: '/protesto', element: <PrivateRoute><Protesto /></PrivateRoute> },
-            { path: '/cartacobranca', element: <PrivateRoute><CartaCobranca /></PrivateRoute> },
-            { path: '/ajuizamento', element: <PrivateRoute><Ajuizamento /></PrivateRoute> },
-            { path: '/upload/semas', element: <PrivateRoute><UploadSemas /></PrivateRoute> },
-            { path: '/upload/adepara', element: <PrivateRoute><UploadAdepara /></PrivateRoute> },
-            { path: '/upload/jucepapj', element: <PrivateRoute><UploadJucepaPj /></PrivateRoute> },
-            { path: '/upload/jucepavinculo', element: <PrivateRoute><UploadJucepaVinculo /></PrivateRoute> },
-            { path: '/upload/detranrenach', element: <PrivateRoute><UploadDetranRenach /></PrivateRoute> },
-            { path: '/upload/detransidet', element: <PrivateRoute><UploadDetranSidet /></PrivateRoute> },
-            { path: '/upload/detranveiculo', element: <PrivateRoute><UploadDetranCargaVeiculo /></PrivateRoute> },
-            { path: '/upload/detranmodelo', element: <PrivateRoute><UploadDetranModelo /></PrivateRoute> },
+            { path: '/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Administrador']}><Protesto /></PrivateRoute> },
+            { path: '/reguacobranca/cartacobranca', element: <PrivateRoute allowedProfiles={['Administrador']}><CartaCobranca /></PrivateRoute> },
+            { path: '/reguacobranca/ajuizamento', element: <PrivateRoute allowedProfiles={['Administrador']}><Ajuizamento /></PrivateRoute> },
+            { path: '/upload/semas', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadSemas /></PrivateRoute> },
+            { path: '/upload/adepara', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadAdepara /></PrivateRoute> },
+            { path: '/upload/jucepapj', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadJucepaPj /></PrivateRoute> },
+            { path: '/upload/jucepavinculo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadJucepaVinculo /></PrivateRoute> },
+            { path: '/upload/detranrenach', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranRenach /></PrivateRoute> },
+            { path: '/upload/detransidet', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranSidet /></PrivateRoute> },
+            { path: '/upload/detranveiculo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranCargaVeiculo /></PrivateRoute> },
+            { path: '/upload/detranmodelo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranModelo /></PrivateRoute> },
         ],
     },
 ]);

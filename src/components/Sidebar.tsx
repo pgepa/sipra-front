@@ -1,17 +1,18 @@
-import { FileSearch, House, ChevronFirst, Scale, Mails, CloudUpload, ChevronDown, DatabaseBackup } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Mails, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export function Sidebar() {
-    const location = useLocation(); 
-    const [open, setOpen] = useState(true); 
+    const location = useLocation();
+    const [open, setOpen] = useState(true);
     const [uploadOpen, setUploadOpen] = useState(false);
+    const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
 
     return (
         <aside className={`bg-gray-200 p-3 relative transition-all duration-300 ${open ? 'w-64' : 'w-20'}`}>
-            <ChevronFirst 
+            <ChevronFirst
                 className={`absolute cursor-pointer -right-3 top-4 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${open ? '' : 'rotate-180'}`}
-                onClick={() => setOpen(!open)} 
+                onClick={() => setOpen(!open)}
             />
             <nav className="space-y-2 mt-4 flex flex-col">
                 <Link
@@ -21,28 +22,54 @@ export function Sidebar() {
                     <House className="h-6 w-6" />
                     {open && <span className='font-medium'>Home</span>}
                 </Link>
-                <Link
-                    to="/protesto"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/protesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                >
-                    <FileSearch className="h-6 w-6" />
-                    {open && <span className='font-medium'>Protesto</span>}
-                </Link>
-                <Link
-                    to="/cartacobranca"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                >
-                    <Mails className="h-6 w-6" />
-                    {open && <span className='font-medium'>Carta Cobrança</span>}
-                </Link>
-                
-                <Link
-                    to="/ajuizamento"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                >
-                    <Scale className="h-6 w-6" />
-                    {open && <span className='font-medium'>Ajuizamento</span>}
-                </Link>
+
+
+
+                <div className="relative">
+                    <button
+                        onClick={() => setReguaCobrancaOpen(!reguaCobrancaOpen)}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/reguacobranca") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    >
+                        <Ruler className="h-6 w-6" />
+                        {open && <span className='font-medium'>Régua de Cobrança</span>}
+                        {open && <ChevronDown className={`ml-auto transition-transform ${reguaCobrancaOpen ? "rotate-180" : ""}`} />}
+                    </button>
+
+
+                    {reguaCobrancaOpen && open && (
+                        <div className="ml-6 space-y-1">
+
+
+                            <Link
+                                to="/reguacobranca/protesto"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/protesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <FileSearch className="h-5 w-5" />
+                                Protesto
+                            </Link>
+
+
+                            <Link
+                                to="/reguacobranca/cartacobranca"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <Mails className="h-5 w-5" />
+                                Carta Cobrança
+                            </Link>
+
+                            
+                            <Link
+                                to="/reguacobranca/ajuizamento"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <Gavel className="h-5 w-5" />
+                                Ajuizamento
+                            </Link>
+
+                            
+                        </div>
+                    )}
+                </div>
 
                 <div className="relative">
                     <button
@@ -54,7 +81,7 @@ export function Sidebar() {
                         {open && <ChevronDown className={`ml-auto transition-transform ${uploadOpen ? "rotate-180" : ""}`} />}
                     </button>
 
-                
+
                     {uploadOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
