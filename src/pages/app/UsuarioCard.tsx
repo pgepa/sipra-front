@@ -80,7 +80,7 @@ export const UserCard = () => {
                 {users.map((user) => (
                     <Card key={user.id} className="flex flex-col p-4 bg-white rounded-lg shadow-xl">
                         <CardHeader className="flex flex-col space-y-2 pb-4">
-                            <CardTitle className="text-xl font-semibold text-indigo-700">
+                            <CardTitle className="text-xl font-semibold text-slate-700">
                                 {user.nome}
                             </CardTitle>
                             <CardDescription className="text-md text-gray-500">
