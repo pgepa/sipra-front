@@ -36,12 +36,15 @@ export function UploadSemas() {
             const formData = new FormData();
             formData.append('file', selectedFile);
 
+            const token = localStorage.getItem('token');
+
             setIsLoading(true); 
 
             try {
                 const response = await api.post('/uploadsemas', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`,
                     },
                     onUploadProgress: (progressEvent) => {
                         const total = progressEvent.total || 1; 
