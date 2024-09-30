@@ -16,12 +16,14 @@ import { CartaCobranca } from '@/pages/app/CartaCobranca';
 import { Ajuizamento } from '@/pages/app/Ajuizamento';
 import PrivateRoute from '@/utils/PrivateRoute';
 import { Usuarios } from '@/pages/app/Usuarios';
+import { NotFound } from '@/404';
 
 export const Router = createHashRouter([
 
     {
         path: '/',
         element: <AuthLayout />,
+        errorElement: <NotFound/>,
         children: [
             { path: '/', element: <SignIn /> },
         ],
@@ -31,6 +33,7 @@ export const Router = createHashRouter([
     {
         path: '/',
         element: <AppLayout />,
+        errorElement: <NotFound/>,
         children: [
             { path: '/home', element: <PrivateRoute allowedProfiles={['Administrador']}><Home /></PrivateRoute> },
             { path: '/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Administrador']}><Protesto /></PrivateRoute> },
