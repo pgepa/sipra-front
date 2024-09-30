@@ -88,7 +88,7 @@ export const UserCard = () => {
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex-1">
-                            <p className="text-indigo-700 text-lg font-semibold">{user.email}</p>
+                            <p className="text-indigo-700 text-base font-semibold">{user.email}</p>
                         </CardContent>
                         <CardFooter className="flex gap-2 mt-1">
                             <UserEditar user={user} />

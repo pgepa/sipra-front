@@ -28,9 +28,9 @@ type UpdateUserForm = z.infer<typeof updateUserSchema>;
 
 interface User {
     id: number;
-    nome: string; // Alterado para 'nome' para coincidir com o formulário
+    nome: string; 
     email: string;
-    perfil: string; // Adicionado para coincidir com o ID do perfil
+    perfil: string; 
 }
 
 interface UserEditarProps {
