@@ -150,15 +150,15 @@ export function Protesto() {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead className='min-w-[180px]'>Nº Documento</TableHead>
-                                        <TableHead className='min-w-[160px]'>Contribuinte</TableHead>
-                                        <TableHead className='min-w-[200px]'>Tipo de Documento</TableHead>
+                                        <TableHead className='min-w-[320px]'>Contribuinte</TableHead>
+                                        <TableHead className='min-w-[160px]'>Tipo de Documento</TableHead>
                                         <TableHead className='min-w-[180px]'>Natureza Jurídica</TableHead>
                                         <TableHead className='min-w-[180px]'>Porte da Empresa</TableHead>
-                                        <TableHead className='min-w-[180px]'>Situação Cadastral</TableHead>
+                                        <TableHead className='min-w-[160px]'>Situação Cadastral</TableHead>
                                         <TableHead className='min-w-[180px]'>Data Situação Cadastral</TableHead>
                                         <TableHead className='min-w-[180px]'>Data Início de Atividade</TableHead>
                                         <TableHead className='min-w-[160px]'>Capital Social</TableHead>
-                                        <TableHead className='min-w-[180px]'>Descrição</TableHead>
+                                        <TableHead className='min-w-[220px]'>Descrição</TableHead>
                                         <TableHead className='min-w-[160px]'>CDA</TableHead>
                                         <TableHead className='min-w-[160px]'>Data Inscrição</TableHead>
                                         <TableHead className='min-w-[160px]'>Data Referência</TableHead>
@@ -177,7 +177,7 @@ export function Protesto() {
                                         <TableHead className='min-w-[160px]'>Sit Protesto</TableHead>
                                         <TableHead className='min-w-[160px]'>Parcelamento</TableHead>
                                         <TableHead className='min-w-[160px]'>Prescrito</TableHead>
-                                        <TableHead className='min-w-[160px]'>Observação End Protesto</TableHead>
+                                        <TableHead className='min-w-[320px]'>Observação End Protesto</TableHead>
                                         <TableHead className='min-w-[320px]'>Fundamento</TableHead>
                                     </TableRow>
                                 </TableHeader>
