@@ -18,6 +18,7 @@ import PrivateRoute from '@/utils/PrivateRoute';
 import { Usuarios } from '@/pages/app/Usuarios';
 import { NotFound } from '@/404';
 
+
 export const Router = createHashRouter([
 
     {
@@ -48,6 +49,7 @@ export const Router = createHashRouter([
             { path: '/upload/detranveiculo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranCargaVeiculo /></PrivateRoute> },
             { path: '/upload/detranmodelo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranModelo /></PrivateRoute> },
             { path: '/usuarios', element: <PrivateRoute allowedProfiles={['Administrador']}><Usuarios /></PrivateRoute> },
+            
         ],
     },
 ]);
