@@ -6,7 +6,7 @@ import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Download, Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { GrDocumentExcel } from "react-icons/gr";
 
 interface ProtestoData {
