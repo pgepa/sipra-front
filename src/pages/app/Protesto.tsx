@@ -183,6 +183,12 @@ export function Protesto() {
                         value={filters.contribuinte}
                         onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
                     />
+                    <Input
+                        placeholder='Fundamento'
+                        className='w-[320px]'
+                        value={filters.fundamento}
+                        onChange={(e) => setFilters({ ...filters, fundamento: e.target.value })}
+                    />
 
 
                     <Select value={filters.tipodoc} onValueChange={(value) => setFilters({ ...filters, tipodoc: value })}>
@@ -210,6 +216,108 @@ export function Protesto() {
                         </SelectContent>
                     </Select>
 
+                    <Select value={filters.situacaocadastral} onValueChange={(value) => setFilters({ ...filters, situacaocadastral: value })}>
+                        <SelectTrigger className="w-full sm:w-[200px]">
+                            <SelectValue placeholder="Situação Cadastral RFB" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="Ativa">Ativa</SelectItem>
+                            <SelectItem value="Baixada">Baixada</SelectItem>
+                            <SelectItem value="Inapta">Inapta</SelectItem>
+                            <SelectItem value="Nula">Nula</SelectItem>
+                            <SelectItem value="Suspensa">Suspensa</SelectItem>
+
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filters.tipotributo} onValueChange={(value) => setFilters({ ...filters, tipotributo: value })}>
+                        <SelectTrigger className="w-full sm:w-[180px]">
+                            <SelectValue placeholder="Tipo de Atributo" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="Dívida Ativa ICMS">Dívida Ativa ICMS</SelectItem>
+                            <SelectItem value="Dívida Ativa IPVA">Dívida Ativa IPVA</SelectItem>
+                            <SelectItem value="Dívida Ativa ITCD">Dívida Ativa ITCD</SelectItem>
+                            <SelectItem value="Dívida Ativa não tributária">Dívida Ativa não Tributária</SelectItem>
+                            <SelectItem value="Dívida Ativa TFRH">Dívida Ativa TFRH</SelectItem>
+                            <SelectItem value="Dívida Ativa TFRM">Dívida Ativa TFRM</SelectItem>
+
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filters.status_saj} onValueChange={(value) => setFilters({ ...filters, status_saj: value })}>
+                        <SelectTrigger className="w-full sm:w-[180px]">
+                            <SelectValue placeholder="Status SAJ" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="Cancelada">Cancelada</SelectItem>
+                            <SelectItem value="Exclusão">Exclusão</SelectItem>
+                            <SelectItem value="Ajuizamento">Ajuizamento</SelectItem>
+                            <SelectItem value="Análise CDAs Legado">Análise CDAs Legado</SelectItem>
+                            <SelectItem value="Quitada">Quitada</SelectItem>
+                            <SelectItem value="Suspensa">Suspensa</SelectItem>
+
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filters.flajuizada} onValueChange={(value) => setFilters({ ...filters, flajuizada: value })}>
+                        <SelectTrigger className="w-full sm:w-[180px]">
+                            <SelectValue placeholder="Flag Ajuizada" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="S">SIM</SelectItem>
+                            <SelectItem value="N">NÃO</SelectItem>
+                            
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filters.parcelamento} onValueChange={(value) => setFilters({ ...filters, parcelamento: value })}>
+                        <SelectTrigger className="w-full sm:w-[160px]">
+                            <SelectValue placeholder="Parcelamento" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="S">SIM</SelectItem>
+                            <SelectItem value="N">NÃO</SelectItem>
+                            
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filters.prescrito} onValueChange={(value) => setFilters({ ...filters, prescrito: value })}>
+                        <SelectTrigger className="w-full sm:w-[160px]">
+                            <SelectValue placeholder="Prescrito" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="Dentro do prazo prescricional">Dentro do prazo prescricional</SelectItem>
+                            <SelectItem value="Possível Prescrição">Possível Prescrição</SelectItem>
+                            <SelectItem value="Prestes a prescrever">Prestes a prescrever</SelectItem>
+                            
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filters.obs_end_protesto} onValueChange={(value) => setFilters({ ...filters, obs_end_protesto: value })}>
+                        <SelectTrigger className="w-full sm:w-[160px]">
+                            <SelectValue placeholder="Endereço Protesto" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="Endereço Extenso">Endereço Extenso</SelectItem>
+                            <SelectItem value="Endereço Incompleto">Endereço Incompleto</SelectItem>
+                            <SelectItem value="Endereço Insuficiente">Prestes a prescrever</SelectItem>
+                            <SelectItem value="Endereço Nulo">Endereço Nulo</SelectItem>
+                            <SelectItem value="Endereço válido para Protesto">Endereço válido para Protesto</SelectItem>
+                            
+                        </SelectContent>
+                    </Select>
+
+
+
+
                     <Button type='submit' className='default'>
                         <Search className="h-4 w-4 mr-2" />
                         Pesquisar
@@ -220,7 +328,7 @@ export function Protesto() {
                         Remover filtros
                     </Button>
                 </form>
-                
+
                 {/* Paginação alinhada ao início */}
 
                 <div className="flex justify-start mt-2">
@@ -266,7 +374,7 @@ export function Protesto() {
                                         <TableHead className='min-w-[180px]'>Data Situação Cadastral</TableHead>
                                         <TableHead className='min-w-[180px]'>Data Início de Atividade</TableHead>
                                         <TableHead className='min-w-[160px]'>Capital Social</TableHead>
-                                        <TableHead className='min-w-[220px]'>Descrição</TableHead>
+                                        <TableHead className='min-w-[320px]'>Descrição</TableHead>
                                         <TableHead className='min-w-[160px]'>CDA</TableHead>
                                         <TableHead className='min-w-[160px]'>Data Inscrição</TableHead>
                                         <TableHead className='min-w-[160px]'>Data Referência</TableHead>
@@ -281,11 +389,11 @@ export function Protesto() {
                                         <TableHead className='min-w-[160px]'>Data Status SAJ</TableHead>
                                         <TableHead className='min-w-[160px]'>Último Histórico</TableHead>
                                         <TableHead className='min-w-[160px]'>Data Último Histórico</TableHead>
-                                        <TableHead className='min-w-[160px]'>Flag Ajuizada</TableHead>
+                                        <TableHead className='min-w-[120px]'>Flag Ajuizada</TableHead>
                                         <TableHead className='min-w-[160px]'>Sit Protesto</TableHead>
-                                        <TableHead className='min-w-[160px]'>Parcelamento</TableHead>
+                                        <TableHead className='min-w-[120px]'>Parcelamento</TableHead>
                                         <TableHead className='min-w-[160px]'>Prescrito</TableHead>
-                                        <TableHead className='min-w-[320px]'>Observação End Protesto</TableHead>
+                                        <TableHead className='min-w-[220px]'>Endereço Protesto</TableHead>
                                         <TableHead className='min-w-[320px]'>Fundamento</TableHead>
                                     </TableRow>
                                 </TableHeader>

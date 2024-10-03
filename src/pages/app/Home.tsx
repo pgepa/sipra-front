@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import logo from '@/assets/Logopda.png';
+import logo from '@/assets/Logo SIDA.png';
 
 export function Home() {
     return (
