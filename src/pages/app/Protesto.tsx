@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 interface ProtestoData {
     cda: string;
@@ -44,6 +45,7 @@ export function Protesto() {
     const [error, setError] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
     const [filters, setFilters] = useState({
         nudocumento: '',
         contribuinte: '',
@@ -65,7 +67,7 @@ export function Protesto() {
     const token = localStorage.getItem('token');
 
     const fetchProtestos = async (currentPage = 1) => {
-        
+
         try {
             setLoading(true);
             setError(null); // Limpa o erro ao iniciar uma nova busca
@@ -77,10 +79,11 @@ export function Protesto() {
             });
 
 
-            setProtestos( response.data.data); 
-            setTotalPages(response.data.totalPages || 1);
+            setProtestos(response.data.data);
+            setTotalItems(response.data.total_items);
+            setTotalPages(Math.ceil(response.data.total_items / 25));
 
-            
+
         } catch (error) {
             console.error('Erro ao buscar dados de protestos:', error);
             setProtestos([]);
@@ -103,11 +106,37 @@ export function Protesto() {
         }
     };
 
+    const renderPaginationItems = () => {
+        const items = [];
+        const startPage = Math.max(page - 2, 1);
+        const endPage = Math.min(page + 2, totalPages);
+
+        for (let i = startPage; i <= endPage; i++) {
+            items.push(
+                <PaginationItem key={i}>
+                    <PaginationLink
+                        size="sm"
+                        onClick={() => handlePageChange(i)}
+                        className={i === page ? "bg-blue-500 text-white" : "text-blue-500"}
+                    >
+                        {i}
+                    </PaginationLink>
+                </PaginationItem>
+            );
+        }
+
+        return items;
+    };
+
     return (
         <>
             <Helmet title="Protesto" />
+
             <div className='flex flex-col gap-4'>
                 <h1 className='text-2xl font-bold text-slate-700'>Protesto</h1>
+
+
+
                 <form
                     className='flex items-center gap-2 mt-2'
                     onSubmit={(e) => {
@@ -136,6 +165,29 @@ export function Protesto() {
                     />
                     <button type='submit' className='btn-primary'>Buscar</button>
                 </form>
+                {/* Paginação alinhada ao início */}
+
+                <div className="flex justify-start mt-2">
+                    <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
+                        <PaginationContent>
+                            {page > 1 && (
+                                <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
+                                    {page === 2 ? 'Primeira Página' : 'Anterior'}
+                                </PaginationPrevious>
+                            )}
+                            {renderPaginationItems()}
+                            {page < totalPages && (
+                                <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
+                                    Próxima
+                                </PaginationNext>
+                            )}
+                        </PaginationContent>
+                        <div className="text-sm mt-2 text-gray-600">
+                            Página {page} de {totalPages} ({totalItems} linhas no total)
+                        </div>
+                    </Pagination>
+                </div>
+
             </div>
 
             <div className='border rounded-md overflow-x-auto mt-4'>
@@ -229,26 +281,7 @@ export function Protesto() {
                             </Table>
                         )}
 
-                        {/* Paginação */}
-                        <div className='flex justify-center mt-4'>
-                            <button
-                                onClick={() => handlePageChange(page - 1)}
-                                disabled={page === 1}
-                                className='btn-secondary mx-2'
-                            >
-                                Anterior
-                            </button>
-                            <span className='mx-2'>
-                                Página {page} de {totalPages}
-                            </span>
-                            <button
-                                onClick={() => handlePageChange(page + 1)}
-                                disabled={page === totalPages}
-                                className='btn-secondary mx-2'
-                            >
-                                Próxima
-                            </button>
-                        </div>
+
                     </>
                 )}
             </div>
