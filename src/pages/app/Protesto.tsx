@@ -4,6 +4,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Search, X } from 'lucide-react';
 
 interface ProtestoData {
     cda: string;
@@ -128,6 +131,29 @@ export function Protesto() {
         return items;
     };
 
+    const handleClearFilters = () => {
+        setFilters({
+            nudocumento: '',
+            contribuinte: '',
+            tipodoc: '',
+            natjuridica: '',
+            porte: '',
+            situacaocadastral: '',
+            tipotributo: '',
+            fundamento: '',
+            vlcdaatualizado_min: '',
+            vlcdaatualizado_max: '',
+            status_saj: '',
+            flajuizada: '',
+            parcelamento: '',
+            prescrito: '',
+            obs_end_protesto: '',
+        });
+        setPage(1); // Reinicia a paginação para a primeira página
+        fetchProtestos(1); // Refaz a busca com os filtros limpos
+    };
+    
+
     return (
         <>
             <Helmet title="Protesto" />
@@ -147,7 +173,7 @@ export function Protesto() {
                     <span className='text-sm font-semibold'>Filtros:</span>
                     <Input
                         placeholder='Nº Documento'
-                        className='w-[320px]'
+                        className='w-[200px]'
                         value={filters.nudocumento}
                         onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
                     />
@@ -157,14 +183,44 @@ export function Protesto() {
                         value={filters.contribuinte}
                         onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
                     />
-                    <Input
-                        placeholder='Tipo de Documento'
-                        className='w-[320px]'
-                        value={filters.tipodoc}
-                        onChange={(e) => setFilters({ ...filters, tipodoc: e.target.value })}
-                    />
-                    <button type='submit' className='btn-primary'>Buscar</button>
+
+
+                    <Select value={filters.tipodoc} onValueChange={(value) => setFilters({ ...filters, tipodoc: value })}>
+                        <SelectTrigger className="w-full sm:w-[180px]">
+                            <SelectValue placeholder="Tipo de Documento" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="CPF ">CPF</SelectItem>
+                            <SelectItem value="CNPJ">CNPJ</SelectItem>
+
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={filters.porte} onValueChange={(value) => setFilters({ ...filters, porte: value })}>
+                        <SelectTrigger className="w-full sm:w-[180px]">
+                            <SelectValue placeholder="Porte da Empresa" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="Empresa de Pequeno Porte">Empresa de Pequeno Porte</SelectItem>
+                            <SelectItem value="Micro Empresa">Micro Empresa</SelectItem>
+                            <SelectItem value="Demais">Demais</SelectItem>
+
+                        </SelectContent>
+                    </Select>
+
+                    <Button type='submit' className='default'>
+                        <Search className="h-4 w-4 mr-2" />
+                        Pesquisar
+                    </Button>
+
+                    <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full sm:w-auto">
+                        <X className="h-4 w-4 mr-2" />
+                        Remover filtros
+                    </Button>
                 </form>
+                
                 {/* Paginação alinhada ao início */}
 
                 <div className="flex justify-start mt-2">
