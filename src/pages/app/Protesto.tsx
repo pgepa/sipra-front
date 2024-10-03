@@ -6,7 +6,8 @@ import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, X } from 'lucide-react';
+import { Download, Search, X } from 'lucide-react';
+import { GrDocumentExcel } from "react-icons/gr";
 
 interface ProtestoData {
     cda: string;
@@ -70,31 +71,40 @@ export function Protesto() {
 
     const token = localStorage.getItem('token');
 
-    const fetchProtestos = async (currentPage = 1) => {
+    const fetchProtestos = async (currentPage = 1, downloadFormat = '') => {
 
         try {
             setLoading(true);
-            setError(null); // Limpa o erro ao iniciar uma nova busca
+            setError(null); 
+
             const response = await api.get('/buscaprotesto', {
-                params: { page: currentPage, per_page: 25, ...filters },
+                params: { 
+                    page: currentPage, 
+                    per_page: 25, 
+                    download: downloadFormat,
+                     ...filters },
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
+                responseType: downloadFormat ? 'blob' : 'json',
             });
 
-
-            setProtestos(response.data.data);
-            setTotalItems(response.data.total_items);
-            setTotalPages(Math.ceil(response.data.total_items / 25));
-
+            if (downloadFormat) {
+                const blob = new Blob([response.data], { type: downloadFormat === 'xlsx' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `protestos.${downloadFormat}`;
+                link.click();
+            } else {
+                setProtestos(response.data.data);
+                setTotalItems(response.data.total_items);
+                setTotalPages(Math.ceil(response.data.total_items / 25));
+            }
 
         } catch (error) {
             console.error('Erro ao buscar dados de protestos:', error);
             setProtestos([]);
-            // Exibe o erro após um atraso de 2 segundos
-            setTimeout(() => {
-                setError('Erro ao buscar dados de protestos. Tente novamente mais tarde.');
-            }, 2000);
+            setError('Erro ao buscar dados de protestos. Tente novamente mais tarde.');
         } finally {
             setLoading(false);
         }
@@ -351,6 +361,15 @@ export function Protesto() {
                         Remover filtros
                     </Button>
                 </form>
+
+                {/* Botões de Download */}
+                <div className="flex gap-4 mt-4">
+                    
+                    <Button onClick={() => fetchProtestos(page, 'csv')} variant='default'>
+                        <GrDocumentExcel className="h-4 w-4 mr-2" />
+                        Baixar Planilha
+                    </Button>
+                </div>
 
                 {/* Paginação alinhada ao início */}
 
