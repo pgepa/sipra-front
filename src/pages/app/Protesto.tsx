@@ -65,6 +65,7 @@ export function Protesto() {
         parcelamento: '',
         prescrito: '',
         obs_end_protesto: '',
+        origemdivida: '',
     });
 
     const token = localStorage.getItem('token');
@@ -148,11 +149,12 @@ export function Protesto() {
             parcelamento: '',
             prescrito: '',
             obs_end_protesto: '',
+            origemdivida: '',
         });
         setPage(1); // Reinicia a paginação para a primeira página
         fetchProtestos(1); // Refaz a busca com os filtros limpos
     };
-    
+
 
     return (
         <>
@@ -188,6 +190,27 @@ export function Protesto() {
                         className='w-[320px]'
                         value={filters.fundamento}
                         onChange={(e) => setFilters({ ...filters, fundamento: e.target.value })}
+                    />
+
+                    <Input
+                        placeholder='Origem dívida'
+                        className='w-[220px]'
+                        value={filters.origemdivida}
+                        onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
+                    />
+
+                    <Input
+                        placeholder='Valor mínimo atualizado'
+                        className='w-[220px]'
+                        value={filters.vlcdaatualizado_min}
+                        onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
+                    />
+
+                    <Input
+                        placeholder='Valor máximo atualizado'
+                        className='w-[220px]'
+                        value={filters.vlcdaatualizado_max}
+                        onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
                     />
 
 
@@ -271,7 +294,7 @@ export function Protesto() {
 
                             <SelectItem value="S">SIM</SelectItem>
                             <SelectItem value="N">NÃO</SelectItem>
-                            
+
                         </SelectContent>
                     </Select>
 
@@ -283,7 +306,7 @@ export function Protesto() {
 
                             <SelectItem value="S">SIM</SelectItem>
                             <SelectItem value="N">NÃO</SelectItem>
-                            
+
                         </SelectContent>
                     </Select>
 
@@ -296,7 +319,7 @@ export function Protesto() {
                             <SelectItem value="Dentro do prazo prescricional">Dentro do prazo prescricional</SelectItem>
                             <SelectItem value="Possível Prescrição">Possível Prescrição</SelectItem>
                             <SelectItem value="Prestes a prescrever">Prestes a prescrever</SelectItem>
-                            
+
                         </SelectContent>
                     </Select>
 
@@ -311,7 +334,7 @@ export function Protesto() {
                             <SelectItem value="Endereço Insuficiente">Prestes a prescrever</SelectItem>
                             <SelectItem value="Endereço Nulo">Endereço Nulo</SelectItem>
                             <SelectItem value="Endereço válido para Protesto">Endereço válido para Protesto</SelectItem>
-                            
+
                         </SelectContent>
                     </Select>
 
