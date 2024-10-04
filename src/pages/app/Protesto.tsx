@@ -362,7 +362,7 @@ export function Protesto() {
                     </Button>
                 </form>
 
-                {/* Botões de Download */}
+                
                 <div className="flex gap-4 mt-4">
                     
                     <Button onClick={() => fetchProtestos(page, 'csv')} variant='default'>
@@ -371,7 +371,7 @@ export function Protesto() {
                     </Button>
                 </div>
 
-                {/* Paginação alinhada ao início */}
+                
 
                 <div className="flex justify-start mt-2">
                     <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">

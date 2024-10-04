@@ -15,13 +15,7 @@ export function AppLayout() {
 
             <div className="flex flex-1">
 
-                
-
-                    <Sidebar />
-                    
-                
-
-
+                <Sidebar />
 
 
                 <main className="flex-1 flex flex-col p-8 pt-20 bg-gray-100">
