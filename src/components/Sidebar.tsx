@@ -9,7 +9,7 @@ export function Sidebar() {
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
 
     return (
-        <aside className={`bg-gray-200 p-3 relative transition-all duration-300 ${open ? 'w-64' : 'w-20'}`}>
+        <aside className={`bg-gray-200 p-3 mt-16 relative transition-all duration-300 ${open ? 'w-[17.5rem]' : 'w-20'}h-screen fixed top-0 left-0 z-40`}>
             <ChevronFirst
                 className={`absolute cursor-pointer -right-3 top-4 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${open ? '' : 'rotate-180'}`}
                 onClick={() => setOpen(!open)}
