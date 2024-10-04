@@ -67,6 +67,7 @@ export function Protesto() {
         prescrito: '',
         obs_end_protesto: '',
         origemdivida: '',
+        ulthistorico: '',
     });
 
     const token = localStorage.getItem('token');
@@ -160,6 +161,7 @@ export function Protesto() {
             prescrito: '',
             obs_end_protesto: '',
             origemdivida: '',
+            ulthistorico: '',
         });
         setPage(1); // Reinicia a paginação para a primeira página
         fetchProtestos(1); // Refaz a busca com os filtros limpos
@@ -264,6 +266,19 @@ export function Protesto() {
                         </SelectContent>
                     </Select>
 
+                    <Select value={filters.ulthistorico} onValueChange={(value) => setFilters({ ...filters, ulthistorico: value })}>
+                        <SelectTrigger className="w-full sm:w-[200px]">
+                            <SelectValue placeholder="Último Histórico" />
+                        </SelectTrigger>
+                        <SelectContent>
+
+                            <SelectItem value="Inscrita">Inscrita</SelectItem>
+                            <SelectItem value="Protestada">Protestada</SelectItem>
+                            
+
+                        </SelectContent>
+                    </Select>
+
                     <Select value={filters.tipotributo} onValueChange={(value) => setFilters({ ...filters, tipotributo: value })}>
                         <SelectTrigger className="w-full sm:w-[180px]">
                             <SelectValue placeholder="Tipo de Atributo" />
@@ -286,6 +301,7 @@ export function Protesto() {
                         </SelectTrigger>
                         <SelectContent>
 
+                            <SelectItem value="Inscrita">Inscrita</SelectItem>
                             <SelectItem value="Cancelada">Cancelada</SelectItem>
                             <SelectItem value="Exclusão">Exclusão</SelectItem>
                             <SelectItem value="Ajuizamento">Ajuizamento</SelectItem>
