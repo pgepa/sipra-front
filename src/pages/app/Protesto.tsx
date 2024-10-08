@@ -446,7 +446,7 @@ export function Protesto() {
                                 <Table className="min-w-full">
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead></TableHead>
+                                            <TableHead className='w-[64px]'></TableHead>
                                             {/*<TableHead className='min-w-[180px]'>Nº Documento</TableHead>*/}
                                             {/*<TableHead className='min-w-[320px]'>Contribuinte</TableHead>*/}
                                             {/*<TableHead className='min-w-[160px]'>Tipo de Documento</TableHead>*/}
@@ -468,25 +468,25 @@ export function Protesto() {
 
 
 
-                                            <TableHead className='min-w-[160px]'>CDA</TableHead>
-                                            <TableHead className='min-w-[160px]'>Data Inscrição</TableHead>
-                                            <TableHead className='min-w-[160px]'>Data Referência</TableHead>
+                                            <TableHead>CDA</TableHead>
+                                            <TableHead>Data Inscrição</TableHead>
+                                            <TableHead>Data Referência</TableHead>
 
-                                            <TableHead className='min-w-[160px]'>Origem da Dívida</TableHead>
-
-
+                                            <TableHead >Origem da Dívida</TableHead>
 
 
-                                            <TableHead className='min-w-[160px]'>Valor CDA Atualizada</TableHead>
-                                            <TableHead className='min-w-[160px]'>Status SAJ</TableHead>
+
+
+                                            <TableHead>Valor CDA Atualizada</TableHead>
+                                            <TableHead>Status SAJ</TableHead>
                                             
-                                            <TableHead className='min-w-[160px]'>Último Histórico</TableHead>
-                                            <TableHead className='min-w-[160px]'>Data Último Histórico</TableHead>
+                                            <TableHead>Último Histórico</TableHead>
+                                            <TableHead>Data Último Histórico</TableHead>
 
                                             
                                         
 
-                                            <TableHead className='min-w-[320px]'>Fundamento</TableHead>
+                                            <TableHead>Fundamento</TableHead>
                                         </TableRow>
                                     </TableHeader>
 
@@ -742,7 +742,7 @@ export function Protesto() {
 
 
 
-                                                    <TableCell>{protesto.cda}</TableCell>
+                                                    <TableCell className='font-mono font-medium'>{protesto.cda}</TableCell>
                                                     <TableCell>
                                                         {protesto.dtinscricao
                                                             ? (() => {
@@ -786,7 +786,7 @@ export function Protesto() {
 
 
 
-                                                    <TableCell>
+                                                    <TableCell className='font-medium'>
                                                         {protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
                                                             ? Number(protesto.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                                                             : 'R$ 0,00'}
