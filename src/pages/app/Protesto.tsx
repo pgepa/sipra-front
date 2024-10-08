@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Search, X } from 'lucide-react';
 import { GrDocumentExcel } from "react-icons/gr";
 import { format, parse } from 'date-fns';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 interface ProtestoData {
     cda: string;
@@ -165,8 +166,8 @@ export function Protesto() {
             origemdivida: '',
             ulthistorico: '',
         });
-        setPage(1); // Reinicia a paginação para a primeira página
-        fetchProtestos(1); // Refaz a busca com os filtros limpos
+        setPage(1);
+        fetchProtestos(1);
     };
 
 
@@ -445,35 +446,46 @@ export function Protesto() {
                                 <Table className="min-w-full">
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead className='min-w-[180px]'>Nº Documento</TableHead>
-                                            <TableHead className='min-w-[320px]'>Contribuinte</TableHead>
-                                            <TableHead className='min-w-[160px]'>Tipo de Documento</TableHead>
-                                            <TableHead className='min-w-[180px]'>Natureza Jurídica</TableHead>
-                                            <TableHead className='min-w-[180px]'>Porte da Empresa</TableHead>
-                                            <TableHead className='min-w-[160px]'>Situação Cadastral</TableHead>
-                                            <TableHead className='min-w-[180px]'>Data Situação Cadastral</TableHead>
-                                            <TableHead className='min-w-[180px]'>Data Início de Atividade</TableHead>
-                                            <TableHead className='min-w-[160px]'>Capital Social</TableHead>
-                                            <TableHead className='min-w-[320px]'>Descrição</TableHead>
+                                            <TableHead></TableHead>
+                                            {/*<TableHead className='min-w-[180px]'>Nº Documento</TableHead>*/}
+                                            {/*<TableHead className='min-w-[320px]'>Contribuinte</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Tipo de Documento</TableHead>*/}
+                                            {/*<TableHead className='min-w-[180px]'>Natureza Jurídica</TableHead>*/}
+                                            {/*<TableHead className='min-w-[180px]'>Porte da Empresa</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Situação Cadastral</TableHead>*/}
+                                            {/*<TableHead className='min-w-[180px]'>Data Situação Cadastral</TableHead>*/}
+                                            {/*<TableHead className='min-w-[180px]'>Data Início de Atividade</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Capital Social</TableHead>*/}
+                                            {/*<TableHead className='min-w-[320px]'>Descrição</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Tipo de Tributo</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Valor CDA Original</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Multa Atualizada</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Juros Atualizados</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Valor IMP Atualizado</TableHead>*/}
+                                            {/*<TableHead className='min-w-[160px]'>Data Status SAJ</TableHead>*/}
+
+
+
+
+
                                             <TableHead className='min-w-[160px]'>CDA</TableHead>
                                             <TableHead className='min-w-[160px]'>Data Inscrição</TableHead>
                                             <TableHead className='min-w-[160px]'>Data Referência</TableHead>
-                                            <TableHead className='min-w-[160px]'>Tipo de Tributo</TableHead>
+
                                             <TableHead className='min-w-[160px]'>Origem da Dívida</TableHead>
-                                            <TableHead className='min-w-[160px]'>Valor CDA Original</TableHead>
-                                            <TableHead className='min-w-[160px]'>Multa Atualizada</TableHead>
-                                            <TableHead className='min-w-[160px]'>Juros Atualizados</TableHead>
-                                            <TableHead className='min-w-[160px]'>Valor IMP Atualizado</TableHead>
+
+
+
+
                                             <TableHead className='min-w-[160px]'>Valor CDA Atualizada</TableHead>
                                             <TableHead className='min-w-[160px]'>Status SAJ</TableHead>
-                                            <TableHead className='min-w-[160px]'>Data Status SAJ</TableHead>
+                                            
                                             <TableHead className='min-w-[160px]'>Último Histórico</TableHead>
                                             <TableHead className='min-w-[160px]'>Data Último Histórico</TableHead>
-                                            <TableHead className='min-w-[120px]'>Flag Ajuizada</TableHead>
-                                            <TableHead className='min-w-[160px]'>Sit Protesto</TableHead>
-                                            <TableHead className='min-w-[120px]'>Parcelamento</TableHead>
-                                            <TableHead className='min-w-[160px]'>Prescrito</TableHead>
-                                            <TableHead className='min-w-[220px]'>Endereço Protesto</TableHead>
+
+                                            
+                                        
+
                                             <TableHead className='min-w-[320px]'>Fundamento</TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -482,14 +494,184 @@ export function Protesto() {
                                         {protestos.length > 0 ? (
                                             protestos.map((protesto) => (
                                                 <TableRow key={protesto.cda}>
-                                                    <TableCell>{protesto.docformatado}</TableCell>
-                                                    <TableCell>{protesto.contribuinte}</TableCell>
-                                                    <TableCell>{protesto.tipodoc}</TableCell>
-                                                    <TableCell>{protesto.natjuridica}</TableCell>
-                                                    <TableCell>{protesto.porte}</TableCell>
-                                                    <TableCell>{protesto.situacaocadastral}</TableCell>
-
                                                     <TableCell>
+                                                        <Dialog>
+                                                            <DialogTrigger asChild>
+                                                                <Button variant="outline" size="xs">
+                                                                    <Search className='h-3 w-3' />
+                                                                </Button>
+                                                            </DialogTrigger>
+
+                                                            <DialogContent className="max-h-[90vh] overflow-y-auto">
+                                                                <DialogHeader>
+                                                                    <DialogTitle>Contribuinte: {protesto.contribuinte}</DialogTitle>
+                                                                    <DialogDescription>Detalhes do Contribuinte</DialogDescription>
+                                                                </DialogHeader>
+
+                                                                <div className='space-y-6'>
+                                                                    <Table>
+                                                                        <TableBody>
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Nº Documento</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.docformatado}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Tipo de Documento</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.tipodoc}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Natureza Jurídica</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.natjuridica}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Porte da Empresa</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.porte}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Situação Cadastral</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.situacaocadastral}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Data Situação Cadastral</TableCell>
+                                                                                <TableCell className='flex justify-end'>
+                                                                                    {protesto.dtsituacaocadastral
+                                                                                        ? (() => {
+                                                                                            const data = parse(protesto.dtsituacaocadastral, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
+
+                                                                                            if (!isNaN(data.getTime())) {
+                                                                                                return format(data, 'dd/MM/yyyy');
+                                                                                            } else {
+                                                                                                return 'Data inválida';
+                                                                                            }
+                                                                                        })()
+                                                                                        : '-'}
+                                                                                </TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Data Início de Atividade</TableCell>
+                                                                                <TableCell className='flex justify-end'>
+                                                                                    {protesto.dtinicioatividade
+                                                                                        ? (() => {
+                                                                                            const data = parse(protesto.dtinicioatividade, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
+
+                                                                                            if (!isNaN(data.getTime())) {
+                                                                                                return format(data, 'dd/MM/yyyy');
+                                                                                            } else {
+                                                                                                return 'Data inválida';
+                                                                                            }
+                                                                                        })()
+                                                                                        : '-'}
+                                                                                </TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Capital Social</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.capitalsocial !== undefined && protesto.capitalsocial !== null
+                                                                                    ? Number(protesto.capitalsocial).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Descrição</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.descricao}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Tipo de Tributo</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.tipotributo}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Valor CDA Original</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
+                                                                                    ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Multa Atualizada</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.vlmultaatualizada !== undefined && protesto.vlmultaatualizada !== null
+                                                                                    ? Number(protesto.vlmultaatualizada).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Juros Atualizados</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
+                                                                                    ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Imposto Atualizado</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
+                                                                                    ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Data Status SAJ</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.dt_status_saj
+                                                                                    ? (() => {
+                                                                                        
+                                                                                        const data = new Date(protesto.dt_status_saj.replace(' ', 'T')); 
+                                                                                        console.log('Data analisada:', data);
+
+                                                                                        
+                                                                                        if (!isNaN(data.getTime())) {
+                                                                                            return format(data, 'dd/MM/yyyy'); 
+                                                                                        } else {
+                                                                                            return 'Data inválida';
+                                                                                        }
+                                                                                    })()
+                                                                                    : '-'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Flag Ajuizada</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.flajuizada}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Situação Protesto</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.sit_protesto}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Parcelamento</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.parcelamento}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Prescrito</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.prescrito}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Endereço Protesto</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.obs_end_protesto}</TableCell>
+                                                                            </TableRow>
+
+                                                                        </TableBody>
+                                                                    </Table>
+                                                                </div>
+
+                                                            </DialogContent>
+                                                        </Dialog>
+                                                    </TableCell>
+                                                    {/*<TableCell>{protesto.docformatado}</TableCell>*/}
+                                                    {/*<TableCell>{protesto.contribuinte}</TableCell>*/}
+                                                    {/*<TableCell>{protesto.tipodoc}</TableCell>*/}
+                                                    {/*<TableCell>{protesto.natjuridica}</TableCell>*/}
+                                                    {/*<TableCell>{protesto.porte}</TableCell>*/}
+                                                    {/*<TableCell>{protesto.situacaocadastral}</TableCell>*/}
+                                                    {/*<TableCell>
                                                         {protesto.dtsituacaocadastral
                                                             ? (() => {
                                                                 const data = parse(protesto.dtsituacaocadastral, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
@@ -501,9 +683,8 @@ export function Protesto() {
                                                                 }
                                                             })()
                                                             : '-'}
-                                                    </TableCell>
-
-                                                    <TableCell>
+                                                    </TableCell>*/}
+                                                    {/*<TableCell>
                                                         {protesto.dtinicioatividade
                                                             ? (() => {
                                                                 const data = parse(protesto.dtinicioatividade, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
@@ -515,11 +696,52 @@ export function Protesto() {
                                                                 }
                                                             })()
                                                             : '-'}
-                                                    </TableCell>
+                                                    </TableCell>*/}
+                                                    {/*<TableCell>{protesto.capitalsocial}</TableCell>*/}
+                                                    {/*<TableCell>{protesto.descricao}</TableCell>*/}
+                                                    {/*<TableCell>{protesto.tipotributo}</TableCell>*/}
+                                                    {/*<TableCell>
+                                                        {protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
+                                                            ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                            : 'R$ 0,00'}
+                                                    </TableCell>*/}
+                                                    {/*<TableCell>
+                                                        {protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
+                                                            ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                            : 'R$ 0,00'}
+                                                    </TableCell>*/}
+
+                                                    {/* <TableCell>
+                                                        {protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
+                                                            ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                            : 'R$ 0,00'}
+                                                    </TableCell>*/}
+
+                                                    {/* <TableCell>
+                                                        {protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
+                                                            ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                            : 'R$ 0,00'}
+                                                    </TableCell>*/}
+                                                    {/* <TableCell>
+                                                        {protesto.dt_status_saj
+                                                            ? (() => {
+                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
+                                                                const data = new Date(protesto.dt_status_saj.replace(' ', 'T')); // Converte para formato ISO
+                                                                console.log('Data analisada:', data);
+
+                                                                // Verifica se a data é válida
+                                                                if (!isNaN(data.getTime())) {
+                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
+                                                                } else {
+                                                                    return 'Data inválida';
+                                                                }
+                                                            })()
+                                                            : '-'}
+                                                    </TableCell>*/}
 
 
-                                                    <TableCell>{protesto.capitalsocial}</TableCell>
-                                                    <TableCell>{protesto.descricao}</TableCell>
+
+
                                                     <TableCell>{protesto.cda}</TableCell>
                                                     <TableCell>
                                                         {protesto.dtinscricao
@@ -554,30 +776,15 @@ export function Protesto() {
                                                             })()
                                                             : '-'}
                                                     </TableCell>
-                                                    
-                                                    <TableCell>{protesto.tipotributo}</TableCell>
-                                                    <TableCell>{protesto.origemdivida}</TableCell>
-                                                    <TableCell>
-                                                        {protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
-                                                            ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                            : 'R$ 0,00'}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {protesto.vlmultaatualizada !== undefined && protesto.vlmultaatualizada !== null
-                                                            ? Number(protesto.vlmultaatualizada).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                            : 'R$ 0,00'}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
-                                                            ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                            : 'R$ 0,00'}
-                                                    </TableCell>
 
-                                                    <TableCell>
-                                                        {protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
-                                                            ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                            : 'R$ 0,00'}
-                                                    </TableCell>
+
+                                                    <TableCell>{protesto.origemdivida}</TableCell>
+
+
+
+
+
+
 
                                                     <TableCell>
                                                         {protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
@@ -585,24 +792,13 @@ export function Protesto() {
                                                             : 'R$ 0,00'}
                                                     </TableCell>
 
+
+
                                                     <TableCell>{protesto.status_saj}</TableCell>
 
-                                                    <TableCell>
-                                                        {protesto.dt_status_saj
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dt_status_saj.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
 
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>                                                    
+
+                                                    
                                                     <TableCell>{protesto.ulthistorico}</TableCell>
 
                                                     <TableCell>
@@ -621,16 +817,13 @@ export function Protesto() {
                                                             })()
                                                             : '-'}
                                                     </TableCell>
-                                                        
+                                                    
+                                                    
+                                                    
                                                     
                                                     
 
-                                                    
-                                                    <TableCell>{protesto.flajuizada}</TableCell>
-                                                    <TableCell>{protesto.sit_protesto}</TableCell>
-                                                    <TableCell>{protesto.parcelamento}</TableCell>
-                                                    <TableCell>{protesto.prescrito}</TableCell>
-                                                    <TableCell>{protesto.obs_end_protesto}</TableCell>
+
                                                     <TableCell>{protesto.fundamento}</TableCell>
                                                 </TableRow>
                                             ))
