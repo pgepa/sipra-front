@@ -17,6 +17,9 @@ import { Ajuizamento } from '@/pages/app/Ajuizamento';
 import PrivateRoute from '@/utils/PrivateRoute';
 import { Usuarios } from '@/pages/app/Usuarios';
 import { NotFound } from '@/404';
+import { AppLayoutChefia } from '@/pages/_layouts/appChefia';
+import { HomeChefia } from '@/pages/app/HomeChefia';
+
 
 
 export const Router = createHashRouter([
@@ -52,4 +55,20 @@ export const Router = createHashRouter([
             
         ],
     },
+
+    {
+        path: '/',
+        element: <AppLayoutChefia />,
+        errorElement: <NotFound/>,
+        children: [
+            { path: '/homechefia', element: <PrivateRoute allowedProfiles={['Chefia']}><HomeChefia /></PrivateRoute> },
+            { path: 'chefia/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Chefia']}><Protesto /></PrivateRoute> },
+            { path: 'chefia/reguacobranca/cartacobranca', element: <PrivateRoute allowedProfiles={['Chefia']}><CartaCobranca /></PrivateRoute> },
+            { path: 'chefia/reguacobranca/ajuizamento', element: <PrivateRoute allowedProfiles={['Chefia']}><Ajuizamento /></PrivateRoute> },
+            
+            
+        ],
+    },
+
+    
 ]);

@@ -36,8 +36,8 @@ export function SignIn() {
         case "Administrador":
           navigate('/home', { replace: true });
           break;
-          case 2:
-          navigate('/chefia', { replace: true });
+          case "Chefia":
+          navigate('/homechefia', { replace: true });
           break;
         case 3:
           navigate('/estagiario', { replace: true });
