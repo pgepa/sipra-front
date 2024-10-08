@@ -178,56 +178,56 @@ export function Protesto() {
 
 
                 <form
-                    className='flex items-center gap-2 mt-2'
+                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-2'
                     onSubmit={(e) => {
                         e.preventDefault();
                         fetchProtestos(1);
                     }}
                 >
-                    <span className='text-sm font-semibold'>Filtros:</span>
+                    <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
                     <Input
                         placeholder='Nº Documento'
-                        className='w-[200px]'
+                        className='col-span-1'
                         value={filters.nudocumento}
                         onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
                     />
                     <Input
                         placeholder='Contribuinte'
-                        className='w-[320px]'
+                        className='col-span-1'
                         value={filters.contribuinte}
                         onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
                     />
                     <Input
                         placeholder='Fundamento'
-                        className='w-[320px]'
+                        className='col-span-1'
                         value={filters.fundamento}
                         onChange={(e) => setFilters({ ...filters, fundamento: e.target.value })}
                     />
 
                     <Input
                         placeholder='Origem dívida'
-                        className='w-[220px]'
+                        className='col-span-1'
                         value={filters.origemdivida}
                         onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
                     />
 
                     <Input
                         placeholder='Valor mínimo atualizado'
-                        className='w-[220px]'
+                        className='col-span-1'
                         value={filters.vlcdaatualizado_min}
                         onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
                     />
 
                     <Input
                         placeholder='Valor máximo atualizado'
-                        className='w-[220px]'
+                        className='col-span-1'
                         value={filters.vlcdaatualizado_max}
                         onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
                     />
 
 
                     <Select value={filters.tipodoc} onValueChange={(value) => setFilters({ ...filters, tipodoc: value })}>
-                        <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Tipo de Documento" />
                         </SelectTrigger>
                         <SelectContent>
@@ -239,7 +239,7 @@ export function Protesto() {
                     </Select>
 
                     <Select value={filters.porte} onValueChange={(value) => setFilters({ ...filters, porte: value })}>
-                        <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Porte da Empresa" />
                         </SelectTrigger>
                         <SelectContent>
@@ -252,7 +252,7 @@ export function Protesto() {
                     </Select>
 
                     <Select value={filters.situacaocadastral} onValueChange={(value) => setFilters({ ...filters, situacaocadastral: value })}>
-                        <SelectTrigger className="w-full sm:w-[200px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Situação Cadastral RFB" />
                         </SelectTrigger>
                         <SelectContent>
@@ -267,20 +267,37 @@ export function Protesto() {
                     </Select>
 
                     <Select value={filters.ulthistorico} onValueChange={(value) => setFilters({ ...filters, ulthistorico: value })}>
-                        <SelectTrigger className="w-full sm:w-[200px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Último Histórico" />
                         </SelectTrigger>
                         <SelectContent>
 
+                            <SelectItem value="Aguardando ajuizamento">Aguardando ajuizamento</SelectItem>
+                            <SelectItem value="Ajuizada">Ajuizada</SelectItem>
+                            <SelectItem value="Cancelada">Cancelada</SelectItem>
+                            <SelectItem value="EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO">Exclusão ajuizamento análise CDAS legado</SelectItem>
+                            <SelectItem value="Exclusão do Ajuizamento">Exclusão do ajuizamento</SelectItem>
+                            <SelectItem value="Execução fiscal excluída">Execução fiscal excluída</SelectItem>
+                            <SelectItem value="Execução fiscal extinta">Execução fiscal extinta</SelectItem>
                             <SelectItem value="Inscrita">Inscrita</SelectItem>
+                            <SelectItem value="Kit de ajuizamento excluído">Kit de ajuizamento excluído</SelectItem>
+                            <SelectItem value="Kit de protesto excluído">Kit de protesto excluído</SelectItem>
+                            <SelectItem value="Kit de protesto gerado">Kit de protesto gerado</SelectItem>
+                            <SelectItem value="Processo protesto excluído">Processo protesto excluído</SelectItem>
+                            <SelectItem value="Processo protesto extinto">Processo protesto extinto</SelectItem>
                             <SelectItem value="Protestada">Protestada</SelectItem>
+                            <SelectItem value="Protestada por edital">Protestada por edital</SelectItem>
+                            <SelectItem value="Protesto pago">Protesto pago</SelectItem>
+                            <SelectItem value="Protesto sustado">Protesto sustado</SelectItem>
+                            <SelectItem value="Quitada">Quitada</SelectItem>
+                            <SelectItem value="Suspensa">Suspensa</SelectItem>
                             
 
                         </SelectContent>
                     </Select>
 
                     <Select value={filters.tipotributo} onValueChange={(value) => setFilters({ ...filters, tipotributo: value })}>
-                        <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Tipo de Atributo" />
                         </SelectTrigger>
                         <SelectContent>
@@ -296,7 +313,7 @@ export function Protesto() {
                     </Select>
 
                     <Select value={filters.status_saj} onValueChange={(value) => setFilters({ ...filters, status_saj: value })}>
-                        <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Status SAJ" />
                         </SelectTrigger>
                         <SelectContent>
@@ -313,7 +330,7 @@ export function Protesto() {
                     </Select>
 
                     <Select value={filters.flajuizada} onValueChange={(value) => setFilters({ ...filters, flajuizada: value })}>
-                        <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Flag Ajuizada" />
                         </SelectTrigger>
                         <SelectContent>
@@ -325,7 +342,7 @@ export function Protesto() {
                     </Select>
 
                     <Select value={filters.parcelamento} onValueChange={(value) => setFilters({ ...filters, parcelamento: value })}>
-                        <SelectTrigger className="w-full sm:w-[160px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Parcelamento" />
                         </SelectTrigger>
                         <SelectContent>
@@ -337,7 +354,7 @@ export function Protesto() {
                     </Select>
 
                     <Select value={filters.prescrito} onValueChange={(value) => setFilters({ ...filters, prescrito: value })}>
-                        <SelectTrigger className="w-full sm:w-[160px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Prescrito" />
                         </SelectTrigger>
                         <SelectContent>
@@ -350,7 +367,7 @@ export function Protesto() {
                     </Select>
 
                     <Select value={filters.obs_end_protesto} onValueChange={(value) => setFilters({ ...filters, obs_end_protesto: value })}>
-                        <SelectTrigger className="w-full sm:w-[160px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Endereço Protesto" />
                         </SelectTrigger>
                         <SelectContent>
@@ -412,7 +429,7 @@ export function Protesto() {
 
             </div>
 
-            <div className='border rounded-md overflow-x-auto mt-4'>
+            <div className='border rounded-md overflow-x-auto mt-4 max-w-full'>
                 {loading ? (
                     <div>Carregando...</div>
                 ) : (
@@ -420,7 +437,8 @@ export function Protesto() {
                         {error ? (
                             <div className='text-red-500 text-center'>{error}</div>
                         ) : (
-                            <Table>
+                            <div className="overflow-x-auto">
+                            <Table className="min-w-full">
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead className='min-w-[180px]'>Nº Documento</TableHead>
@@ -501,6 +519,8 @@ export function Protesto() {
                                     )}
                                 </TableBody>
                             </Table>
+
+                            </div>
                         )}
 
 
