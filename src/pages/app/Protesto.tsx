@@ -447,45 +447,15 @@ export function Protesto() {
                                     <TableHeader>
                                         <TableRow>
                                             <TableHead className='w-[64px]'></TableHead>
-                                            {/*<TableHead className='min-w-[180px]'>Nº Documento</TableHead>*/}
-                                            {/*<TableHead className='min-w-[320px]'>Contribuinte</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Tipo de Documento</TableHead>*/}
-                                            {/*<TableHead className='min-w-[180px]'>Natureza Jurídica</TableHead>*/}
-                                            {/*<TableHead className='min-w-[180px]'>Porte da Empresa</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Situação Cadastral</TableHead>*/}
-                                            {/*<TableHead className='min-w-[180px]'>Data Situação Cadastral</TableHead>*/}
-                                            {/*<TableHead className='min-w-[180px]'>Data Início de Atividade</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Capital Social</TableHead>*/}
-                                            {/*<TableHead className='min-w-[320px]'>Descrição</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Tipo de Tributo</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Valor CDA Original</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Multa Atualizada</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Juros Atualizados</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Valor IMP Atualizado</TableHead>*/}
-                                            {/*<TableHead className='min-w-[160px]'>Data Status SAJ</TableHead>*/}
-
-
-
-
-
+                                           
                                             <TableHead>CDA</TableHead>
-                                            <TableHead>Data Inscrição</TableHead>
-                                            <TableHead>Data Referência</TableHead>
-
-                                            <TableHead >Origem da Dívida</TableHead>
-
-
-
-
                                             <TableHead>Valor CDA Atualizada</TableHead>
                                             <TableHead>Status SAJ</TableHead>
-                                            
                                             <TableHead>Último Histórico</TableHead>
                                             <TableHead>Data Último Histórico</TableHead>
-
-                                            
-                                        
-
+                                            <TableHead >Origem da Dívida</TableHead>
+                                            <TableHead>Data Inscrição</TableHead>
+                                            <TableHead>Data Referência</TableHead>                                                                              
                                             <TableHead>Fundamento</TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -665,68 +635,25 @@ export function Protesto() {
                                                             </DialogContent>
                                                         </Dialog>
                                                     </TableCell>
-                                                    {/*<TableCell>{protesto.docformatado}</TableCell>*/}
-                                                    {/*<TableCell>{protesto.contribuinte}</TableCell>*/}
-                                                    {/*<TableCell>{protesto.tipodoc}</TableCell>*/}
-                                                    {/*<TableCell>{protesto.natjuridica}</TableCell>*/}
-                                                    {/*<TableCell>{protesto.porte}</TableCell>*/}
-                                                    {/*<TableCell>{protesto.situacaocadastral}</TableCell>*/}
-                                                    {/*<TableCell>
-                                                        {protesto.dtsituacaocadastral
-                                                            ? (() => {
-                                                                const data = parse(protesto.dtsituacaocadastral, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
+                                                    
 
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy');
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>*/}
-                                                    {/*<TableCell>
-                                                        {protesto.dtinicioatividade
-                                                            ? (() => {
-                                                                const data = parse(protesto.dtinicioatividade, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
+                                                    <TableCell className='font-mono font-medium'>{protesto.cda}</TableCell>
 
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy');
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>*/}
-                                                    {/*<TableCell>{protesto.capitalsocial}</TableCell>*/}
-                                                    {/*<TableCell>{protesto.descricao}</TableCell>*/}
-                                                    {/*<TableCell>{protesto.tipotributo}</TableCell>*/}
-                                                    {/*<TableCell>
-                                                        {protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
-                                                            ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                    <TableCell className='font-medium'>
+                                                        {protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
+                                                            ? Number(protesto.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                                                             : 'R$ 0,00'}
-                                                    </TableCell>*/}
-                                                    {/*<TableCell>
-                                                        {protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
-                                                            ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                            : 'R$ 0,00'}
-                                                    </TableCell>*/}
+                                                    </TableCell>
 
-                                                    {/* <TableCell>
-                                                        {protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
-                                                            ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                            : 'R$ 0,00'}
-                                                    </TableCell>*/}
+                                                    <TableCell>{protesto.status_saj}</TableCell>
 
-                                                    {/* <TableCell>
-                                                        {protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
-                                                            ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                            : 'R$ 0,00'}
-                                                    </TableCell>*/}
-                                                    {/* <TableCell>
-                                                        {protesto.dt_status_saj
+                                                    <TableCell>{protesto.ulthistorico}</TableCell>
+
+                                                    <TableCell>
+                                                        {protesto.dt_ulthist
                                                             ? (() => {
                                                                 // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dt_status_saj.replace(' ', 'T')); // Converte para formato ISO
+                                                                const data = new Date(protesto.dt_ulthist.replace(' ', 'T')); // Converte para formato ISO
                                                                 console.log('Data analisada:', data);
 
                                                                 // Verifica se a data é válida
@@ -737,12 +664,10 @@ export function Protesto() {
                                                                 }
                                                             })()
                                                             : '-'}
-                                                    </TableCell>*/}
+                                                    </TableCell>
 
+                                                    <TableCell>{protesto.origemdivida}</TableCell>
 
-
-
-                                                    <TableCell className='font-mono font-medium'>{protesto.cda}</TableCell>
                                                     <TableCell>
                                                         {protesto.dtinscricao
                                                             ? (() => {
@@ -775,50 +700,7 @@ export function Protesto() {
                                                                 }
                                                             })()
                                                             : '-'}
-                                                    </TableCell>
-
-
-                                                    <TableCell>{protesto.origemdivida}</TableCell>
-
-
-
-
-
-
-
-                                                    <TableCell className='font-medium'>
-                                                        {protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
-                                                            ? Number(protesto.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                            : 'R$ 0,00'}
-                                                    </TableCell>
-
-
-
-                                                    <TableCell>{protesto.status_saj}</TableCell>
-
-
-
-                                                    
-                                                    <TableCell>{protesto.ulthistorico}</TableCell>
-
-                                                    <TableCell>
-                                                        {protesto.dt_ulthist
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dt_ulthist.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
-
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>
-                                                    
-                                                    
+                                                    </TableCell>                                             
                                                     
                                                     
                                                     
