@@ -10,6 +10,7 @@ import { Search, X } from 'lucide-react';
 import { GrDocumentExcel } from "react-icons/gr";
 import { format, parse } from 'date-fns';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import GridLoader from 'react-spinners/GridLoader';
 
 interface ProtestoData {
     cda: string;
@@ -436,7 +437,9 @@ export function Protesto() {
 
             <div className='border rounded-md overflow-x-auto mt-4 max-w-full'>
                 {loading ? (
-                    <div>Carregando...</div>
+                    <div className="flex justify-center h-screen mt-10">
+                    <GridLoader size={16} color="#6b25c7" />
+                </div>
                 ) : (
                     <>
                         {error ? (
