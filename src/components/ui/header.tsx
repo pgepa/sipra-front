@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { AccountMenu } from '@/components/AccountMenu';
-import logo from '@/assets/LogoSIDA.svg'
+import logo from '@/assets/logo.svg'
 export function Header() {
 
 
@@ -9,8 +9,10 @@ export function Header() {
         <div className={`border-b`}>
             <div className="flex h-16 items-center gap-6 justify-start px-6 bg-gradient-to-r from-indigo-500 shadow-xl">
                 <div className="flex items-center gap-3 text-white">
-                <img className="w-28 text-white" src={logo} alt="Logo" />
-                    <Separator orientation="vertical" className="h-6 hidden lg:block" />
+                <img className="h-12 w-12 text-white" src={logo} alt="Logo" />
+                <Separator orientation="vertical" className="h-6 hidden lg:block" />
+                <span className="font-bold">PROCURADORIA DA DÍVIDA ATIVA</span>
+                    
                 </div>
 
                 <div className='ml-auto flex items-center gap-2'>
