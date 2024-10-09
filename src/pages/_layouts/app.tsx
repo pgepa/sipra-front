@@ -25,7 +25,7 @@ export function AppLayout() {
                     </div>
 
 
-                    <footer className="text-sm text-muted-foreground text-center mt-8">
+                    <footer className="w-full text-center p-4 text-sm text-muted-foreground">
                         Copyright &copy; PGE-PA {new Date().getFullYear()} | DTIGD - Todos
                         os direitos reservados.
                     </footer>

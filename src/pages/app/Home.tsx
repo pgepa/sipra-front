@@ -5,8 +5,8 @@ export function Home() {
     return (
         <>
         <Helmet title="Home" />
-        <div className="flex flex-col gap-4 items-center p-4 sm:p-6 md:p-8">
-        <img className="w-80" src={logo} alt="Logo" />
+        <div className="flex min-h-screen items-center justify-center">
+        <img className="w-96" src={logo} alt="Logo SIDA" />
             
                           
         </div>

@@ -72,6 +72,7 @@ export function Protesto() {
         obs_end_protesto: '',
         origemdivida: '',
         ulthistorico: '',
+        sit_protesto: '',
     });
 
     const token = localStorage.getItem('token');
@@ -167,6 +168,7 @@ export function Protesto() {
             obs_end_protesto: '',
             origemdivida: '',
             ulthistorico: '',
+            sit_protesto: '',
         });
         setPage(1);
         fetchProtestos(1);
@@ -276,202 +278,226 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                    <Label className='font-semibold text-sm text-gray-800'>Porte da empresa:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Porte da empresa:</Label>
 
-                    <Select value={filters.porte} onValueChange={(value) => setFilters({ ...filters, porte: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
+                        <Select value={filters.porte} onValueChange={(value) => setFilters({ ...filters, porte: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
 
-                            <SelectItem value="Empresa de Pequeno Porte">Empresa de Pequeno Porte</SelectItem>
-                            <SelectItem value="Micro Empresa">Micro Empresa</SelectItem>
-                            <SelectItem value="Demais">Demais</SelectItem>
+                                <SelectItem value="Empresa de Pequeno Porte">Empresa de Pequeno Porte</SelectItem>
+                                <SelectItem value="Micro Empresa">Micro Empresa</SelectItem>
+                                <SelectItem value="Demais">Demais</SelectItem>
 
-                        </SelectContent>
-                    </Select>
-
-                    </div>
-
-                    <div className='space-y-2'>
-
-                    <Label className='font-semibold text-sm text-gray-800'>Situação cadastral RFB:</Label>
-
-                    <Select value={filters.situacaocadastral} onValueChange={(value) => setFilters({ ...filters, situacaocadastral: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
-
-                            <SelectItem value="Ativa">Ativa</SelectItem>
-                            <SelectItem value="Baixada">Baixada</SelectItem>
-                            <SelectItem value="Inapta">Inapta</SelectItem>
-                            <SelectItem value="Nula">Nula</SelectItem>
-                            <SelectItem value="Suspensa">Suspensa</SelectItem>
-
-                        </SelectContent>
-                    </Select>
+                            </SelectContent>
+                        </Select>
 
                     </div>
 
                     <div className='space-y-2'>
 
-                    <Label className='font-semibold text-sm text-gray-800'>Último histórico:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Situação cadastral RFB:</Label>
 
-                    <Select value={filters.ulthistorico} onValueChange={(value) => setFilters({ ...filters, ulthistorico: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
+                        <Select value={filters.situacaocadastral} onValueChange={(value) => setFilters({ ...filters, situacaocadastral: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
 
-                            <SelectItem value="Aguardando ajuizamento">Aguardando ajuizamento</SelectItem>
-                            <SelectItem value="Ajuizada">Ajuizada</SelectItem>
-                            <SelectItem value="Cancelada">Cancelada</SelectItem>
-                            <SelectItem value="EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO">Exclusão ajuizamento análise CDAS legado</SelectItem>
-                            <SelectItem value="Exclusão do Ajuizamento">Exclusão do ajuizamento</SelectItem>
-                            <SelectItem value="Execução fiscal excluída">Execução fiscal excluída</SelectItem>
-                            <SelectItem value="Execução fiscal extinta">Execução fiscal extinta</SelectItem>
-                            <SelectItem value="Inscrita">Inscrita</SelectItem>
-                            <SelectItem value="Kit de ajuizamento excluído">Kit de ajuizamento excluído</SelectItem>
-                            <SelectItem value="Kit de protesto excluído">Kit de protesto excluído</SelectItem>
-                            <SelectItem value="Kit de protesto gerado">Kit de protesto gerado</SelectItem>
-                            <SelectItem value="Processo protesto excluído">Processo protesto excluído</SelectItem>
-                            <SelectItem value="Processo protesto extinto">Processo protesto extinto</SelectItem>
-                            <SelectItem value="Protestada">Protestada</SelectItem>
-                            <SelectItem value="Protestada por edital">Protestada por edital</SelectItem>
-                            <SelectItem value="Protesto pago">Protesto pago</SelectItem>
-                            <SelectItem value="Protesto sustado">Protesto sustado</SelectItem>
-                            <SelectItem value="Quitada">Quitada</SelectItem>
-                            <SelectItem value="Suspensa">Suspensa</SelectItem>
+                                <SelectItem value="Ativa">Ativa</SelectItem>
+                                <SelectItem value="Baixada">Baixada</SelectItem>
+                                <SelectItem value="Inapta">Inapta</SelectItem>
+                                <SelectItem value="Nula">Nula</SelectItem>
+                                <SelectItem value="Suspensa">Suspensa</SelectItem>
 
-
-                        </SelectContent>
-                    </Select>
+                            </SelectContent>
+                        </Select>
 
                     </div>
 
                     <div className='space-y-2'>
 
-                    <Label className='font-semibold text-sm text-gray-800'>Tipo de Atributo:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Situação Protesto:</Label>
 
-                    <Select value={filters.tipotributo} onValueChange={(value) => setFilters({ ...filters, tipotributo: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
+                        <Select value={filters.sit_protesto} onValueChange={(value) => setFilters({ ...filters, sit_protesto: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
 
-                            <SelectItem value="Dívida Ativa ICMS">Dívida Ativa ICMS</SelectItem>
-                            <SelectItem value="Dívida Ativa IPVA">Dívida Ativa IPVA</SelectItem>
-                            <SelectItem value="Dívida Ativa ITCD">Dívida Ativa ITCD</SelectItem>
-                            <SelectItem value="Dívida Ativa não tributária">Dívida Ativa não Tributária</SelectItem>
-                            <SelectItem value="Dívida Ativa TFRH">Dívida Ativa TFRH</SelectItem>
-                            <SelectItem value="Dívida Ativa TFRM">Dívida Ativa TFRM</SelectItem>
+                                <SelectItem value="Ag. Protesto">Ag. Protesto</SelectItem>
+                                <SelectItem value="Cancelamento">Cancelamento</SelectItem>
+                                <SelectItem value="Devolvido">Devolvido</SelectItem>
+                                <SelectItem value="Kit Protesto Gerado">Kit Protesto Gerado</SelectItem>
+                                <SelectItem value="Não Protestado">Não Protestado</SelectItem>
+                                <SelectItem value="Protestado">Protestado</SelectItem>
+                                <SelectItem value="Pago">Pago</SelectItem>
+                                <SelectItem value="Sustado">Sustado</SelectItem>
 
-                        </SelectContent>
-                    </Select>
-
-                    </div> 
-
-                    <div className='space-y-2'>
-
-                    <Label className='font-semibold text-sm text-gray-800'>Status SAJ:</Label>
-
-                    <Select value={filters.status_saj} onValueChange={(value) => setFilters({ ...filters, status_saj: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
-
-                            <SelectItem value="Inscrita">Inscrita</SelectItem>
-                            <SelectItem value="Cancelada">Cancelada</SelectItem>
-                            <SelectItem value="Exclusão">Exclusão</SelectItem>
-                            <SelectItem value="Ajuizamento">Ajuizamento</SelectItem>
-                            <SelectItem value="Análise CDAs Legado">Análise CDAs Legado</SelectItem>
-                            <SelectItem value="Quitada">Quitada</SelectItem>
-                            <SelectItem value="Suspensa">Suspensa</SelectItem>
-
-                        </SelectContent>
-                    </Select>
+                            </SelectContent>
+                        </Select>
 
                     </div>
 
                     <div className='space-y-2'>
 
-                    <Label className='font-semibold text-sm text-gray-800'>Flag Ajuizada:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Último histórico:</Label>
 
-                    <Select value={filters.flajuizada} onValueChange={(value) => setFilters({ ...filters, flajuizada: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
+                        <Select value={filters.ulthistorico} onValueChange={(value) => setFilters({ ...filters, ulthistorico: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
 
-                            <SelectItem value="S">SIM</SelectItem>
-                            <SelectItem value="N">NÃO</SelectItem>
+                                <SelectItem value="Aguardando ajuizamento">Aguardando ajuizamento</SelectItem>
+                                <SelectItem value="Ajuizada">Ajuizada</SelectItem>
+                                <SelectItem value="Cancelada">Cancelada</SelectItem>
+                                <SelectItem value="EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO">Exclusão ajuizamento análise CDAS legado</SelectItem>
+                                <SelectItem value="Exclusão do Ajuizamento">Exclusão do ajuizamento</SelectItem>
+                                <SelectItem value="Execução fiscal excluída">Execução fiscal excluída</SelectItem>
+                                <SelectItem value="Execução fiscal extinta">Execução fiscal extinta</SelectItem>
+                                <SelectItem value="Inscrita">Inscrita</SelectItem>
+                                <SelectItem value="Kit de ajuizamento excluído">Kit de ajuizamento excluído</SelectItem>
+                                <SelectItem value="Kit de protesto excluído">Kit de protesto excluído</SelectItem>
+                                <SelectItem value="Kit de protesto gerado">Kit de protesto gerado</SelectItem>
+                                <SelectItem value="Processo protesto excluído">Processo protesto excluído</SelectItem>
+                                <SelectItem value="Processo protesto extinto">Processo protesto extinto</SelectItem>
+                                <SelectItem value="Protestada">Protestada</SelectItem>
+                                <SelectItem value="Protestada por edital">Protestada por edital</SelectItem>
+                                <SelectItem value="Protesto pago">Protesto pago</SelectItem>
+                                <SelectItem value="Protesto sustado">Protesto sustado</SelectItem>
+                                <SelectItem value="Quitada">Quitada</SelectItem>
+                                <SelectItem value="Suspensa">Suspensa</SelectItem>
 
-                        </SelectContent>
-                    </Select>
 
-                    </div> 
-
-                    <div className='space-y-2'>
-
-                    <Label className='font-semibold text-sm text-gray-800'>Parcelamento:</Label>
-
-                    <Select value={filters.parcelamento} onValueChange={(value) => setFilters({ ...filters, parcelamento: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
-
-                            <SelectItem value="S">SIM</SelectItem>
-                            <SelectItem value="N">NÃO</SelectItem>
-
-                        </SelectContent>
-                    </Select>
-
-                    </div>
-
-                    <div className='space-y-2'>
-
-                    <Label className='font-semibold text-sm text-gray-800'>Prescrito:</Label>
-
-                    <Select value={filters.prescrito} onValueChange={(value) => setFilters({ ...filters, prescrito: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
-
-                            <SelectItem value="Dentro do prazo prescricional">Dentro do prazo prescricional</SelectItem>
-                            <SelectItem value="Possível Prescrição">Possível Prescrição</SelectItem>
-                            <SelectItem value="Prestes a prescrever">Prestes a prescrever</SelectItem>
-
-                        </SelectContent>
-                    </Select>
+                            </SelectContent>
+                        </Select>
 
                     </div>
 
                     <div className='space-y-2'>
 
-                    <Label className='font-semibold text-sm text-gray-800'>Endereço Protesto:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Atributo:</Label>
 
-                    <Select value={filters.obs_end_protesto} onValueChange={(value) => setFilters({ ...filters, obs_end_protesto: value })}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Escolha uma opção" />
-                        </SelectTrigger>
-                        <SelectContent>
+                        <Select value={filters.tipotributo} onValueChange={(value) => setFilters({ ...filters, tipotributo: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
 
-                            <SelectItem value="Endereço Extenso">Endereço Extenso</SelectItem>
-                            <SelectItem value="Endereço Incompleto">Endereço Incompleto</SelectItem>
-                            <SelectItem value="Endereço Insuficiente">Endereço Insuficiente</SelectItem>
-                            <SelectItem value="Endereço Nulo">Endereço Nulo</SelectItem>
-                            <SelectItem value="Endereço válido para Protesto">Endereço válido para Protesto</SelectItem>
+                                <SelectItem value="Dívida Ativa ICMS">Dívida Ativa ICMS</SelectItem>
+                                <SelectItem value="Dívida Ativa IPVA">Dívida Ativa IPVA</SelectItem>
+                                <SelectItem value="Dívida Ativa ITCD">Dívida Ativa ITCD</SelectItem>
+                                <SelectItem value="Dívida Ativa não tributária">Dívida Ativa não Tributária</SelectItem>
+                                <SelectItem value="Dívida Ativa TFRH">Dívida Ativa TFRH</SelectItem>
+                                <SelectItem value="Dívida Ativa TFRM">Dívida Ativa TFRM</SelectItem>
 
-                        </SelectContent>
-                    </Select>
+                            </SelectContent>
+                        </Select>
 
                     </div>
 
-                    
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Status SAJ:</Label>
+
+                        <Select value={filters.status_saj} onValueChange={(value) => setFilters({ ...filters, status_saj: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                <SelectItem value="Inscrita">Inscrita</SelectItem>
+                                <SelectItem value="Cancelada">Cancelada</SelectItem>
+                                <SelectItem value="Exclusão">Exclusão</SelectItem>
+                                <SelectItem value="Ajuizamento">Ajuizamento</SelectItem>
+                                <SelectItem value="Análise CDAs Legado">Análise CDAs Legado</SelectItem>
+                                <SelectItem value="Quitada">Quitada</SelectItem>
+                                <SelectItem value="Suspensa">Suspensa</SelectItem>
+
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Flag Ajuizada:</Label>
+
+                        <Select value={filters.flajuizada} onValueChange={(value) => setFilters({ ...filters, flajuizada: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                <SelectItem value="S">SIM</SelectItem>
+                                <SelectItem value="N">NÃO</SelectItem>
+
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Parcelamento:</Label>
+
+                        <Select value={filters.parcelamento} onValueChange={(value) => setFilters({ ...filters, parcelamento: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                <SelectItem value="S">SIM</SelectItem>
+                                <SelectItem value="N">NÃO</SelectItem>
+
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Prescrito:</Label>
+
+                        <Select value={filters.prescrito} onValueChange={(value) => setFilters({ ...filters, prescrito: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                <SelectItem value="Dentro do prazo prescricional">Dentro do prazo prescricional</SelectItem>
+                                <SelectItem value="Possível Prescrição">Possível Prescrição</SelectItem>
+                                <SelectItem value="Prestes a prescrever">Prestes a prescrever</SelectItem>
+
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Endereço Protesto:</Label>
+
+                        <Select value={filters.obs_end_protesto} onValueChange={(value) => setFilters({ ...filters, obs_end_protesto: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                <SelectItem value="Endereço Extenso">Endereço Extenso</SelectItem>
+                                <SelectItem value="Endereço Incompleto">Endereço Incompleto</SelectItem>
+                                <SelectItem value="Endereço Insuficiente">Endereço Insuficiente</SelectItem>
+                                <SelectItem value="Endereço Nulo">Endereço Nulo</SelectItem>
+                                <SelectItem value="Endereço válido para Protesto">Endereço válido para Protesto</SelectItem>
+
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+
                     <Button type='submit' className='default mt-8'>
                         <Search className="h-4 w-4 mr-2" />
                         Pesquisar
