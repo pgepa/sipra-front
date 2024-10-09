@@ -714,8 +714,9 @@ export function Protesto() {
                                             ))
                                         ) : (
                                             <TableRow>
-                                                <TableCell colSpan={32} className='text-center'>
-                                                    Nenhum protesto encontrado
+                                                <TableCell colSpan={32} className='text-center font-semibold text-muted-foreground text-lg'>
+                                                <p>Não foi encontrado nenhum registro para o(s) filtro(s) selecionado(s).</p> 
+                                                <p>Tente novamente como outros parâmetros.</p>
                                                 </TableCell>
                                             </TableRow>
                                         )}
