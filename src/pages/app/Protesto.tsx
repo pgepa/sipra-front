@@ -11,6 +11,7 @@ import { GrDocumentExcel } from "react-icons/gr";
 import { format, parse } from 'date-fns';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
+import { Label } from '@/components/ui/label';
 
 interface ProtestoData {
     cda: string;
@@ -191,12 +192,17 @@ export function Protesto() {
                     }}
                 >
                     <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
+                    <div className='flex flex-col gap-2'>
+                    <Label className='font-semibold text-sm text-gray-800'>Nº Documento:</Label>
                     <Input
-                        placeholder='Nº Documento'
+                        placeholder='Somente números'
                         className='col-span-1'
                         value={filters.nudocumento}
                         onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
                     />
+
+                    </div>
+                    
                     <Input
                         placeholder='Contribuinte'
                         className='col-span-1'

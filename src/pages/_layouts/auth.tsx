@@ -1,25 +1,22 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom";
+import PGE from "@/assets/PGEPARA.jpg";
 
 export function AuthLayout() {
   return (
-    <div className="min-h-screen grid grid-cols-2 antialiased">
-      <div className="h-full items-center border-r border-foreground/5 bg-muted p-10 text-muted-foreground flex flex-col justify-between bg-img-purple bg-cover bg-no-repeat">
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover"
+      style={{ backgroundImage: `url(${PGE})` }}
+    >
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
-        <div className='flex flex-col items-center'>
-            
-            
-        </div>
-        
-
-        <footer className="text-sm text-muted text-gray-100 text-center mt-8">
-          Copyright &copy; PGE-PA {new Date().getFullYear()} | DTIGD - Todos os direitos reservados. 
-        </footer>
-      
-      </div>
-
-      <div className="flex flex-col items-center justify-center relative">
+      <div className="relative z-10 bg-white bg-opacity-90 p-2 rounded-lg shadow-lg">
         <Outlet />
       </div>
+
+      <footer className="absolute bottom-0 w-full text-center p-4 text-sm text-gray-100 z-10">
+        Copyright &copy; PGE-PA {new Date().getFullYear()} | DTIGD - Todos os
+        direitos reservados.
+      </footer>
     </div>
-  )
+  );
 }
