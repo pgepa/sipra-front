@@ -12,6 +12,11 @@ import { format, parse } from 'date-fns';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from "@/components/ui/checkbox"
+
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ChevronDown } from 'lucide-react';
+
 
 interface ProtestoData {
     cda: string;
@@ -59,7 +64,7 @@ export function Protesto() {
         contribuinte: '',
         tipodoc: '',
         natjuridica: '',
-        porte: '',
+        porte: [] as string[],
         situacaocadastral: '',
         tipotributo: '',
         fundamento: '',
@@ -72,8 +77,10 @@ export function Protesto() {
         obs_end_protesto: '',
         origemdivida: '',
         ulthistorico: '',
-        sit_protesto: '',
+        sit_protesto: [] as string[],
     });
+
+
 
     const token = localStorage.getItem('token');
 
@@ -88,7 +95,10 @@ export function Protesto() {
                     page: currentPage,
                     per_page: 25,
                     download: downloadFormat,
-                    ...filters
+                    ...filters,
+
+                    sit_protesto: filters.sit_protesto.join(","),
+                    porte: filters.porte.join(","),
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -119,7 +129,7 @@ export function Protesto() {
 
     useEffect(() => {
         fetchProtestos(page);
-    }, [page]);
+    }, [page, filters]); // filters recarrega quando os filtros mudarem
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -155,7 +165,7 @@ export function Protesto() {
             contribuinte: '',
             tipodoc: '',
             natjuridica: '',
-            porte: '',
+            porte: [],
             situacaocadastral: '',
             tipotributo: '',
             fundamento: '',
@@ -168,11 +178,37 @@ export function Protesto() {
             obs_end_protesto: '',
             origemdivida: '',
             ulthistorico: '',
-            sit_protesto: '',
+            sit_protesto: [],
         });
         setPage(1);
         fetchProtestos(1);
     };
+
+    const handleCheckboxChange = (type: 'sit_protesto' | 'porte', value: string) => {
+        setFilters((prevFilters) => {
+            const newFilter = prevFilters[type].includes(value)
+                ? prevFilters[type].filter((item: string) => item !== value)
+                : [...prevFilters[type], value];
+
+            return { ...prevFilters, [type]: newFilter };
+        });
+    };
+    const situacoesProtesto = [
+        "Ag. Protesto",
+        "Cancelamento",
+        "Devolvido",
+        "Kit Protesto Gerado",
+        "Não Protestado",
+        "Protestado",
+        "Pago",
+        "Sustado"
+    ];
+
+    const portes = [
+        "Empresa de Pequeno Porte",
+        "Micro Empresa",
+        "Demais",
+    ];
 
 
 
@@ -278,22 +314,30 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Porte da empresa:</Label>
-
-                        <Select value={filters.porte} onValueChange={(value) => setFilters({ ...filters, porte: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="Empresa de Pequeno Porte">Empresa de Pequeno Porte</SelectItem>
-                                <SelectItem value="Micro Empresa">Micro Empresa</SelectItem>
-                                <SelectItem value="Demais">Demais</SelectItem>
-
-                            </SelectContent>
-                        </Select>
-
+                        <Label className='font-semibold text-sm text-gray-800'>Porte:</Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                    <span className='font-normal'>
+                                        {filters.porte.length > 0 ? filters.porte.join(", ") : "Escolha uma opção"}
+                                    </span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4">
+                                {portes.map((option) => (
+                                    <DropdownMenuItem key={option} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.porte.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('porte', option)}
+                                        />
+                                        <Label className="ml-2 font-normal">{option}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
+
 
                     <div className='space-y-2'>
 
@@ -317,26 +361,26 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-
                         <Label className='font-semibold text-sm text-gray-800'>Situação Protesto:</Label>
-
-                        <Select value={filters.sit_protesto} onValueChange={(value) => setFilters({ ...filters, sit_protesto: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="Ag. Protesto">Ag. Protesto</SelectItem>
-                                <SelectItem value="Cancelamento">Cancelamento</SelectItem>
-                                <SelectItem value="Devolvido">Devolvido</SelectItem>
-                                <SelectItem value="Kit Protesto Gerado">Kit Protesto Gerado</SelectItem>
-                                <SelectItem value="Não Protestado">Não Protestado</SelectItem>
-                                <SelectItem value="Protestado">Protestado</SelectItem>
-                                <SelectItem value="Pago">Pago</SelectItem>
-                                <SelectItem value="Sustado">Sustado</SelectItem>
-
-                            </SelectContent>
-                        </Select>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                    <span className='font-normal'>{filters.sit_protesto.length > 0 ? filters.sit_protesto.join(", ") : "Escolha uma opção"}</span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4">
+                                {situacoesProtesto.map((situacao) => (
+                                    <DropdownMenuItem key={situacao} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.sit_protesto.includes(situacao)}
+                                            onCheckedChange={() => handleCheckboxChange('sit_protesto', situacao)}
+                                        />
+                                        <Label className="ml-2 font-normal">{situacao}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                     </div>
 
@@ -660,7 +704,7 @@ export function Protesto() {
 
                                                                             <TableRow>
                                                                                 <TableCell className='text-muted-foreground'>Descrição</TableCell>
-                                                                                <TableCell className='flex justify-end'>{protesto.descricao}</TableCell>
+                                                                                <TableCell className='flex text-justify'>{protesto.descricao}</TableCell>
                                                                             </TableRow>
 
                                                                             <TableRow>
