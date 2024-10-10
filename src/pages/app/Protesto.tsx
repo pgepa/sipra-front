@@ -70,7 +70,7 @@ export function Protesto() {
         fundamento: '',
         vlcdaatualizado_min: '',
         vlcdaatualizado_max: '',
-        status_saj: '',
+        status_saj: [] as string[],
         flajuizada: '',
         parcelamento: '',
         prescrito: '',
@@ -102,6 +102,7 @@ export function Protesto() {
                     situacaocadastral: filters.situacaocadastral.join(","),
                     ulthistorico: filters.ulthistorico.join(","),
                     tipotributo: filters.tipotributo.join(","),
+                    status_saj: filters.status_saj.join(","),
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -174,7 +175,7 @@ export function Protesto() {
             fundamento: '',
             vlcdaatualizado_min: '',
             vlcdaatualizado_max: '',
-            status_saj: '',
+            status_saj: [],
             flajuizada: '',
             parcelamento: '',
             prescrito: '',
@@ -187,7 +188,7 @@ export function Protesto() {
         fetchProtestos(1);
     };
 
-    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo', value: string) => {
+    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -252,6 +253,17 @@ export function Protesto() {
         "Dívida Ativa TFRH",
         "Dívida Ativa TFRM",       
                                 
+    ]
+
+    const statusSaj = [
+        
+        "Inscrita",
+        "Cancelada",
+        "Exclusão",
+        "Ajuizamento",
+        "Análise CDAs Legado",
+        "Quitada",
+        "Suspensa",
     ]
 
 
@@ -480,26 +492,28 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-
                         <Label className='font-semibold text-sm text-gray-800'>Status SAJ:</Label>
-
-                        <Select value={filters.status_saj} onValueChange={(value) => setFilters({ ...filters, status_saj: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="Inscrita">Inscrita</SelectItem>
-                                <SelectItem value="Cancelada">Cancelada</SelectItem>
-                                <SelectItem value="Exclusão">Exclusão</SelectItem>
-                                <SelectItem value="Ajuizamento">Ajuizamento</SelectItem>
-                                <SelectItem value="Análise CDAs Legado">Análise CDAs Legado</SelectItem>
-                                <SelectItem value="Quitada">Quitada</SelectItem>
-                                <SelectItem value="Suspensa">Suspensa</SelectItem>
-
-                            </SelectContent>
-                        </Select>
-
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                    <span className='font-normal'>
+                                        {filters.status_saj.length > 0 ? filters.status_saj.join(", ") : "Escolha uma opção"}
+                                    </span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4">
+                                {statusSaj.map((option) => (
+                                    <DropdownMenuItem key={option} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.status_saj.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('status_saj', option)}
+                                        />
+                                        <Label className="ml-2 font-normal">{option}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
 
                     <div className='space-y-2'>
