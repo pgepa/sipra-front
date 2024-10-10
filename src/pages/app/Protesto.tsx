@@ -381,7 +381,7 @@ export function Protesto() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal'>
+                                    <span className='font-normal truncate'>
                                         {filters.porte.length > 0 ? filters.porte.join(", ") : "Escolha uma opção"}
                                     </span>
                                     <ChevronDown className="h-4 w-4" />
@@ -407,7 +407,7 @@ export function Protesto() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal'>
+                                    <span className='font-normal truncate'>
                                         {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
                                     </span>
                                     <ChevronDown className="h-4 w-4" />
@@ -432,7 +432,7 @@ export function Protesto() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal'>{filters.sit_protesto.length > 0 ? filters.sit_protesto.join(", ") : "Escolha uma opção"}</span>
+                                    <span className='font-normal truncate'>{filters.sit_protesto.length > 0 ? filters.sit_protesto.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -456,11 +456,11 @@ export function Protesto() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal'>{filters.ulthistorico.length > 0 ? filters.ulthistorico.join(", ") : "Escolha uma opção"}</span>
+                                    <span className='font-normal truncate'>{filters.ulthistorico.length > 0 ? filters.ulthistorico.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4">
+                            <DropdownMenuContent className="p-4 max-h-48 overflow-y-auto">
                                 {historicos.map((option) => (
                                     <DropdownMenuItem key={option} className="flex items-center">
                                         <Checkbox
@@ -479,7 +479,7 @@ export function Protesto() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal'>{filters.tipotributo.length > 0 ? filters.tipotributo.join(", ") : "Escolha uma opção"}</span>
+                                    <span className='font-normal truncate'>{filters.tipotributo.length > 0 ? filters.tipotributo.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -503,9 +503,7 @@ export function Protesto() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal'>
-                                        {filters.status_saj.length > 0 ? filters.status_saj.join(", ") : "Escolha uma opção"}
-                                    </span>
+                                    <span className='font-normal truncate'>{filters.status_saj.length > 0 ? filters.status_saj.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -521,6 +519,7 @@ export function Protesto() {
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
+
                     </div>
 
                     <div className='space-y-2'>
@@ -564,7 +563,7 @@ export function Protesto() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal'>{filters.prescrito.length > 0 ? filters.prescrito.join(", ") : "Escolha uma opção"}</span>
+                                    <span className='font-normal truncate'>{filters.prescrito.length > 0 ? filters.prescrito.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
