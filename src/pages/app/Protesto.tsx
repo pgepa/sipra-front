@@ -73,7 +73,7 @@ export function Protesto() {
         status_saj: [] as string[],
         flajuizada: '',
         parcelamento: '',
-        prescrito: '',
+        prescrito: [] as string[],
         obs_end_protesto: '',
         origemdivida: '',
         ulthistorico: [] as string[],
@@ -103,6 +103,7 @@ export function Protesto() {
                     ulthistorico: filters.ulthistorico.join(","),
                     tipotributo: filters.tipotributo.join(","),
                     status_saj: filters.status_saj.join(","),
+                    prescrito: filters.prescrito.join(","),
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -178,7 +179,7 @@ export function Protesto() {
             status_saj: [],
             flajuizada: '',
             parcelamento: '',
-            prescrito: '',
+            prescrito: [],
             obs_end_protesto: '',
             origemdivida: '',
             ulthistorico: [],
@@ -188,7 +189,7 @@ export function Protesto() {
         fetchProtestos(1);
     };
 
-    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj', value: string) => {
+    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -264,6 +265,12 @@ export function Protesto() {
         "Análise CDAs Legado",
         "Quitada",
         "Suspensa",
+    ]
+
+    const prescritos = [
+        "Dentro do prazo prescricional",
+        "Possível Prescrição",
+        "Prestes a prescrever",
     ]
 
 
@@ -553,21 +560,26 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-
                         <Label className='font-semibold text-sm text-gray-800'>Prescrito:</Label>
-
-                        <Select value={filters.prescrito} onValueChange={(value) => setFilters({ ...filters, prescrito: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="Dentro do prazo prescricional">Dentro do prazo prescricional</SelectItem>
-                                <SelectItem value="Possível Prescrição">Possível Prescrição</SelectItem>
-                                <SelectItem value="Prestes a prescrever">Prestes a prescrever</SelectItem>
-
-                            </SelectContent>
-                        </Select>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                    <span className='font-normal'>{filters.prescrito.length > 0 ? filters.prescrito.join(", ") : "Escolha uma opção"}</span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4">
+                                {prescritos.map((option) => (
+                                    <DropdownMenuItem key={option} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.prescrito.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('prescrito', option)}
+                                        />
+                                        <Label className="ml-2 font-normal">{option}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                     </div>
 
