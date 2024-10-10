@@ -65,7 +65,7 @@ export function Protesto() {
         tipodoc: '',
         natjuridica: '',
         porte: [] as string[],
-        situacaocadastral: '',
+        situacaocadastral: [] as string[],
         tipotributo: '',
         fundamento: '',
         vlcdaatualizado_min: '',
@@ -99,6 +99,7 @@ export function Protesto() {
 
                     sit_protesto: filters.sit_protesto.join(","),
                     porte: filters.porte.join(","),
+                    situacaocadastral: filters.situacaocadastral.join(","),
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -166,7 +167,7 @@ export function Protesto() {
             tipodoc: '',
             natjuridica: '',
             porte: [],
-            situacaocadastral: '',
+            situacaocadastral: [],
             tipotributo: '',
             fundamento: '',
             vlcdaatualizado_min: '',
@@ -184,7 +185,7 @@ export function Protesto() {
         fetchProtestos(1);
     };
 
-    const handleCheckboxChange = (type: 'sit_protesto' | 'porte', value: string) => {
+    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -209,6 +210,14 @@ export function Protesto() {
         "Micro Empresa",
         "Demais",
     ];
+
+    const situacaoCadastral =[
+        "Ativa",
+        "Baixada",
+        "Inapta",
+        "Nula",
+        "Suspensa",
+    ]
 
 
 
@@ -340,24 +349,28 @@ export function Protesto() {
 
 
                     <div className='space-y-2'>
-
                         <Label className='font-semibold text-sm text-gray-800'>Situação cadastral RFB:</Label>
-
-                        <Select value={filters.situacaocadastral} onValueChange={(value) => setFilters({ ...filters, situacaocadastral: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="Ativa">Ativa</SelectItem>
-                                <SelectItem value="Baixada">Baixada</SelectItem>
-                                <SelectItem value="Inapta">Inapta</SelectItem>
-                                <SelectItem value="Nula">Nula</SelectItem>
-                                <SelectItem value="Suspensa">Suspensa</SelectItem>
-
-                            </SelectContent>
-                        </Select>
-
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                    <span className='font-normal'>
+                                        {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
+                                    </span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4">
+                                {situacaoCadastral.map((option) => (
+                                    <DropdownMenuItem key={option} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.situacaocadastral.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('situacaocadastral', option)}
+                                        />
+                                        <Label className="ml-2 font-normal">{option}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
 
                     <div className='space-y-2'>
