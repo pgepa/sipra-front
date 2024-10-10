@@ -76,7 +76,7 @@ export function Protesto() {
         prescrito: '',
         obs_end_protesto: '',
         origemdivida: '',
-        ulthistorico: '',
+        ulthistorico: [] as string[],
         sit_protesto: [] as string[],
     });
 
@@ -100,6 +100,7 @@ export function Protesto() {
                     sit_protesto: filters.sit_protesto.join(","),
                     porte: filters.porte.join(","),
                     situacaocadastral: filters.situacaocadastral.join(","),
+                    ulthistorico: filters.ulthistorico.join(","),
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -130,7 +131,7 @@ export function Protesto() {
 
     useEffect(() => {
         fetchProtestos(page);
-    }, [page, filters]); // filters recarrega quando os filtros mudarem
+    }, [page, filters]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -178,14 +179,14 @@ export function Protesto() {
             prescrito: '',
             obs_end_protesto: '',
             origemdivida: '',
-            ulthistorico: '',
+            ulthistorico: [],
             sit_protesto: [],
         });
         setPage(1);
         fetchProtestos(1);
     };
 
-    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral', value: string) => {
+    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -217,6 +218,29 @@ export function Protesto() {
         "Inapta",
         "Nula",
         "Suspensa",
+    ]
+
+    const historicos = [
+      "Aguardando ajuizamento",
+      "Ajuizada",
+      "Cancelada",
+      "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
+      "Exclusão do Ajuizamento",
+      "Execução fiscal excluída",
+      "Execução fiscal extinta",
+      "Inscrita",
+      "Kit de ajuizamento excluído",
+      "Kit de protesto excluído",
+      "Kit de protesto gerado",
+      "Protesto pago",
+      "Protesto sustado",
+      "Processo protesto excluído",
+      "Processo protesto extinto",
+      "Protestada",
+      "Protestada por edital",
+      "Quitada",
+      "Suspensa",                         
+
     ]
 
 
@@ -398,41 +422,28 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-
                         <Label className='font-semibold text-sm text-gray-800'>Último histórico:</Label>
-
-                        <Select value={filters.ulthistorico} onValueChange={(value) => setFilters({ ...filters, ulthistorico: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="Aguardando ajuizamento">Aguardando ajuizamento</SelectItem>
-                                <SelectItem value="Ajuizada">Ajuizada</SelectItem>
-                                <SelectItem value="Cancelada">Cancelada</SelectItem>
-                                <SelectItem value="EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO">Exclusão ajuizamento análise CDAS legado</SelectItem>
-                                <SelectItem value="Exclusão do Ajuizamento">Exclusão do ajuizamento</SelectItem>
-                                <SelectItem value="Execução fiscal excluída">Execução fiscal excluída</SelectItem>
-                                <SelectItem value="Execução fiscal extinta">Execução fiscal extinta</SelectItem>
-                                <SelectItem value="Inscrita">Inscrita</SelectItem>
-                                <SelectItem value="Kit de ajuizamento excluído">Kit de ajuizamento excluído</SelectItem>
-                                <SelectItem value="Kit de protesto excluído">Kit de protesto excluído</SelectItem>
-                                <SelectItem value="Kit de protesto gerado">Kit de protesto gerado</SelectItem>
-                                <SelectItem value="Processo protesto excluído">Processo protesto excluído</SelectItem>
-                                <SelectItem value="Processo protesto extinto">Processo protesto extinto</SelectItem>
-                                <SelectItem value="Protestada">Protestada</SelectItem>
-                                <SelectItem value="Protestada por edital">Protestada por edital</SelectItem>
-                                <SelectItem value="Protesto pago">Protesto pago</SelectItem>
-                                <SelectItem value="Protesto sustado">Protesto sustado</SelectItem>
-                                <SelectItem value="Quitada">Quitada</SelectItem>
-                                <SelectItem value="Suspensa">Suspensa</SelectItem>
-
-
-                            </SelectContent>
-                        </Select>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                    <span className='font-normal'>{filters.ulthistorico.length > 0 ? filters.ulthistorico.join(", ") : "Escolha uma opção"}</span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4">
+                                {historicos.map((option) => (
+                                    <DropdownMenuItem key={option} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.ulthistorico.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('ulthistorico', option)}
+                                        />
+                                        <Label className="ml-2 font-normal">{option}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                     </div>
-
                     <div className='space-y-2'>
 
                         <Label className='font-semibold text-sm text-gray-800'>Tipo de Atributo:</Label>
