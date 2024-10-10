@@ -66,7 +66,7 @@ export function Protesto() {
         natjuridica: '',
         porte: [] as string[],
         situacaocadastral: [] as string[],
-        tipotributo: '',
+        tipotributo: [] as string[],
         fundamento: '',
         vlcdaatualizado_min: '',
         vlcdaatualizado_max: '',
@@ -101,6 +101,7 @@ export function Protesto() {
                     porte: filters.porte.join(","),
                     situacaocadastral: filters.situacaocadastral.join(","),
                     ulthistorico: filters.ulthistorico.join(","),
+                    tipotributo: filters.tipotributo.join(","),
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -169,7 +170,7 @@ export function Protesto() {
             natjuridica: '',
             porte: [],
             situacaocadastral: [],
-            tipotributo: '',
+            tipotributo: [],
             fundamento: '',
             vlcdaatualizado_min: '',
             vlcdaatualizado_max: '',
@@ -186,7 +187,7 @@ export function Protesto() {
         fetchProtestos(1);
     };
 
-    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico', value: string) => {
+    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -241,6 +242,16 @@ export function Protesto() {
       "Quitada",
       "Suspensa",                         
 
+    ]
+
+    const tributos = [
+        "Dívida Ativa ICMS",
+        "Dívida Ativa IPVA",
+        "Dívida Ativa ITCD",
+        "Dívida Ativa não tributária",
+        "Dívida Ativa TFRH",
+        "Dívida Ativa TFRM",       
+                                
     ]
 
 
@@ -445,24 +456,26 @@ export function Protesto() {
 
                     </div>
                     <div className='space-y-2'>
-
-                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Atributo:</Label>
-
-                        <Select value={filters.tipotributo} onValueChange={(value) => setFilters({ ...filters, tipotributo: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="Dívida Ativa ICMS">Dívida Ativa ICMS</SelectItem>
-                                <SelectItem value="Dívida Ativa IPVA">Dívida Ativa IPVA</SelectItem>
-                                <SelectItem value="Dívida Ativa ITCD">Dívida Ativa ITCD</SelectItem>
-                                <SelectItem value="Dívida Ativa não tributária">Dívida Ativa não Tributária</SelectItem>
-                                <SelectItem value="Dívida Ativa TFRH">Dívida Ativa TFRH</SelectItem>
-                                <SelectItem value="Dívida Ativa TFRM">Dívida Ativa TFRM</SelectItem>
-
-                            </SelectContent>
-                        </Select>
+                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Tributo:</Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                    <span className='font-normal'>{filters.tipotributo.length > 0 ? filters.tipotributo.join(", ") : "Escolha uma opção"}</span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4">
+                                {tributos.map((option) => (
+                                    <DropdownMenuItem key={option} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.tipotributo.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('tipotributo', option)}
+                                        />
+                                        <Label className="ml-2 font-normal">{option}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                     </div>
 
