@@ -50,6 +50,7 @@ interface ProtestoData {
     parcelamento: string;
     prescrito: string;
     obs_end_protesto: string;
+    periodoprotesto: string;
 }
 
 export function Protesto() {
@@ -78,6 +79,7 @@ export function Protesto() {
         origemdivida: '',
         ulthistorico: [] as string[],
         sit_protesto: [] as string[],
+        periodoprotesto: '',
     });
 
 
@@ -184,6 +186,7 @@ export function Protesto() {
             origemdivida: '',
             ulthistorico: [],
             sit_protesto: [],
+            periodoprotesto: '',
         });
         setPage(1);
         fetchProtestos(1);
@@ -527,6 +530,23 @@ export function Protesto() {
                         <Label className='font-semibold text-sm text-gray-800'>Flag Ajuizada:</Label>
 
                         <Select value={filters.flajuizada} onValueChange={(value) => setFilters({ ...filters, flajuizada: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                <SelectItem value="S">SIM</SelectItem>
+                                <SelectItem value="N">NÃO</SelectItem>
+
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Período protesto:</Label>
+                        <Select value={filters.periodoprotesto} onValueChange={(value) => setFilters({ ...filters, periodoprotesto: value })}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
                             </SelectTrigger>
