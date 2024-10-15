@@ -60,6 +60,7 @@ export function Protesto() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
+    const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
     const [filters, setFilters] = useState({
         nudocumento: '',
         contribuinte: '',
@@ -106,6 +107,7 @@ export function Protesto() {
                     tipotributo: filters.tipotributo.join(","),
                     status_saj: filters.status_saj.join(","),
                     prescrito: filters.prescrito.join(","),
+                    order: sortOrder,
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -276,7 +278,11 @@ export function Protesto() {
         "Prestes a prescrever",
     ]
 
-
+    const toggleSortOrder = () => {
+        setSortOrder(prevOrder => (prevOrder === 'desc' ? 'asc' : 'desc'));
+        fetchProtestos(page); 
+    };
+    
 
 
     return (
@@ -686,7 +692,9 @@ export function Protesto() {
                                             <TableHead className='w-[64px]'></TableHead>
 
                                             <TableHead>CDA</TableHead>
-                                            <TableHead>Valor CDA Atualizada</TableHead>
+                                            <TableHead onClick={toggleSortOrder} className="cursor-pointer">
+                                                Valor CDA Atualizada {sortOrder === 'desc' ? '↓' : '↑'}
+                                            </TableHead>
                                             <TableHead>Status SAJ</TableHead>
                                             <TableHead>Último Histórico</TableHead>
                                             <TableHead>Data Último Histórico</TableHead>
