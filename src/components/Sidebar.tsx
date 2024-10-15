@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Mails, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Mails, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -63,7 +63,15 @@ export function Sidebar() {
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <Gavel className="h-5 w-5" />
-                                Ajuizamento
+                                Para Ajuizamento
+                            </Link>
+
+                            <Link
+                                to="/reguacobranca/ajuizadas"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/ajuizadas" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <Scale className="h-5 w-5" />
+                                Ajuizadas
                             </Link>
 
                             
