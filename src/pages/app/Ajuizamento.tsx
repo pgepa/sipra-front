@@ -5,7 +5,7 @@ export function Ajuizamento() {
         <>
         <Helmet title="Ajuizamento" />
         <div>
-            <h1 className='text-2xl text-slate-800'>Ajuizamento</h1>
+            <h1 className='text-2xl text-slate-800'>Para ajuizamento</h1>
         </div>
         </>
     )

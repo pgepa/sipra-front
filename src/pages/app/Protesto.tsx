@@ -136,7 +136,7 @@ export function Protesto() {
 
     useEffect(() => {
         fetchProtestos(page);
-    }, [page, filters]);
+    }, [page]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
