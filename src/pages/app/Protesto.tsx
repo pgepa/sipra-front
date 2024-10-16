@@ -295,13 +295,13 @@ export function Protesto() {
 
 
                 <form
-                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-2'
+                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-2'
                     onSubmit={(e) => {
                         e.preventDefault();
                         fetchProtestos(1);
                     }}
                 >
-                    <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
+                    <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-6'>Filtros:</span>
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Nº Documento:</Label>
                         <Input
