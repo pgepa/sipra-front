@@ -259,11 +259,9 @@ export function Ajuizamento() {
     const statusSaj = [
         
         "Inscrita",
-        "Cancelada",
         "Exclusão",
         "Ajuizamento",
         "Análise CDAs Legado",
-        "Quitada",
         "Suspensa",
     ]
 
