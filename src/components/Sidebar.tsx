@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Mails, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Mails, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -50,7 +50,7 @@ export function Sidebar() {
 
 
 
-                            
+
                             <Link
                                 to="/reguacobranca/ajuizamento"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}
@@ -74,10 +74,28 @@ export function Sidebar() {
                                 <Mails className="h-5 w-5" />
                                 Carta Cobrança
                             </Link>
-                            
+
                         </div>
                     )}
                 </div>
+
+                <Link
+                    to="/indiciopatrimonial"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/indiciopatrimonial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                >
+                    <CircleDollarSign  className="h-6 w-6" />
+                    {open && <span className='font-medium'>Indício Patrimonial</span>}
+                </Link>
+
+                <Link
+                    to="/dashboard"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                >
+                    <ChartNoAxesCombined className="h-6 w-6" />
+                    {open && <span className='font-medium'>Dashboard</span>}
+                </Link>
+
+                
 
                 <div className="relative">
                     <button
@@ -151,7 +169,7 @@ export function Sidebar() {
                             </Link>
                         </div>
 
-                        
+
                     )}
                 </div>
 
@@ -162,6 +180,7 @@ export function Sidebar() {
                     <Users className="h-6 w-6" />
                     {open && <span className='font-medium'>Usuários</span>}
                 </Link>
+
             </nav>
         </aside>
     );

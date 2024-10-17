@@ -20,6 +20,8 @@ import { NotFound } from '@/404';
 import { AppLayoutChefia } from '@/pages/_layouts/appChefia';
 import { HomeChefia } from '@/pages/app/HomeChefia';
 import { Ajuizadas } from '@/pages/app/Ajuizadas';
+import { Dashboard } from '@/pages/app/Dashborad';
+import { IndicioPatrimonial } from '@/pages/app/IndicioPatrimonial';
 
 
 
@@ -54,6 +56,8 @@ export const Router = createHashRouter([
             { path: '/upload/detranveiculo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranCargaVeiculo /></PrivateRoute> },
             { path: '/upload/detranmodelo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranModelo /></PrivateRoute> },
             { path: '/usuarios', element: <PrivateRoute allowedProfiles={['Administrador']}><Usuarios /></PrivateRoute> },
+            { path: '/dashboard', element: <PrivateRoute allowedProfiles={['Administrador']}><Dashboard /></PrivateRoute> },
+            { path: '/indiciopatrimonial', element: <PrivateRoute allowedProfiles={['Administrador']}><IndicioPatrimonial /></PrivateRoute> },
             
         ],
     },
@@ -68,6 +72,8 @@ export const Router = createHashRouter([
             { path: 'chefia/reguacobranca/cartacobranca', element: <PrivateRoute allowedProfiles={['Chefia']}><CartaCobranca /></PrivateRoute> },
             { path: 'chefia/reguacobranca/ajuizamento', element: <PrivateRoute allowedProfiles={['Chefia']}><Ajuizamento /></PrivateRoute> },
             { path: 'chefia/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Chefia']}><Ajuizadas /></PrivateRoute> },
+            { path: 'chefia/dashboard', element: <PrivateRoute allowedProfiles={['Chefia']}><Dashboard /></PrivateRoute> },
+            { path: 'chefia/indiciopatrimonial', element: <PrivateRoute allowedProfiles={['Chefia']}><IndicioPatrimonial /></PrivateRoute> },
             
             
         ],
