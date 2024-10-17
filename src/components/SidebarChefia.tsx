@@ -47,16 +47,6 @@ export function SidebarChefia() {
                                 <FileSearch className="h-5 w-5" />
                                 Protesto
                             </Link>
-
-
-                            <Link
-                                to="/chefia/reguacobranca/cartacobranca"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/reguacobranca/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                            >
-                                <Mails className="h-5 w-5" />
-                                Carta Cobrança
-                            </Link>
-
                             
                             <Link
                                 to="/chefia/reguacobranca/ajuizamento"
@@ -74,6 +64,13 @@ export function SidebarChefia() {
                                 Ajuizadas
                             </Link>
 
+                            <Link
+                                to="/chefia/reguacobranca/cartacobranca"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/reguacobranca/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <Mails className="h-5 w-5" />
+                                Carta Cobrança
+                            </Link>
                             
                         </div>
                     )}
