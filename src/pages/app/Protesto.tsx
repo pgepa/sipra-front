@@ -60,7 +60,7 @@ export function Protesto() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
-    const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [filters, setFilters] = useState({
         nudocumento: '',
         contribuinte: '',
@@ -87,7 +87,13 @@ export function Protesto() {
 
     const token = localStorage.getItem('token');
 
-    const fetchProtestos = async (currentPage = 1, downloadFormat = '') => {
+    const toggleSortOrder = () => {
+        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';  // Alterna entre asc e desc
+        setSortOrder(newSortOrder);  // Atualiza o estado com a nova ordenação
+        setPage(1);  // Reseta para a primeira página após a alteração
+    };
+
+    const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
 
         try {
             setLoading(true);
@@ -98,6 +104,7 @@ export function Protesto() {
                     page: currentPage,
                     per_page: 25,
                     download: downloadFormat,
+                    order: order,
                     ...filters,
 
                     sit_protesto: filters.sit_protesto.join(","),
@@ -107,7 +114,7 @@ export function Protesto() {
                     tipotributo: filters.tipotributo.join(","),
                     status_saj: filters.status_saj.join(","),
                     prescrito: filters.prescrito.join(","),
-                    order: sortOrder,
+                    
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -137,8 +144,8 @@ export function Protesto() {
     };
 
     useEffect(() => {
-        fetchProtestos(page);
-    }, [page]);
+        fetchProtestos(page, sortOrder);  // Requisita com a página e ordenação atualizadas
+    }, [page, sortOrder]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -278,10 +285,7 @@ export function Protesto() {
         "Prestes a prescrever",
     ]
 
-    const toggleSortOrder = () => {
-        setSortOrder(prevOrder => (prevOrder === 'desc' ? 'asc' : 'desc'));
-        fetchProtestos(page); 
-    };
+    
     
 
 
@@ -305,7 +309,7 @@ export function Protesto() {
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Nº Documento:</Label>
                         <Input
-                            placeholder='Informe somente números'
+                            placeholder='Informe o número do documento'
                             className='col-span-1'
                             value={filters.nudocumento}
                             onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
@@ -693,7 +697,7 @@ export function Protesto() {
 
                                             <TableHead>CDA</TableHead>
                                             <TableHead onClick={toggleSortOrder} className="cursor-pointer">
-                                                Valor CDA Atualizada {sortOrder === 'desc' ? '↓' : '↑'}
+                                                Valor CDA Atualizada {sortOrder === 'asc' ? '↑' : '↓'}
                                             </TableHead>
                                             <TableHead>Status SAJ</TableHead>
                                             <TableHead>Último Histórico</TableHead>
