@@ -88,9 +88,9 @@ export function Protesto() {
     const token = localStorage.getItem('token');
 
     const toggleSortOrder = () => {
-        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';  // Alterna entre asc e desc
-        setSortOrder(newSortOrder);  // Atualiza o estado com a nova ordenação
-        setPage(1);  // Reseta para a primeira página após a alteração
+        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';  
+        setSortOrder(newSortOrder);  
+        setPage(1);  
     };
 
     const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
