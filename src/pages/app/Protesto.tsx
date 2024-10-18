@@ -381,7 +381,7 @@ export function Protesto() {
                             </SelectTrigger>
                             <SelectContent>
 
-                                <SelectItem value="CPF ">CPF</SelectItem>
+                                <SelectItem value="CPF">CPF</SelectItem>
                                 <SelectItem value="CNPJ">CNPJ</SelectItem>
 
                             </SelectContent>
