@@ -4,19 +4,23 @@ export function AnalisePrescricao() {
     return (
         <>
             <Helmet title="Análise de Prescrição" />
-            <div>
-                <h1 className='text-2xl text-slate-800'>Dashboard Consulta para Análise de Prescrição</h1>
-                <div className="mt-6">
-                    {/* <iframe 
-                        title="Consulta Devedor - CNPJ" 
-                        width="100%" 
-                        height="800px" 
-                        src="https://app.powerbi.com/view?r=eyJrIjoiYmQ0YWZlMWEtZmVlMS00N2M5LTljZGYtZDVjMjUxYzEyOWQ2IiwidCI6ImIwYmUwNjYzLTkxNWUtNDczZS1hNTU2LWExNmVmOWRmZTQxNCJ9" 
-                        allowFullScreen
-                        style={{ border: 'none' }}  // Remove a borda padrão
+            <div className='h-screen flex flex-col'>
+                <h1 className='text-2xl font-bold text-slate-700'>Dashboard Consulta para Análise de Prescrição</h1>
+                <div className="mt-6 flex flex-1">
+
+                    <iframe
+                        className='rounded-md'
+                        title="Consulta Devedor - CNPJ"
+                        width="100%"
+                        height="100%"
+                        src="https://app.powerbi.com/reportEmbed?reportId=bfb0351a-5aeb-48e7-a2a7-88a8bd0395ad&autoAuth=true&ctid=b0be0663-915e-473e-a556-a16ef9dfe414"
+                        allowFullScreen={true}
+                        style={{ border: 'none' }}
+
                     >
-                    </iframe> */}
-                    
+                    </iframe>
+
+
                 </div>
             </div>
         </>
