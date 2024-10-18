@@ -13,7 +13,7 @@ export function ConsultaDevedor() {
                         title="Consulta Devedor - CNPJ" 
                         width="100%" 
                         height="100%" 
-                        src="https://app.powerbi.com/reportEmbed?reportId=f225dd7f-32ed-408c-a280-8c91d7654285&autoAuth=true&ctid=b0be0663-915e-473e-a556-a16ef9dfe414" 
+                        src="https://app.powerbi.com/view?r=eyJrIjoiYWE0M2EzNjAtOGUwMy00N2Q0LTlkOWYtMzc3OTJiNWE5ZmZhIiwidCI6ImIwYmUwNjYzLTkxNWUtNDczZS1hNTU2LWExNmVmOWRmZTQxNCJ9" 
                         allowFullScreen={true}
                         style={{ border: 'none' }}
                         

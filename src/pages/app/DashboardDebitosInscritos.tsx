@@ -13,7 +13,7 @@ export function DebitosInscritos() {
                         title="Consulta Devedor - CNPJ" 
                         width="100%" 
                         height="100%" 
-                        src="https://app.powerbi.com/reportEmbed?reportId=f6acc0ef-4355-4d8b-8177-55fd4abf3345&autoAuth=true&ctid=b0be0663-915e-473e-a556-a16ef9dfe414" 
+                        src="https://app.powerbi.com/view?r=eyJrIjoiNzIyZDdlOGUtNGM4Ny00YTlhLWFhMTMtNTFiZTUyNDJkNDQxIiwidCI6ImIwYmUwNjYzLTkxNWUtNDczZS1hNTU2LWExNmVmOWRmZTQxNCJ9" 
                         allowFullScreen={true}
                         style={{ border: 'none' }}
                         

@@ -13,7 +13,7 @@ export function AnalisePrescricao() {
                         title="Consulta Devedor - CNPJ"
                         width="100%"
                         height="100%"
-                        src="https://app.powerbi.com/reportEmbed?reportId=bfb0351a-5aeb-48e7-a2a7-88a8bd0395ad&autoAuth=true&ctid=b0be0663-915e-473e-a556-a16ef9dfe414"
+                        src="https://app.powerbi.com/view?r=eyJrIjoiOWVlNjIzMjEtNDExYS00YTYxLTllNDEtMDdlM2VhNjhlY2IxIiwidCI6ImIwYmUwNjYzLTkxNWUtNDczZS1hNTU2LWExNmVmOWRmZTQxNCJ9"
                         allowFullScreen={true}
                         style={{ border: 'none' }}
 
