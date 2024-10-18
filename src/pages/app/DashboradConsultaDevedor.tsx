@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 
-export function Dashboard() {
+export function ConsultaDevedor() {
     return (
         <>
-            <Helmet title="Dashboard" />
+            <Helmet title="Consulta Devedor" />
             <div>
-                <h1 className='text-2xl text-slate-800'>Dashboard</h1>
+                <h1 className='text-2xl text-slate-800'>Dashboard Consulta Devedor</h1>
                 <div className="mt-6">
                     {/* <iframe 
                         title="Consulta Devedor - CNPJ" 

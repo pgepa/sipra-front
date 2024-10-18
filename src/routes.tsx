@@ -20,8 +20,10 @@ import { NotFound } from '@/404';
 import { AppLayoutChefia } from '@/pages/_layouts/appChefia';
 import { HomeChefia } from '@/pages/app/HomeChefia';
 import { Ajuizadas } from '@/pages/app/Ajuizadas';
-import { Dashboard } from '@/pages/app/Dashborad';
+import { ConsultaDevedor } from '@/pages/app/DashboradConsultaDevedor';
 import { IndicioPatrimonial } from '@/pages/app/IndicioPatrimonial';
+import { AnalisePrescricao } from '@/pages/app/DashboardAnalisePrescricao';
+import { DebitosInscritos } from '@/pages/app/DashboardDebitosInscritos';
 
 
 
@@ -56,8 +58,10 @@ export const Router = createHashRouter([
             { path: '/upload/detranveiculo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranCargaVeiculo /></PrivateRoute> },
             { path: '/upload/detranmodelo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranModelo /></PrivateRoute> },
             { path: '/usuarios', element: <PrivateRoute allowedProfiles={['Administrador']}><Usuarios /></PrivateRoute> },
-            { path: '/dashboard', element: <PrivateRoute allowedProfiles={['Administrador']}><Dashboard /></PrivateRoute> },
             { path: '/indiciopatrimonial', element: <PrivateRoute allowedProfiles={['Administrador']}><IndicioPatrimonial /></PrivateRoute> },
+            { path: '/dashboard/consultadevedor', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaDevedor /></PrivateRoute> },
+            { path: '/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Administrador']}><AnalisePrescricao /></PrivateRoute> },
+            { path: '/dashboard/debitosinscritos', element: <PrivateRoute allowedProfiles={['Administrador']}><DebitosInscritos /></PrivateRoute> },
             
         ],
     },
@@ -72,8 +76,8 @@ export const Router = createHashRouter([
             { path: 'chefia/reguacobranca/cartacobranca', element: <PrivateRoute allowedProfiles={['Chefia']}><CartaCobranca /></PrivateRoute> },
             { path: 'chefia/reguacobranca/ajuizamento', element: <PrivateRoute allowedProfiles={['Chefia']}><Ajuizamento /></PrivateRoute> },
             { path: 'chefia/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Chefia']}><Ajuizadas /></PrivateRoute> },
-            { path: 'chefia/dashboard', element: <PrivateRoute allowedProfiles={['Chefia']}><Dashboard /></PrivateRoute> },
             { path: 'chefia/indiciopatrimonial', element: <PrivateRoute allowedProfiles={['Chefia']}><IndicioPatrimonial /></PrivateRoute> },
+            { path: 'chefia/dashboard/consultadevedor', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDevedor /></PrivateRoute> },
             
             
         ],

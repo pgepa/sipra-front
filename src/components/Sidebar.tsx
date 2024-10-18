@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Mails, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Mails, FileChartColumn, FileBadge,  CloudUpload, ScanSearch, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ export function Sidebar() {
     const [open, setOpen] = useState(true);
     const [uploadOpen, setUploadOpen] = useState(false);
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
+    const [dashboardOpen, setDashboardOpen] = useState(false);
 
     return (
         <aside className={`bg-gray-200 p-3 mt-16 relative transition-all duration-300 ${open ? 'w-[17.5rem]' : 'w-20'}h-screen fixed top-0 left-0 z-40`}>
@@ -87,13 +88,49 @@ export function Sidebar() {
                     {open && <span className='font-medium'>Indício Patrimonial</span>}
                 </Link>
 
-                <Link
-                    to="/dashboard"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                >
-                    <ChartNoAxesCombined className="h-6 w-6" />
-                    {open && <span className='font-medium'>Dashboard</span>}
-                </Link>
+
+                <div className="relative">
+                    <button
+                        onClick={() => setDashboardOpen(!dashboardOpen)}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    >
+                       <ChartNoAxesCombined className="h-6 w-6" />
+                        {open && <span className='font-medium'>Dashboard</span>}
+                        {open && <ChevronDown className={`ml-auto transition-transform ${dashboardOpen ? "rotate-180" : ""}`} />}
+                    </button>
+
+
+                    {dashboardOpen && open && (
+                        <div className="ml-6 space-y-1">
+                            <Link
+                                to="/dashboard/consultadevedor"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/consultadevedor" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <ScanSearch  className="h-5 w-5" />
+                                Consulta Devedor (CNPJ)
+                            </Link>
+                            <Link
+                                to="/dashboard/analiseprescricao"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/analiseprescricao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <FileChartColumn className="h-5 w-5" />
+                                Análise de Prescrição
+                            </Link>
+                            <Link
+                                to="/dashboard/debitosinscritos"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/debitosinscritos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <FileBadge className="h-5 w-5" />
+                                Débitos Inscritos
+                            </Link>
+
+                            
+                        </div>
+
+
+                    )}
+                </div>
+
 
                 
 
@@ -172,6 +209,8 @@ export function Sidebar() {
 
                     )}
                 </div>
+
+
 
                 <Link
                     to="/usuarios"
