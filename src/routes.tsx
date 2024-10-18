@@ -78,6 +78,9 @@ export const Router = createHashRouter([
             { path: 'chefia/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Chefia']}><Ajuizadas /></PrivateRoute> },
             { path: 'chefia/indiciopatrimonial', element: <PrivateRoute allowedProfiles={['Chefia']}><IndicioPatrimonial /></PrivateRoute> },
             { path: 'chefia/dashboard/consultadevedor', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDevedor /></PrivateRoute> },
+            { path: 'chefia/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Chefia']}><AnalisePrescricao /></PrivateRoute> },
+            { path: 'chefia/dashboard/debitosinscritos', element: <PrivateRoute allowedProfiles={['Chefia']}><DebitosInscritos /></PrivateRoute> },
+            
             
             
         ],
