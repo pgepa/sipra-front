@@ -716,7 +716,7 @@ export function Protesto() {
                                                     <TableCell>
                                                         <Dialog>
                                                             <DialogTrigger asChild>
-                                                                <Button variant="outline" size="xs">
+                                                                <Button variant="default" size="xs">
                                                                     <Search className='h-3 w-3' />
                                                                 </Button>
                                                             </DialogTrigger>
