@@ -6,7 +6,8 @@ export function DebitosInscritos() {
             <Helmet title="Débitos Inscritos" />
             <div className='h-screen flex flex-col'>
                 <h1 className='text-2xl font-bold text-slate-700'>Dashboard Consulta de Débitos Inscritos</h1>
-                <div className="mt-6 flex flex-1">
+
+                {/* <div className="mt-6 flex flex-1">
                     
                     <iframe 
                         className='rounded-md'
@@ -21,7 +22,8 @@ export function DebitosInscritos() {
                     </iframe>
 
 
-                </div>
+                </div> */}
+                
             </div>
         </>
     );
