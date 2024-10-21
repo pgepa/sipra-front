@@ -307,7 +307,7 @@ export function Protesto() {
                 >
                     <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-6'>Filtros:</span>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Nº Documento:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Nº CPF/CNPJ:</Label>
                         <Input
                             placeholder='Informe o número do documento'
                             className='col-span-1'
@@ -317,7 +317,7 @@ export function Protesto() {
 
                     </div>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Contribuinte:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Nome Contribuinte:</Label>
                         <Input
                             placeholder='Contribuinte'
                             className='col-span-1'
@@ -348,7 +348,7 @@ export function Protesto() {
 
                     <div className='space-y-2'>
 
-                        <Label className='font-semibold text-sm text-gray-800'>Valor mínino atualizado:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Valor mínino:</Label>
 
                         <Input
                             placeholder='Informe somente números'
@@ -360,7 +360,7 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Valor máximo atualizado:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Valor máximo:</Label>
 
                         <Input
                             placeholder='informe somente números'
@@ -416,7 +416,7 @@ export function Protesto() {
 
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Situação cadastral RFB:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Situação cadastral (RFB):</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -512,7 +512,7 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Status SAJ:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Status (SAJ):</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -537,7 +537,7 @@ export function Protesto() {
 
                     <div className='space-y-2'>
 
-                        <Label className='font-semibold text-sm text-gray-800'>Flag Ajuizada:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Ajuizada:</Label>
 
                         <Select value={filters.flajuizada} onValueChange={(value) => setFilters({ ...filters, flajuizada: value })}>
                             <SelectTrigger className="w-full">
@@ -853,7 +853,7 @@ export function Protesto() {
                                                                             </TableRow>
 
                                                                             <TableRow>
-                                                                                <TableCell className='text-muted-foreground'>Flag Ajuizada</TableCell>
+                                                                                <TableCell className='text-muted-foreground'>Ajuizada</TableCell>
                                                                                 <TableCell className='flex justify-end'>{protesto.flajuizada}</TableCell>
                                                                             </TableRow>
 

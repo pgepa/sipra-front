@@ -293,7 +293,7 @@ export function Ajuizamento() {
                 >
                     <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-6'>Filtros:</span>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Nº Documento:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Nº CPF/CNPJ:</Label>
                         <Input
                             placeholder='Informe o número do documento'
                             className='col-span-1'
@@ -304,7 +304,7 @@ export function Ajuizamento() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Documento Raiz:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>CNPJ Raiz:</Label>
                         <Input
                             placeholder='Informe somente números'
                             className='col-span-1'
@@ -314,7 +314,7 @@ export function Ajuizamento() {
 
                     </div>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Contribuinte:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Nome Contribuinte:</Label>
                         <Input
                             placeholder='Contribuinte'
                             className='col-span-1'
@@ -404,7 +404,7 @@ export function Ajuizamento() {
 
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Situação cadastral RFB:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Situação cadastral (RFB):</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -476,7 +476,7 @@ export function Ajuizamento() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Status SAJ:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Status (SAJ):</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -608,7 +608,7 @@ export function Ajuizamento() {
                                             <TableHead onClick={toggleSortOrder} className="cursor-pointer">
                                                 Valor CDA Atualizada {sortOrder === 'asc' ? '↑' : '↓'}
                                             </TableHead>
-                                            <TableHead>Status SAJ</TableHead>
+                                            <TableHead>Status (SAJ)</TableHead>
                                             <TableHead>Último Histórico</TableHead>
                                             <TableHead>Data Último Histórico</TableHead>
                                             <TableHead >Origem da Dívida</TableHead>
@@ -632,7 +632,7 @@ export function Ajuizamento() {
 
                                                             <DialogContent className="max-h-[90vh] overflow-y-auto">
                                                                 <DialogHeader>
-                                                                    <DialogTitle>Contribuinte: {protesto.contribuinte}</DialogTitle>
+                                                                    <DialogTitle>Nome Contribuinte: {protesto.contribuinte}</DialogTitle>
                                                                     <DialogDescription>Detalhes do Contribuinte</DialogDescription>
                                                                 </DialogHeader>
 
@@ -762,7 +762,7 @@ export function Ajuizamento() {
                                                                             </TableRow>
 
                                                                             <TableRow>
-                                                                                <TableCell className='text-muted-foreground'>Flag Ajuizada</TableCell>
+                                                                                <TableCell className='text-muted-foreground'>Ajuizada</TableCell>
                                                                                 <TableCell className='flex justify-end'>{protesto.flajuizada}</TableCell>
                                                                             </TableRow>
 
