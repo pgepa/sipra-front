@@ -24,6 +24,7 @@ import { ConsultaDevedor } from '@/pages/app/DashboradConsultaDevedor';
 import { IndicioPatrimonial } from '@/pages/app/IndicioPatrimonial';
 import { AnalisePrescricao } from '@/pages/app/DashboardAnalisePrescricao';
 import { DebitosInscritos } from '@/pages/app/DashboardDebitosInscritos';
+import { UltimaAtualizacaoDatabase } from '@/pages/app/UltimaAtualizacaoDatabase';
 
 
 
@@ -49,6 +50,7 @@ export const Router = createHashRouter([
             { path: '/reguacobranca/cartacobranca', element: <PrivateRoute allowedProfiles={['Administrador']}><CartaCobranca /></PrivateRoute> },
             { path: '/reguacobranca/ajuizamento', element: <PrivateRoute allowedProfiles={['Administrador']}><Ajuizamento /></PrivateRoute> },
             { path: '/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Administrador']}><Ajuizadas /></PrivateRoute> },
+            { path: '/upload/ultimaatualizacao', element: <PrivateRoute allowedProfiles={['Administrador']}><UltimaAtualizacaoDatabase /></PrivateRoute> },
             { path: '/upload/semas', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadSemas /></PrivateRoute> },
             { path: '/upload/adepara', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadAdepara /></PrivateRoute> },
             { path: '/upload/jucepapj', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadJucepaPj /></PrivateRoute> },

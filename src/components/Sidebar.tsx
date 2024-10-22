@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Mails, FileChartColumn, FileBadge,  CloudUpload, ScanSearch, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, History, Mails, FileChartColumn, FileBadge,  CloudUpload, ScanSearch, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -147,6 +147,13 @@ export function Sidebar() {
 
                     {uploadOpen && open && (
                         <div className="ml-6 space-y-1">
+                            <Link
+                                to="/upload/ultimaatualizacao"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/ultimaatualizacao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <History className="h-4 w-4" />
+                                Última Atualização
+                            </Link>
                             <Link
                                 to="/upload/semas"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/semas" ? "font-bold text-indigo-700" : "text-gray-500"}`}
