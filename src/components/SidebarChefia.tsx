@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, Mails, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, ScanSearch, FileChartColumn, FileBadge, CircleDollarSign } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, Mails, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, ScanSearch, FileChartColumn, FileBadge, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ export function SidebarChefia() {
     
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
     const [dashboardOpen, setDashboardOpen] = useState(false);
+    const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
         <aside className={`bg-gray-200 p-3 mt-16 relative transition-all duration-300 ${open ? 'w-[17.5rem]' : 'w-20'}h-screen fixed top-0 left-0 z-40`}>
@@ -77,13 +78,41 @@ export function SidebarChefia() {
                     )}
                 </div>
 
-                <Link
-                    to="/chefia/indiciopatrimonial"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/indiciopatrimonial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                >
-                    <CircleDollarSign  className="h-6 w-6" />
-                    {open && <span className='font-medium'>Indício Patrimonial</span>}
-                </Link>
+                <div className="relative">
+                    <button
+                        onClick={() => setIndicioPatrimonialOpen(!indicioPatrimonialOpen)}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/chefia/indiciopatrimonial") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    >
+                        <CircleDollarSign className="h-6 w-6" />
+                        {open && <span className='font-medium'>Indício Patrimonial</span>}
+                        {open && <ChevronDown className={`ml-auto transition-transform ${indicioPatrimonialOpen ? "rotate-180" : ""}`} />}
+                    </button>
+
+
+                    {indicioPatrimonialOpen && open && (
+                        <div className="ml-6 space-y-1">
+                            <Link
+                                to="/chefia/indiciopatrimonial/cnpj"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/indiciopatrimonial/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <PcCase className="h-5 w-5" />
+                                Pessoa Jurídica (CNPJ)
+                            </Link>
+                            <Link
+                                to="/chefia/indiciopatrimonial/cpf"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/indiciopatrimonial/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <UserRoundSearch className="h-5 w-5" />
+                                Pessoa Física (CPF)
+                            </Link>
+
+
+                        </div>
+
+
+                    )}
+                </div>
+
 
                 <div className="relative">
                     <button

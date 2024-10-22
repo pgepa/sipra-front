@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, History, Mails, FileChartColumn, FileBadge,  CloudUpload, ScanSearch, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, History, Mails, FileChartColumn, FileBadge, CloudUpload, ScanSearch, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ export function Sidebar() {
     const [uploadOpen, setUploadOpen] = useState(false);
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
     const [dashboardOpen, setDashboardOpen] = useState(false);
+    const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
         <aside className={`bg-gray-200 p-3 mt-16 relative transition-all duration-300 ${open ? 'w-[17.5rem]' : 'w-20'}h-screen fixed top-0 left-0 z-40`}>
@@ -49,9 +50,6 @@ export function Sidebar() {
                                 Protesto
                             </Link>
 
-
-
-
                             <Link
                                 to="/reguacobranca/ajuizamento"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}
@@ -80,13 +78,41 @@ export function Sidebar() {
                     )}
                 </div>
 
-                <Link
-                    to="/indiciopatrimonial"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/indiciopatrimonial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                >
-                    <CircleDollarSign  className="h-6 w-6" />
-                    {open && <span className='font-medium'>Indício Patrimonial</span>}
-                </Link>
+
+                <div className="relative">
+                    <button
+                        onClick={() => setIndicioPatrimonialOpen(!indicioPatrimonialOpen)}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/indiciopatrimonial") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    >
+                        <CircleDollarSign className="h-6 w-6" />
+                        {open && <span className='font-medium'>Indício Patrimonial</span>}
+                        {open && <ChevronDown className={`ml-auto transition-transform ${indicioPatrimonialOpen ? "rotate-180" : ""}`} />}
+                    </button>
+
+
+                    {indicioPatrimonialOpen && open && (
+                        <div className="ml-6 space-y-1">
+                            <Link
+                                to="/indiciopatrimonial/cnpj"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/indiciopatrimonial/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <PcCase className="h-5 w-5" />
+                                Pessoa Jurídica (CNPJ)
+                            </Link>
+                            <Link
+                                to="/indiciopatrimonial/cpf"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/indiciopatrimonial/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <UserRoundSearch className="h-5 w-5" />
+                                Pessoa Física (CPF)
+                            </Link>
+
+
+                        </div>
+
+
+                    )}
+                </div>
 
 
                 <div className="relative">
@@ -94,7 +120,7 @@ export function Sidebar() {
                         onClick={() => setDashboardOpen(!dashboardOpen)}
                         className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
-                       <ChartNoAxesCombined className="h-6 w-6" />
+                        <ChartNoAxesCombined className="h-6 w-6" />
                         {open && <span className='font-medium'>Dashboard</span>}
                         {open && <ChevronDown className={`ml-auto transition-transform ${dashboardOpen ? "rotate-180" : ""}`} />}
                     </button>
@@ -106,7 +132,7 @@ export function Sidebar() {
                                 to="/dashboard/consultadevedor"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/consultadevedor" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
-                                <ScanSearch  className="h-5 w-5" />
+                                <ScanSearch className="h-5 w-5" />
                                 Consulta Devedor (CNPJ)
                             </Link>
                             <Link
@@ -124,7 +150,7 @@ export function Sidebar() {
                                 Débitos Inscritos
                             </Link>
 
-                            
+
                         </div>
 
 
@@ -132,7 +158,7 @@ export function Sidebar() {
                 </div>
 
 
-                
+
 
                 <div className="relative">
                     <button
