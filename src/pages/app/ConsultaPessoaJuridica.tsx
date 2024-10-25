@@ -54,6 +54,17 @@ interface Debitos {
 
 }
 
+interface ParticipacaoProcessos {
+    nudocformatado: string;
+    tpparte: string;
+    processosaj: string;
+    numjudicial: string;
+    classe: string;
+    assunto: string;
+    comarca: string;
+    vara: string;
+}
+
 interface Detran {
     anofabricacao: string;
     anomodelo: string;
@@ -71,6 +82,7 @@ interface PessoaJuridicaData {
     vwdebitos: Debitos[];
     vwrfbjucepa: DadosCadastrais[];
     vwjucepasocios: QuadroSocietario[];
+    vwpartesprocesso: ParticipacaoProcessos[];
 }
 
 export const ConsultaPessoaJuridica: React.FC = () => {
@@ -363,6 +375,59 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">CDAs prestres a prescever:</span>
                                                     <span className="text-muted-foreground">{debito.qtdprestesprescr}</span>
+                                                </div>                                           
+                                                
+                                                
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div>
+                                        <p className='text-muted-foreground p-4'>Nenhum débito encontrado.</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <h2 className="text-xl font-bold mb-4 text-slate-700 p-4">Participação em processos:</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                {data.vwpartesprocesso && data.vwpartesprocesso.length > 0 ? (
+                                    data.vwpartesprocesso.map((processo, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                        >
+                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Documento:</span>
+                                                    <span className="text-muted-foreground">{processo.nudocformatado}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Tipo Participação:</span>
+                                                    <span className="text-muted-foreground">{processo.tpparte}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Processo:</span>
+                                                    <span className="text-muted-foreground">{processo.processosaj}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Nº Judicial:</span>
+                                                    <span className="text-muted-foreground">{processo.numjudicial}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Classe:</span>
+                                                    <span className="text-muted-foreground">{processo.classe}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Assunto:</span>
+                                                    <span className="text-muted-foreground">{processo.assunto}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Comarca:</span>
+                                                    <span className="text-muted-foreground">{processo.comarca}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Vara Judicial:</span>
+                                                    <span className="text-muted-foreground">{processo.vara}</span>
                                                 </div>                                           
                                                 
                                                 
