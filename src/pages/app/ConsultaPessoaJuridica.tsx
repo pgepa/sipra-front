@@ -125,6 +125,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
     const [showDetran, setShowDetran] = useState(false);
     const [showSemas, setShowSemas] = useState(false);
     const [showAdepara, setShowAdepara] = useState(false);
+    const [showDadosCadastrais, setShowDadosCadastrais] = useState(false);
     const [filters, setFilters] = useState({
         cnpj: '',
         doc_raiz: '',
@@ -240,105 +241,119 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                         <h2 className="text-2xl font-bold text-slate-700 justify-center">{title}</h2>
                         <div className="w-full mx-auto p-2">
 
-                            <h2 className="text-xl font-bold mb-4 text-slate-700">Dados Cadastrais:</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                {data.vwrfbjucepa && data.vwrfbjucepa.length > 0 ? (
-                                    data.vwrfbjucepa.map((cadastro, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                        >
-                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                    <span className="text-muted-foreground">{cadastro.docformatado}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Razão Social:</span>
-                                                    <span className="text-muted-foreground">{cadastro.razaosocial}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Porte:</span>
-                                                    <span className="text-muted-foreground">{cadastro.porte}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Natureza Jurídica:</span>
-                                                    <span className="text-muted-foreground">{cadastro.natjuridica}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Descrição:</span>
-                                                    <span className="text-muted-foreground">{cadastro.descricao}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Data Início atividade:</span>
-                                                    <span className="text-muted-foreground">{cadastro.dtinicioatividade}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Capital Social:</span>
-                                                    <span className="text-muted-foreground">{cadastro.capitalsocial}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Situação Cadastral:</span>
-                                                    <span className="text-muted-foreground">{cadastro.situacaocadastral}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Data Situação Cadastral:</span>
-                                                    <span className="text-muted-foreground">{cadastro.dtsituacaocadastral}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Endereço:</span>
-                                                    <span className="text-muted-foreground">{cadastro.endereco}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Complemento:</span>
-                                                    <span className="text-muted-foreground">{cadastro.complemento}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Bairro:</span>
-                                                    <span className="text-muted-foreground">{cadastro.bairro}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">CEP:</span>
-                                                    <span className="text-muted-foreground">{cadastro.cep}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">UF:</span>
-                                                    <span className="text-muted-foreground">{cadastro.uf}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">E-mail:</span>
-                                                    <span className="text-muted-foreground">{cadastro.email}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Telefone:</span>
-                                                    <span className="text-muted-foreground">({cadastro.ddd}) {cadastro.telefone}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Situação JUCEPA:</span>
-                                                    <span className="text-muted-foreground">{cadastro.jucepa_situacao}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Status JUCEPA:</span>
-                                                    <span className="text-muted-foreground">{cadastro.jucepa_status}</span>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div>Nenhum dado cadastral encontrado.</div>
-                                )}
+                            <div
+                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                onClick={() => toggleSection(setShowDadosCadastrais)}
+                            >
+                                <h2>Dados Cadastrais:</h2>
+                                <span className="text-white text-xl">
+                                    {showDadosCadastrais ? '↑' : '↓'}
+                                </span>
                             </div>
+
+                            {showDadosCadastrais && (
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                    {data.vwrfbjucepa && data.vwrfbjucepa.length > 0 ? (
+                                        data.vwrfbjucepa.map((cadastro, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                            >
+                                                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Documento:</span>
+                                                        <span className="text-muted-foreground">{cadastro.docformatado}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Razão Social:</span>
+                                                        <span className="text-muted-foreground">{cadastro.razaosocial}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Porte:</span>
+                                                        <span className="text-muted-foreground">{cadastro.porte}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Natureza Jurídica:</span>
+                                                        <span className="text-muted-foreground">{cadastro.natjuridica}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Descrição:</span>
+                                                        <span className="text-muted-foreground">{cadastro.descricao}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Data Início atividade:</span>
+                                                        <span className="text-muted-foreground">{cadastro.dtinicioatividade}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Capital Social:</span>
+                                                        <span className="text-muted-foreground">{cadastro.capitalsocial}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Situação Cadastral:</span>
+                                                        <span className="text-muted-foreground">{cadastro.situacaocadastral}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Data Situação Cadastral:</span>
+                                                        <span className="text-muted-foreground">{cadastro.dtsituacaocadastral}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Endereço:</span>
+                                                        <span className="text-muted-foreground">{cadastro.endereco}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Complemento:</span>
+                                                        <span className="text-muted-foreground">{cadastro.complemento}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Bairro:</span>
+                                                        <span className="text-muted-foreground">{cadastro.bairro}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">CEP:</span>
+                                                        <span className="text-muted-foreground">{cadastro.cep}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">UF:</span>
+                                                        <span className="text-muted-foreground">{cadastro.uf}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">E-mail:</span>
+                                                        <span className="text-muted-foreground">{cadastro.email}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Telefone:</span>
+                                                        <span className="text-muted-foreground">({cadastro.ddd}) {cadastro.telefone}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Situação JUCEPA:</span>
+                                                        <span className="text-muted-foreground">{cadastro.jucepa_situacao}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Status JUCEPA:</span>
+                                                        <span className="text-muted-foreground">{cadastro.jucepa_status}</span>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div>Nenhum dado cadastral encontrado.</div>
+                                    )}
+                                </div>
+
+                            )}
+
 
                             <div>
 
                                 <div
-                                    className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                    className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
                                     onClick={() => toggleSection(setShowSocios)}
                                 >
                                     <h2>Quadro Societário:</h2>
-                                    <span className="text-violet-700 text-xl">
+                                    <span className="text-white text-xl">
                                         {showSocios ? '↑' : '↓'}
                                     </span>
                                 </div>
@@ -411,11 +426,11 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             </div>
 
                             <div
-                                className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
                                 onClick={() => toggleSection(setShowDebitos)}
                             >
                                 <h2>Débitos:</h2>
-                                <span className="text-violet-700 text-xl">
+                                <span className="text-white text-xl">
                                     {showDebitos ? '↑' : '↓'}
                                 </span>
                             </div>
@@ -477,11 +492,11 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
 
                             <div
-                                className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
                                 onClick={() => toggleSection(setShowPartesProcessos)}
                             >
                                 <h2>Participação em processos:</h2>
-                                <span className="text-violet-700 text-xl">
+                                <span className="text-white text-xl">
                                     {showPartesProcessos ? '↑' : '↓'}
                                 </span>
                             </div>
@@ -547,11 +562,11 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             )}
 
                             <div
-                                className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
                                 onClick={() => toggleSection(setShowDetran)}
                             >
                                 <h2>DETRAN:</h2>
-                                <span className="text-violet-700 text-xl">
+                                <span className="text-white text-xl">
                                     {showDetran ? '↑' : '↓'}
                                 </span>
                             </div>
@@ -628,11 +643,11 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             )}
 
                             <div
-                                className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
                                 onClick={() => toggleSection(setShowSemas)}
                             >
                                 <h2>SEMAS:</h2>
-                                <span className="text-violet-700 text-xl">
+                                <span className="text-white text-xl">
                                     {showSemas ? '↑' : '↓'}
                                 </span>
                             </div>
@@ -695,11 +710,11 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             )}
 
                             <div
-                                className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
                                 onClick={() => toggleSection(setShowAdepara)}
                             >
                                 <h2>ADEPARA:</h2>
-                                <span className="text-violet-700 text-xl">
+                                <span className="text-white text-xl">
                                     {showAdepara ? '↑' : '↓'}
                                 </span>
                             </div>
