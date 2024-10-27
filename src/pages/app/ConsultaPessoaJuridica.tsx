@@ -410,7 +410,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             key={index}
                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                         >
-                                            {/* Div do lado esquerdo com cor aleatória */}
+                                            
                                             <div
                                                 className="w-2 h-full mr-4 rounded-lg"
                                                 style={{ backgroundColor: getRandomColor() }}
@@ -454,7 +454,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                     ))
                                 ) : (
                                     <div>
-                                        <p className='text-muted-foreground p-4'>Nenhum débito encontrado.</p>
+                                        <p className='text-muted-foreground p-4'>Nenhum processo encontrado.</p>
                                     </div>
                                 )}
                             </div>
@@ -468,6 +468,10 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             key={index}
                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                         >
+                                            <div
+                                                className="w-2 h-full mr-4 rounded-lg"
+                                                style={{ backgroundColor: getRandomColor() }}
+                                            />
                                             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">Placa:</span>
@@ -509,7 +513,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                     <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
                                                     <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1 col-span-2">
+                                                <div className="flex flex-col gap-1 col-span-1">
                                                     <span className="font-semibold text-slate-700">Impedimento Judicial/Administrativo:</span>
                                                     <span className="text-muted-foreground">{veiculo.imped_judicial_admin}</span>
                                                 </div>
