@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import { api } from '@/lib/axios';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
@@ -112,16 +112,27 @@ interface PessoaJuridicaData {
     vwadepara: Adepara[];
 }
 
+type ToggleSectionFunction = Dispatch<SetStateAction<boolean>>;
+
+const toggleSection = (setFunction: ToggleSectionFunction) => {
+    setFunction((prev) => !prev);
+};
+
+
 export const ConsultaPessoaJuridica: React.FC = () => {
     const [data, setData] = useState<PessoaJuridicaData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showSocios, setShowSocios] = useState(false);
+    const [showDebitos, setShowDebitos] = useState(false);
     const [filters, setFilters] = useState({
         cnpj: '',
         doc_raiz: '',
     });
     const [searched, setSearched] = useState(false);
-    const [title, setTitle] = useState<string>(''); // Declare o estado para o título
+    const [title, setTitle] = useState<string>('');
+
+
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -314,119 +325,162 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                 )}
                             </div>
 
-                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">Quadro Societário:</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                {data.vwjucepasocios && data.vwjucepasocios.length > 0 ? (
-                                    data.vwjucepasocios.map((socio, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                        >
+                            <div>
+
+                                <div
+                                    className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                    onClick={() => toggleSection(setShowSocios)}
+                                >
+                                    <h2>Quadro Societário:</h2>
+                                    <span className="text-violet-700 text-xl">
+                                        {showSocios ? '↑' : '↓'}
+                                    </span>
+                                </div>
+
+                                {showSocios && (
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                        {data.vwjucepasocios && data.vwjucepasocios.length > 0 ? (
+                                            data.vwjucepasocios.map((socio, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                >
+                                                    <div
+                                                        className="w-2 h-full mr-4 rounded-lg"
+                                                        style={{ backgroundColor: getRandomColor() }}
+                                                    />
+                                                    <div className="flex flex-wrap gap-4">
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">CNPJ:</span>
+                                                            <span className="text-muted-foreground">{socio.nr_cgc}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Razão Social:</span>
+                                                            <span className="text-muted-foreground">{socio.razaosocial}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Pessoa:</span>
+                                                            <span className="text-muted-foreground">{socio.no_pessoa}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Tipo Sócio:</span>
+                                                            <span className="text-muted-foreground">{socio.tiposocio}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Doc. Sócio:</span>
+                                                            <span className="text-muted-foreground">{socio.nr_docsocio}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Vínculo:</span>
+                                                            <span className="text-muted-foreground">{socio.no_vinculo}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Entrada Sociedade:</span>
+                                                            <span className="text-muted-foreground">{socio.dt_entrada_sociedade}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Saída Sociedade:</span>
+                                                            <span className="text-muted-foreground">{socio.dt_saida_sociedade}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Status Sociedade:</span>
+                                                            <span className="text-muted-foreground">{socio.statussociedade}</span>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>
+                                                <p className='text-muted-foreground p-4'>Nenhum sócio encontrado.</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                )}
+
+
+                            </div>
+
+                            <div
+                                    className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                    onClick={() => toggleSection(setShowDebitos)}
+                                >
+                                    <h2>Débitos:</h2>
+                                    <span className="text-violet-700 text-xl">
+                                        {showDebitos ? '↑' : '↓'}
+                                    </span>
+                                </div>
+
+                                {showDebitos && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                    {data.vwdebitos && data.vwdebitos.length > 0 ? (
+                                        data.vwdebitos.map((debito, index) => (
                                             <div
-                                                className="w-2 h-full mr-4 rounded-lg"
-                                                style={{ backgroundColor: getRandomColor() }}
-                                            />
-                                            <div className="flex flex-wrap gap-4">
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">CNPJ:</span>
-                                                    <span className="text-muted-foreground">{socio.nr_cgc}</span>
+                                                key={index}
+                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                            >
+                                                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Documento:</span>
+                                                        <span className="text-muted-foreground">{debito.documento}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Qtd. CDAs:</span>
+                                                        <span className="text-muted-foreground">{debito.qtdcdas}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Soma Valor CDAs:</span>
+                                                        <span className="text-muted-foreground">{debito.somavlcdas}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Qtd. Consolidado:</span>
+                                                        <span className="text-muted-foreground">{debito.qtdconsolidado}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">Valor Consolidado:</span>
+                                                        <span className="text-muted-foreground">{debito.vlconsolidado}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">CDAs dentro do prazo prescricional:</span>
+                                                        <span className="text-muted-foreground">{debito.qtdprazoprescr}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">CDAs com provável prescrição:</span>
+                                                        <span className="text-muted-foreground">{debito.qtdprescricao}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="font-semibold text-slate-700">CDAs prestres a prescever:</span>
+                                                        <span className="text-muted-foreground">{debito.qtdprestesprescr}</span>
+                                                    </div>
+    
+    
                                                 </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Razão Social:</span>
-                                                    <span className="text-muted-foreground">{socio.razaosocial}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Pessoa:</span>
-                                                    <span className="text-muted-foreground">{socio.no_pessoa}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Tipo Sócio:</span>
-                                                    <span className="text-muted-foreground">{socio.tiposocio}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Doc. Sócio:</span>
-                                                    <span className="text-muted-foreground">{socio.nr_docsocio}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Vínculo:</span>
-                                                    <span className="text-muted-foreground">{socio.no_vinculo}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Entrada Sociedade:</span>
-                                                    <span className="text-muted-foreground">{socio.dt_entrada_sociedade}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Saída Sociedade:</span>
-                                                    <span className="text-muted-foreground">{socio.dt_saida_sociedade}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Status Sociedade:</span>
-                                                    <span className="text-muted-foreground">{socio.statussociedade}</span>
-                                                </div>
-
-
                                             </div>
+                                        ))
+                                    ) : (
+                                        <div>
+                                            <p className='text-muted-foreground p-4'>Nenhum débito encontrado.</p>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div>
-                                        <p className='text-muted-foreground p-4'>Nenhum sócio encontrado.</p>
-                                    </div>
+                                    )}
+                                </div>
+
                                 )}
+
+                            
+
+
+
+                            <div>
+
                             </div>
 
-                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">Débitos:</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                {data.vwdebitos && data.vwdebitos.length > 0 ? (
-                                    data.vwdebitos.map((debito, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                        >
-                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                    <span className="text-muted-foreground">{debito.documento}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Qtd. CDAs:</span>
-                                                    <span className="text-muted-foreground">{debito.qtdcdas}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Soma Valor CDAs:</span>
-                                                    <span className="text-muted-foreground">{debito.somavlcdas}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Qtd. Consolidado:</span>
-                                                    <span className="text-muted-foreground">{debito.qtdconsolidado}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">Valor Consolidado:</span>
-                                                    <span className="text-muted-foreground">{debito.vlconsolidado}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">CDAs dentro do prazo prescricional:</span>
-                                                    <span className="text-muted-foreground">{debito.qtdprazoprescr}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">CDAs com provável prescrição:</span>
-                                                    <span className="text-muted-foreground">{debito.qtdprescricao}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="font-semibold text-slate-700">CDAs prestres a prescever:</span>
-                                                    <span className="text-muted-foreground">{debito.qtdprestesprescr}</span>
-                                                </div>
 
 
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div>
-                                        <p className='text-muted-foreground p-4'>Nenhum débito encontrado.</p>
-                                    </div>
-                                )}
-                            </div>
+                            
+                            
 
                             <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">Participação em processos:</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -436,7 +490,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             key={index}
                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                         >
-                                            
+
                                             <div
                                                 className="w-2 h-full mr-4 rounded-lg"
                                                 style={{ backgroundColor: getRandomColor() }}
@@ -563,7 +617,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             key={index}
                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                         >
-                                            
+
                                             <div
                                                 className="w-2 h-full mr-4 rounded-lg"
                                                 style={{ backgroundColor: getRandomColor() }}
@@ -598,7 +652,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                     <span className="font-semibold text-slate-700">Nº CAR:</span>
                                                     <span className="text-muted-foreground">{semas.no_car}</span>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     ))
@@ -617,7 +671,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             key={index}
                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                         >
-                                            
+
                                             <div
                                                 className="w-2 h-full mr-4 rounded-lg"
                                                 style={{ backgroundColor: getRandomColor() }}
@@ -652,7 +706,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                     <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
                                                     <span className="text-muted-foreground">{adepara.bov_total}</span>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     ))
