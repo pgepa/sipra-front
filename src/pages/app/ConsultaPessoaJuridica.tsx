@@ -322,40 +322,44 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             key={index}
                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                         >
-                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                <div className="flex flex-col gap-1">
+                                            <div
+                                                className="w-2 h-full mr-4 rounded-lg"
+                                                style={{ backgroundColor: getRandomColor() }}
+                                            />
+                                            <div className="flex flex-wrap gap-4">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">CNPJ:</span>
                                                     <span className="text-muted-foreground">{socio.nr_cgc}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Razão Social:</span>
                                                     <span className="text-muted-foreground">{socio.razaosocial}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Pessoa:</span>
                                                     <span className="text-muted-foreground">{socio.no_pessoa}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Tipo Sócio:</span>
                                                     <span className="text-muted-foreground">{socio.tiposocio}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Doc. Sócio:</span>
                                                     <span className="text-muted-foreground">{socio.nr_docsocio}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Vínculo:</span>
                                                     <span className="text-muted-foreground">{socio.no_vinculo}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Entrada Sociedade:</span>
                                                     <span className="text-muted-foreground">{socio.dt_entrada_sociedade}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Saída Sociedade:</span>
                                                     <span className="text-muted-foreground">{socio.dt_saida_sociedade}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Status Sociedade:</span>
                                                     <span className="text-muted-foreground">{socio.statussociedade}</span>
                                                 </div>
@@ -425,7 +429,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             </div>
 
                             <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">Participação em processos:</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                 {data.vwpartesprocesso && data.vwpartesprocesso.length > 0 ? (
                                     data.vwpartesprocesso.map((processo, index) => (
                                         <div
@@ -438,36 +442,36 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 style={{ backgroundColor: getRandomColor() }}
                                             />
 
-                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                <div className="flex flex-col gap-1">
+                                            <div className="flex flex-wrap gap-4">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Documento:</span>
                                                     <span className="text-muted-foreground">{processo.nudocformatado}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Tipo Participação:</span>
                                                     <span className="text-muted-foreground">{processo.tpparte}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Processo:</span>
                                                     <span className="text-muted-foreground">{processo.processosaj}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Nº Judicial:</span>
                                                     <span className="text-muted-foreground">{processo.numjudicial}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Classe:</span>
                                                     <span className="text-muted-foreground">{processo.classe}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Assunto:</span>
                                                     <span className="text-muted-foreground">{processo.assunto}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Comarca:</span>
                                                     <span className="text-muted-foreground">{processo.comarca}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Vara Judicial:</span>
                                                     <span className="text-muted-foreground">{processo.vara}</span>
                                                 </div>
@@ -494,44 +498,44 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 className="w-2 h-full mr-4 rounded-lg"
                                                 style={{ backgroundColor: getRandomColor() }}
                                             />
-                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                <div className="flex flex-col gap-1">
+                                            <div className="flex flex-wrap gap-4">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Placa:</span>
                                                     <span className="text-muted-foreground">{veiculo.placa}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Renavam:</span>
                                                     <span className="text-muted-foreground">{veiculo.renavam}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Doc. Proprietário:</span>
                                                     <span className="text-muted-foreground">{veiculo.docproprietario}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Arrendatário:</span>
                                                     <span className="text-muted-foreground">{veiculo.arrendatario}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Marca/Modelo:</span>
                                                     <span className="text-muted-foreground">{veiculo.marcamodelo}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Ano Modelo:</span>
                                                     <span className="text-muted-foreground">{veiculo.anomodelo}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Procedência:</span>
                                                     <span className="text-muted-foreground">{veiculo.procedencia}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Obs. Licenciamento:</span>
                                                     <span className="text-muted-foreground">{veiculo.licenciamento}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Ocorrência Policial:</span>
                                                     <span className="text-muted-foreground">{veiculo.ocorr_policial}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
                                                     <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
                                                 </div>
@@ -565,32 +569,32 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 style={{ backgroundColor: getRandomColor() }}
                                             />
 
-                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                <div className="flex flex-col gap-1">
+                                            <div className="flex flex-wrap gap-4">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Documento:</span>
                                                     <span className="text-muted-foreground">{semas.docproprietario}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Proprietário:</span>
                                                     <span className="text-muted-foreground">{semas.nomeproprietario}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Propriedade:</span>
                                                     <span className="text-muted-foreground">{semas.nomepropriedade}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Município:</span>
                                                     <span className="text-muted-foreground">{semas.municipio}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Área Total:</span>
                                                     <span className="text-muted-foreground">{semas.areatotal}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Situação:</span>
                                                     <span className="text-muted-foreground">{semas.situacao}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Nº CAR:</span>
                                                     <span className="text-muted-foreground">{semas.no_car}</span>
                                                 </div>
@@ -619,32 +623,32 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 style={{ backgroundColor: getRandomColor() }}
                                             />
 
-                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                <div className="flex flex-col gap-1">
+                                            <div className="flex flex-wrap gap-4">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Documento:</span>
                                                     <span className="text-muted-foreground">{adepara.docprodutor}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Produtor:</span>
                                                     <span className="text-muted-foreground">{adepara.nomeprodutor}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Propriedade:</span>
                                                     <span className="text-muted-foreground">{adepara.nomepropriedade}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Município:</span>
                                                     <span className="text-muted-foreground">{adepara.municipio}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Área Total:</span>
                                                     <span className="text-muted-foreground">{adepara.aretotal}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Área Pasto Cultivado:</span>
                                                     <span className="text-muted-foreground">{adepara.areadepastocultivado}</span>
                                                 </div>
-                                                <div className="flex flex-col gap-1">
+                                                <div className="flex flex-col gap-1 min-w-[150px]">
                                                     <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
                                                     <span className="text-muted-foreground">{adepara.bov_total}</span>
                                                 </div>
