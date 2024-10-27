@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
+import GridLoader from 'react-spinners/GridLoader';
 
 interface DadosCadastrais {
     docformatado: string;
@@ -145,6 +146,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
         e.preventDefault();
         setLoading(true);
         setSearched(false);
+        setError(null);
         const token = localStorage.getItem('token');
 
         api.get('/indiciopatrimonial', {
@@ -182,6 +184,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
         setData(null);
         setSearched(false);
         setTitle('');
+        setError(null);
     };
 
     const getRandomColor = () => {
@@ -236,133 +239,359 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                 </form>
 
                 {/* Renderize o título aqui */}
-                {!loading && searched && data && (
-                    <div className='flex flex-col gap-4 items-center mt-6'>
-                        <h2 className="text-2xl font-bold text-slate-700 justify-center">{title}</h2>
-                        <div className="w-full mx-auto p-2">
+                {loading && (
+                    <div className="flex justify-center h-screen mt-10">
+                        <GridLoader size={16} color="#6b25c7" />
+                    </div>
+                )}
 
-                            <div
-                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                onClick={() => toggleSection(setShowDadosCadastrais)}
-                            >
-                                <h2>Dados Cadastrais:</h2>
-                                <span className="text-white text-xl">
-                                    {showDadosCadastrais ? '↑' : '↓'}
-                                </span>
-                            </div>
+                {error && !loading && (
+                    <div className="text-center text-red-500">
+                        {error}
+                    </div>
+                )}
 
-                            {showDadosCadastrais && (
+                {searched && data && (
+                    <div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                    {data.vwrfbjucepa && data.vwrfbjucepa.length > 0 ? (
-                                        data.vwrfbjucepa.map((cadastro, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                            >
-                                                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Documento:</span>
-                                                        <span className="text-muted-foreground">{cadastro.docformatado}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Razão Social:</span>
-                                                        <span className="text-muted-foreground">{cadastro.razaosocial}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Porte:</span>
-                                                        <span className="text-muted-foreground">{cadastro.porte}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Natureza Jurídica:</span>
-                                                        <span className="text-muted-foreground">{cadastro.natjuridica}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Descrição:</span>
-                                                        <span className="text-muted-foreground">{cadastro.descricao}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Data Início atividade:</span>
-                                                        <span className="text-muted-foreground">{cadastro.dtinicioatividade}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Capital Social:</span>
-                                                        <span className="text-muted-foreground">{cadastro.capitalsocial}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Situação Cadastral:</span>
-                                                        <span className="text-muted-foreground">{cadastro.situacaocadastral}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Data Situação Cadastral:</span>
-                                                        <span className="text-muted-foreground">{cadastro.dtsituacaocadastral}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Endereço:</span>
-                                                        <span className="text-muted-foreground">{cadastro.endereco}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Complemento:</span>
-                                                        <span className="text-muted-foreground">{cadastro.complemento}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Bairro:</span>
-                                                        <span className="text-muted-foreground">{cadastro.bairro}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">CEP:</span>
-                                                        <span className="text-muted-foreground">{cadastro.cep}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">UF:</span>
-                                                        <span className="text-muted-foreground">{cadastro.uf}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">E-mail:</span>
-                                                        <span className="text-muted-foreground">{cadastro.email}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Telefone:</span>
-                                                        <span className="text-muted-foreground">({cadastro.ddd}) {cadastro.telefone}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Situação JUCEPA:</span>
-                                                        <span className="text-muted-foreground">{cadastro.jucepa_situacao}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Status JUCEPA:</span>
-                                                        <span className="text-muted-foreground">{cadastro.jucepa_status}</span>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div>Nenhum dado cadastral encontrado.</div>
-                                    )}
-                                </div>
-
-                            )}
-
-
-                            <div>
+                        <div className='flex flex-col gap-4 items-center mt-6'>
+                            <h2 className="text-2xl font-bold text-slate-700 justify-center">{title}</h2>
+                            <div className="w-full mx-auto p-2">
 
                                 <div
                                     className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                    onClick={() => toggleSection(setShowSocios)}
+                                    onClick={() => toggleSection(setShowDadosCadastrais)}
                                 >
-                                    <h2>Quadro Societário:</h2>
+                                    <h2>Dados Cadastrais:</h2>
                                     <span className="text-white text-xl">
-                                        {showSocios ? '↑' : '↓'}
+                                        {showDadosCadastrais ? '↑' : '↓'}
                                     </span>
                                 </div>
 
-                                {showSocios && (
+                                {showDadosCadastrais && (
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                        {data.vwjucepasocios && data.vwjucepasocios.length > 0 ? (
-                                            data.vwjucepasocios.map((socio, index) => (
+                                        {data.vwrfbjucepa && data.vwrfbjucepa.length > 0 ? (
+                                            data.vwrfbjucepa.map((cadastro, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                >
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Documento:</span>
+                                                            <span className="text-muted-foreground">{cadastro.docformatado}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Razão Social:</span>
+                                                            <span className="text-muted-foreground">{cadastro.razaosocial}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Porte:</span>
+                                                            <span className="text-muted-foreground">{cadastro.porte}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Natureza Jurídica:</span>
+                                                            <span className="text-muted-foreground">{cadastro.natjuridica}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Descrição:</span>
+                                                            <span className="text-muted-foreground">{cadastro.descricao}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Data Início atividade:</span>
+                                                            <span className="text-muted-foreground">{cadastro.dtinicioatividade}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Capital Social:</span>
+                                                            <span className="text-muted-foreground">{cadastro.capitalsocial}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Situação Cadastral:</span>
+                                                            <span className="text-muted-foreground">{cadastro.situacaocadastral}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Data Situação Cadastral:</span>
+                                                            <span className="text-muted-foreground">{cadastro.dtsituacaocadastral}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Endereço:</span>
+                                                            <span className="text-muted-foreground">{cadastro.endereco}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Complemento:</span>
+                                                            <span className="text-muted-foreground">{cadastro.complemento}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Bairro:</span>
+                                                            <span className="text-muted-foreground">{cadastro.bairro}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">CEP:</span>
+                                                            <span className="text-muted-foreground">{cadastro.cep}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">UF:</span>
+                                                            <span className="text-muted-foreground">{cadastro.uf}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">E-mail:</span>
+                                                            <span className="text-muted-foreground">{cadastro.email}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Telefone:</span>
+                                                            <span className="text-muted-foreground">({cadastro.ddd}) {cadastro.telefone}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Situação JUCEPA:</span>
+                                                            <span className="text-muted-foreground">{cadastro.jucepa_situacao}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Status JUCEPA:</span>
+                                                            <span className="text-muted-foreground">{cadastro.jucepa_status}</span>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>Nenhum dado cadastral encontrado.</div>
+                                        )}
+                                    </div>
+
+                                )}
+
+
+                                <div>
+
+                                    <div
+                                        className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                        onClick={() => toggleSection(setShowSocios)}
+                                    >
+                                        <h2>Quadro Societário:</h2>
+                                        <span className="text-white text-xl">
+                                            {showSocios ? '↑' : '↓'}
+                                        </span>
+                                    </div>
+
+                                    {showSocios && (
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                            {data.vwjucepasocios && data.vwjucepasocios.length > 0 ? (
+                                                data.vwjucepasocios.map((socio, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                    >
+                                                        <div
+                                                            className="w-2 h-full mr-4 rounded-lg"
+                                                            style={{ backgroundColor: getRandomColor() }}
+                                                        />
+                                                        <div className="flex flex-wrap gap-4">
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">CNPJ:</span>
+                                                                <span className="text-muted-foreground">{socio.nr_cgc}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Razão Social:</span>
+                                                                <span className="text-muted-foreground">{socio.razaosocial}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Pessoa:</span>
+                                                                <span className="text-muted-foreground">{socio.no_pessoa}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Tipo Sócio:</span>
+                                                                <span className="text-muted-foreground">{socio.tiposocio}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Doc. Sócio:</span>
+                                                                <span className="text-muted-foreground">{socio.nr_docsocio}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Vínculo:</span>
+                                                                <span className="text-muted-foreground">{socio.no_vinculo}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Entrada Sociedade:</span>
+                                                                <span className="text-muted-foreground">{socio.dt_entrada_sociedade}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Saída Sociedade:</span>
+                                                                <span className="text-muted-foreground">{socio.dt_saida_sociedade}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Status Sociedade:</span>
+                                                                <span className="text-muted-foreground">{socio.statussociedade}</span>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div>
+                                                    <p className='text-muted-foreground p-4'>Nenhum sócio encontrado.</p>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                    )}
+
+
+                                </div>
+
+                                <div
+                                    className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                    onClick={() => toggleSection(setShowDebitos)}
+                                >
+                                    <h2>Débitos:</h2>
+                                    <span className="text-white text-xl">
+                                        {showDebitos ? '↑' : '↓'}
+                                    </span>
+                                </div>
+
+                                {showDebitos && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                        {data.vwdebitos && data.vwdebitos.length > 0 ? (
+                                            data.vwdebitos.map((debito, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                >
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Documento:</span>
+                                                            <span className="text-muted-foreground">{debito.documento}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Qtd. CDAs:</span>
+                                                            <span className="text-muted-foreground">{debito.qtdcdas}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Soma Valor CDAs:</span>
+                                                            <span className="text-muted-foreground">{debito.somavlcdas}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Qtd. Consolidado:</span>
+                                                            <span className="text-muted-foreground">{debito.qtdconsolidado}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">Valor Consolidado:</span>
+                                                            <span className="text-muted-foreground">{debito.vlconsolidado}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">CDAs dentro do prazo prescricional:</span>
+                                                            <span className="text-muted-foreground">{debito.qtdprazoprescr}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">CDAs com provável prescrição:</span>
+                                                            <span className="text-muted-foreground">{debito.qtdprescricao}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="font-semibold text-slate-700">CDAs prestres a prescever:</span>
+                                                            <span className="text-muted-foreground">{debito.qtdprestesprescr}</span>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>
+                                                <p className='text-muted-foreground p-4'>Nenhum débito encontrado.</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                )}
+
+
+                                <div
+                                    className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                    onClick={() => toggleSection(setShowPartesProcessos)}
+                                >
+                                    <h2>Participação em processos:</h2>
+                                    <span className="text-white text-xl">
+                                        {showPartesProcessos ? '↑' : '↓'}
+                                    </span>
+                                </div>
+
+                                {showPartesProcessos && (
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                        {data.vwpartesprocesso && data.vwpartesprocesso.length > 0 ? (
+                                            data.vwpartesprocesso.map((processo, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                >
+
+                                                    <div
+                                                        className="w-2 h-full mr-4 rounded-lg"
+                                                        style={{ backgroundColor: getRandomColor() }}
+                                                    />
+
+                                                    <div className="flex flex-wrap gap-4">
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Documento:</span>
+                                                            <span className="text-muted-foreground">{processo.nudocformatado}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Tipo Participação:</span>
+                                                            <span className="text-muted-foreground">{processo.tpparte}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Processo:</span>
+                                                            <span className="text-muted-foreground">{processo.processosaj}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Nº Judicial:</span>
+                                                            <span className="text-muted-foreground">{processo.numjudicial}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Classe:</span>
+                                                            <span className="text-muted-foreground">{processo.classe}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Assunto:</span>
+                                                            <span className="text-muted-foreground">{processo.assunto}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Comarca:</span>
+                                                            <span className="text-muted-foreground">{processo.comarca}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Vara Judicial:</span>
+                                                            <span className="text-muted-foreground">{processo.vara}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>
+                                                <p className='text-muted-foreground p-4'>Nenhum processo encontrado.</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                )}
+
+                                <div
+                                    className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                    onClick={() => toggleSection(setShowDetran)}
+                                >
+                                    <h2>DETRAN:</h2>
+                                    <span className="text-white text-xl">
+                                        {showDetran ? '↑' : '↓'}
+                                    </span>
+                                </div>
+
+                                {showDetran && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                        {data.vwcargaveiculos && data.vwcargaveiculos.length > 0 ? (
+                                            data.vwcargaveiculos.map((veiculo, index) => (
                                                 <div
                                                     key={index}
                                                     className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
@@ -373,40 +602,48 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                     />
                                                     <div className="flex flex-wrap gap-4">
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">CNPJ:</span>
-                                                            <span className="text-muted-foreground">{socio.nr_cgc}</span>
+                                                            <span className="font-semibold text-slate-700">Placa:</span>
+                                                            <span className="text-muted-foreground">{veiculo.placa}</span>
                                                         </div>
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">Razão Social:</span>
-                                                            <span className="text-muted-foreground">{socio.razaosocial}</span>
+                                                            <span className="font-semibold text-slate-700">Renavam:</span>
+                                                            <span className="text-muted-foreground">{veiculo.renavam}</span>
                                                         </div>
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">Pessoa:</span>
-                                                            <span className="text-muted-foreground">{socio.no_pessoa}</span>
+                                                            <span className="font-semibold text-slate-700">Doc. Proprietário:</span>
+                                                            <span className="text-muted-foreground">{veiculo.docproprietario}</span>
                                                         </div>
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">Tipo Sócio:</span>
-                                                            <span className="text-muted-foreground">{socio.tiposocio}</span>
+                                                            <span className="font-semibold text-slate-700">Arrendatário:</span>
+                                                            <span className="text-muted-foreground">{veiculo.arrendatario}</span>
                                                         </div>
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">Doc. Sócio:</span>
-                                                            <span className="text-muted-foreground">{socio.nr_docsocio}</span>
+                                                            <span className="font-semibold text-slate-700">Marca/Modelo:</span>
+                                                            <span className="text-muted-foreground">{veiculo.marcamodelo}</span>
                                                         </div>
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">Vínculo:</span>
-                                                            <span className="text-muted-foreground">{socio.no_vinculo}</span>
+                                                            <span className="font-semibold text-slate-700">Ano Modelo:</span>
+                                                            <span className="text-muted-foreground">{veiculo.anomodelo}</span>
                                                         </div>
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">Entrada Sociedade:</span>
-                                                            <span className="text-muted-foreground">{socio.dt_entrada_sociedade}</span>
+                                                            <span className="font-semibold text-slate-700">Procedência:</span>
+                                                            <span className="text-muted-foreground">{veiculo.procedencia}</span>
                                                         </div>
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">Saída Sociedade:</span>
-                                                            <span className="text-muted-foreground">{socio.dt_saida_sociedade}</span>
+                                                            <span className="font-semibold text-slate-700">Obs. Licenciamento:</span>
+                                                            <span className="text-muted-foreground">{veiculo.licenciamento}</span>
                                                         </div>
                                                         <div className="flex flex-col gap-1 min-w-[150px]">
-                                                            <span className="font-semibold text-slate-700">Status Sociedade:</span>
-                                                            <span className="text-muted-foreground">{socio.statussociedade}</span>
+                                                            <span className="font-semibold text-slate-700">Ocorrência Policial:</span>
+                                                            <span className="text-muted-foreground">{veiculo.ocorr_policial}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
+                                                            <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 col-span-1">
+                                                            <span className="font-semibold text-slate-700">Impedimento Judicial/Administrativo:</span>
+                                                            <span className="text-muted-foreground">{veiculo.imped_judicial_admin}</span>
                                                         </div>
 
 
@@ -415,7 +652,141 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             ))
                                         ) : (
                                             <div>
-                                                <p className='text-muted-foreground p-4'>Nenhum sócio encontrado.</p>
+                                                <p className='text-muted-foreground p-4'>Nenhum veículo encontrado.</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                )}
+
+                                <div
+                                    className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                    onClick={() => toggleSection(setShowSemas)}
+                                >
+                                    <h2>SEMAS:</h2>
+                                    <span className="text-white text-xl">
+                                        {showSemas ? '↑' : '↓'}
+                                    </span>
+                                </div>
+
+                                {showSemas && (
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                        {data.vwcarsemas && data.vwcarsemas.length > 0 ? (
+                                            data.vwcarsemas.map((semas, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                >
+
+                                                    <div
+                                                        className="w-2 h-full mr-4 rounded-lg"
+                                                        style={{ backgroundColor: getRandomColor() }}
+                                                    />
+
+                                                    <div className="flex flex-wrap gap-4">
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Documento:</span>
+                                                            <span className="text-muted-foreground">{semas.docproprietario}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Proprietário:</span>
+                                                            <span className="text-muted-foreground">{semas.nomeproprietario}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Propriedade:</span>
+                                                            <span className="text-muted-foreground">{semas.nomepropriedade}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Município:</span>
+                                                            <span className="text-muted-foreground">{semas.municipio}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Área Total:</span>
+                                                            <span className="text-muted-foreground">{semas.areatotal}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Situação:</span>
+                                                            <span className="text-muted-foreground">{semas.situacao}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Nº CAR:</span>
+                                                            <span className="text-muted-foreground">{semas.no_car}</span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>
+                                                <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                )}
+
+                                <div
+                                    className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                    onClick={() => toggleSection(setShowAdepara)}
+                                >
+                                    <h2>ADEPARA:</h2>
+                                    <span className="text-white text-xl">
+                                        {showAdepara ? '↑' : '↓'}
+                                    </span>
+                                </div>
+
+                                {showAdepara && (
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                        {data.vwadepara && data.vwadepara.length > 0 ? (
+                                            data.vwadepara.map((adepara, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                >
+
+                                                    <div
+                                                        className="w-2 h-full mr-4 rounded-lg"
+                                                        style={{ backgroundColor: getRandomColor() }}
+                                                    />
+
+                                                    <div className="flex flex-wrap gap-4">
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Documento:</span>
+                                                            <span className="text-muted-foreground">{adepara.docprodutor}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Produtor:</span>
+                                                            <span className="text-muted-foreground">{adepara.nomeprodutor}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Propriedade:</span>
+                                                            <span className="text-muted-foreground">{adepara.nomepropriedade}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Município:</span>
+                                                            <span className="text-muted-foreground">{adepara.municipio}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Área Total:</span>
+                                                            <span className="text-muted-foreground">{adepara.aretotal}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Área Pasto Cultivado:</span>
+                                                            <span className="text-muted-foreground">{adepara.areadepastocultivado}</span>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 min-w-[150px]">
+                                                            <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
+                                                            <span className="text-muted-foreground">{adepara.bov_total}</span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>
+                                                <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
                                             </div>
                                         )}
                                     </div>
@@ -424,370 +795,17 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
 
                             </div>
-
-                            <div
-                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                onClick={() => toggleSection(setShowDebitos)}
-                            >
-                                <h2>Débitos:</h2>
-                                <span className="text-white text-xl">
-                                    {showDebitos ? '↑' : '↓'}
-                                </span>
-                            </div>
-
-                            {showDebitos && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                    {data.vwdebitos && data.vwdebitos.length > 0 ? (
-                                        data.vwdebitos.map((debito, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                            >
-                                                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Documento:</span>
-                                                        <span className="text-muted-foreground">{debito.documento}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Qtd. CDAs:</span>
-                                                        <span className="text-muted-foreground">{debito.qtdcdas}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Soma Valor CDAs:</span>
-                                                        <span className="text-muted-foreground">{debito.somavlcdas}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Qtd. Consolidado:</span>
-                                                        <span className="text-muted-foreground">{debito.qtdconsolidado}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">Valor Consolidado:</span>
-                                                        <span className="text-muted-foreground">{debito.vlconsolidado}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">CDAs dentro do prazo prescricional:</span>
-                                                        <span className="text-muted-foreground">{debito.qtdprazoprescr}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">CDAs com provável prescrição:</span>
-                                                        <span className="text-muted-foreground">{debito.qtdprescricao}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="font-semibold text-slate-700">CDAs prestres a prescever:</span>
-                                                        <span className="text-muted-foreground">{debito.qtdprestesprescr}</span>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div>
-                                            <p className='text-muted-foreground p-4'>Nenhum débito encontrado.</p>
-                                        </div>
-                                    )}
-                                </div>
-
-                            )}
-
-
-                            <div
-                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                onClick={() => toggleSection(setShowPartesProcessos)}
-                            >
-                                <h2>Participação em processos:</h2>
-                                <span className="text-white text-xl">
-                                    {showPartesProcessos ? '↑' : '↓'}
-                                </span>
-                            </div>
-
-                            {showPartesProcessos && (
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    {data.vwpartesprocesso && data.vwpartesprocesso.length > 0 ? (
-                                        data.vwpartesprocesso.map((processo, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                            >
-
-                                                <div
-                                                    className="w-2 h-full mr-4 rounded-lg"
-                                                    style={{ backgroundColor: getRandomColor() }}
-                                                />
-
-                                                <div className="flex flex-wrap gap-4">
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Documento:</span>
-                                                        <span className="text-muted-foreground">{processo.nudocformatado}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Tipo Participação:</span>
-                                                        <span className="text-muted-foreground">{processo.tpparte}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Processo:</span>
-                                                        <span className="text-muted-foreground">{processo.processosaj}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Nº Judicial:</span>
-                                                        <span className="text-muted-foreground">{processo.numjudicial}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Classe:</span>
-                                                        <span className="text-muted-foreground">{processo.classe}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Assunto:</span>
-                                                        <span className="text-muted-foreground">{processo.assunto}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Comarca:</span>
-                                                        <span className="text-muted-foreground">{processo.comarca}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Vara Judicial:</span>
-                                                        <span className="text-muted-foreground">{processo.vara}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div>
-                                            <p className='text-muted-foreground p-4'>Nenhum processo encontrado.</p>
-                                        </div>
-                                    )}
-                                </div>
-
-                            )}
-
-                            <div
-                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                onClick={() => toggleSection(setShowDetran)}
-                            >
-                                <h2>DETRAN:</h2>
-                                <span className="text-white text-xl">
-                                    {showDetran ? '↑' : '↓'}
-                                </span>
-                            </div>
-
-                            {showDetran && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                    {data.vwcargaveiculos && data.vwcargaveiculos.length > 0 ? (
-                                        data.vwcargaveiculos.map((veiculo, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                            >
-                                                <div
-                                                    className="w-2 h-full mr-4 rounded-lg"
-                                                    style={{ backgroundColor: getRandomColor() }}
-                                                />
-                                                <div className="flex flex-wrap gap-4">
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Placa:</span>
-                                                        <span className="text-muted-foreground">{veiculo.placa}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Renavam:</span>
-                                                        <span className="text-muted-foreground">{veiculo.renavam}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Doc. Proprietário:</span>
-                                                        <span className="text-muted-foreground">{veiculo.docproprietario}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Arrendatário:</span>
-                                                        <span className="text-muted-foreground">{veiculo.arrendatario}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Marca/Modelo:</span>
-                                                        <span className="text-muted-foreground">{veiculo.marcamodelo}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Ano Modelo:</span>
-                                                        <span className="text-muted-foreground">{veiculo.anomodelo}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Procedência:</span>
-                                                        <span className="text-muted-foreground">{veiculo.procedencia}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Obs. Licenciamento:</span>
-                                                        <span className="text-muted-foreground">{veiculo.licenciamento}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Ocorrência Policial:</span>
-                                                        <span className="text-muted-foreground">{veiculo.ocorr_policial}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
-                                                        <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 col-span-1">
-                                                        <span className="font-semibold text-slate-700">Impedimento Judicial/Administrativo:</span>
-                                                        <span className="text-muted-foreground">{veiculo.imped_judicial_admin}</span>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div>
-                                            <p className='text-muted-foreground p-4'>Nenhum veículo encontrado.</p>
-                                        </div>
-                                    )}
-                                </div>
-
-                            )}
-
-                            <div
-                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                onClick={() => toggleSection(setShowSemas)}
-                            >
-                                <h2>SEMAS:</h2>
-                                <span className="text-white text-xl">
-                                    {showSemas ? '↑' : '↓'}
-                                </span>
-                            </div>
-
-                            {showSemas && (
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                    {data.vwcarsemas && data.vwcarsemas.length > 0 ? (
-                                        data.vwcarsemas.map((semas, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                            >
-
-                                                <div
-                                                    className="w-2 h-full mr-4 rounded-lg"
-                                                    style={{ backgroundColor: getRandomColor() }}
-                                                />
-
-                                                <div className="flex flex-wrap gap-4">
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Documento:</span>
-                                                        <span className="text-muted-foreground">{semas.docproprietario}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Proprietário:</span>
-                                                        <span className="text-muted-foreground">{semas.nomeproprietario}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Propriedade:</span>
-                                                        <span className="text-muted-foreground">{semas.nomepropriedade}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Município:</span>
-                                                        <span className="text-muted-foreground">{semas.municipio}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Área Total:</span>
-                                                        <span className="text-muted-foreground">{semas.areatotal}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Situação:</span>
-                                                        <span className="text-muted-foreground">{semas.situacao}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Nº CAR:</span>
-                                                        <span className="text-muted-foreground">{semas.no_car}</span>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div>
-                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
-                                        </div>
-                                    )}
-                                </div>
-
-                            )}
-
-                            <div
-                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                onClick={() => toggleSection(setShowAdepara)}
-                            >
-                                <h2>ADEPARA:</h2>
-                                <span className="text-white text-xl">
-                                    {showAdepara ? '↑' : '↓'}
-                                </span>
-                            </div>
-
-                            {showAdepara && (
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                    {data.vwadepara && data.vwadepara.length > 0 ? (
-                                        data.vwadepara.map((adepara, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                            >
-
-                                                <div
-                                                    className="w-2 h-full mr-4 rounded-lg"
-                                                    style={{ backgroundColor: getRandomColor() }}
-                                                />
-
-                                                <div className="flex flex-wrap gap-4">
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Documento:</span>
-                                                        <span className="text-muted-foreground">{adepara.docprodutor}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Produtor:</span>
-                                                        <span className="text-muted-foreground">{adepara.nomeprodutor}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Propriedade:</span>
-                                                        <span className="text-muted-foreground">{adepara.nomepropriedade}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Município:</span>
-                                                        <span className="text-muted-foreground">{adepara.municipio}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Área Total:</span>
-                                                        <span className="text-muted-foreground">{adepara.aretotal}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Área Pasto Cultivado:</span>
-                                                        <span className="text-muted-foreground">{adepara.areadepastocultivado}</span>
-                                                    </div>
-                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                        <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
-                                                        <span className="text-muted-foreground">{adepara.bov_total}</span>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div>
-                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
-                                        </div>
-                                    )}
-                                </div>
-
-                            )}
-
-
                         </div>
+
                     </div>
                 )}
 
-                {!loading && searched && data === null && (
-                    <div className="text-center">Nenhum dado encontrado para os filtros aplicados.</div>
-                )}
 
-                {loading && <div className="text-center">Carregando...</div>}
 
-                {error && <div className="text-center text-red-500">{error}</div>}
+
+
+
+
             </div>
         </>
     );
