@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { api } from '@/lib/axios';
-import { Badge } from "@/components/ui/badge";
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -66,13 +65,19 @@ interface ParticipacaoProcessos {
 }
 
 interface Detran {
-    anofabricacao: string;
-    anomodelo: string;
-    licenciamento: string;
-    marcamodelo: string;
     placa: string;
     renavam: string;
-    tpveiculo: string;
+    docproprietario: string;
+    proprietario: string;
+    docarrendatario: string;
+    arrendatario: string;
+    marcamodelo: string;
+    anomodelo: string;
+    procedencia: string;
+    licenciamento: string;
+    ocorr_policial: string;
+    imped_judicial_admin: string;
+    proprietarioanterior: string;
 }
 
 
@@ -113,10 +118,10 @@ export const ConsultaPessoaJuridica: React.FC = () => {
         })
             .then((response) => {
                 console.log(response.data);
-                const cnpjKey = Object.keys(response.data)[0]; // Obtém a chave CNPJ
-                const pessoaJuridicaData = response.data[cnpjKey]; // Acessa os dados associados
+                const cnpjKey = Object.keys(response.data)[0];
+                const pessoaJuridicaData = response.data[cnpjKey];
 
-                setData(pessoaJuridicaData); // Atualiza o estado com os dados
+                setData(pessoaJuridicaData); 
                 setLoading(false);
                 setSearched(true);
                 setTitle(`${cnpjKey}`);
@@ -125,7 +130,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                 console.error(error);
                 setLoading(false);
                 setSearched(true);
-                setError('Ocorreu um erro ao buscar os dados.');
+                setError('Informe novos filtros para a pesquisa.');
             });
     };
 
@@ -144,7 +149,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
             <Helmet title="Consulta Pessoa Jurídica" />
 
             <div className="flex flex-col gap-4">
-                <h1 className="text-2xl font-bold text-slate-700">Consulta Índicio Patrimonial - CNPJ</h1>
+                <h1 className="text-2xl font-bold text-slate-700">Consultar Índicio Patrimonial - CNPJ</h1>
 
                 <form
                     className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-2"
@@ -184,7 +189,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                 {/* Renderize o título aqui */}
                 {!loading && searched && data && (
                     <div className='flex flex-col gap-4 items-center mt-6'>
-                        <h2 className="text-2xl font-bold text-slate-700 justify-center">{title}</h2> {/* Exibir título */}
+                        <h2 className="text-2xl font-bold text-slate-700 justify-center">{title}</h2>
                         <div className="w-full mx-auto p-2">
 
                             <h2 className="text-xl font-bold mb-4 text-slate-700">Dados Cadastrais:</h2>
@@ -278,7 +283,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                 )}
                             </div>
 
-                            <h2 className="text-xl font-bold mb-4 text-slate-700 p-4">Quadro Societário:</h2>
+                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">Quadro Societário:</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                 {data.vwjucepasocios && data.vwjucepasocios.length > 0 ? (
                                     data.vwjucepasocios.map((socio, index) => (
@@ -335,7 +340,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                 )}
                             </div>
 
-                            <h2 className="text-xl font-bold mb-4 text-slate-700 p-4">Débitos:</h2>
+                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">Débitos:</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                 {data.vwdebitos && data.vwdebitos.length > 0 ? (
                                     data.vwdebitos.map((debito, index) => (
@@ -388,7 +393,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                 )}
                             </div>
 
-                            <h2 className="text-xl font-bold mb-4 text-slate-700 p-4">Participação em processos:</h2>
+                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">Participação em processos:</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                 {data.vwpartesprocesso && data.vwpartesprocesso.length > 0 ? (
                                     data.vwpartesprocesso.map((processo, index) => (
@@ -442,51 +447,73 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             </div>
 
 
-                            <h2 className="text-xl font-bold p-4 text-slate-700">Veículos</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">DETRAN:</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                 {data.vwcargaveiculos && data.vwcargaveiculos.length > 0 ? (
                                     data.vwcargaveiculos.map((veiculo, index) => (
                                         <div
                                             key={index}
-                                            className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                         >
-                                            <div className="flex flex-col gap-2">
-                                                <span className="text-lg font-semibold flex gap-2 text-gray-800">
-                                                    <Badge variant="default" className="text-base">Modelo: {veiculo.marcamodelo}</Badge>
-                                                </span>
-                                                <span className="text-muted-foreground">Ano Fabricação: {veiculo.anofabricacao}</span>
-                                                <span className="text-muted-foreground">Placa: {veiculo.placa}</span>
-                                                <span className="text-muted-foreground">Renavam: {veiculo.renavam}</span>
-                                                <span className="text-muted-foreground">Licenciamento: {veiculo.licenciamento}</span>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Placa:</span>
+                                                    <span className="text-muted-foreground">{veiculo.placa}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Renavam:</span>
+                                                    <span className="text-muted-foreground">{veiculo.renavam}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Doc. Proprietário:</span>
+                                                    <span className="text-muted-foreground">{veiculo.docproprietario}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Arrendatário:</span>
+                                                    <span className="text-muted-foreground">{veiculo.arrendatario}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Marca/Modelo:</span>
+                                                    <span className="text-muted-foreground">{veiculo.marcamodelo}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Ano Modelo:</span>
+                                                    <span className="text-muted-foreground">{veiculo.anomodelo}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Procedência:</span>
+                                                    <span className="text-muted-foreground">{veiculo.procedencia}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Obs. Licenciamento:</span>
+                                                    <span className="text-muted-foreground">{veiculo.licenciamento}</span>
+                                                </div>                                           
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Ocorrência Policial:</span>
+                                                    <span className="text-muted-foreground">{veiculo.ocorr_policial}</span>
+                                                </div>                                           
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
+                                                    <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
+                                                </div>                                           
+                                                <div className="flex flex-col gap-1 col-span-2">
+                                                    <span className="font-semibold text-slate-700">Impedimento Judicial/Administrativo:</span>
+                                                    <span className="text-muted-foreground">{veiculo.imped_judicial_admin}</span>
+                                                </div>                                           
+                                                
+                                                
                                             </div>
                                         </div>
                                     ))
                                 ) : (
-                                    <div>Nenhum veículo encontrado.</div>
+                                    <div>
+                                        <p className='text-muted-foreground p-4'>Nenhum veículo encontrado.</p>
+                                    </div>
                                 )}
                             </div>
 
-                            <h2 className="text-xl font-bold mb-4 mt-8 text-slate-700">Débitos</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                                {data.vwdebitos && data.vwdebitos.length > 0 ? (
-                                    data.vwdebitos.map((debito, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                        >
-                                            <div className="flex flex-col gap-2 ">
-                                                <span className="text-lg font-semibold flex gap-2 text-gray-800">
-                                                    <Badge variant="default" className="text-base">Documento: {debito.documento}</Badge>
-                                                </span>
-                                                <span className="text-muted-foreground">Quantidade CDAS: {debito.qtdcdas}</span>
-                                                <span className="text-muted-foreground">Quantidade Consolidada: {debito.qtdconsolidado}</span>
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div>Nenhum débito encontrado.</div>
-                                )}
-                            </div>
+                            
+                            
                         </div>
                     </div>
                 )}
