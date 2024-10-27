@@ -90,6 +90,16 @@ interface Semas {
     no_car: string;
 }
 
+interface Adepara {
+    docprodutor: string;
+    nomeprodutor: string;
+    nomepropriedade: string;
+    municipio: string;
+    aretotal: string;
+    areadepastocultivado: string;
+    bov_total: string;
+}
+
 
 interface PessoaJuridicaData {
     cnpj: string;
@@ -99,6 +109,7 @@ interface PessoaJuridicaData {
     vwjucepasocios: QuadroSocietario[];
     vwpartesprocesso: ParticipacaoProcessos[];
     vwcarsemas: Semas[];
+    vwadepara: Adepara[];
 }
 
 export const ConsultaPessoaJuridica: React.FC = () => {
@@ -582,6 +593,60 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">Nº CAR:</span>
                                                     <span className="text-muted-foreground">{semas.no_car}</span>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div>
+                                        <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">ADEPARA:</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                {data.vwadepara && data.vwadepara.length > 0 ? (
+                                    data.vwadepara.map((adepara, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                        >
+                                            
+                                            <div
+                                                className="w-2 h-full mr-4 rounded-lg"
+                                                style={{ backgroundColor: getRandomColor() }}
+                                            />
+
+                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Documento:</span>
+                                                    <span className="text-muted-foreground">{adepara.docprodutor}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Produtor:</span>
+                                                    <span className="text-muted-foreground">{adepara.nomeprodutor}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Propriedade:</span>
+                                                    <span className="text-muted-foreground">{adepara.nomepropriedade}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Município:</span>
+                                                    <span className="text-muted-foreground">{adepara.municipio}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Área Total:</span>
+                                                    <span className="text-muted-foreground">{adepara.aretotal}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Área Pasto Cultivado:</span>
+                                                    <span className="text-muted-foreground">{adepara.areadepastocultivado}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
+                                                    <span className="text-muted-foreground">{adepara.bov_total}</span>
                                                 </div>
                                                 
                                             </div>
