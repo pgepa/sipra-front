@@ -38,7 +38,7 @@ interface QuadroSocietario {
     no_vinculo: string;
     dt_entrada_sociedade: string;
     dt_saida_sociedade: string;
-    statussociedade: string;    
+    statussociedade: string;
 }
 
 interface Debitos {
@@ -49,7 +49,7 @@ interface Debitos {
     vlconsolidado: string;
     qtdprazoprescr: string;
     qtdprescricao: string;
-    qtdprestesprescr: string;   
+    qtdprestesprescr: string;
 
 }
 
@@ -121,7 +121,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                 const cnpjKey = Object.keys(response.data)[0];
                 const pessoaJuridicaData = response.data[cnpjKey];
 
-                setData(pessoaJuridicaData); 
+                setData(pessoaJuridicaData);
                 setLoading(false);
                 setSearched(true);
                 setTitle(`${cnpjKey}`);
@@ -142,6 +142,15 @@ export const ConsultaPessoaJuridica: React.FC = () => {
         setData(null);
         setSearched(false);
         setTitle('');
+    };
+
+    const getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
     };
 
     return (
@@ -273,8 +282,8 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                     <span className="font-semibold text-slate-700">Status JUCEPA:</span>
                                                     <span className="text-muted-foreground">{cadastro.jucepa_status}</span>
                                                 </div>
-                                                
-                                                
+
+
                                             </div>
                                         </div>
                                     ))
@@ -327,9 +336,9 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">Status Sociedade:</span>
                                                     <span className="text-muted-foreground">{socio.statussociedade}</span>
-                                                </div>                                               
-                                                
-                                                
+                                                </div>
+
+
                                             </div>
                                         </div>
                                     ))
@@ -380,9 +389,9 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">CDAs prestres a prescever:</span>
                                                     <span className="text-muted-foreground">{debito.qtdprestesprescr}</span>
-                                                </div>                                           
-                                                
-                                                
+                                                </div>
+
+
                                             </div>
                                         </div>
                                     ))
@@ -401,6 +410,12 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             key={index}
                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                         >
+                                            {/* Div do lado esquerdo com cor aleatória */}
+                                            <div
+                                                className="w-2 h-full mr-4 rounded-lg"
+                                                style={{ backgroundColor: getRandomColor() }}
+                                            />
+
                                             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">Documento:</span>
@@ -433,9 +448,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">Vara Judicial:</span>
                                                     <span className="text-muted-foreground">{processo.vara}</span>
-                                                </div>                                           
-                                                
-                                                
+                                                </div>
                                             </div>
                                         </div>
                                     ))
@@ -487,21 +500,21 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">Obs. Licenciamento:</span>
                                                     <span className="text-muted-foreground">{veiculo.licenciamento}</span>
-                                                </div>                                           
+                                                </div>
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">Ocorrência Policial:</span>
                                                     <span className="text-muted-foreground">{veiculo.ocorr_policial}</span>
-                                                </div>                                           
+                                                </div>
                                                 <div className="flex flex-col gap-1">
                                                     <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
                                                     <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
-                                                </div>                                           
+                                                </div>
                                                 <div className="flex flex-col gap-1 col-span-2">
                                                     <span className="font-semibold text-slate-700">Impedimento Judicial/Administrativo:</span>
                                                     <span className="text-muted-foreground">{veiculo.imped_judicial_admin}</span>
-                                                </div>                                           
-                                                
-                                                
+                                                </div>
+
+
                                             </div>
                                         </div>
                                     ))
@@ -512,8 +525,8 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                 )}
                             </div>
 
-                            
-                            
+
+
                         </div>
                     </div>
                 )}
