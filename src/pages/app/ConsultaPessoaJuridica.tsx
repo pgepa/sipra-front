@@ -80,6 +80,16 @@ interface Detran {
     proprietarioanterior: string;
 }
 
+interface Semas {
+    docproprietario: string;
+    nomeproprietario: string;
+    nomepropriedade: string;
+    municipio: string;
+    areatotal: string;
+    situacao: string;
+    no_car: string;
+}
+
 
 interface PessoaJuridicaData {
     cnpj: string;
@@ -88,6 +98,7 @@ interface PessoaJuridicaData {
     vwrfbjucepa: DadosCadastrais[];
     vwjucepasocios: QuadroSocietario[];
     vwpartesprocesso: ParticipacaoProcessos[];
+    vwcarsemas: Semas[];
 }
 
 export const ConsultaPessoaJuridica: React.FC = () => {
@@ -525,6 +536,60 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                 ) : (
                                     <div>
                                         <p className='text-muted-foreground p-4'>Nenhum veículo encontrado.</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">SEMAS:</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                {data.vwcarsemas && data.vwcarsemas.length > 0 ? (
+                                    data.vwcarsemas.map((semas, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                        >
+                                            
+                                            <div
+                                                className="w-2 h-full mr-4 rounded-lg"
+                                                style={{ backgroundColor: getRandomColor() }}
+                                            />
+
+                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Documento:</span>
+                                                    <span className="text-muted-foreground">{semas.docproprietario}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Proprietário:</span>
+                                                    <span className="text-muted-foreground">{semas.nomeproprietario}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Propriedade:</span>
+                                                    <span className="text-muted-foreground">{semas.nomepropriedade}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Município:</span>
+                                                    <span className="text-muted-foreground">{semas.municipio}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Área Total:</span>
+                                                    <span className="text-muted-foreground">{semas.areatotal}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Situação:</span>
+                                                    <span className="text-muted-foreground">{semas.situacao}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-semibold text-slate-700">Nº CAR:</span>
+                                                    <span className="text-muted-foreground">{semas.no_car}</span>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div>
+                                        <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
                                     </div>
                                 )}
                             </div>
