@@ -123,6 +123,8 @@ export const ConsultaPessoaJuridica: React.FC = () => {
     const [showDebitos, setShowDebitos] = useState(false);
     const [showPartesProcessos, setShowPartesProcessos] = useState(false);
     const [showDetran, setShowDetran] = useState(false);
+    const [showSemas, setShowSemas] = useState(false);
+    const [showAdepara, setShowAdepara] = useState(false);
     const [filters, setFilters] = useState({
         cnpj: '',
         doc_raiz: '',
@@ -555,190 +557,209 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             </div>
 
                             {showDetran && (
-                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                 {data.vwcargaveiculos && data.vwcargaveiculos.length > 0 ? (
-                                     data.vwcargaveiculos.map((veiculo, index) => (
-                                         <div
-                                             key={index}
-                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                         >
-                                             <div
-                                                 className="w-2 h-full mr-4 rounded-lg"
-                                                 style={{ backgroundColor: getRandomColor() }}
-                                             />
-                                             <div className="flex flex-wrap gap-4">
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Placa:</span>
-                                                     <span className="text-muted-foreground">{veiculo.placa}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Renavam:</span>
-                                                     <span className="text-muted-foreground">{veiculo.renavam}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Doc. Proprietário:</span>
-                                                     <span className="text-muted-foreground">{veiculo.docproprietario}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Arrendatário:</span>
-                                                     <span className="text-muted-foreground">{veiculo.arrendatario}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Marca/Modelo:</span>
-                                                     <span className="text-muted-foreground">{veiculo.marcamodelo}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Ano Modelo:</span>
-                                                     <span className="text-muted-foreground">{veiculo.anomodelo}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Procedência:</span>
-                                                     <span className="text-muted-foreground">{veiculo.procedencia}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Obs. Licenciamento:</span>
-                                                     <span className="text-muted-foreground">{veiculo.licenciamento}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Ocorrência Policial:</span>
-                                                     <span className="text-muted-foreground">{veiculo.ocorr_policial}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 min-w-[150px]">
-                                                     <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
-                                                     <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
-                                                 </div>
-                                                 <div className="flex flex-col gap-1 col-span-1">
-                                                     <span className="font-semibold text-slate-700">Impedimento Judicial/Administrativo:</span>
-                                                     <span className="text-muted-foreground">{veiculo.imped_judicial_admin}</span>
-                                                 </div>
- 
- 
-                                             </div>
-                                         </div>
-                                     ))
-                                 ) : (
-                                     <div>
-                                         <p className='text-muted-foreground p-4'>Nenhum veículo encontrado.</p>
-                                     </div>
-                                 )}
-                             </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                    {data.vwcargaveiculos && data.vwcargaveiculos.length > 0 ? (
+                                        data.vwcargaveiculos.map((veiculo, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                            >
+                                                <div
+                                                    className="w-2 h-full mr-4 rounded-lg"
+                                                    style={{ backgroundColor: getRandomColor() }}
+                                                />
+                                                <div className="flex flex-wrap gap-4">
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Placa:</span>
+                                                        <span className="text-muted-foreground">{veiculo.placa}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Renavam:</span>
+                                                        <span className="text-muted-foreground">{veiculo.renavam}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Doc. Proprietário:</span>
+                                                        <span className="text-muted-foreground">{veiculo.docproprietario}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Arrendatário:</span>
+                                                        <span className="text-muted-foreground">{veiculo.arrendatario}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Marca/Modelo:</span>
+                                                        <span className="text-muted-foreground">{veiculo.marcamodelo}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Ano Modelo:</span>
+                                                        <span className="text-muted-foreground">{veiculo.anomodelo}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Procedência:</span>
+                                                        <span className="text-muted-foreground">{veiculo.procedencia}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Obs. Licenciamento:</span>
+                                                        <span className="text-muted-foreground">{veiculo.licenciamento}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Ocorrência Policial:</span>
+                                                        <span className="text-muted-foreground">{veiculo.ocorr_policial}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
+                                                        <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 col-span-1">
+                                                        <span className="font-semibold text-slate-700">Impedimento Judicial/Administrativo:</span>
+                                                        <span className="text-muted-foreground">{veiculo.imped_judicial_admin}</span>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div>
+                                            <p className='text-muted-foreground p-4'>Nenhum veículo encontrado.</p>
+                                        </div>
+                                    )}
+                                </div>
 
                             )}
 
-
-
-
-                           
-                           
-
-                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">SEMAS:</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                {data.vwcarsemas && data.vwcarsemas.length > 0 ? (
-                                    data.vwcarsemas.map((semas, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                        >
-
-                                            <div
-                                                className="w-2 h-full mr-4 rounded-lg"
-                                                style={{ backgroundColor: getRandomColor() }}
-                                            />
-
-                                            <div className="flex flex-wrap gap-4">
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                    <span className="text-muted-foreground">{semas.docproprietario}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Proprietário:</span>
-                                                    <span className="text-muted-foreground">{semas.nomeproprietario}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Propriedade:</span>
-                                                    <span className="text-muted-foreground">{semas.nomepropriedade}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Município:</span>
-                                                    <span className="text-muted-foreground">{semas.municipio}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Área Total:</span>
-                                                    <span className="text-muted-foreground">{semas.areatotal}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Situação:</span>
-                                                    <span className="text-muted-foreground">{semas.situacao}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Nº CAR:</span>
-                                                    <span className="text-muted-foreground">{semas.no_car}</span>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div>
-                                        <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
-                                    </div>
-                                )}
+                            <div
+                                className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                onClick={() => toggleSection(setShowSemas)}
+                            >
+                                <h2>SEMAS:</h2>
+                                <span className="text-violet-700 text-xl">
+                                    {showSemas ? '↑' : '↓'}
+                                </span>
                             </div>
 
-                            <h2 className="text-xl font-bold mt-4 text-slate-700 p-4">ADEPARA:</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                {data.vwadepara && data.vwadepara.length > 0 ? (
-                                    data.vwadepara.map((adepara, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                        >
+                            {showSemas && (
 
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                    {data.vwcarsemas && data.vwcarsemas.length > 0 ? (
+                                        data.vwcarsemas.map((semas, index) => (
                                             <div
-                                                className="w-2 h-full mr-4 rounded-lg"
-                                                style={{ backgroundColor: getRandomColor() }}
-                                            />
+                                                key={index}
+                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                            >
 
-                                            <div className="flex flex-wrap gap-4">
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                    <span className="text-muted-foreground">{adepara.docprodutor}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Produtor:</span>
-                                                    <span className="text-muted-foreground">{adepara.nomeprodutor}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Propriedade:</span>
-                                                    <span className="text-muted-foreground">{adepara.nomepropriedade}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Município:</span>
-                                                    <span className="text-muted-foreground">{adepara.municipio}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Área Total:</span>
-                                                    <span className="text-muted-foreground">{adepara.aretotal}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Área Pasto Cultivado:</span>
-                                                    <span className="text-muted-foreground">{adepara.areadepastocultivado}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                    <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
-                                                    <span className="text-muted-foreground">{adepara.bov_total}</span>
-                                                </div>
+                                                <div
+                                                    className="w-2 h-full mr-4 rounded-lg"
+                                                    style={{ backgroundColor: getRandomColor() }}
+                                                />
 
+                                                <div className="flex flex-wrap gap-4">
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Documento:</span>
+                                                        <span className="text-muted-foreground">{semas.docproprietario}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Proprietário:</span>
+                                                        <span className="text-muted-foreground">{semas.nomeproprietario}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Propriedade:</span>
+                                                        <span className="text-muted-foreground">{semas.nomepropriedade}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Município:</span>
+                                                        <span className="text-muted-foreground">{semas.municipio}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Área Total:</span>
+                                                        <span className="text-muted-foreground">{semas.areatotal}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Situação:</span>
+                                                        <span className="text-muted-foreground">{semas.situacao}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Nº CAR:</span>
+                                                        <span className="text-muted-foreground">{semas.no_car}</span>
+                                                    </div>
+
+                                                </div>
                                             </div>
+                                        ))
+                                    ) : (
+                                        <div>
+                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div>
-                                        <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
-                                    </div>
-                                )}
+                                    )}
+                                </div>
+
+                            )}
+
+                            <div
+                                className="flex items-center gap-2 text-xl font-bold mt-4 mb-4 text-slate-700 p-4 bg-white cursor-pointer rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                onClick={() => toggleSection(setShowAdepara)}
+                            >
+                                <h2>ADEPARA:</h2>
+                                <span className="text-violet-700 text-xl">
+                                    {showAdepara ? '↑' : '↓'}
+                                </span>
                             </div>
 
+                            {showAdepara && (
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                    {data.vwadepara && data.vwadepara.length > 0 ? (
+                                        data.vwadepara.map((adepara, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                            >
+
+                                                <div
+                                                    className="w-2 h-full mr-4 rounded-lg"
+                                                    style={{ backgroundColor: getRandomColor() }}
+                                                />
+
+                                                <div className="flex flex-wrap gap-4">
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Documento:</span>
+                                                        <span className="text-muted-foreground">{adepara.docprodutor}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Produtor:</span>
+                                                        <span className="text-muted-foreground">{adepara.nomeprodutor}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Propriedade:</span>
+                                                        <span className="text-muted-foreground">{adepara.nomepropriedade}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Município:</span>
+                                                        <span className="text-muted-foreground">{adepara.municipio}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Área Total:</span>
+                                                        <span className="text-muted-foreground">{adepara.aretotal}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Área Pasto Cultivado:</span>
+                                                        <span className="text-muted-foreground">{adepara.areadepastocultivado}</span>
+                                                    </div>
+                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                        <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
+                                                        <span className="text-muted-foreground">{adepara.bov_total}</span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div>
+                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                            )}
 
 
                         </div>
