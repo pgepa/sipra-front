@@ -247,7 +247,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             onChange={(e) => setFilters({ ...filters, cnpj: e.target.value })}
                         />
                     </div>
-                    <div className="space-y-2">
+                    {/*<div className="space-y-2">
                         <Label className="font-semibold text-sm text-gray-800">CNPJ/Raiz:</Label>
                         <Input
                             placeholder="Buscar por CNPJ/Raiz"
@@ -255,7 +255,8 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                             value={filters.doc_raiz}
                             onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
                         />
-                    </div>
+                    </div> */}
+                    
 
                     <Button type="submit" className="default mt-8">
                         <Search className="h-4 w-4 mr-2" />
