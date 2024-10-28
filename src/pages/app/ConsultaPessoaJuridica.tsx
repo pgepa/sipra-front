@@ -347,7 +347,9 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="font-semibold text-slate-700">Capital Social:</span>
-                                                            <span className="text-muted-foreground">{cadastro.capitalsocial}</span>
+                                                            <span className="text-muted-foreground">
+                                                            {Number(cadastro.capitalsocial).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                            </span>
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="font-semibold text-slate-700">Situação Cadastral:</span>
@@ -514,7 +516,11 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="font-semibold text-slate-700">Soma Valor CDAs:</span>
-                                                            <span className="text-muted-foreground">{debito.somavlcdas}</span>
+                                                            <span className="text-muted-foreground">
+
+                                                            {Number(debito.somavlcdas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                            
+                                                            </span>
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="font-semibold text-slate-700">Qtd. Consolidado:</span>
@@ -522,7 +528,9 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="font-semibold text-slate-700">Valor Consolidado:</span>
-                                                            <span className="text-muted-foreground">{debito.vlconsolidado}</span>
+                                                            <span className="text-muted-foreground">
+                                                            {Number(debito.vlconsolidado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                            </span>
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="font-semibold text-slate-700">CDAs dentro do prazo prescricional:</span>
