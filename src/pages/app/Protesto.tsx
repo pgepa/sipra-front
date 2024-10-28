@@ -127,10 +127,10 @@ export function Protesto() {
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = `protestos.${downloadFormat}`;
-                document.body.appendChild(link); // Adiciona o link ao DOM
-                link.click(); // Executa o clique para iniciar o download
-                document.body.removeChild(link); // Remove o link do DOM
-                window.URL.revokeObjectURL(link.href); // Libera a memória
+                document.body.appendChild(link); 
+                link.click(); 
+                document.body.removeChild(link); 
+                window.URL.revokeObjectURL(link.href); 
             } else {
                 setProtestos(response.data.data);
                 setTotalItems(response.data.total_items);
@@ -147,7 +147,7 @@ export function Protesto() {
     };
 
     useEffect(() => {
-        fetchProtestos(page, sortOrder);  // Requisita com a página e ordenação atualizadas
+        fetchProtestos(page, sortOrder);  
     }, [page, sortOrder]);
 
     const handlePageChange = (newPage: number) => {
