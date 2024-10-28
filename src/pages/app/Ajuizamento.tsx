@@ -125,11 +125,14 @@ export function Ajuizamento() {
             });
 
             if (downloadFormat) {
-                const blob = new Blob([response.data], { type: downloadFormat === 'xlsx' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv' });
+                const blob = new Blob([response.data], { type: 'text/csv' });
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = `protestos.${downloadFormat}`;
-                link.click();
+                document.body.appendChild(link); 
+                link.click(); 
+                document.body.removeChild(link); 
+                window.URL.revokeObjectURL(link.href);
             } else {
                 setProtestos(response.data.data);
                 setTotalItems(response.data.total_items);
@@ -557,7 +560,7 @@ export function Ajuizamento() {
 
                 <div className="flex gap-4 mt-4">
 
-                    <Button onClick={() => fetchProtestos(page, 'csv')} variant='default'>
+                    <Button onClick={() => fetchProtestos(page, sortOrder, 'csv')} variant='default'>
                         <GrDocumentExcel className="h-4 w-4 mr-2" />
                         Baixar Planilha
                     </Button>
