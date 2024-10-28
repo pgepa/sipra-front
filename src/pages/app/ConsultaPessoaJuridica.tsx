@@ -357,7 +357,9 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="font-semibold text-slate-700">Data Situação Cadastral:</span>
-                                                            <span className="text-muted-foreground">{cadastro.dtsituacaocadastral}</span>
+                                                            <span className="text-muted-foreground">
+                                                            {cadastro.dtsituacaocadastral}
+                                                            </span>
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="font-semibold text-slate-700">Endereço:</span>
