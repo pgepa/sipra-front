@@ -123,11 +123,14 @@ export function Protesto() {
             });
 
             if (downloadFormat) {
-                const blob = new Blob([response.data], { type: downloadFormat === 'xlsx' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv' });
+                const blob = new Blob([response.data], { type: 'text/csv' });
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = `protestos.${downloadFormat}`;
-                link.click();
+                document.body.appendChild(link); // Adiciona o link ao DOM
+                link.click(); // Executa o clique para iniciar o download
+                document.body.removeChild(link); // Remove o link do DOM
+                window.URL.revokeObjectURL(link.href); // Libera a memória
             } else {
                 setProtestos(response.data.data);
                 setTotalItems(response.data.total_items);
@@ -648,7 +651,7 @@ export function Protesto() {
 
                 <div className="flex gap-4 mt-4">
 
-                    <Button onClick={() => fetchProtestos(page, 'csv')} variant='default'>
+                    <Button onClick={() => fetchProtestos(page, sortOrder, 'csv')} variant='default'>
                         <GrDocumentExcel className="h-4 w-4 mr-2" />
                         Baixar Planilha
                     </Button>
