@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
+import { AiFillFilePdf } from 'react-icons/ai';
 
 interface DadosCadastrais {
     docformatado: string;
@@ -127,10 +128,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
     const [showSemas, setShowSemas] = useState(false);
     const [showAdepara, setShowAdepara] = useState(false);
     const [showDadosCadastrais, setShowDadosCadastrais] = useState(false);
-    const [filters, setFilters] = useState({
-        cnpj: '',
-        doc_raiz: '',
-    });
+    const [filters, setFilters] = useState({ cnpj: '', doc_raiz: '' });
     const [searched, setSearched] = useState(false);
     const [title, setTitle] = useState<string>('');
 
@@ -140,23 +138,56 @@ export const ConsultaPessoaJuridica: React.FC = () => {
         setFunction((prev) => !prev);
     };
 
+    const handleDownloadPdf = () => {
+        const token = localStorage.getItem('token');
 
+        if (!token) {
+            alert('Token de autenticação não encontrado!');
+            return;
+        }
+
+        setLoading(true);
+
+        api.get('/indiciopatrimonial', {
+            headers: { Authorization: `Bearer ${token}` },
+            params: {
+                cnpj: filters.cnpj || undefined,
+                doc_raiz: filters.doc_raiz || undefined,
+                download: 'pdf',
+            },
+            responseType: 'blob',
+        })
+            .then((response) => {
+
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `consulta_${filters.cnpj || filters.doc_raiz}.pdf`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch((error) => {
+                console.error('Erro ao fazer download do PDF:', error);
+                alert('Erro ao fazer download do PDF.');
+            })
+            .finally(() => setLoading(false));
+    };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setSearched(false);
         setError(null);
+
         const token = localStorage.getItem('token');
 
         api.get('/indiciopatrimonial', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
             params: {
                 cnpj: filters.cnpj || undefined,
                 doc_raiz: filters.doc_raiz || undefined,
-            },
+            }
         })
             .then((response) => {
                 console.log(response.data);
@@ -177,10 +208,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
     };
 
     const handleClearFilters = () => {
-        setFilters({
-            cnpj: '',
-            doc_raiz: '',
-        });
+        setFilters({ cnpj: '', doc_raiz: '' });
         setData(null);
         setSearched(false);
         setTitle('');
@@ -195,6 +223,8 @@ export const ConsultaPessoaJuridica: React.FC = () => {
         }
         return color;
     };
+
+
 
     return (
         <>
@@ -236,7 +266,10 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                         <X className="h-4 w-4 mr-2" />
                         Remover filtros
                     </Button>
+
                 </form>
+
+
 
                 {/* Renderize o título aqui */}
                 {loading && (
@@ -253,9 +286,18 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
                 {searched && data && (
                     <div>
+                         <div className='flex'>
+                                <Button onClick={handleDownloadPdf} className="w-full sm:w-auto mt-8" variant="outline">
+                                    <AiFillFilePdf className="h-4 w-4 mr-2 text-rose-700" />
+                                    Download PDF
+                                </Button>
+                            </div>
 
                         <div className='flex flex-col gap-4 items-center mt-6'>
                             <h2 className="text-2xl font-bold text-slate-700 justify-center">{title}</h2>
+
+                           
+
                             <div className="w-full mx-auto p-2">
 
                                 <div
