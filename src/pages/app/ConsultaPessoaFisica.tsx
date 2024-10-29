@@ -220,7 +220,7 @@ export const ConsultaPessoaFisica: React.FC = () => {
 
     return (
         <>
-            <Helmet title="Consulta Pessoa Jurídica" />
+            <Helmet title="Consulta Pessoa Física" />
 
             <div className="flex flex-col gap-4">
                 <h1 className="text-2xl font-bold text-slate-700">Consultar Índicio Patrimonial - CPF</h1>
