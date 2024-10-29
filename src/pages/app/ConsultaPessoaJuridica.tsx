@@ -163,7 +163,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `consulta_${filters.cnpj || filters.doc_raiz}.pdf`);
+                link.setAttribute('download', `Indício Patrimonial_${filters.cnpj || filters.doc_raiz}.pdf`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
