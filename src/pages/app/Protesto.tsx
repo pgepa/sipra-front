@@ -61,6 +61,7 @@ export function Protesto() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
+    const [isCNPJSelected, setIsCNPJSelected] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [filters, setFilters] = useState({
         nudocumento: '',
@@ -205,6 +206,7 @@ export function Protesto() {
         });
         setPage(1);
         fetchProtestos(1);
+        setIsCNPJSelected(false);
     };
 
     const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
@@ -290,6 +292,11 @@ export function Protesto() {
         "Possível Prescrição",
         "Prestes a prescrever",
     ]
+
+    const handleDocumentTypeChange = (value: string) => {
+        setFilters({ ...filters, tipodoc: value });
+        setIsCNPJSelected(value === "CNPJ");
+    };
 
 
 
@@ -381,15 +388,13 @@ export function Protesto() {
                     <div className='space-y-2'>
 
                         <Label className='font-semibold text-sm text-gray-800'>Tipo de documento:</Label>
-                        <Select value={filters.tipodoc} onValueChange={(value) => setFilters({ ...filters, tipodoc: value })}>
+                        <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
                             </SelectTrigger>
                             <SelectContent>
-
                                 <SelectItem value="CPF">CPF</SelectItem>
                                 <SelectItem value="CNPJ">CNPJ</SelectItem>
-
                             </SelectContent>
                         </Select>
 
@@ -399,7 +404,7 @@ export function Protesto() {
                         <Label className='font-semibold text-sm text-gray-800'>Porte:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
                                     <span className='font-normal truncate'>
                                         {filters.porte.length > 0 ? filters.porte.join(", ") : "Escolha uma opção"}
                                     </span>
@@ -425,7 +430,7 @@ export function Protesto() {
                         <Label className='font-semibold text-sm text-gray-800'>Situação cadastral (RFB):</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
                                     <span className='font-normal truncate'>
                                         {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
                                     </span>
