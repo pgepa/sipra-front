@@ -51,6 +51,7 @@ interface ProtestoData {
     prescrito: string;
     obs_end_protesto: string;
     periodoprotesto: string;
+    conveniadoieptb: string;
 }
 
 export function Protesto() {
@@ -81,6 +82,7 @@ export function Protesto() {
         ulthistorico: [] as string[],
         sit_protesto: [] as string[],
         periodoprotesto: '',
+        conveniadoieptb: '',
     });
 
 
@@ -88,9 +90,9 @@ export function Protesto() {
     const token = localStorage.getItem('token');
 
     const toggleSortOrder = () => {
-        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';  
-        setSortOrder(newSortOrder);  
-        setPage(1);  
+        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+        setSortOrder(newSortOrder);
+        setPage(1);
     };
 
     const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
@@ -114,7 +116,7 @@ export function Protesto() {
                     tipotributo: filters.tipotributo.join(","),
                     status_saj: filters.status_saj.join(","),
                     prescrito: filters.prescrito.join(","),
-                    
+
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -127,10 +129,10 @@ export function Protesto() {
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = `protestos.${downloadFormat}`;
-                document.body.appendChild(link); 
-                link.click(); 
-                document.body.removeChild(link); 
-                window.URL.revokeObjectURL(link.href); 
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
             } else {
                 setProtestos(response.data.data);
                 setTotalItems(response.data.total_items);
@@ -147,7 +149,7 @@ export function Protesto() {
     };
 
     useEffect(() => {
-        fetchProtestos(page, sortOrder);  
+        fetchProtestos(page, sortOrder);
     }, [page, sortOrder]);
 
     const handlePageChange = (newPage: number) => {
@@ -199,6 +201,7 @@ export function Protesto() {
             ulthistorico: [],
             sit_protesto: [],
             periodoprotesto: '',
+            conveniadoieptb: '',
         });
         setPage(1);
         fetchProtestos(1);
@@ -230,7 +233,7 @@ export function Protesto() {
         "Demais",
     ];
 
-    const situacaoCadastral =[
+    const situacaoCadastral = [
         "Ativa",
         "Baixada",
         "Inapta",
@@ -239,25 +242,25 @@ export function Protesto() {
     ]
 
     const historicos = [
-      "Aguardando ajuizamento",
-      "Ajuizada",
-      "Cancelada",
-      "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
-      "Exclusão do Ajuizamento",
-      "Execução fiscal excluída",
-      "Execução fiscal extinta",
-      "Inscrita",
-      "Kit de ajuizamento excluído",
-      "Kit de protesto excluído",
-      "Kit de protesto gerado",
-      "Protesto pago",
-      "Protesto sustado",
-      "Processo protesto excluído",
-      "Processo protesto extinto",
-      "Protestada",
-      "Protestada por edital",
-      "Quitada",
-      "Suspensa",                         
+        "Aguardando ajuizamento",
+        "Ajuizada",
+        "Cancelada",
+        "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
+        "Exclusão do Ajuizamento",
+        "Execução fiscal excluída",
+        "Execução fiscal extinta",
+        "Inscrita",
+        "Kit de ajuizamento excluído",
+        "Kit de protesto excluído",
+        "Kit de protesto gerado",
+        "Protesto pago",
+        "Protesto sustado",
+        "Processo protesto excluído",
+        "Processo protesto extinto",
+        "Protestada",
+        "Protestada por edital",
+        "Quitada",
+        "Suspensa",
 
     ]
 
@@ -267,12 +270,12 @@ export function Protesto() {
         "Dívida Ativa ITCD",
         "Dívida Ativa não tributária",
         "Dívida Ativa TFRH",
-        "Dívida Ativa TFRM",       
-                                
+        "Dívida Ativa TFRM",
+
     ]
 
     const statusSaj = [
-        
+
         "Inscrita",
         "Cancelada",
         "Exclusão",
@@ -288,8 +291,8 @@ export function Protesto() {
         "Prestes a prescrever",
     ]
 
-    
-    
+
+
 
 
     return (
@@ -543,6 +546,24 @@ export function Protesto() {
                         <Label className='font-semibold text-sm text-gray-800'>Ajuizada:</Label>
 
                         <Select value={filters.flajuizada} onValueChange={(value) => setFilters({ ...filters, flajuizada: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                <SelectItem value="S">SIM</SelectItem>
+                                <SelectItem value="N">NÃO</SelectItem>
+
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Convênio IEPTB:</Label>
+
+                        <Select value={filters.conveniadoieptb} onValueChange={(value) => setFilters({ ...filters, conveniadoieptb: value })}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
                             </SelectTrigger>
