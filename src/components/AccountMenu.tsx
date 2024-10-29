@@ -60,7 +60,7 @@ export function AccountMenu() {
             case "Administrador":
                 return "Administrador";
             case "Chefia":
-                return "Chefia";
+                return "Coordenação";
             case "Estagiário":
                 return "Estagiário";
             default:
