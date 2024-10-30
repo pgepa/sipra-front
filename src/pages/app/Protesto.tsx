@@ -76,13 +76,11 @@ export function Protesto() {
         vlcdaatualizado_max: '',
         status_saj: [] as string[],
         flajuizada: '',
-        parcelamento: '',
         prescrito: [] as string[],
         obs_end_protesto: '',
         origemdivida: '',
         ulthistorico: [] as string[],
         sit_protesto: [] as string[],
-        periodoprotesto: '',
         conveniadoieptb: '',
     });
 
@@ -195,13 +193,11 @@ export function Protesto() {
             vlcdaatualizado_max: '',
             status_saj: [],
             flajuizada: '',
-            parcelamento: '',
             prescrito: [],
             obs_end_protesto: '',
             origemdivida: '',
             ulthistorico: [],
             sit_protesto: [],
-            periodoprotesto: '',
             conveniadoieptb: '',
         });
         setPage(1);
@@ -320,7 +316,7 @@ export function Protesto() {
                 >
                     <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-6'>Filtros:</span>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Nº CPF/CNPJ:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
                         <Input
                             placeholder='Informe o número do documento'
                             className='col-span-1'
@@ -330,7 +326,7 @@ export function Protesto() {
 
                     </div>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Nome Contribuinte:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Nome do Contribuinte:</Label>
                         <Input
                             placeholder='Contribuinte'
                             className='col-span-1'
@@ -582,7 +578,10 @@ export function Protesto() {
 
                     </div>
 
-                    <div className='space-y-2'>
+                    {/*
+
+                    Filtro Período Protesto
+                     <div className='space-y-2'>
 
                         <Label className='font-semibold text-sm text-gray-800'>Período protesto:</Label>
                         <Select value={filters.periodoprotesto} onValueChange={(value) => setFilters({ ...filters, periodoprotesto: value })}>
@@ -598,6 +597,11 @@ export function Protesto() {
                         </Select>
 
                     </div>
+                    
+                    
+                    */}
+
+                    {/*
 
                     <div className='space-y-2'>
 
@@ -616,6 +620,12 @@ export function Protesto() {
                         </Select>
 
                     </div>
+                    
+                    */}
+
+                   
+
+                    
 
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Prescrito:</Label>
