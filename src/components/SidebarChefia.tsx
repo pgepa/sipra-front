@@ -1,13 +1,15 @@
-import { FileSearch, House, ChevronFirst, Mails, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, ScanSearch, FileChartColumn, FileBadge, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export function SidebarChefia() {
     const location = useLocation();
     const [open, setOpen] = useState(true);
-    
+
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
-    const [dashboardOpen, setDashboardOpen] = useState(false);
+
+    {/*const [dashboardOpen, setDashboardOpen] = useState(false); */}
+    
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
@@ -49,7 +51,7 @@ export function SidebarChefia() {
                                 <FileSearch className="h-5 w-5" />
                                 Protesto
                             </Link>
-                            
+
                             <Link
                                 to="/chefia/reguacobranca/ajuizamento"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/reguacobranca/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}
@@ -66,14 +68,16 @@ export function SidebarChefia() {
                                 Ajuizadas
                             </Link>
 
-                            <Link
+                            {/*<Link
                                 to="/chefia/reguacobranca/cartacobranca"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/reguacobranca/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <Mails className="h-5 w-5" />
                                 Carta Cobrança
-                            </Link>
+                            </Link> */}
+
                             
+
                         </div>
                     )}
                 </div>
@@ -113,8 +117,9 @@ export function SidebarChefia() {
                     )}
                 </div>
 
+                {/* DASHBOARD
 
-                <div className="relative">
+            <div className="relative">
                     <button
                         onClick={() => setDashboardOpen(!dashboardOpen)}
                         className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}
@@ -154,11 +159,26 @@ export function SidebarChefia() {
 
 
                     )}
+
+
                 </div>
 
-                                   
 
-               
+*/}
+
+                <Link
+                    to="/chefia/dashboard/analiseprescricao"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/analiseprescricao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                >
+                    <ChartNoAxesCombined className="h-6 w-6" />
+                    {open && <span className='font-medium'>Dashboard</span>}
+                </Link>
+
+
+
+
+
+
             </nav>
         </aside>
     );
