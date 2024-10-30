@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, History, Mails, FileChartColumn, FileBadge, CloudUpload, ScanSearch, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ export function Sidebar() {
     const [open, setOpen] = useState(true);
     const [uploadOpen, setUploadOpen] = useState(false);
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
-    const [dashboardOpen, setDashboardOpen] = useState(false);
+    {/*const [dashboardOpen, setDashboardOpen] = useState(false); */}    
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
@@ -66,13 +66,15 @@ export function Sidebar() {
                                 Ajuizadas
                             </Link>
 
-                            <Link
+                            {/*<Link
                                 to="/reguacobranca/cartacobranca"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <Mails className="h-5 w-5" />
                                 Carta Cobrança
-                            </Link>
+                            </Link> */}
+
+                            
 
                         </div>
                     )}
@@ -113,6 +115,8 @@ export function Sidebar() {
 
                     )}
                 </div>
+
+                {/* Págiina em Construção
 
 
                 <div className="relative">
@@ -156,6 +160,18 @@ export function Sidebar() {
 
                     )}
                 </div>
+
+
+ */}
+
+                <Link
+                    to="/dashboard/analiseprescricao"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/analiseprescricao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                >
+                    <ChartNoAxesCombined className="h-6 w-6" />
+                    {open && <span className='font-medium'>Dashboard</span>}
+                </Link>
+
 
 
 
