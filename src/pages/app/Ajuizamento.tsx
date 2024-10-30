@@ -584,7 +584,7 @@ export function Ajuizamento() {
                             )}
                         </PaginationContent>
                         <div className="text-sm mt-2 text-gray-600">
-                            Página {page} de {totalPages} ({totalItems} linhas no total)
+                            Página {page} de {totalPages} ({totalItems} total de resultados)
                         </div>
                     </Pagination>
                 </div>
