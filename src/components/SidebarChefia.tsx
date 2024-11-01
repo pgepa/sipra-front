@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, FileBadge, ScanSearch } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ export function SidebarChefia() {
 
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
 
-    {/*const [dashboardOpen, setDashboardOpen] = useState(false); */}
+    const [dashboardOpen, setDashboardOpen] = useState(false);
     
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
@@ -117,7 +117,7 @@ export function SidebarChefia() {
                     )}
                 </div>
 
-                {/* DASHBOARD
+                
 
             <div className="relative">
                     <button
@@ -133,25 +133,19 @@ export function SidebarChefia() {
                     {dashboardOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
-                                to="/chefia/dashboard/consultadevedor"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/consultadevedor" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/chefia/dashboard/acompanhamentoprotesto"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ScanSearch  className="h-5 w-5" />
-                                Consulta Devedor (CNPJ)
+                                Acompanhamento Protesto
                             </Link>
+                            
                             <Link
-                                to="/chefia/dashboard/analiseprescricao"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/analiseprescricao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                            >
-                                <FileChartColumn className="h-5 w-5" />
-                                Análise de Prescrição
-                            </Link>
-                            <Link
-                                to="/chefia/dashboard/debitosinscritos"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/debitosinscritos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/chefia/dashboard/acompanhamentopda"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <FileBadge className="h-5 w-5" />
-                                Débitos Inscritos
+                                Acompanhamento PDA
                             </Link>
 
                             
@@ -162,22 +156,6 @@ export function SidebarChefia() {
 
 
                 </div>
-
-
-*/}
-
-                <Link
-                    to="/chefia/dashboard/analiseprescricao"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/analiseprescricao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                >
-                    <ChartNoAxesCombined className="h-6 w-6" />
-                    {open && <span className='font-medium'>Dashboard</span>}
-                </Link>
-
-
-
-
-
 
             </nav>
         </aside>
