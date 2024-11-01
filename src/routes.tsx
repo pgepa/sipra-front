@@ -22,7 +22,7 @@ import { HomeChefia } from '@/pages/app/HomeChefia';
 import { Ajuizadas } from '@/pages/app/Ajuizadas';
 import { ConsultaDevedor } from '@/pages/app/DashboradConsultaDevedor';
 import { AnalisePrescricao } from '@/pages/app/DashboardAnalisePrescricao';
-import { DebitosInscritos } from '@/pages/app/DashboardDebitosInscritos';
+import { AcompanhamentoProtesto } from '@/pages/app/DashboardAcompanhamentoProtesto';
 import { UltimaAtualizacaoDatabase } from '@/pages/app/UltimaAtualizacaoDatabase';
 import { ConsultaPessoaJuridica } from '@/pages/app/ConsultaPessoaJuridica';
 import { ConsultaPessoaFisica } from '@/pages/app/ConsultaPessoaFisica';
@@ -65,7 +65,7 @@ export const Router = createHashRouter([
             { path: '/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaPessoaFisica /></PrivateRoute> },
             { path: '/dashboard/consultadevedor', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaDevedor /></PrivateRoute> },
             { path: '/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Administrador']}><AnalisePrescricao /></PrivateRoute> },
-            { path: '/dashboard/debitosinscritos', element: <PrivateRoute allowedProfiles={['Administrador']}><DebitosInscritos /></PrivateRoute> },
+            { path: '/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoProtesto /></PrivateRoute> },
             
         ],
     },
@@ -84,7 +84,7 @@ export const Router = createHashRouter([
             { path: 'chefia/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaPessoaFisica /></PrivateRoute> },
             { path: 'chefia/dashboard/consultadevedor', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDevedor /></PrivateRoute> },
             { path: 'chefia/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Chefia']}><AnalisePrescricao /></PrivateRoute> },
-            { path: 'chefia/dashboard/debitosinscritos', element: <PrivateRoute allowedProfiles={['Chefia']}><DebitosInscritos /></PrivateRoute> },
+            { path: 'chefia/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoProtesto /></PrivateRoute> },
             
             
             

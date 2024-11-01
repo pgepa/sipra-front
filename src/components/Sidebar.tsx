@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ScanSearch, FileChartColumn, FileBadge } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ export function Sidebar() {
     const [open, setOpen] = useState(true);
     const [uploadOpen, setUploadOpen] = useState(false);
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
-    {/*const [dashboardOpen, setDashboardOpen] = useState(false); */}    
+    const [dashboardOpen, setDashboardOpen] = useState(false);    
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
@@ -116,7 +116,7 @@ export function Sidebar() {
                     )}
                 </div>
 
-                {/* Págiina em Construção
+                
 
 
                 <div className="relative">
@@ -133,11 +133,11 @@ export function Sidebar() {
                     {dashboardOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
-                                to="/dashboard/consultadevedor"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/consultadevedor" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/dashboard/acompanhamentoprotesto"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ScanSearch className="h-5 w-5" />
-                                Consulta Devedor (CNPJ)
+                                Acompanhamento Protesto
                             </Link>
                             <Link
                                 to="/dashboard/analiseprescricao"
@@ -162,18 +162,7 @@ export function Sidebar() {
                 </div>
 
 
- */}
-
-                <Link
-                    to="/dashboard/analiseprescricao"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/analiseprescricao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                >
-                    <ChartNoAxesCombined className="h-6 w-6" />
-                    {open && <span className='font-medium'>Dashboard</span>}
-                </Link>
-
-
-
+ 
 
 
                 <div className="relative">
