@@ -317,66 +317,103 @@ export function Protesto() {
                     <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-6'>Filtros:</span>
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
-                        <Input
-                            placeholder='Informe o número do documento'
-                            className='col-span-1'
-                            value={filters.nudocumento}
-                            onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
-                        />
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                placeholder='Buscar por CPF/CNPJ'
+                                className='pl-10 col-span-1'
+                                value={filters.nudocumento}
+                                onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
+                            />
+                        </div>
 
                     </div>
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Nome do Contribuinte:</Label>
-                        <Input
-                            placeholder='Contribuinte'
-                            className='col-span-1'
-                            value={filters.contribuinte}
-                            onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
-                        />
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+
+                            <Input
+                                placeholder='Contribuinte'
+                                className='pl-10 col-span-1'
+                                value={filters.contribuinte}
+                                onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
+                            />
+                        </div>
                     </div>
 
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Fundamento:</Label>
-                        <Input
-                            placeholder='Fundamento'
-                            className='col-span-1'
-                            value={filters.fundamento}
-                            onChange={(e) => setFilters({ ...filters, fundamento: e.target.value })}
-                        />
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                placeholder='Fundamento'
+                                className='pl-10 col-span-1'
+                                value={filters.fundamento}
+                                onChange={(e) => setFilters({ ...filters, fundamento: e.target.value })}
+                            />
+                        </div>
                     </div>
 
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Origem da dívida:</Label>
-                        <Input
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
                             placeholder='Origem da dívida'
-                            className='col-span-1'
+                            className='pl-10 col-span-1'
                             value={filters.origemdivida}
                             onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
-                        />
+                            />
+
+                        </div>
+                        
                     </div>
 
                     <div className='space-y-2'>
 
                         <Label className='font-semibold text-sm text-gray-800'>Valor mínino:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
 
-                        <Input
+                            <Input
                             placeholder='Informe somente números'
-                            className='col-span-1'
+                            className='pl-10 col-span-1'
                             value={filters.vlcdaatualizado_min}
                             onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
-                        />
+                            />
+
+                        </div>
+
+                        
 
                     </div>
 
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Valor máximo:</Label>
-
-                        <Input
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
                             placeholder='informe somente números'
-                            className='col-span-1'
+                            className='pl-10 col-span-1'
                             value={filters.vlcdaatualizado_max}
                             onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
-                        />
+                            />
+                        </div>
+
+                        
 
                     </div>
 
@@ -623,9 +660,9 @@ export function Protesto() {
                     
                     */}
 
-                   
 
-                    
+
+
 
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Prescrito:</Label>
