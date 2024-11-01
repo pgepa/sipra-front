@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ScanSearch, FileChartColumn, FileBadge } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ScanSearch, FileBadge } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -139,19 +139,13 @@ export function Sidebar() {
                                 <ScanSearch className="h-5 w-5" />
                                 Acompanhamento Protesto
                             </Link>
+                            
                             <Link
-                                to="/dashboard/analiseprescricao"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/analiseprescricao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                            >
-                                <FileChartColumn className="h-5 w-5" />
-                                Análise de Prescrição
-                            </Link>
-                            <Link
-                                to="/dashboard/debitosinscritos"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/debitosinscritos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/dashboard/acompanhamentopda"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <FileBadge className="h-5 w-5" />
-                                Débitos Inscritos
+                                Acompanhamento PDA
                             </Link>
 
 

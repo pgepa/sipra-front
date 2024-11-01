@@ -20,7 +20,7 @@ import { NotFound } from '@/404';
 import { AppLayoutChefia } from '@/pages/_layouts/appChefia';
 import { HomeChefia } from '@/pages/app/HomeChefia';
 import { Ajuizadas } from '@/pages/app/Ajuizadas';
-import { ConsultaDevedor } from '@/pages/app/DashboradConsultaDevedor';
+import { AcompanhamentoPda } from '@/pages/app/DashboradAcompanhamentoPda';
 import { AnalisePrescricao } from '@/pages/app/DashboardAnalisePrescricao';
 import { AcompanhamentoProtesto } from '@/pages/app/DashboardAcompanhamentoProtesto';
 import { UltimaAtualizacaoDatabase } from '@/pages/app/UltimaAtualizacaoDatabase';
@@ -63,7 +63,7 @@ export const Router = createHashRouter([
             { path: '/usuarios', element: <PrivateRoute allowedProfiles={['Administrador']}><Usuarios /></PrivateRoute> },
             { path: '/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: '/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaPessoaFisica /></PrivateRoute> },
-            { path: '/dashboard/consultadevedor', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaDevedor /></PrivateRoute> },
+            { path: '/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoPda /></PrivateRoute> },
             { path: '/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Administrador']}><AnalisePrescricao /></PrivateRoute> },
             { path: '/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoProtesto /></PrivateRoute> },
             
@@ -82,7 +82,7 @@ export const Router = createHashRouter([
             { path: 'chefia/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Chefia']}><Ajuizadas /></PrivateRoute> },
             { path: 'chefia/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: 'chefia/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaPessoaFisica /></PrivateRoute> },
-            { path: 'chefia/dashboard/consultadevedor', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDevedor /></PrivateRoute> },
+            { path: 'chefia/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoPda /></PrivateRoute> },
             { path: 'chefia/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Chefia']}><AnalisePrescricao /></PrivateRoute> },
             { path: 'chefia/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoProtesto /></PrivateRoute> },
             
