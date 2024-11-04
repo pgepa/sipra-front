@@ -26,6 +26,10 @@ import { AcompanhamentoProtesto } from '@/pages/app/DashboardAcompanhamentoProte
 import { UltimaAtualizacaoDatabase } from '@/pages/app/UltimaAtualizacaoDatabase';
 import { ConsultaPessoaJuridica } from '@/pages/app/ConsultaPessoaJuridica';
 import { ConsultaPessoaFisica } from '@/pages/app/ConsultaPessoaFisica';
+import { AppLayoutProcurador } from '@/pages/_layouts/appProcurador';
+import { HomeProcurador } from '@/pages/app/HomeProcurador';
+import { AppLayoutAssessor } from '@/pages/_layouts/appAssessor';
+import { HomeAssessor } from '@/pages/app/HomeAssessor';
 
 
 
@@ -86,6 +90,44 @@ export const Router = createHashRouter([
             { path: 'chefia/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Chefia']}><AnalisePrescricao /></PrivateRoute> },
             { path: 'chefia/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoProtesto /></PrivateRoute> },
             
+            
+            
+        ],
+    },
+
+    {
+        path: '/',
+        element: <AppLayoutProcurador />,
+        errorElement: <NotFound/>,
+        children: [
+            { path: '/homeprocurador', element: <PrivateRoute allowedProfiles={['Procurador']}><HomeProcurador /></PrivateRoute> },
+            { path: 'procurador/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Procurador']}><Protesto /></PrivateRoute> },
+            { path: 'procurador/reguacobranca/cartacobranca', element: <PrivateRoute allowedProfiles={['Procurador']}><CartaCobranca /></PrivateRoute> },
+            { path: 'procurador/reguacobranca/ajuizamento', element: <PrivateRoute allowedProfiles={['Procurador']}><Ajuizamento /></PrivateRoute> },
+            { path: 'procurador/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Procurador']}><Ajuizadas /></PrivateRoute> },
+            { path: 'procurador/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Procurador']}><ConsultaPessoaJuridica /></PrivateRoute> },
+            { path: 'procurador/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Procurador']}><ConsultaPessoaFisica /></PrivateRoute> },
+            { path: 'procurador/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoPda /></PrivateRoute> },
+            { path: 'procurador/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Procurador']}><AnalisePrescricao /></PrivateRoute> },
+            { path: 'procurador/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoProtesto /></PrivateRoute> },
+            
+            
+            
+        ],
+    },
+
+    {
+        path: '/',
+        element: <AppLayoutAssessor />,
+        errorElement: <NotFound/>,
+        children: [
+            { path: '/homeassessor', element: <PrivateRoute allowedProfiles={['Assessor']}><HomeAssessor /></PrivateRoute> },
+            { path: 'assessor/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Assessor']}><Protesto /></PrivateRoute> },
+            { path: 'assessor/reguacobranca/cartacobranca', element: <PrivateRoute allowedProfiles={['Assessor']}><CartaCobranca /></PrivateRoute> },
+            { path: 'assessor/reguacobranca/ajuizamento', element: <PrivateRoute allowedProfiles={['Assessor']}><Ajuizamento /></PrivateRoute> },
+            { path: 'assessor/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Assessor']}><Ajuizadas /></PrivateRoute> },
+            { path: 'assessor/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaJuridica /></PrivateRoute> },
+            { path: 'assessor/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaFisica /></PrivateRoute> },        
             
             
         ],

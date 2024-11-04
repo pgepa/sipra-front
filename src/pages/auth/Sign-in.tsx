@@ -40,8 +40,11 @@ export function SignIn() {
                 case "Chefia":
                     navigate('/homechefia', { replace: true });
                     break;
-                case 3:
-                    navigate('/estagiario', { replace: true });
+                case "Procurador":
+                    navigate('/homeprocurador', { replace: true });
+                    break;
+                case "Assessor":
+                    navigate('/homeassessor', { replace: true });
                     break;
                 default:
                     navigate('/', { replace: true });

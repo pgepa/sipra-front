@@ -121,8 +121,9 @@ export function SignUp() {
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="Administrador">Administrador</SelectItem>
-                                            <SelectItem value="Chefia">Chefia</SelectItem>
-                                            <SelectItem value="Estagiário">Estagiário</SelectItem>
+                                            <SelectItem value="Chefia">Coordenação</SelectItem>
+                                            <SelectItem value="Procurador">Procurador</SelectItem>
+                                            <SelectItem value="Assessor">Assessor</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 )}
