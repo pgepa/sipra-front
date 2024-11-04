@@ -53,9 +53,11 @@ export const UserCard = () => {
             case "Administrador":
                 return "Administrador";
             case "Chefia":
-                return "Chefia";
-            case "Estagiário":
-                return "Estagiário";
+                return "Coordernação";
+            case "Procurador":
+                return "Procurador";
+            case "Assessor":
+                return "Assessor";
             default:
                 return "Desconhecido";
         }
