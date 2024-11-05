@@ -406,7 +406,7 @@ export function Protesto() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='informe somente números'
+                            placeholder='Informe somente números'
                             className='pl-10 col-span-1'
                             value={filters.vlcdaatualizado_max}
                             onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}

@@ -296,7 +296,7 @@ export function Ajuizamento() {
                 >
                     <span className='text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-6'>Filtros:</span>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Nº CPF/CNPJ:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
@@ -320,7 +320,7 @@ export function Ajuizamento() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                         <Input
-                            placeholder='Busca por CNPJ/Raiz'
+                            placeholder='Buscar por CNPJ/Raiz'
                             className='pl-10 col-span-1'
                             value={filters.doc_raiz}
                             onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
@@ -387,7 +387,7 @@ export function Ajuizamento() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                                placeholder='informe somente números'
+                                placeholder='Informe somente números'
                                 className='pl-10 col-span-1'
                                 value={filters.vlcdaatualizado_max}
                                 onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
