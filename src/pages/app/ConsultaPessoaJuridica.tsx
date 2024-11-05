@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState } from 'react';
 import { api } from '@/lib/axios';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
@@ -121,23 +121,23 @@ export const ConsultaPessoaJuridica: React.FC = () => {
     const [data, setData] = useState<{ cnpj: string; data: PessoaJuridicaData }[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [showSocios, setShowSocios] = useState(false);
-    const [showDebitos, setShowDebitos] = useState(false);
-    const [showPartesProcessos, setShowPartesProcessos] = useState(false);
-    const [showDetran, setShowDetran] = useState(false);
-    const [showSemas, setShowSemas] = useState(false);
-    const [showAdepara, setShowAdepara] = useState(false);
-    const [showDadosCadastrais, setShowDadosCadastrais] = useState(false);
     const [filters, setFilters] = useState({ cnpj: '', doc_raiz: '' });
     const [searched, setSearched] = useState(false);
-    
+    const [expandedSections, setExpandedSections] = useState<{ [key: string]: { [key: string]: boolean } }>({});
 
 
-    type ToggleSectionFunction = Dispatch<SetStateAction<boolean>>;
 
-    const toggleSection = (setFunction: ToggleSectionFunction) => {
-        setFunction((prev) => !prev);
+
+    const toggleSection = (cnpj: string, section: string) => {
+        setExpandedSections((prev) => ({
+            ...prev,
+            [cnpj]: {
+                ...prev[cnpj],
+                [section]: !prev[cnpj]?.[section],
+            },
+        }));
     };
+
 
     const handleDownloadPdf = () => {
         const token = localStorage.getItem('token');
@@ -250,13 +250,13 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder="Buscar por CNPJ"
-                            className='pl-10 col-span-1'
-                            value={filters.cnpj}
-                            onChange={(e) => setFilters({ ...filters, cnpj: e.target.value })}
-                        />
+                                placeholder="Buscar por CNPJ"
+                                className='pl-10 col-span-1'
+                                value={filters.cnpj}
+                                onChange={(e) => setFilters({ ...filters, cnpj: e.target.value })}
+                            />
                         </div>
-                        
+
                     </div>
                     <div className="space-y-2">
                         <Label className="font-semibold text-sm text-gray-800">CNPJ/Raiz:</Label>
@@ -265,13 +265,13 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder="Buscar por CNPJ/Raiz"
-                            className='pl-10 col-span-1'
-                            value={filters.doc_raiz}
-                            onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
+                                placeholder="Buscar por CNPJ/Raiz"
+                                className='pl-10 col-span-1'
+                                value={filters.doc_raiz}
+                                onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
                             />
                         </div>
-                        
+
                     </div>
 
 
@@ -322,15 +322,15 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
                                         <div
                                             className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(setShowDadosCadastrais)}
+                                            onClick={() => toggleSection(cnpj, 'dadosCadastrais')}
                                         >
                                             <h2>Dados Cadastrais:</h2>
                                             <span className="text-white text-xl">
-                                                {showDadosCadastrais ? '↑' : '↓'}
+                                                {expandedSections[cnpj]?.dadosCadastrais ? '↑' : '↓'}
                                             </span>
                                         </div>
 
-                                        {showDadosCadastrais && (
+                                        {expandedSections[cnpj]?.dadosCadastrais  && (
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                                 {cnpjData.vwrfbjucepa && cnpjData.vwrfbjucepa.length > 0 ? (
@@ -433,15 +433,15 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
                                             <div
                                                 className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                                onClick={() => toggleSection(setShowSocios)}
+                                                onClick={() => toggleSection(cnpj, 'socios')}
                                             >
                                                 <h2>Quadro Societário:</h2>
                                                 <span className="text-white text-xl">
-                                                    {showSocios ? '↑' : '↓'}
+                                                {expandedSections[cnpj]?.socios ? '↑' : '↓'}
                                                 </span>
                                             </div>
 
-                                            {showSocios && (
+                                            {expandedSections[cnpj]?.socios && (
 
                                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                                     {cnpjData.vwjucepasocios && cnpjData.vwjucepasocios.length > 0 ? (
@@ -510,15 +510,15 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
                                         <div
                                             className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(setShowDebitos)}
+                                            onClick={() => toggleSection(cnpj, 'debitos')}
                                         >
                                             <h2>Débitos:</h2>
                                             <span className="text-white text-xl">
-                                                {showDebitos ? '↑' : '↓'}
+                                                {expandedSections[cnpj]?.debitos ? '↑' : '↓'}
                                             </span>
                                         </div>
 
-                                        {showDebitos && (
+                                        {expandedSections[cnpj]?.debitos && (
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                                 {cnpjData.vwdebitos && cnpjData.vwdebitos.length > 0 ? (
                                                     cnpjData.vwdebitos.map((debito, index) => (
@@ -582,15 +582,15 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
                                         <div
                                             className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(setShowPartesProcessos)}
+                                            onClick={() => toggleSection(cnpj, 'partesProcessos')}
                                         >
                                             <h2>Participação em processos:</h2>
                                             <span className="text-white text-xl">
-                                                {showPartesProcessos ? '↑' : '↓'}
+                                                {expandedSections[cnpj]?.partesProcessos ? '↑' : '↓'}
                                             </span>
                                         </div>
 
-                                        {showPartesProcessos && (
+                                        {expandedSections[cnpj]?.partesProcessos && (
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                                 {cnpjData.vwpartesprocesso && cnpjData.vwpartesprocesso.length > 0 ? (
@@ -652,15 +652,15 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
                                         <div
                                             className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(setShowDetran)}
+                                            onClick={() => toggleSection(cnpj, 'detran')}
                                         >
                                             <h2>DETRAN:</h2>
                                             <span className="text-white text-xl">
-                                                {showDetran ? '↑' : '↓'}
+                                                {expandedSections[cnpj]?.detran ? '↑' : '↓'}
                                             </span>
                                         </div>
 
-                                        {showDetran && (
+                                        {expandedSections[cnpj]?.detran && (
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                                 {cnpjData.vwcargaveiculos && cnpjData.vwcargaveiculos.length > 0 ? (
                                                     cnpjData.vwcargaveiculos.map((veiculo, index) => (
@@ -733,15 +733,15 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
                                         <div
                                             className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(setShowSemas)}
+                                            onClick={() => toggleSection(cnpj, 'semas')}
                                         >
                                             <h2>SEMAS:</h2>
                                             <span className="text-white text-xl">
-                                                {showSemas ? '↑' : '↓'}
+                                                {expandedSections[cnpj]?.semas ? '↑' : '↓'}
                                             </span>
                                         </div>
 
-                                        {showSemas && (
+                                        {expandedSections[cnpj]?.semas && (
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                                 {cnpjData.vwcarsemas && cnpjData.vwcarsemas.length > 0 ? (
@@ -800,15 +800,15 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
                                         <div
                                             className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(setShowAdepara)}
+                                            onClick={() => toggleSection(cnpj, 'adepara')}
                                         >
                                             <h2>ADEPARA:</h2>
                                             <span className="text-white text-xl">
-                                                {showAdepara ? '↑' : '↓'}
+                                                {expandedSections[cnpj]?.adepara ? '↑' : '↓'}
                                             </span>
                                         </div>
 
-                                        {showAdepara && (
+                                        {expandedSections[cnpj]?.adepara && (
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                                 {cnpjData.vwadepara && cnpjData.vwadepara.length > 0 ? (
