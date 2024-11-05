@@ -245,21 +245,33 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                     <span className="text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-6">Filtros:</span>
                     <div className="space-y-2">
                         <Label className="font-semibold text-sm text-gray-800">Nº CNPJ:</Label>
-                        <Input
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
                             placeholder="Buscar por CNPJ"
-                            className="col-span-1"
+                            className='pl-10 col-span-1'
                             value={filters.cnpj}
                             onChange={(e) => setFilters({ ...filters, cnpj: e.target.value })}
                         />
+                        </div>
+                        
                     </div>
                     <div className="space-y-2">
                         <Label className="font-semibold text-sm text-gray-800">CNPJ/Raiz:</Label>
-                        <Input
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
                             placeholder="Buscar por CNPJ/Raiz"
-                            className="col-span-1"
+                            className='pl-10 col-span-1'
                             value={filters.doc_raiz}
                             onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
-                        />
+                            />
+                        </div>
+                        
                     </div>
 
 
