@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { api } from '@/lib/axios';
 import logo from '@/assets/logo.svg'
+import { LockKeyhole, LucideUser } from 'lucide-react';
 
 const signInFormSchema = z.object({
     email: z.string().email('E-mail inválido'),
@@ -56,6 +57,8 @@ export function SignIn() {
         }
     };
 
+    
+
     return (
         <>
             <Helmet title="Login" />
@@ -63,20 +66,38 @@ export function SignIn() {
                 <div className="w-[350px] flex flex-col justify-center gap-6 mx-auto">
                     <div className="flex flex-col items-center gap-2 text-center">
                         <img className="h-16 w-16 text-white" src={logo} alt="Logo" />
-                        <h1 className="text-2xl text-gray-800 font-semibold tracking-tighter">Acesse o Painel</h1>
+                        <h1 className="text-2xl text-gray-800 font-semibold tracking-tighter">Acessar Painel</h1>
                         <p className="text-sm text-gray-600 ">SiDA - Sistema de Inteligência da Dívida Ativa</p>
                     </div>
 
                     <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email" className='font-semibold text-sm text-gray-800'>E-mail:</Label>
-                            <Input id="email" placeholder="E-mail" type="email" {...register("email")} />
+                            <Label htmlFor="email" className='font-semibold text-sm text-gray-800'>E-mail</Label>
+
+                            <div className="relative">
+                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
+
+                                    <LucideUser className="h-5 w-5 text-gray-500"/>
+                                </span>                           
+
+                                <Input id="email" className='pl-10 col-span-1' placeholder="Seu e-mail" type="email" {...register("email")} />
+
+                            </div>
+                            
                             {errors.email && <p className="text-red-500">{errors.email.message}</p>}
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="senha" className='font-semibold text-sm text-gray-800'>Senha:</Label>
-                            <Input id="senha" placeholder="Digite a sua senha" type="password" {...register("senha")} />
+                            <Label htmlFor="senha" className='font-semibold text-sm text-gray-800'>Senha</Label>
+
+                            <div className="relative">
+                                <span  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
+                                <LockKeyhole className="h-5 w-5 text-gray-500" />                            
+                                </span>
+
+                                <Input id="senha" className='pl-10 col-span-1' placeholder="Sua senha" type="password" {...register("senha")} />
+                            </div>
+                            
                             {errors.senha && <p className="text-red-500">{errors.senha.message}</p>}
                         </div>
 
