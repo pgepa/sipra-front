@@ -67,10 +67,12 @@ export function Ajuizamento() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
+    const [isCNPJSelected, setIsCNPJSelected] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [filters, setFilters] = useState({
         nudocumento: '',
         contribuinte: '',
+        tipodoc: '',
         doc_raiz: '',
         porte: [] as string[],
         situacaocadastral: [] as string[],
@@ -90,9 +92,9 @@ export function Ajuizamento() {
     const token = localStorage.getItem('token');
 
     const toggleSortOrder = () => {
-        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';  
-        setSortOrder(newSortOrder);  
-        setPage(1);  
+        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+        setSortOrder(newSortOrder);
+        setPage(1);
     };
 
     const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
@@ -109,14 +111,14 @@ export function Ajuizamento() {
                     order: order,
                     ...filters,
 
-                    
+
                     porte: filters.porte.join(","),
                     situacaocadastral: filters.situacaocadastral.join(","),
                     ulthistorico: filters.ulthistorico.join(","),
                     tipotributo: filters.tipotributo.join(","),
                     status_saj: filters.status_saj.join(","),
                     prescrito: filters.prescrito.join(","),
-                    
+
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -129,9 +131,9 @@ export function Ajuizamento() {
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = `protestos.${downloadFormat}`;
-                document.body.appendChild(link); 
-                link.click(); 
-                document.body.removeChild(link); 
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
                 window.URL.revokeObjectURL(link.href);
             } else {
                 setProtestos(response.data.data);
@@ -149,7 +151,7 @@ export function Ajuizamento() {
     };
 
     useEffect(() => {
-        fetchProtestos(page, sortOrder);  
+        fetchProtestos(page, sortOrder);
     }, [page, sortOrder]);
 
     const handlePageChange = (newPage: number) => {
@@ -184,6 +186,7 @@ export function Ajuizamento() {
         setFilters({
             nudocumento: '',
             contribuinte: '',
+            tipodoc: '',
             porte: [],
             situacaocadastral: [],
             tipotributo: [],
@@ -199,6 +202,7 @@ export function Ajuizamento() {
         });
         setPage(1);
         fetchProtestos(1);
+        setIsCNPJSelected(false);
     };
 
     const handleCheckboxChange = (type: 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
@@ -210,7 +214,7 @@ export function Ajuizamento() {
             return { ...prevFilters, [type]: newFilter };
         });
     };
-    
+
 
     const portes = [
         "Empresa de Pequeno Porte",
@@ -218,7 +222,7 @@ export function Ajuizamento() {
         "Demais",
     ];
 
-    const situacaoCadastral =[
+    const situacaoCadastral = [
         "Ativa",
         "Baixada",
         "Inapta",
@@ -227,25 +231,25 @@ export function Ajuizamento() {
     ]
 
     const historicos = [
-      "Aguardando ajuizamento",
-      "Ajuizada",
-      "Cancelada",
-      "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
-      "Exclusão do Ajuizamento",
-      "Execução fiscal excluída",
-      "Execução fiscal extinta",
-      "Inscrita",
-      "Kit de ajuizamento excluído",
-      "Kit de protesto excluído",
-      "Kit de protesto gerado",
-      "Protesto pago",
-      "Protesto sustado",
-      "Processo protesto excluído",
-      "Processo protesto extinto",
-      "Protestada",
-      "Protestada por edital",
-      "Quitada",
-      "Suspensa",                         
+        "Aguardando ajuizamento",
+        "Ajuizada",
+        "Cancelada",
+        "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
+        "Exclusão do Ajuizamento",
+        "Execução fiscal excluída",
+        "Execução fiscal extinta",
+        "Inscrita",
+        "Kit de ajuizamento excluído",
+        "Kit de protesto excluído",
+        "Kit de protesto gerado",
+        "Protesto pago",
+        "Protesto sustado",
+        "Processo protesto excluído",
+        "Processo protesto extinto",
+        "Protestada",
+        "Protestada por edital",
+        "Quitada",
+        "Suspensa",
 
     ]
 
@@ -255,12 +259,12 @@ export function Ajuizamento() {
         "Dívida Ativa ITCD",
         "Dívida Ativa não tributária",
         "Dívida Ativa TFRH",
-        "Dívida Ativa TFRM",       
-                                
+        "Dívida Ativa TFRM",
+
     ]
 
     const statusSaj = [
-        
+
         "Inscrita",
         "Exclusão",
         "Ajuizamento",
@@ -274,8 +278,13 @@ export function Ajuizamento() {
         "Prestes a prescrever",
     ]
 
-    
-    
+    const handleDocumentTypeChange = (value: string) => {
+        setFilters({ ...filters, tipodoc: value });
+        setIsCNPJSelected(value === "CNPJ");
+    };
+
+
+
 
 
     return (
@@ -302,14 +311,14 @@ export function Ajuizamento() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='Buscar por CPF/CNPJ'
-                            className='pl-10 col-span-1'
-                            value={filters.nudocumento}
-                            onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
+                                placeholder='Buscar por CPF/CNPJ'
+                                className='pl-10 col-span-1'
+                                value={filters.nudocumento}
+                                onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
                             />
-                        
+
                         </div>
-                        
+
 
                     </div>
 
@@ -319,12 +328,12 @@ export function Ajuizamento() {
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
-                        <Input
-                            placeholder='Buscar por CNPJ/Raiz'
-                            className='pl-10 col-span-1'
-                            value={filters.doc_raiz}
-                            onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
-                        />
+                            <Input
+                                placeholder='Buscar por CNPJ/Raiz'
+                                className='pl-10 col-span-1'
+                                value={filters.doc_raiz}
+                                onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
+                            />
                         </div>
 
                     </div>
@@ -334,12 +343,12 @@ export function Ajuizamento() {
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
-                        <Input
-                            placeholder='Contribuinte'
-                            className='pl-10 col-span-1'
-                            value={filters.contribuinte}
-                            onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
-                        />
+                            <Input
+                                placeholder='Contribuinte'
+                                className='pl-10 col-span-1'
+                                value={filters.contribuinte}
+                                onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
+                            />
                         </div>
                     </div>
 
@@ -350,12 +359,12 @@ export function Ajuizamento() {
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
-                        <Input
-                            placeholder='Origem da dívida'
-                            className='pl-10 col-span-1'
-                            value={filters.origemdivida}
-                            onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
-                        />
+                            <Input
+                                placeholder='Origem da dívida'
+                                className='pl-10 col-span-1'
+                                value={filters.origemdivida}
+                                onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
+                            />
                         </div>
                     </div>
 
@@ -398,10 +407,26 @@ export function Ajuizamento() {
                     </div>
 
                     <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Tipo de documento:</Label>
+                        <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="CPF">CPF</SelectItem>
+                                <SelectItem value="CNPJ">CNPJ</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+
+                    <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Porte:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
                                     <span className='font-normal truncate'>
                                         {filters.porte.length > 0 ? filters.porte.join(", ") : "Escolha uma opção"}
                                     </span>
@@ -423,29 +448,10 @@ export function Ajuizamento() {
                     </div>
 
                     <div className='space-y-2'>
-
-                        <Label className='font-semibold text-sm text-gray-800'>Indício Patrimonial:</Label>
-
-                        <Select value={filters.indiciopatrimonial} onValueChange={(value) => setFilters({ ...filters, indiciopatrimonial: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="S">SIM</SelectItem>
-                                <SelectItem value="N">NÃO</SelectItem>
-
-                            </SelectContent>
-                        </Select>
-
-                    </div>
-
-
-                    <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Situação cadastral (RFB):</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
                                     <span className='font-normal truncate'>
                                         {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
                                     </span>
@@ -465,6 +471,27 @@ export function Ajuizamento() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
+
+
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Indício Patrimonial:</Label>
+
+                        <Select value={filters.indiciopatrimonial} onValueChange={(value) => setFilters({ ...filters, indiciopatrimonial: value })}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                <SelectItem value="S">SIM</SelectItem>
+                                <SelectItem value="N">NÃO</SelectItem>
+
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+
+
 
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Último histórico:</Label>
