@@ -66,6 +66,7 @@ export function Ajuizadas() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [page, setPage] = useState(1);
+    const [isCNPJSelected, setIsCNPJSelected] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -73,6 +74,7 @@ export function Ajuizadas() {
         nudocumento: '',
         contribuinte: '',
         doc_raiz: '',
+        tipodoc: '',
         porte: [] as string[],
         situacaocadastral: [] as string[],
         tipotributo: [] as string[],
@@ -91,9 +93,9 @@ export function Ajuizadas() {
     const token = localStorage.getItem('token');
 
     const toggleSortOrder = () => {
-        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';  
-        setSortOrder(newSortOrder);  
-        setPage(1);  
+        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+        setSortOrder(newSortOrder);
+        setPage(1);
     };
 
     const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
@@ -110,14 +112,14 @@ export function Ajuizadas() {
                     order: order,
                     ...filters,
 
-                    
+
                     porte: filters.porte.join(","),
                     situacaocadastral: filters.situacaocadastral.join(","),
                     ulthistorico: filters.ulthistorico.join(","),
                     tipotributo: filters.tipotributo.join(","),
                     status_saj: filters.status_saj.join(","),
                     prescrito: filters.prescrito.join(","),
-                    
+
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -130,9 +132,9 @@ export function Ajuizadas() {
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = `protestos.${downloadFormat}`;
-                document.body.appendChild(link); 
-                link.click(); 
-                document.body.removeChild(link); 
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
                 window.URL.revokeObjectURL(link.href);
             } else {
                 setProtestos(response.data.data);
@@ -150,7 +152,7 @@ export function Ajuizadas() {
     };
 
     useEffect(() => {
-        fetchProtestos(page, sortOrder);  
+        fetchProtestos(page, sortOrder);
     }, [page, sortOrder]);
 
     const handlePageChange = (newPage: number) => {
@@ -186,6 +188,7 @@ export function Ajuizadas() {
             nudocumento: '',
             contribuinte: '',
             porte: [],
+            tipodoc: '',
             situacaocadastral: [],
             tipotributo: [],
             vlcdaatualizado_min: '',
@@ -200,6 +203,7 @@ export function Ajuizadas() {
         });
         setPage(1);
         fetchProtestos(1);
+        setIsCNPJSelected(false);
     };
 
     const handleCheckboxChange = (type: 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
@@ -211,7 +215,7 @@ export function Ajuizadas() {
             return { ...prevFilters, [type]: newFilter };
         });
     };
-    
+
 
     const portes = [
         "Empresa de Pequeno Porte",
@@ -219,7 +223,7 @@ export function Ajuizadas() {
         "Demais",
     ];
 
-    const situacaoCadastral =[
+    const situacaoCadastral = [
         "Ativa",
         "Baixada",
         "Inapta",
@@ -228,25 +232,25 @@ export function Ajuizadas() {
     ]
 
     const historicos = [
-      "Aguardando ajuizamento",
-      "Ajuizada",
-      "Cancelada",
-      "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
-      "Exclusão do Ajuizamento",
-      "Execução fiscal excluída",
-      "Execução fiscal extinta",
-      "Inscrita",
-      "Kit de ajuizamento excluído",
-      "Kit de protesto excluído",
-      "Kit de protesto gerado",
-      "Protesto pago",
-      "Protesto sustado",
-      "Processo protesto excluído",
-      "Processo protesto extinto",
-      "Protestada",
-      "Protestada por edital",
-      "Quitada",
-      "Suspensa",                         
+        "Aguardando ajuizamento",
+        "Ajuizada",
+        "Cancelada",
+        "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
+        "Exclusão do Ajuizamento",
+        "Execução fiscal excluída",
+        "Execução fiscal extinta",
+        "Inscrita",
+        "Kit de ajuizamento excluído",
+        "Kit de protesto excluído",
+        "Kit de protesto gerado",
+        "Protesto pago",
+        "Protesto sustado",
+        "Processo protesto excluído",
+        "Processo protesto extinto",
+        "Protestada",
+        "Protestada por edital",
+        "Quitada",
+        "Suspensa",
 
     ]
 
@@ -256,12 +260,12 @@ export function Ajuizadas() {
         "Dívida Ativa ITCD",
         "Dívida Ativa não tributária",
         "Dívida Ativa TFRH",
-        "Dívida Ativa TFRM",       
-                                
+        "Dívida Ativa TFRM",
+
     ]
 
     const statusSaj = [
-        
+
         "Inscrita",
         "Exclusão",
         "Ajuizamento",
@@ -275,8 +279,13 @@ export function Ajuizadas() {
         "Prestes a prescrever",
     ]
 
-    
-    
+    const handleDocumentTypeChange = (value: string) => {
+        setFilters({ ...filters, tipodoc: value });
+        setIsCNPJSelected(value === "CNPJ");
+    };
+
+
+
 
 
     return (
@@ -303,13 +312,13 @@ export function Ajuizadas() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='Buscar por CPF/CNPJ'
-                            className='pl-10 col-span-1'
-                            value={filters.nudocumento}
-                            onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
+                                placeholder='Buscar por CPF/CNPJ'
+                                className='pl-10 col-span-1'
+                                value={filters.nudocumento}
+                                onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
                             />
                         </div>
-                        
+
 
                     </div>
 
@@ -320,13 +329,13 @@ export function Ajuizadas() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='Buscar por CNPJ/Raiz'
-                            className='pl-10 col-span-1'
-                            value={filters.doc_raiz}
-                            onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
+                                placeholder='Buscar por CNPJ/Raiz'
+                                className='pl-10 col-span-1'
+                                value={filters.doc_raiz}
+                                onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
                             />
                         </div>
-                        
+
 
                     </div>
                     <div className='space-y-2'>
@@ -336,32 +345,32 @@ export function Ajuizadas() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='Contribuinte'
-                            className='pl-10 col-span-1'
-                            value={filters.contribuinte}
-                            onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
-                        />
+                                placeholder='Contribuinte'
+                                className='pl-10 col-span-1'
+                                value={filters.contribuinte}
+                                onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
+                            />
 
                         </div>
-                        
+
                     </div>
 
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Origem da dívida:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Origem da Dívida:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='Origem da dívida'
-                            className='pl-10 col-span-1'
-                            value={filters.origemdivida}
-                            onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
+                                placeholder='Origem da dívida'
+                                className='pl-10 col-span-1'
+                                value={filters.origemdivida}
+                                onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
                             />
 
                         </div>
-                        
+
                     </div>
 
                     <div className='space-y-2'>
@@ -373,16 +382,18 @@ export function Ajuizadas() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='Informe somente números'
-                            className='pl-10 col-span-1'
-                            value={filters.vlcdaatualizado_min}
-                            onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
+                                placeholder='Informe somente números'
+                                className='pl-10 col-span-1'
+                                value={filters.vlcdaatualizado_min}
+                                onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
                             />
                         </div>
 
-                        
+
 
                     </div>
+
+
 
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Valor Máximo:</Label>
@@ -398,7 +409,22 @@ export function Ajuizadas() {
                                 onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
                             />
                         </div>
-                                 
+
+
+                    </div>
+
+                    <div className='space-y-2'>
+
+                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Documento:</Label>
+                        <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="CPF">CPF</SelectItem>
+                                <SelectItem value="CNPJ">CNPJ</SelectItem>
+                            </SelectContent>
+                        </Select>
 
                     </div>
 
@@ -406,7 +432,7 @@ export function Ajuizadas() {
                         <Label className='font-semibold text-sm text-gray-800'>Porte:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
                                     <span className='font-normal truncate'>
                                         {filters.porte.length > 0 ? filters.porte.join(", ") : "Escolha uma opção"}
                                     </span>
@@ -419,6 +445,32 @@ export function Ajuizadas() {
                                         <Checkbox
                                             checked={filters.porte.includes(option)}
                                             onCheckedChange={() => handleCheckboxChange('porte', option)}
+                                        />
+                                        <Label className="ml-2 font-normal">{option}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+
+
+                    <div className='space-y-2'>
+                        <Label className='font-semibold text-sm text-gray-800'>Situação Cadastral (RFB):</Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
+                                    <span className='font-normal truncate'>
+                                        {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
+                                    </span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4">
+                                {situacaoCadastral.map((option) => (
+                                    <DropdownMenuItem key={option} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.situacaocadastral.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('situacaocadastral', option)}
                                         />
                                         <Label className="ml-2 font-normal">{option}</Label>
                                     </DropdownMenuItem>
@@ -445,34 +497,8 @@ export function Ajuizadas() {
 
                     </div>
 
-
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Situação cadastral (RFB):</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>
-                                        {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
-                                    </span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4">
-                                {situacaoCadastral.map((option) => (
-                                    <DropdownMenuItem key={option} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.situacaocadastral.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('situacaocadastral', option)}
-                                        />
-                                        <Label className="ml-2 font-normal">{option}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Último histórico:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Último Histórico:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -562,7 +588,7 @@ export function Ajuizadas() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Prescrito:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Indício de Prescrição Originária:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -824,7 +850,7 @@ export function Ajuizadas() {
                                                                                 <TableCell className='flex justify-end'>{protesto.prescrito}</TableCell>
                                                                             </TableRow>
 
-                                                                            
+
                                                                             <TableRow>
                                                                                 <TableCell className='text-muted-foreground'>Data Ajuizamento</TableCell>
                                                                                 <TableCell className='flex justify-end'>{protesto.dtajuizamento}</TableCell>
@@ -870,13 +896,13 @@ export function Ajuizadas() {
                                                     <TableCell>
                                                         {protesto.dt_ulthist
                                                             ? (() => {
-                                                                
-                                                                const data = new Date(protesto.dt_ulthist.replace(' ', 'T')); 
+
+                                                                const data = new Date(protesto.dt_ulthist.replace(' ', 'T'));
                                                                 console.log('Data analisada:', data);
 
-                                                                
+
                                                                 if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); 
+                                                                    return format(data, 'dd/MM/yyyy');
                                                                 } else {
                                                                     return 'Data inválida';
                                                                 }
@@ -889,13 +915,13 @@ export function Ajuizadas() {
                                                     <TableCell>
                                                         {protesto.dtinscricao
                                                             ? (() => {
-                                                                
-                                                                const data = new Date(protesto.dtinscricao.replace(' ', 'T')); 
+
+                                                                const data = new Date(protesto.dtinscricao.replace(' ', 'T'));
                                                                 console.log('Data analisada:', data);
 
-                                                                
+
                                                                 if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); 
+                                                                    return format(data, 'dd/MM/yyyy');
                                                                 } else {
                                                                     return 'Data inválida';
                                                                 }
@@ -906,13 +932,13 @@ export function Ajuizadas() {
                                                     <TableCell>
                                                         {protesto.dtreferencia
                                                             ? (() => {
-                                                                
-                                                                const data = new Date(protesto.dtreferencia.replace(' ', 'T')); 
+
+                                                                const data = new Date(protesto.dtreferencia.replace(' ', 'T'));
                                                                 console.log('Data analisada:', data);
 
-                                                                
+
                                                                 if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); 
+                                                                    return format(data, 'dd/MM/yyyy');
                                                                 } else {
                                                                     return 'Data inválida';
                                                                 }

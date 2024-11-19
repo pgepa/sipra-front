@@ -362,7 +362,7 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Origem da dívida:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Origem da Dívida:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
@@ -380,7 +380,7 @@ export function Protesto() {
 
                     <div className='space-y-2'>
 
-                        <Label className='font-semibold text-sm text-gray-800'>Valor mínino:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Valor Mínino:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
@@ -400,7 +400,7 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Valor máximo:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Valor Máximo:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
@@ -420,7 +420,7 @@ export function Protesto() {
 
                     <div className='space-y-2'>
 
-                        <Label className='font-semibold text-sm text-gray-800'>Tipo de documento:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Documento:</Label>
                         <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
@@ -460,7 +460,7 @@ export function Protesto() {
 
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Situação cadastral (RFB):</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Situação Cadastral (RFB):</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
@@ -509,7 +509,7 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Último histórico:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Último Histórico:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -665,7 +665,7 @@ export function Protesto() {
 
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Prescrito:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Indício de Prescrição Originária:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
