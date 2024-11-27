@@ -186,6 +186,14 @@ export function Sidebar() {
                                 <DatabaseBackup className="h-4 w-4" />
                                 Semas
                             </Link>
+
+                            <Link
+                                to="/upload/sefa"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/sefa" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <DatabaseBackup className="h-4 w-4" />
+                                Sefa
+                            </Link>
                             <Link
                                 to="/upload/adepara"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/adepara" ? "font-bold text-indigo-700" : "text-gray-500"}`}

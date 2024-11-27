@@ -30,6 +30,7 @@ import { AppLayoutProcurador } from '@/pages/_layouts/appProcurador';
 import { HomeProcurador } from '@/pages/app/HomeProcurador';
 import { AppLayoutAssessor } from '@/pages/_layouts/appAssessor';
 import { HomeAssessor } from '@/pages/app/HomeAssessor';
+import { UploadSefa } from '@/pages/app/UploadSefa';
 
 
 
@@ -57,6 +58,7 @@ export const Router = createHashRouter([
             { path: '/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Administrador']}><Ajuizadas /></PrivateRoute> },
             { path: '/upload/ultimaatualizacao', element: <PrivateRoute allowedProfiles={['Administrador']}><UltimaAtualizacaoDatabase /></PrivateRoute> },
             { path: '/upload/semas', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadSemas /></PrivateRoute> },
+            { path: '/upload/sefa', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadSefa /></PrivateRoute> },
             { path: '/upload/adepara', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadAdepara /></PrivateRoute> },
             { path: '/upload/jucepapj', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadJucepaPj /></PrivateRoute> },
             { path: '/upload/jucepavinculo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadJucepaVinculo /></PrivateRoute> },
