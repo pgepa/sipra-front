@@ -5,7 +5,6 @@ export function AcompanhamentoProtesto() {
         <>
             <Helmet title="Acompanhamento de Protesto" />
             <div className='h-screen flex flex-col'>
-                <h1 className='text-2xl font-bold text-slate-700 text-center'>Dashboard Acompanhamento de Protesto</h1>
 
                  <div className="mt-6 flex flex-1">
                     
