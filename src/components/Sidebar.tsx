@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ScanSearch, FileBadge } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale,ChartArea, ChartScatter, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -136,7 +136,7 @@ export function Sidebar() {
                                 to="/dashboard/acompanhamentoprotesto"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
-                                <ScanSearch className="h-5 w-5" />
+                                <ChartPie  className="h-5 w-5" />
                                 Acompanhamento Protesto
                             </Link>
                             
@@ -144,8 +144,16 @@ export function Sidebar() {
                                 to="/dashboard/acompanhamentopda"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
-                                <FileBadge className="h-5 w-5" />
+                                <ChartScatter className="h-5 w-5" />
                                 Acompanhamento PDA
+                            </Link>
+
+                            <Link
+                                to="/dashboard/acompanhamentocda"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <ChartArea  className="h-5 w-5" />
+                                Acompanhamento CDAs
                             </Link>
 
 

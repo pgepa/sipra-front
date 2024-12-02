@@ -21,7 +21,7 @@ import { AppLayoutChefia } from '@/pages/_layouts/appChefia';
 import { HomeChefia } from '@/pages/app/HomeChefia';
 import { Ajuizadas } from '@/pages/app/Ajuizadas';
 import { AcompanhamentoPda } from '@/pages/app/DashboradAcompanhamentoPda';
-import { AnalisePrescricao } from '@/pages/app/DashboardAnalisePrescricao';
+import { AcompanhamentoCda, AnalisePrescricao } from '@/pages/app/DashboardAcompanhamentoCda';
 import { AcompanhamentoProtesto } from '@/pages/app/DashboardAcompanhamentoProtesto';
 import { UltimaAtualizacaoDatabase } from '@/pages/app/UltimaAtualizacaoDatabase';
 import { ConsultaPessoaJuridica } from '@/pages/app/ConsultaPessoaJuridica';
@@ -70,7 +70,7 @@ export const Router = createHashRouter([
             { path: '/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: '/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaPessoaFisica /></PrivateRoute> },
             { path: '/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoPda /></PrivateRoute> },
-            { path: '/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Administrador']}><AnalisePrescricao /></PrivateRoute> },
+            { path: '/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoCda /></PrivateRoute> },
             { path: '/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoProtesto /></PrivateRoute> },
             
         ],
@@ -89,7 +89,7 @@ export const Router = createHashRouter([
             { path: 'chefia/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: 'chefia/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaPessoaFisica /></PrivateRoute> },
             { path: 'chefia/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoPda /></PrivateRoute> },
-            { path: 'chefia/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Chefia']}><AnalisePrescricao /></PrivateRoute> },
+            { path: 'chefia/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoCda /></PrivateRoute> },
             { path: 'chefia/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoProtesto /></PrivateRoute> },
             
             
@@ -110,7 +110,7 @@ export const Router = createHashRouter([
             { path: 'procurador/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Procurador']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: 'procurador/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Procurador']}><ConsultaPessoaFisica /></PrivateRoute> },
             { path: 'procurador/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoPda /></PrivateRoute> },
-            { path: 'procurador/dashboard/analiseprescricao', element: <PrivateRoute allowedProfiles={['Procurador']}><AnalisePrescricao /></PrivateRoute> },
+            { path: 'procurador/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoCda /></PrivateRoute> },
             { path: 'procurador/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoProtesto /></PrivateRoute> },
             
             
