@@ -21,7 +21,7 @@ import { AppLayoutChefia } from '@/pages/_layouts/appChefia';
 import { HomeChefia } from '@/pages/app/HomeChefia';
 import { Ajuizadas } from '@/pages/app/Ajuizadas';
 import { AcompanhamentoPda } from '@/pages/app/DashboradAcompanhamentoPda';
-import { AcompanhamentoCda, AnalisePrescricao } from '@/pages/app/DashboardAcompanhamentoCda';
+import { AcompanhamentoCda } from '@/pages/app/DashboardAcompanhamentoCda';
 import { AcompanhamentoProtesto } from '@/pages/app/DashboardAcompanhamentoProtesto';
 import { UltimaAtualizacaoDatabase } from '@/pages/app/UltimaAtualizacaoDatabase';
 import { ConsultaPessoaJuridica } from '@/pages/app/ConsultaPessoaJuridica';
