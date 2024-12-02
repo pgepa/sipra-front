@@ -1,9 +1,13 @@
 import { Sidebar } from '@/components/Sidebar';
 import { Header } from "@/components/ui/header";
-
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 export function AppLayout() {
+
+    const { pathname } = useLocation();
+
+    const fullscreenPages = ["/dashboard/acompanhamentopda", "/dashboard/acompanhamentocda", "/dashboard/acompanhamentoprotesto"];
+    const isFullscreenPage = fullscreenPages.includes(pathname);
 
 
     return (
@@ -18,7 +22,9 @@ export function AppLayout() {
                 <Sidebar />
 
 
-                <main className="flex-1 flex flex-col p-8 pt-20 bg-gray-100">
+                <main className={`flex-1 flex flex-col ${isFullscreenPage ? "p-0 pt-10" : "p-8 pt-20"
+                    } bg-gray-100`}
+                >
 
                     <div className="flex-1">
                         <Outlet />
