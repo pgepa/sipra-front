@@ -133,24 +133,24 @@ export function SidebarProcurador() {
                     {dashboardOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
-                                to="/dashboard/acompanhamentoprotesto"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="procurador/dashboard/acompanhamentoprotesto"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "procurador/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartPie  className="h-5 w-5" />
                                 Acompanhamento Protesto
                             </Link>
                             
                             <Link
-                                to="/dashboard/acompanhamentopda"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="procurador/dashboard/acompanhamentopda"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "procurador/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartScatter className="h-5 w-5" />
                                 Acompanhamento PDA
                             </Link>
 
                             <Link
-                                to="/dashboard/acompanhamentocda"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="procurador/dashboard/acompanhamentocda"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "procurador/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartArea  className="h-5 w-5" />
                                 Acompanhamento CDAs

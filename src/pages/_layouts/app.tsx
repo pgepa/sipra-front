@@ -6,7 +6,18 @@ export function AppLayout() {
 
     const { pathname } = useLocation();
 
-    const fullscreenPages = ["/dashboard/acompanhamentopda", "/dashboard/acompanhamentocda", "/dashboard/acompanhamentoprotesto"];
+    const fullscreenPages = [
+        "/dashboard/acompanhamentopda", 
+        "/dashboard/acompanhamentocda", 
+        "/dashboard/acompanhamentoprotesto",
+        "/chefia/dashboard/acompanhamentoprotesto",
+        "/chefia/dashboard/acompanhamentopda",
+        "/chefia/dashboard/acompanhamentocda",
+        "/procurador/dashboard/acompanhamentoprotesto",
+        "/procurador/dashboard/acompanhamentopda",
+        "/procurador/dashboard/acompanhamentocda",
+        
+    ];
     const isFullscreenPage = fullscreenPages.includes(pathname);
 
 
