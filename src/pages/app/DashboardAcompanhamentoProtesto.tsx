@@ -13,9 +13,9 @@ export function AcompanhamentoProtesto() {
                         title="Acompanhamento de Protesto" 
                         width="100%" 
                         height="100%" 
-                        src="https://app.powerbi.com/view?r=eyJrIjoiMzZkYmRhODUtNDQxNS00NWFmLTk3MzctMTMzNTk1NGI3ZGFkIiwidCI6ImIwYmUwNjYzLTkxNWUtNDczZS1hNTU2LWExNmVmOWRmZTQxNCJ9" 
-                        allowFullScreen={true}
+                        src="https://app.powerbi.com/view?r=eyJrIjoiMDJkYWQ3MWEtOTVkMi00NmYxLWIxY2QtMDczNWIxZDkxNDVmIiwidCI6IjA2YjQ3Y2UyLWZmN2UtNDRjOS05M2ExLTEwZDVhYTE4M2RlNCJ9"
                         style={{ border: 'none' }}
+                        allowFullScreen={true}
                         
                         >
                     </iframe>
