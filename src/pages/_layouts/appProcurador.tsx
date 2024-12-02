@@ -1,9 +1,18 @@
 import { SidebarProcurador } from '@/components/SidebarProcurador';
 import { Header } from "@/components/ui/header";
-
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 export function AppLayoutProcurador() {
+
+    const { pathname } = useLocation();
+
+    const fullscreenPages = [
+        "/procurador/dashboard/acompanhamentoprotesto",
+        "/procurador/dashboard/acompanhamentopda",
+        "/procurador/dashboard/acompanhamentocda",
+        
+    ];
+    const isFullscreenPage = fullscreenPages.includes(pathname);
 
 
     return (
@@ -15,10 +24,12 @@ export function AppLayoutProcurador() {
 
             <div className="flex flex-1">
 
-                <SidebarProcurador />
+            <SidebarProcurador />
 
 
-                <main className="flex-1 flex flex-col p-8 pt-20 bg-gray-100">
+                <main className={`flex-1 flex flex-col ${isFullscreenPage ? "p-0 pt-10" : "p-8 pt-20"
+                    } bg-gray-100`}
+                >
 
                     <div className="flex-1">
                         <Outlet />

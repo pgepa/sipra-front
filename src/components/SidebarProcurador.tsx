@@ -122,7 +122,7 @@ export function SidebarProcurador() {
             <div className="relative">
                     <button
                         onClick={() => setDashboardOpen(!dashboardOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/procurador/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
                        <ChartNoAxesCombined className="h-6 w-6" />
                         {open && <span className='font-medium'>Dashboard</span>}
@@ -133,24 +133,24 @@ export function SidebarProcurador() {
                     {dashboardOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
-                                to="procurador/dashboard/acompanhamentoprotesto"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "procurador/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/procurador/dashboard/acompanhamentoprotesto"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartPie  className="h-5 w-5" />
                                 Acompanhamento Protesto
                             </Link>
                             
                             <Link
-                                to="procurador/dashboard/acompanhamentopda"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "procurador/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/procurador/dashboard/acompanhamentopda"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartScatter className="h-5 w-5" />
                                 Acompanhamento PDA
                             </Link>
 
                             <Link
-                                to="procurador/dashboard/acompanhamentocda"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "procurador/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/procurador/dashboard/acompanhamentocda"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartArea  className="h-5 w-5" />
                                 Acompanhamento CDAs
