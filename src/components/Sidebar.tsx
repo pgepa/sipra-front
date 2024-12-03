@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale,ChartArea, ChartScatter, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale,ChartArea, ChartScatter, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, Handshake } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -154,6 +154,13 @@ export function Sidebar() {
                             >
                                 <ChartArea  className="h-5 w-5" />
                                 Acompanhamento CDAs
+                            </Link>
+                            <Link
+                                to="/dashboard/pagamentossiat"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/pagamentossiat" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <Handshake className="h-5 w-5" />
+                                Pagamentos SIAT
                             </Link>
 
 

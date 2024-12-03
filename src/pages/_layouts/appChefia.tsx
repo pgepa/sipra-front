@@ -10,6 +10,7 @@ export function AppLayoutChefia() {
         "/chefia/dashboard/acompanhamentoprotesto",
         "/chefia/dashboard/acompanhamentopda",
         "/chefia/dashboard/acompanhamentocda",      
+        "/chefia/dashboard/pagamentossiat",      
     ];
     const isFullscreenPage = fullscreenPages.includes(pathname);
 

@@ -156,6 +156,14 @@ export function SidebarChefia() {
                                 Acompanhamento CDAs
                             </Link>
 
+                            <Link
+                                to="/chefia/dashboard/pagamentossiat"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/pagamentossiat" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <ChartArea  className="h-5 w-5" />
+                                Pagamentos SIAT
+                            </Link>
+
 
                             
                         </div>

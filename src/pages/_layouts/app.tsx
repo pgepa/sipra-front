@@ -10,6 +10,7 @@ export function AppLayout() {
         "/dashboard/acompanhamentopda", 
         "/dashboard/acompanhamentocda", 
         "/dashboard/acompanhamentoprotesto",
+        "/dashboard/pagamentossiat",
         "/chefia/dashboard/acompanhamentoprotesto",
         "/chefia/dashboard/acompanhamentopda",
         "/chefia/dashboard/acompanhamentocda",

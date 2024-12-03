@@ -31,6 +31,7 @@ import { HomeProcurador } from '@/pages/app/HomeProcurador';
 import { AppLayoutAssessor } from '@/pages/_layouts/appAssessor';
 import { HomeAssessor } from '@/pages/app/HomeAssessor';
 import { UploadSefa } from '@/pages/app/UploadSefa';
+import { PagamentosSiat } from './pages/app/DashboardPagamentosSiat';
 
 
 
@@ -72,6 +73,7 @@ export const Router = createHashRouter([
             { path: '/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoPda /></PrivateRoute> },
             { path: '/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoCda /></PrivateRoute> },
             { path: '/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoProtesto /></PrivateRoute> },
+            { path: '/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Administrador']}><PagamentosSiat /></PrivateRoute> },
             
         ],
     },
@@ -91,6 +93,7 @@ export const Router = createHashRouter([
             { path: 'chefia/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoPda /></PrivateRoute> },
             { path: 'chefia/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoCda /></PrivateRoute> },
             { path: 'chefia/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoProtesto /></PrivateRoute> },
+            { path: 'chefia/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Chefia']}><PagamentosSiat /></PrivateRoute> },
             
             
             
