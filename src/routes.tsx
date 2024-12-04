@@ -31,7 +31,8 @@ import { HomeProcurador } from '@/pages/app/HomeProcurador';
 import { AppLayoutAssessor } from '@/pages/_layouts/appAssessor';
 import { HomeAssessor } from '@/pages/app/HomeAssessor';
 import { UploadSefa } from '@/pages/app/UploadSefa';
-import { PagamentosSiat } from './pages/app/DashboardPagamentosSiat';
+import { PagamentosSiat } from '@/pages/app/DashboardPagamentosSiat';
+import { ConsultaDebitos } from '@/pages/app/ConsultaDebitos';
 
 
 
@@ -74,6 +75,7 @@ export const Router = createHashRouter([
             { path: '/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoCda /></PrivateRoute> },
             { path: '/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoProtesto /></PrivateRoute> },
             { path: '/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Administrador']}><PagamentosSiat /></PrivateRoute> },
+            { path: '/consultadebitos', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaDebitos /></PrivateRoute> },
             
         ],
     },

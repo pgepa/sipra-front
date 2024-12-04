@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale,ChartArea, ChartScatter, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, Handshake } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale,ChartArea, ChartScatter, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, Handshake, HandCoins } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -170,8 +170,13 @@ export function Sidebar() {
                     )}
                 </div>
 
-
- 
+                <Link
+                    to="/consultadebitos"
+                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                >
+                    <HandCoins  className="h-6 w-6" />
+                    {open && <span className='font-medium'>Consulta de Débitos</span>}
+                </Link> 
 
 
                 <div className="relative">
@@ -274,6 +279,8 @@ export function Sidebar() {
                     <Users className="h-6 w-6" />
                     {open && <span className='font-medium'>Usuários</span>}
                 </Link>
+
+                
 
             </nav>
         </aside>
