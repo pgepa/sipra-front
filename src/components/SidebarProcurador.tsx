@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, ChartScatter, ChartArea } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, ChartScatter, ChartArea, HandCoins } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ export function SidebarProcurador() {
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
 
     const [dashboardOpen, setDashboardOpen] = useState(false);
-    
+
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
@@ -76,7 +76,7 @@ export function SidebarProcurador() {
                                 Carta Cobrança
                             </Link> */}
 
-                            
+
 
                         </div>
                     )}
@@ -117,14 +117,14 @@ export function SidebarProcurador() {
                     )}
                 </div>
 
-                
 
-            <div className="relative">
+
+                <div className="relative">
                     <button
                         onClick={() => setDashboardOpen(!dashboardOpen)}
                         className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/procurador/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
-                       <ChartNoAxesCombined className="h-6 w-6" />
+                        <ChartNoAxesCombined className="h-6 w-6" />
                         {open && <span className='font-medium'>Dashboard</span>}
                         {open && <ChevronDown className={`ml-auto transition-transform ${dashboardOpen ? "rotate-180" : ""}`} />}
                     </button>
@@ -136,10 +136,10 @@ export function SidebarProcurador() {
                                 to="/procurador/dashboard/acompanhamentoprotesto"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
-                                <ChartPie  className="h-5 w-5" />
+                                <ChartPie className="h-5 w-5" />
                                 Acompanhamento Protesto
                             </Link>
-                            
+
                             <Link
                                 to="/procurador/dashboard/acompanhamentopda"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
@@ -152,16 +152,24 @@ export function SidebarProcurador() {
                                 to="/procurador/dashboard/acompanhamentocda"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
-                                <ChartArea  className="h-5 w-5" />
+                                <ChartArea className="h-5 w-5" />
                                 Acompanhamento CDAs
                             </Link>
 
 
-                            
+
                         </div>
 
 
                     )}
+
+                    <Link
+                        to="/procurador/consultadebitos"
+                        className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    >
+                        <HandCoins className="h-6 w-6" />
+                        {open && <span className='font-medium'>Consulta de Débitos</span>}
+                    </Link>
 
 
                 </div>

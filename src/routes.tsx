@@ -96,6 +96,7 @@ export const Router = createHashRouter([
             { path: 'chefia/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoCda /></PrivateRoute> },
             { path: 'chefia/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoProtesto /></PrivateRoute> },
             { path: 'chefia/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Chefia']}><PagamentosSiat /></PrivateRoute> },
+            { path: 'chefia/consultadebitos', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDebitos /></PrivateRoute> },
             
             
             
@@ -117,6 +118,7 @@ export const Router = createHashRouter([
             { path: 'procurador/dashboard/acompanhamentopda', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoPda /></PrivateRoute> },
             { path: 'procurador/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoCda /></PrivateRoute> },
             { path: 'procurador/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoProtesto /></PrivateRoute> },
+            { path: 'procurador/consultadebitos', element: <PrivateRoute allowedProfiles={['Procurador']}><ConsultaDebitos /></PrivateRoute> },
             
             
             
@@ -135,6 +137,7 @@ export const Router = createHashRouter([
             { path: 'assessor/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Assessor']}><Ajuizadas /></PrivateRoute> },
             { path: 'assessor/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: 'assessor/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaFisica /></PrivateRoute> },        
+            { path: 'assessor/consultadebitos', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaDebitos /></PrivateRoute> },        
             
             
         ],

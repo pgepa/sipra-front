@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, ChartScatter, ChartArea } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, ChartScatter, ChartArea, HandCoins } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ export function SidebarChefia() {
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
 
     const [dashboardOpen, setDashboardOpen] = useState(false);
-    
+
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
@@ -76,7 +76,7 @@ export function SidebarChefia() {
                                 Carta Cobrança
                             </Link> */}
 
-                            
+
 
                         </div>
                     )}
@@ -117,14 +117,14 @@ export function SidebarChefia() {
                     )}
                 </div>
 
-                
 
-            <div className="relative">
+
+                <div className="relative">
                     <button
                         onClick={() => setDashboardOpen(!dashboardOpen)}
                         className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/chefia/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
-                       <ChartNoAxesCombined className="h-6 w-6" />
+                        <ChartNoAxesCombined className="h-6 w-6" />
                         {open && <span className='font-medium'>Dashboard</span>}
                         {open && <ChevronDown className={`ml-auto transition-transform ${dashboardOpen ? "rotate-180" : ""}`} />}
                     </button>
@@ -136,10 +136,10 @@ export function SidebarChefia() {
                                 to="/chefia/dashboard/acompanhamentoprotesto"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
-                                <ChartPie  className="h-5 w-5" />
+                                <ChartPie className="h-5 w-5" />
                                 Acompanhamento Protesto
                             </Link>
-                            
+
                             <Link
                                 to="/chefia/dashboard/acompanhamentopda"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
@@ -152,7 +152,7 @@ export function SidebarChefia() {
                                 to="/chefia/dashboard/acompanhamentocda"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
-                                <ChartArea  className="h-5 w-5" />
+                                <ChartArea className="h-5 w-5" />
                                 Acompanhamento CDAs
                             </Link>
 
@@ -160,16 +160,24 @@ export function SidebarChefia() {
                                 to="/chefia/dashboard/pagamentossiat"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/pagamentossiat" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
-                                <ChartArea  className="h-5 w-5" />
+                                <ChartArea className="h-5 w-5" />
                                 Pagamentos SIAT
                             </Link>
 
 
-                            
+
                         </div>
 
 
                     )}
+
+                    <Link
+                        to="/chefia/consultadebitos"
+                        className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    >
+                        <HandCoins className="h-6 w-6" />
+                        {open && <span className='font-medium'>Consulta de Débitos</span>}
+                    </Link>
 
 
                 </div>

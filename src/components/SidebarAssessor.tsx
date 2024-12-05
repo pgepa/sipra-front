@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, CircleDollarSign, PcCase, UserRoundSearch } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, CircleDollarSign, PcCase, UserRoundSearch, HandCoins } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ export function SidebarAssessor() {
 
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
 
-    
+
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
@@ -67,7 +67,7 @@ export function SidebarAssessor() {
                                 Ajuizadas
                             </Link>
 
-                            
+
 
                         </div>
                     )}
@@ -106,9 +106,17 @@ export function SidebarAssessor() {
 
 
                     )}
+
+                    <Link
+                        to="/assessor/consultadebitos"
+                        className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    >
+                        <HandCoins className="h-6 w-6" />
+                        {open && <span className='font-medium'>Consulta de Débitos</span>}
+                    </Link>
                 </div>
 
-                
+
             </nav>
         </aside>
     );
