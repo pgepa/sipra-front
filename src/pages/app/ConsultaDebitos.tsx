@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
 import { AiFillFilePdf } from 'react-icons/ai';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 // Define your interfaces (não modificado, já está correto no original)
 interface DadosCDA {
@@ -58,6 +59,9 @@ export const ConsultaDebitos: React.FC = () => {
     const [filters, setFilters] = useState({ cda: '', documento: '' });
     const [searched, setSearched] = useState(false);
     const [expandedSections, setExpandedSections] = useState<{ [key: string]: { [key: string]: boolean } }>({});
+    const [page, setPage] = useState(1); // Página atual
+    const [totalPages, setTotalPages] = useState(1); // Total de páginas
+    const [totalCdas, setTotalCdas] = useState(1); // Total de páginas
 
     const toggleSection = (cda: string, section: string) => {
         setExpandedSections((prev) => ({
@@ -117,6 +121,8 @@ export const ConsultaDebitos: React.FC = () => {
             params: {
                 cda: filters.cda || undefined,
                 documento: filters.documento || undefined,
+                page, // Passando a página atual
+                per_page: 10, // Quantidade de itens por página
             },
         })
             .then((response) => {
@@ -127,6 +133,8 @@ export const ConsultaDebitos: React.FC = () => {
                         data: item,
                     }));
                     setData(resultados);
+                    setTotalPages(Math.ceil(response.data.total_cdas / 10));
+                    setTotalCdas(Math.ceil(response.data.total_cdas));
                 } else if (response.data?.DadosCDA) {
                     const resultados = [
                         {
@@ -136,6 +144,8 @@ export const ConsultaDebitos: React.FC = () => {
                         },
                     ];
                     setData(resultados);
+                    setTotalPages(1);
+                    setTotalCdas(1);
                 } else {
                     setError('Formato de resposta desconhecido.');
                 }
@@ -158,6 +168,32 @@ export const ConsultaDebitos: React.FC = () => {
         setError(null);
     };
 
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage); // Atualiza a página
+        handleSubmit(new Event('submit') as unknown as React.FormEvent<HTMLFormElement>); // Conversão segura
+    };
+
+
+    const renderPaginationItems = () => {
+        const items = [];
+        const startPage = Math.max(page - 2, 1);
+        const endPage = Math.min(page + 2, totalPages);
+
+        for (let i = startPage; i <= endPage; i++) {
+            items.push(
+                <PaginationItem key={i}>
+                    <PaginationLink
+                        size="sm"
+                        onClick={() => handlePageChange(i)}
+                        className={i === page ? "bg-blue-500 text-white" : "text-blue-500"}
+                    >
+                        {i}
+                    </PaginationLink>
+                </PaginationItem>
+            );
+        }
+        return items;
+    };
 
     return (
         <>
@@ -218,17 +254,46 @@ export const ConsultaDebitos: React.FC = () => {
 
 
                 {/* Renderize o título aqui */}
-                {loading && (
-                    <div className="flex justify-center h-screen mt-10">
-                        <GridLoader size={16} color="#6b25c7" />
-                    </div>
-                )}
+                {loading && <div className="flex justify-center h-screen mt-10">
+                    <GridLoader size={16} color="#6b25c7" />
+                </div>}
+                {error && <div className='text-red-500 text-center'><p className='text-muted-foreground text-lg font-semibold'>{error}</p></div>}
+                {data && (
+                    <div>
+                        {data.map((item) => (
+                            <div key={item.cda}>
+                                {/* Render your results */}
+                            </div>
+                        ))}
 
-                {error && !loading && (
-                    <div className="text-center text-red-500">
-                        {error}
+                        <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
+                            <PaginationContent>
+                                {page > 1 && (
+                                    <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
+                                        {page === 2 ? 'Primeira Página' : 'Anterior'}
+                                    </PaginationPrevious>
+                                )}
+                                {renderPaginationItems()}
+                                {page < totalPages && (
+                                    <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
+                                        Próxima
+                                    </PaginationNext>
+                                )}
+                            </PaginationContent>
+                            <div className="ml-2 text-base mt-2 text-gray-600">
+                                <span className='flex gap-2'>
+                                    <p>Página {page} de {totalPages} ||</p> 
+                                    <p className='font-semibold text-indigo-600'> {totalCdas} CDA(s) encontrada(s)</p>
+                                    
+                                </span>
+                                
+                            </div>
+                        </Pagination>
                     </div>
+
+
                 )}
+                
 
                 {searched && data && (
                     <div>
@@ -237,14 +302,17 @@ export const ConsultaDebitos: React.FC = () => {
                                 <AiFillFilePdf className="h-4 w-4 mr-2 text-rose-700" />
                                 Download PDF
                             </Button>
+
+
                         </div>
+
 
                         {data.map(({ cda, data: cdaData, contribuinte }, index) => (
                             <div key={index} className="mb-8">
                                 <div className='flex flex-col gap-4 items-center mt-6'>
                                     <h2 className="flex flex-col items-center text-2xl font-bold text-slate-700 justify-center">
                                         {contribuinte !== 'N/A' ? contribuinte : 'Contribuinte não encontrado'}
-                                        
+
                                         {cdaData.DadosCDA && cdaData.DadosCDA.length > 0 && (
                                             <span className="text-lg text-indigo-500 ml-2">
                                                 CDA: {cdaData.DadosCDA[0].cda}
