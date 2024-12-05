@@ -8,6 +8,7 @@ import { Search, X } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
 import { AiFillFilePdf } from 'react-icons/ai';
 
+// Define your interfaces (não modificado, já está correto no original)
 interface DadosCDA {
     cda: string;
     dtinscricao: string;
@@ -23,9 +24,7 @@ interface DadosCDA {
     flajuizada: string;
     dtajuizamento: string;
     sit_protesto: string;
-
 }
-
 
 interface HistoricoCDA {
     situacao: string;
@@ -33,8 +32,7 @@ interface HistoricoCDA {
     cdusuinclusao: string;
     observacao: string;
     num_seq: string;
-
-   }
+}
 
 interface ParcelamentoCDA {
     parcelamento: string;
@@ -47,17 +45,11 @@ interface ParcelamentoCDA {
     seqparc: string;
 }
 
-
-
 interface PessoaJuridicaData {
     HistoricoCDA: HistoricoCDA[];
     DadosCDA: DadosCDA[];
     ParcelamentoCDA: ParcelamentoCDA[];
-    
 }
-
-
-
 
 export const ConsultaDebitos: React.FC = () => {
     const [data, setData] = useState<{ cda: string; contribuinte?: string; data: PessoaJuridicaData }[] | null>(null);
@@ -66,9 +58,6 @@ export const ConsultaDebitos: React.FC = () => {
     const [filters, setFilters] = useState({ cda: '', documento: '' });
     const [searched, setSearched] = useState(false);
     const [expandedSections, setExpandedSections] = useState<{ [key: string]: { [key: string]: boolean } }>({});
-
-
-
 
     const toggleSection = (cda: string, section: string) => {
         setExpandedSections((prev) => ({
@@ -79,7 +68,6 @@ export const ConsultaDebitos: React.FC = () => {
             },
         }));
     };
-
 
     const handleDownloadPdf = () => {
         const token = localStorage.getItem('token');
@@ -101,7 +89,6 @@ export const ConsultaDebitos: React.FC = () => {
             responseType: 'blob',
         })
             .then((response) => {
-
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
@@ -122,32 +109,37 @@ export const ConsultaDebitos: React.FC = () => {
         setLoading(true);
         setSearched(false);
         setError(null);
-    
+
         const token = localStorage.getItem('token');
-    
+
         api.get('/consultacda', {
             headers: { Authorization: `Bearer ${token}` },
             params: {
                 cda: filters.cda || undefined,
                 documento: filters.documento || undefined,
-                
             },
         })
             .then((response) => {
-                console.log(response.data); // Debug para validar a estrutura da resposta
-                const resultados = Array.isArray(response.data)
-                    ? response.data.map((item) => ({ 
-                        contribuinte: item.DadosCDA?.[0]?.contribuinte || 'N/A',
-                        cda: item.cda, 
-                        data: item, 
-                    }))
-                    : [{ 
-                        cda: response.data.cda, 
-                        contribuinte: response.data.DadosCDA?.[0]?.contribuinte || 'N/A',
-                        data: response.data,
-                    }];
-    
-                setData(resultados);
+                if (response.data?.DadosPorDocumento) {
+                    const resultados = response.data.DadosPorDocumento.map((item: any) => ({
+                        contribuinte: response.data.Contribuinte || 'N/A',
+                        cda: item.CDA || 'N/A',
+                        data: item,
+                    }));
+                    setData(resultados);
+                } else if (response.data?.DadosCDA) {
+                    const resultados = [
+                        {
+                            contribuinte: response.data.DadosCDA?.[0]?.contribuinte || 'N/A',
+                            cda: response.data.cda || 'N/A',
+                            data: response.data,
+                        },
+                    ];
+                    setData(resultados);
+                } else {
+                    setError('Formato de resposta desconhecido.');
+                }
+
                 setLoading(false);
                 setSearched(true);
             })
@@ -158,14 +150,13 @@ export const ConsultaDebitos: React.FC = () => {
                 setError('Informe novos filtros para a pesquisa.');
             });
     };
+
     const handleClearFilters = () => {
         setFilters({ cda: '', documento: '' });
         setData(null);
         setSearched(false);
         setError(null);
     };
-
-
 
 
     return (
@@ -251,9 +242,9 @@ export const ConsultaDebitos: React.FC = () => {
                         {data.map(({ cda, data: cdaData, contribuinte }, index) => (
                             <div key={index} className="mb-8">
                                 <div className='flex flex-col gap-4 items-center mt-6'>
-                                <h2 className="text-2xl font-bold text-slate-700 justify-center">
-    {contribuinte !== 'N/A' ? contribuinte : 'Contribuinte não encontrado'}
-</h2>
+                                    <h2 className="text-2xl font-bold text-slate-700 justify-center">
+                                        {contribuinte !== 'N/A' ? contribuinte : 'Contribuinte não encontrado'}
+                                    </h2>
 
 
 
@@ -263,13 +254,13 @@ export const ConsultaDebitos: React.FC = () => {
                                             className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
                                             onClick={() => toggleSection(cda, 'dadosCDA')}
                                         >
-                                            <h2>Dados Cadastrais:</h2>
+                                            <h2>Dados CDA:</h2>
                                             <span className="text-white text-xl">
                                                 {expandedSections[cda]?.dadosCDA ? '↑' : '↓'}
                                             </span>
                                         </div>
 
-                                        {expandedSections[cda]?.dadosCDA  && (
+                                        {expandedSections[cda]?.dadosCDA && (
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                                 {cdaData.DadosCDA && cdaData.DadosCDA.length > 0 ? (
@@ -313,7 +304,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                         {Number(cadastro.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                                                     </span>
                                                                 </div>
-                                                                
+
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Data Atualização Saldo:</span>
                                                                     <span className="text-muted-foreground">
@@ -335,7 +326,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Observação:</span>
                                                                     <span className="text-muted-foreground">{cadastro.sit_protesto}</span>
-                                                                </div>                                                              
+                                                                </div>
 
 
                                                             </div>
@@ -357,7 +348,7 @@ export const ConsultaDebitos: React.FC = () => {
                                             >
                                                 <h2>Histórico:</h2>
                                                 <span className="text-white text-xl">
-                                                {expandedSections[cda]?.historico ? '↑' : '↓'}
+                                                    {expandedSections[cda]?.historico ? '↑' : '↓'}
                                                 </span>
                                             </div>
 
@@ -369,8 +360,8 @@ export const ConsultaDebitos: React.FC = () => {
                                                             <div
                                                                 key={index}
                                                                 className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                            >                                                                
-                                                                
+                                                            >
+
                                                                 <div className="flex flex-wrap gap-4">
                                                                     <div className="flex flex-col gap-1 min-w-[200px]">
                                                                         <span className="font-semibold text-slate-700">Situação:</span>
@@ -381,7 +372,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                         <span className='text-muted-foreground'>
                                                                             {new Date(historico.dtsituacao).toLocaleDateString('pt-BR')}
                                                                         </span>
-                                                                        
+
                                                                     </div>
                                                                     <div className="flex flex-col gap-1 min-w-[150px]">
                                                                         <span className="font-semibold text-slate-700">Usuáro Situação:</span>
@@ -395,7 +386,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                         <span className="font-semibold text-slate-700">Observação:</span>
                                                                         <span className="text-muted-foreground">{historico.observacao}</span>
                                                                     </div>
-                                                                    
+
                                                                 </div>
                                                             </div>
                                                         ))
@@ -438,12 +429,12 @@ export const ConsultaDebitos: React.FC = () => {
                                                                     <span className="font-semibold text-slate-700">Data do Parcelamento:</span>
                                                                     <span className="text-muted-foreground">{parcelamento.dtparcelamento}</span>
                                                                 </div>
-                                                                
+
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Nº de Parcelas:</span>
                                                                     <span className="text-muted-foreground">{parcelamento.nuparcelas}</span>
                                                                 </div>
-                                                                
+
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Regra de Parcelamento:</span>
                                                                     <span className="text-muted-foreground">{parcelamento.regraparcelamento}</span>
