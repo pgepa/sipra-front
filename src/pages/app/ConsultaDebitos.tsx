@@ -242,8 +242,16 @@ export const ConsultaDebitos: React.FC = () => {
                         {data.map(({ cda, data: cdaData, contribuinte }, index) => (
                             <div key={index} className="mb-8">
                                 <div className='flex flex-col gap-4 items-center mt-6'>
-                                    <h2 className="text-2xl font-bold text-slate-700 justify-center">
+                                    <h2 className="flex flex-col items-center text-2xl font-bold text-slate-700 justify-center">
                                         {contribuinte !== 'N/A' ? contribuinte : 'Contribuinte não encontrado'}
+                                        
+                                        {cdaData.DadosCDA && cdaData.DadosCDA.length > 0 && (
+                                            <span className="text-lg text-indigo-500 ml-2">
+                                                CDA: {cdaData.DadosCDA[0].cda}
+                                            </span>
+                                        )}
+
+
                                     </h2>
 
 
