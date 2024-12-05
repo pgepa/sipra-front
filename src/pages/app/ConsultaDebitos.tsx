@@ -161,16 +161,60 @@ export const ConsultaDebitos: React.FC = () => {
             });
     };
 
+    const resetPagination = () => {
+        setPage(1); // Reseta a página para o início
+    };
+
     const handleClearFilters = () => {
         setFilters({ cda: '', documento: '' });
         setData(null);
         setSearched(false);
         setError(null);
+        resetPagination();
     };
 
     const handlePageChange = (newPage: number) => {
         setPage(newPage); // Atualiza a página
-        handleSubmit(new Event('submit') as unknown as React.FormEvent<HTMLFormElement>); // Conversão segura
+        setLoading(true);
+        
+        const token = localStorage.getItem('token');
+        
+        api.get('/consultacda', {
+            headers: { Authorization: `Bearer ${token}` },
+            params: {
+                cda: filters.cda || undefined,
+                documento: filters.documento || undefined,
+                page: newPage,
+                per_page: 10, // Quantidade de itens por página
+            },
+        })
+            .then((response) => {
+                if (response.data?.DadosPorDocumento) {
+                    const resultados = response.data.DadosPorDocumento.map((item: any) => ({
+                        contribuinte: response.data.Contribuinte || 'N/A',
+                        cda: item.CDA || 'N/A',
+                        data: item,
+                    }));
+                    setData(resultados);
+                    setTotalPages(Math.ceil(response.data.total_cdas / 10));
+                } else if (response.data?.DadosCDA) {
+                    setData([
+                        {
+                            contribuinte: response.data.DadosCDA?.[0]?.contribuinte || 'N/A',
+                            cda: response.data.cda || 'N/A',
+                            data: response.data,
+                        },
+                    ]);
+                    setTotalPages(1);
+                } else {
+                    setError('Formato de resposta desconhecido.');
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setError('Erro ao carregar os dados.');
+            })
+            .finally(() => setLoading(false));
     };
 
 
