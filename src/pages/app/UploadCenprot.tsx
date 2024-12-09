@@ -100,7 +100,7 @@ export function UploadCentrot() {
 
     return (
         <>
-            <Helmet title="Jucepa PJ" />
+            <Helmet title="CENPROT" />
             <div className="flex justify-center items-start min-h-screen">
                 <div className="w-full max-w-lg p-8 bg-white rounded-md shadow-md">
                     <h1 className="text-2xl font-semibold text-slate-800 text-center mb-6">Upload base de dados - CENPROT</h1>
