@@ -6,8 +6,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
-import { AiFillFilePdf } from 'react-icons/ai';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import { GrDocumentExcel } from 'react-icons/gr';
+
 
 // Define your interfaces (não modificado, já está correto no original)
 interface DadosCDA {
@@ -73,6 +74,11 @@ export const ConsultaDebitos: React.FC = () => {
         }));
     };
 
+     {/* FUNÇÃO DE DOWNLOAD
+        
+        
+        */}
+
     const handleDownloadPdf = () => {
         const token = localStorage.getItem('token');
 
@@ -88,7 +94,7 @@ export const ConsultaDebitos: React.FC = () => {
             params: {
                 cda: filters.cda || undefined,
                 documento: filters.documento || undefined,
-                download: 'pdf',
+                download: 'csv',
             },
             responseType: 'blob',
         })
@@ -96,14 +102,14 @@ export const ConsultaDebitos: React.FC = () => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `Consulta de Débitos_${filters.cda || filters.documento}.pdf`);
+                link.setAttribute('download', `Consulta de Débitos_${filters.cda || filters.documento}.csv`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
             })
             .catch((error) => {
-                console.error('Erro ao fazer download do PDF:', error);
-                alert('Erro ao fazer download do PDF.');
+                console.error('Erro ao fazer download da planilha:', error);
+                alert('Erro ao fazer download da planilha.');
             })
             .finally(() => setLoading(false));
     };
@@ -341,14 +347,18 @@ export const ConsultaDebitos: React.FC = () => {
 
                 {searched && data && (
                     <div>
+                        
+                        
                         <div className='flex'>
-                            <Button onClick={handleDownloadPdf} className="w-full sm:w-auto mt-8" variant="outline">
-                                <AiFillFilePdf className="h-4 w-4 mr-2 text-rose-700" />
-                                Download PDF
+                            <Button onClick={handleDownloadPdf} className="w-full sm:w-auto mt-8" variant="default">
+                            <GrDocumentExcel className="h-4 w-4 mr-2" />
+                                Baixar Planilha
                             </Button>
 
 
-                        </div>
+                        </div> 
+                        
+                        
 
 
                         {data.map(({ cda, data: cdaData, contribuinte }, index) => (
