@@ -264,6 +264,13 @@ export function Sidebar() {
                                 <DatabaseBackup className="h-4 w-4" />
                                 Detran - Modelo
                             </Link>
+                            <Link
+                                to="/upload/cenprot"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/cenprot" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                            >
+                                <DatabaseBackup className="h-4 w-4" />
+                                Cenprot
+                            </Link>
                         </div>
 
 

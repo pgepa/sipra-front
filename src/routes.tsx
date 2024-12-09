@@ -33,6 +33,7 @@ import { HomeAssessor } from '@/pages/app/HomeAssessor';
 import { UploadSefa } from '@/pages/app/UploadSefa';
 import { PagamentosSiat } from '@/pages/app/DashboardPagamentosSiat';
 import { ConsultaDebitos } from '@/pages/app/ConsultaDebitos';
+import { UploadCentrot } from '@/pages/app/UploadCenprot';
 
 
 
@@ -68,6 +69,7 @@ export const Router = createHashRouter([
             { path: '/upload/detransidet', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranSidet /></PrivateRoute> },
             { path: '/upload/detranveiculo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranCargaVeiculo /></PrivateRoute> },
             { path: '/upload/detranmodelo', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadDetranModelo /></PrivateRoute> },
+            { path: '/upload/cenprot', element: <PrivateRoute allowedProfiles={['Administrador']}><UploadCentrot /></PrivateRoute> },
             { path: '/usuarios', element: <PrivateRoute allowedProfiles={['Administrador']}><Usuarios /></PrivateRoute> },
             { path: '/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: '/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaPessoaFisica /></PrivateRoute> },
