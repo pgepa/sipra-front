@@ -52,6 +52,7 @@ interface ProtestoData {
     obs_end_protesto: string;
     periodoprotesto: string;
     conveniadoieptb: string;
+    uf: string;
 }
 
 export function Protesto() {
@@ -81,6 +82,7 @@ export function Protesto() {
         origemdivida: '',
         ulthistorico: [] as string[],
         sit_protesto: [] as string[],
+        uf: [] as string[],
         conveniadoieptb: '',
     });
 
@@ -109,6 +111,7 @@ export function Protesto() {
                     ...filters,
 
                     sit_protesto: filters.sit_protesto.join(","),
+                    uf: filters.uf.join(","),
                     porte: filters.porte.join(","),
                     situacaocadastral: filters.situacaocadastral.join(","),
                     ulthistorico: filters.ulthistorico.join(","),
@@ -198,6 +201,7 @@ export function Protesto() {
             origemdivida: '',
             ulthistorico: [],
             sit_protesto: [],
+            uf: [],
             conveniadoieptb: '',
         });
         setPage(1);
@@ -205,7 +209,7 @@ export function Protesto() {
         setIsCNPJSelected(false);
     };
 
-    const handleCheckboxChange = (type: 'sit_protesto' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
+    const handleCheckboxChange = (type: 'sit_protesto' | 'uf' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -223,6 +227,36 @@ export function Protesto() {
         "Protestado",
         "Pago",
         "Sustado"
+    ];
+    const uf = [
+        "AC",
+        "AL",
+        "AM",
+        "AP",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "EX",
+        "GO",
+        "MA",
+        "MG",
+        "MS",
+        "MT",
+        "PA",
+        "PB",
+        "PE",
+        "PI",
+        "PR",
+        "RJ",
+        "RN",
+        "RO",
+        "RR",
+        "RS",
+        "SC",
+        "SE",
+        "SP",
+        "TO",
     ];
 
     const portes = [
@@ -368,14 +402,14 @@ export function Protesto() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='Origem da dívida'
-                            className='pl-10 col-span-1'
-                            value={filters.origemdivida}
-                            onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
+                                placeholder='Origem da dívida'
+                                className='pl-10 col-span-1'
+                                value={filters.origemdivida}
+                                onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
                             />
 
                         </div>
-                        
+
                     </div>
 
                     <div className='space-y-2'>
@@ -387,15 +421,15 @@ export function Protesto() {
                             </span>
 
                             <Input
-                            placeholder='Informe somente números'
-                            className='pl-10 col-span-1'
-                            value={filters.vlcdaatualizado_min}
-                            onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
+                                placeholder='Informe somente números'
+                                className='pl-10 col-span-1'
+                                value={filters.vlcdaatualizado_min}
+                                onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
                             />
 
                         </div>
 
-                        
+
 
                     </div>
 
@@ -406,14 +440,14 @@ export function Protesto() {
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                            placeholder='Informe somente números'
-                            className='pl-10 col-span-1'
-                            value={filters.vlcdaatualizado_max}
-                            onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
+                                placeholder='Informe somente números'
+                                className='pl-10 col-span-1'
+                                value={filters.vlcdaatualizado_max}
+                                onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
                             />
                         </div>
 
-                        
+
 
                     </div>
 
@@ -708,6 +742,29 @@ export function Protesto() {
                         </Select>
 
                     </div>
+                    <div className='space-y-2'>
+                        <Label className='font-semibold text-sm text-gray-800'>UF:</Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                    <span className='font-normal truncate'>{filters.uf.length > 0 ? filters.uf.join(", ") : "Escolha uma opção"}</span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="p-4 max-h-60 overflow-y-auto">
+                                {uf.map((estado) => (
+                                    <DropdownMenuItem key={estado} className="flex items-center">
+                                        <Checkbox
+                                            checked={filters.uf.includes(estado)}
+                                            onCheckedChange={() => handleCheckboxChange('uf', estado)}
+                                        />
+                                        <Label className="ml-2 font-normal">{estado}</Label>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+
 
 
                     <Button type='submit' className='default mt-8'>
