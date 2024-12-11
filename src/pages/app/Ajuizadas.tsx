@@ -59,6 +59,7 @@ interface ProtestoData {
     qtdadepara: string;
     nudocumento: string;
     dtajuizamento: string;
+    numjudicial: string;
 }
 
 export function Ajuizadas() {
@@ -701,7 +702,7 @@ export function Ajuizadas() {
 
                                                             <DialogContent className="max-h-[90vh] overflow-y-auto">
                                                                 <DialogHeader>
-                                                                    <DialogTitle>Nome Contribuinte: {protesto.contribuinte}</DialogTitle>
+                                                                    <DialogTitle className='text-indigo-600 text-center text-xl'>{protesto.contribuinte}</DialogTitle>
                                                                     <DialogDescription>Detalhes do Contribuinte</DialogDescription>
                                                                 </DialogHeader>
 
@@ -709,8 +710,13 @@ export function Ajuizadas() {
                                                                     <Table>
                                                                         <TableBody>
                                                                             <TableRow>
-                                                                                <TableCell className='text-muted-foreground'>Nº Documento</TableCell>
+                                                                                <TableCell className='text-muted-foreground'>Documento</TableCell>
                                                                                 <TableCell className='flex justify-end'>{protesto.docformatado}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Número do Processo</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.numjudicial}</TableCell>
                                                                             </TableRow>
 
                                                                             <TableRow>

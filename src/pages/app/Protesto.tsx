@@ -856,7 +856,7 @@ export function Protesto() {
 
                                                             <DialogContent className="max-h-[90vh] overflow-y-auto">
                                                                 <DialogHeader>
-                                                                    <DialogTitle>Contribuinte: {protesto.contribuinte}</DialogTitle>
+                                                                    <DialogTitle className='text-indigo-600 text-center text-xl'>{protesto.contribuinte}</DialogTitle>
                                                                     <DialogDescription>Detalhes do Contribuinte</DialogDescription>
                                                                 </DialogHeader>
 
