@@ -406,13 +406,18 @@ export const ConsultaDebitos: React.FC = () => {
                                                                     <span className="text-muted-foreground">{cadastro.dtinscricao}</span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data de Referência:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.dtreferencia}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Tipo Débito:</span>
                                                                     <span className="text-muted-foreground">{cadastro.tipoimposto}</span>
                                                                 </div>
+                                                                <div className="flex flex-col gap-1">
+                                                                    <span className="font-semibold text-slate-700">Status Débito:</span>
+                                                                    <span className="text-muted-foreground">{cadastro.statusdebito}</span>
+                                                                </div>
+                                                                <div className="flex flex-col gap-1">
+                                                                    <span className="font-semibold text-slate-700">Data de Referência:</span>
+                                                                    <span className="text-muted-foreground">{cadastro.dtreferencia}</span>
+                                                                </div>
+                                                                
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Origem Débito:</span>
                                                                     <span className="text-muted-foreground">{cadastro.origemdivida}</span>
@@ -421,10 +426,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                     <span className="font-semibold text-slate-700">Fundamento:</span>
                                                                     <span className="text-muted-foreground">{cadastro.fundamento}</span>
                                                                 </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Status Débito:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.statusdebito}</span>
-                                                                </div>
+                                                                
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Valor:</span>
                                                                     <span className="text-muted-foreground">
@@ -439,10 +441,6 @@ export const ConsultaDebitos: React.FC = () => {
                                                                     </span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Prescrição:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.prescrito}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Ajuizada:</span>
                                                                     <span className="text-muted-foreground">{cadastro.flajuizada}</span>
                                                                 </div>
@@ -450,6 +448,11 @@ export const ConsultaDebitos: React.FC = () => {
                                                                     <span className="font-semibold text-slate-700">Data Ajuizamento:</span>
                                                                     <span className="text-muted-foreground">{cadastro.dtajuizamento}</span>
                                                                 </div>
+                                                                <div className="flex flex-col gap-1">
+                                                                    <span className="font-semibold text-slate-700">Prescrição:</span>
+                                                                    <span className="text-muted-foreground">{cadastro.prescrito}</span>
+                                                                </div>
+                                                                
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Observação:</span>
                                                                     <span className="text-muted-foreground">{cadastro.sit_protesto}</span>
@@ -490,6 +493,10 @@ export const ConsultaDebitos: React.FC = () => {
                                                             >
 
                                                                 <div className="flex flex-wrap gap-4">
+                                                                <div className="flex flex-col gap-1 min-w-[250px]">
+                                                                        <span className="font-semibold text-slate-700">Usuáro Situação:</span>
+                                                                        <span className="text-muted-foreground">{historico.cdusuinclusao}</span>
+                                                                    </div>
                                                                     <div className="flex flex-col gap-1 min-w-[200px]">
                                                                         <span className="font-semibold text-slate-700">Situação:</span>
                                                                         <span className="text-muted-foreground">{historico.situacao}</span>
@@ -501,14 +508,8 @@ export const ConsultaDebitos: React.FC = () => {
                                                                         </span>
 
                                                                     </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Usuáro Situação:</span>
-                                                                        <span className="text-muted-foreground">{historico.cdusuinclusao}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Sequencial:</span>
-                                                                        <span className="text-muted-foreground">{historico.num_seq}</span>
-                                                                    </div>
+                                                                    
+                                                                    
                                                                     <div className="flex flex-col gap-1 min-w-[200px]">
                                                                         <span className="font-semibold text-slate-700">Observação:</span>
                                                                         <span className="text-muted-foreground">{historico.observacao}</span>
