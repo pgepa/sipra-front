@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
-import { AiFillFilePdf } from 'react-icons/ai';
+import { GrDocumentExcel } from 'react-icons/gr';
 
 
 // Define your interfaces (não modificado, já está correto no original)
@@ -37,7 +37,7 @@ interface HistoricoCDA {
 }
 
 interface ParcelamentoCDA {
-    parcelamento: string;
+    nuparcelamento: string;
     dtparcelamento: string;
     nuparcelas: string;
     regraparcelamento: string;
@@ -74,7 +74,7 @@ export const ConsultaDebitos: React.FC = () => {
         }));
     };
 
-    {/* FUNÇÃO DE DOWNLOAD
+     {/* FUNÇÃO DE DOWNLOAD
         
         
         */}
@@ -94,7 +94,7 @@ export const ConsultaDebitos: React.FC = () => {
             params: {
                 cda: filters.cda || undefined,
                 documento: filters.documento || undefined,
-                download: 'pdf',
+                download: 'csv',
             },
             responseType: 'blob',
         })
@@ -102,7 +102,7 @@ export const ConsultaDebitos: React.FC = () => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `Consulta de Débitos_${filters.cda || filters.documento}.pdf`);
+                link.setAttribute('download', `Consulta de Débitos_${filters.cda || filters.documento}.csv`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -182,9 +182,9 @@ export const ConsultaDebitos: React.FC = () => {
     const handlePageChange = (newPage: number) => {
         setPage(newPage); // Atualiza a página
         setLoading(true);
-
+        
         const token = localStorage.getItem('token');
-
+        
         api.get('/consultacda', {
             headers: { Authorization: `Bearer ${token}` },
             params: {
@@ -332,30 +332,33 @@ export const ConsultaDebitos: React.FC = () => {
                             </PaginationContent>
                             <div className="ml-2 text-base mt-2 text-gray-600">
                                 <span className='flex gap-2'>
-                                    <p>Página {page} de {totalPages} ||</p>
+                                    <p>Página {page} de {totalPages} ||</p> 
                                     <p className='font-semibold text-indigo-600'> {totalCdas} CDA(s) encontrada(s)</p>
-
+                                    
                                 </span>
-
+                                
                             </div>
                         </Pagination>
                     </div>
 
 
                 )}
-
+                
 
                 {searched && data && (
                     <div>
-
-
+                        
+                        
                         <div className='flex'>
-                            <Button onClick={handleDownloadPdf} className="w-full sm:w-auto mt-8" variant="outline">
-                                <AiFillFilePdf className="h-4 w-4 mr-2 text-rose-700" />
-                                Download PDF
+                            <Button onClick={handleDownloadPdf} className="w-full sm:w-auto mt-8" variant="default">
+                            <GrDocumentExcel className="h-4 w-4 mr-2" />
+                                Baixar Planilha
                             </Button>
-                        </div>
 
+
+                        </div> 
+                        
+                        
 
 
                         {data.map(({ cda, data: cdaData, contribuinte }, index) => (
@@ -550,7 +553,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Nº Parcelamento:</span>
-                                                                    <span className="text-muted-foreground">{parcelamento.parcelamento}</span>
+                                                                    <span className="text-muted-foreground">{parcelamento.nuparcelamento}</span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Data do Parcelamento:</span>
@@ -559,9 +562,8 @@ export const ConsultaDebitos: React.FC = () => {
 
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Nº de Parcelas:</span>
-                                                                    <span className="text-muted-foreground">{parseInt(parcelamento.nuparcelas, 10)}</span>
+                                                                    <span className="text-muted-foreground">{parcelamento.nuparcelas}</span>
                                                                 </div>
-
 
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Regra de Parcelamento:</span>
@@ -577,11 +579,11 @@ export const ConsultaDebitos: React.FC = () => {
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Data Término Parcelamento:</span>
-
-                                                                    <span className="text-muted-foreground">
-                                                                        {new Date(parcelamento.dtterminopar).toLocaleDateString('pt-BR')}
-                                                                    </span>
-
+                                                                    <span className="text-muted-foreground">{parcelamento.dtterminopar}</span>
+                                                                </div>
+                                                                <div className="flex flex-col gap-1">
+                                                                    <span className="font-semibold text-slate-700">Sequencial:</span>
+                                                                    <span className="text-muted-foreground">{parcelamento.seqparc}</span>
                                                                 </div>
 
 
