@@ -208,7 +208,7 @@ export function Protesto() {
         setPage(1);
         fetchProtestos(1);
         setIsCNPJSelected(false);
-        setIsAjuizadasSelected(false);
+        setIsAjuizadasSelected(true);
     };
 
     const handleCheckboxChange = (type: 'sit_protesto' | 'uf' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
@@ -332,7 +332,7 @@ export function Protesto() {
 
     const handleDocumentTypeAjuizada = (value: string) => {
         setFilters({ ...filters, flajuizada: value });
-        setIsAjuizadasSelected(value === "S");
+        setIsAjuizadasSelected(value === "N");
     };
 
 
@@ -709,7 +709,7 @@ export function Protesto() {
                         <Label className='font-semibold text-sm text-gray-800'>Indício de Prescrição Originária:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={isAjuizadasSelected}>
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isAjuizadasSelected}>
                                     <span className='font-normal truncate'>{filters.prescrito.length > 0 ? filters.prescrito.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
