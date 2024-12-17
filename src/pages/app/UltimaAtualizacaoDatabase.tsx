@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@/lib/axios';
 import { Badge } from "@/components/ui/badge";
 import { Helmet } from 'react-helmet-async';
-import { Bot, Cog } from 'lucide-react'; // Importação dos ícones
+import { Bot, Cog, AlertTriangle } from 'lucide-react';
 
 interface UserData {
     tabela: string;
@@ -11,11 +11,38 @@ interface UserData {
 
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0'); // Paddar dia com zero
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Paddar mês com zero
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
 
-    return `${day}/${month}/${year}`; // Formatar data como dd/mm/aaaa
+    return `${day}/${month}/${year}`;
+};
+
+const isOutdated = (tabela: string, ultimaAtualizacao: string): boolean => {
+    const hoje = new Date();
+    const ultimaData = new Date(ultimaAtualizacao);
+
+    // Critérios de atualização
+    const limiteMeses = 6;
+    const limite30Dias = 30;
+    const limite10Dias = 10;
+
+    if (['jucepapj', 'jucepavinculo', 'adepara', 'cdsefa'].includes(tabela)) {
+        // Verifica se ultrapassou 6 meses para essas tabelas
+        const dataLimite = new Date(hoje);
+        dataLimite.setMonth(dataLimite.getMonth() - limiteMeses);
+        return ultimaData < dataLimite;
+    } else if (['rfbempcpfs', 'rfbnaturezas', 'rfbqualificacoes', 'rfbestabelecimentos', 'rfbempresas'].includes(tabela)) {
+        // Verifica se ultrapassou 30 dias para essas tabelas
+        const dataLimite = new Date(hoje);
+        dataLimite.setDate(dataLimite.getDate() - limite30Dias);
+        return ultimaData < dataLimite;
+    } else {
+        // Verifica se ultrapassou 10 dias para as demais tabelas
+        const dataLimite = new Date(hoje);
+        dataLimite.setDate(dataLimite.getDate() - limite10Dias);
+        return ultimaData < dataLimite;
+    }
 };
 
 export const UltimaAtualizacaoDatabase: React.FC = () => {
@@ -70,6 +97,7 @@ export const UltimaAtualizacaoDatabase: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                         {data.map((dados, index) => {
                             const status = tabelasManuais.includes(dados.tabela) ? "manual" : "automática";
+                            const outdated = isOutdated(dados.tabela, dados.ultima_atualizacao);
 
                             return (
                                 <div
@@ -87,12 +115,18 @@ export const UltimaAtualizacaoDatabase: React.FC = () => {
                                         </span>
                                     </div>
 
-                                    {/* Exibição do Status alinhado à direita com ícone */}
+                                    {/* Exibição do Status alinhado à direita com alerta e ícone */}
                                     <div className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                        {outdated && (
+                                            <div className="flex items-center gap-1 text-orange-600">
+                                                <AlertTriangle size={20} />
+                                                
+                                            </div>
+                                        )}
                                         {status === "manual" ? (
                                             <>
-                                                <Cog className="text-rose-600" size={20} /> 
-                                                <span className="text-rose-600">Manual</span>
+                                                <Cog className="text-slate-600" size={20} />
+                                                <span className="text-slate-600">Manual</span>
                                             </>
                                         ) : (
                                             <>
