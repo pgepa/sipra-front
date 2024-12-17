@@ -197,7 +197,7 @@ export function Sidebar() {
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/upload/ultimaatualizacao" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <History className="h-4 w-4" />
-                                Última Atualização
+                                Status Database
                             </Link>
                             <Link
                                 to="/upload/semas"
