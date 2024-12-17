@@ -26,6 +26,7 @@ interface DadosCDA {
     flajuizada: string;
     dtajuizamento: string;
     sit_protesto: string;
+    placa: string;
 }
 
 interface HistoricoCDA {
@@ -439,6 +440,10 @@ export const ConsultaDebitos: React.FC = () => {
                                                                     <span className="text-muted-foreground">
                                                                         {cadastro.dtatualizacaosaldo}
                                                                     </span>
+                                                                </div>
+                                                                <div className="flex flex-col gap-1">
+                                                                    <span className="font-semibold text-slate-700">Placa:</span>
+                                                                    <span className="text-muted-foreground">{cadastro.placa}</span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Ajuizada:</span>
