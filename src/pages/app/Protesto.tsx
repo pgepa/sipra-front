@@ -63,6 +63,7 @@ export function Protesto() {
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [isCNPJSelected, setIsCNPJSelected] = useState(false);
+    const [isAjuizadasSelected, setIsAjuizadasSelected] = useState(true);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [filters, setFilters] = useState({
         nudocumento: '',
@@ -207,6 +208,7 @@ export function Protesto() {
         setPage(1);
         fetchProtestos(1);
         setIsCNPJSelected(false);
+        setIsAjuizadasSelected(false);
     };
 
     const handleCheckboxChange = (type: 'sit_protesto' | 'uf' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
@@ -326,6 +328,11 @@ export function Protesto() {
     const handleDocumentTypeChange = (value: string) => {
         setFilters({ ...filters, tipodoc: value });
         setIsCNPJSelected(value === "CNPJ");
+    };
+
+    const handleDocumentTypeAjuizada = (value: string) => {
+        setFilters({ ...filters, flajuizada: value });
+        setIsAjuizadasSelected(value === "S");
     };
 
 
@@ -617,7 +624,7 @@ export function Protesto() {
 
                         <Label className='font-semibold text-sm text-gray-800'>Ajuizada:</Label>
 
-                        <Select value={filters.flajuizada} onValueChange={(value) => setFilters({ ...filters, flajuizada: value })}>
+                        <Select value={filters.flajuizada} onValueChange={handleDocumentTypeAjuizada}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
                             </SelectTrigger>
@@ -702,7 +709,7 @@ export function Protesto() {
                         <Label className='font-semibold text-sm text-gray-800'>Indício de Prescrição Originária:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={isAjuizadasSelected}>
                                     <span className='font-normal truncate'>{filters.prescrito.length > 0 ? filters.prescrito.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
