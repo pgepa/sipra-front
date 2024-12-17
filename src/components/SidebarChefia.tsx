@@ -1,4 +1,4 @@
-import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, ChartScatter, ChartArea, HandCoins } from 'lucide-react';
+import { FileSearch, House, DatabaseBackup, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, ChartScatter, ChartArea, HandCoins } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -177,6 +177,14 @@ export function SidebarChefia() {
                     >
                         <HandCoins className="h-6 w-6" />
                         {open && <span className='font-medium'>Consulta de Débitos</span>}
+                    </Link>
+
+                    <Link
+                        to="/chefia/statusdatabase"
+                        className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/statusdatabase" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                    >
+                        <DatabaseBackup  className="h-6 w-6" />
+                        {open && <span className='font-medium'>Status Database</span>}
                     </Link>
 
 
