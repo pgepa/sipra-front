@@ -670,16 +670,17 @@ export function Ajuizamento() {
                                             <TableHead className='w-[64px]'></TableHead>
 
                                             <TableHead>CDA</TableHead>
+                                            <TableHead>Documento</TableHead>
                                             <TableHead onClick={toggleSortOrder} className="cursor-pointer">
                                                 Valor CDA Atualizada {sortOrder === 'asc' ? '↑' : '↓'}
                                             </TableHead>
                                             <TableHead>Status (SAJ)</TableHead>
                                             <TableHead>Último Histórico</TableHead>
                                             <TableHead>Data Último Histórico</TableHead>
-                                            <TableHead >Origem da Dívida</TableHead>
+                                            <TableHead className="w-64">Origem da Dívida</TableHead>
                                             <TableHead>Data Inscrição</TableHead>
                                             <TableHead>Data Referência</TableHead>
-                                            <TableHead>Fundamento</TableHead>
+                                            
                                         </TableRow>
                                     </TableHeader>
 
@@ -847,6 +848,11 @@ export function Ajuizamento() {
                                                                             </TableRow>
 
                                                                             <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Fundamento</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.fundamento}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
                                                                                 <TableCell className='text-muted-foreground'>Quant. Registros DETRAN</TableCell>
                                                                                 <TableCell className='flex justify-end'>{protesto.qtdveiculos}</TableCell>
                                                                             </TableRow>
@@ -871,6 +877,8 @@ export function Ajuizamento() {
 
 
                                                     <TableCell className='font-mono font-medium'>{protesto.cda}</TableCell>
+
+                                                    <TableCell>{protesto.docformatado}</TableCell>
 
                                                     <TableCell className='font-medium'>
                                                         {protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
@@ -939,7 +947,7 @@ export function Ajuizamento() {
 
 
 
-                                                    <TableCell>{protesto.fundamento}</TableCell>
+                                                    
                                                 </TableRow>
                                             ))
                                         ) : (
