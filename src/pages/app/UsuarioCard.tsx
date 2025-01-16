@@ -53,7 +53,7 @@ export const UserCard = () => {
             case "Administrador":
                 return "Administrador";
             case "Chefia":
-                return "Coordernação";
+                return "Coordenação";
             case "Procurador":
                 return "Procurador";
             case "Assessor":
