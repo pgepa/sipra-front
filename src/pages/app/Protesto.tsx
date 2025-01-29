@@ -790,7 +790,7 @@ export function Protesto() {
             </div>
 
             {loading && (
-                <div className="flex justify-center items-center h-screen">
+                <div className="flex justify-center items-start h-screen">
                     <GridLoader size={16} color="#6b25c7" />
                 </div>
             )}
