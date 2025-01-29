@@ -458,7 +458,7 @@ export function Protesto() {
 
                     <div className='space-y-2'>
 
-                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Documento:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Documento:</Label>
                         <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
@@ -570,7 +570,7 @@ export function Protesto() {
 
                     </div>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Tributo:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Tributo:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -655,7 +655,7 @@ export function Protesto() {
 
                     
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Indício de Prescrição Originária:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Prescrição Originária:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isAjuizadasSelected}>
