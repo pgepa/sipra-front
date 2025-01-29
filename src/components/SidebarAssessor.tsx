@@ -1,15 +1,13 @@
-import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, CircleDollarSign, PcCase, UserRoundSearch, HandCoins } from 'lucide-react';
+import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, CircleDollarSign, PcCase, UserRoundSearch, HandCoins, ScanEye, Brain } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export function SidebarAssessor() {
     const location = useLocation();
     const [open, setOpen] = useState(true);
-
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
-
-
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
+    const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
 
     return (
         <aside className={`bg-gray-200 p-3 mt-16 relative transition-all duration-300 ${open ? 'w-[17.5rem]' : 'w-20'}h-screen fixed top-0 left-0 z-40`}>
@@ -31,7 +29,7 @@ export function SidebarAssessor() {
                 <div className="relative">
                     <button
                         onClick={() => setReguaCobrancaOpen(!reguaCobrancaOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/chefia/reguacobranca") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/assessor/reguacobranca") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
                         <Ruler className="h-6 w-6" />
                         {open && <span className='font-medium'>Régua de Cobrança</span>}
@@ -114,6 +112,34 @@ export function SidebarAssessor() {
                         <HandCoins className="h-6 w-6" />
                         {open && <span className='font-medium'>Consulta de Débitos</span>}
                     </Link>
+
+                    <div className="relative">
+                        <button
+                            onClick={() => setRegimeEspecialOpen(!RegimeEspecialOpen)}
+                            className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/assessor/rec") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                        >
+                            <Brain className="h-6 w-6" />
+                            {open && <span className='font-medium'>Regime Especial</span>}
+                            {open && <ChevronDown className={`ml-auto transition-transform ${RegimeEspecialOpen ? "rotate-180" : ""}`} />}
+                        </button>
+
+
+                        {RegimeEspecialOpen && open && (
+                            <div className="ml-6 space-y-1">
+                                <Link
+                                    to="/assessor/rec/acompanhamentoespecial"
+                                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/rec/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                >
+                                    <ScanEye className="h-5 w-5" />
+                                    Acompanhamento EF
+                                </Link>
+
+
+                            </div>
+
+
+                        )}
+                    </div>
                 </div>
 
 

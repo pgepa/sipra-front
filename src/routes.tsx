@@ -102,7 +102,7 @@ export const Router = createHashRouter([
             { path: 'chefia/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Chefia']}><PagamentosSiat /></PrivateRoute> },
             { path: 'chefia/consultadebitos', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDebitos /></PrivateRoute> },
             { path: 'chefia/statusdatabase', element: <PrivateRoute allowedProfiles={['Chefia']}><UltimaAtualizacaoDatabase /></PrivateRoute> },
-            { path: '/chefia/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoEspecial /></PrivateRoute> },
+            { path: 'chefia/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoEspecial /></PrivateRoute> },
             
             
             
@@ -144,6 +144,7 @@ export const Router = createHashRouter([
             { path: 'assessor/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: 'assessor/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaFisica /></PrivateRoute> },        
             { path: 'assessor/consultadebitos', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaDebitos /></PrivateRoute> },        
+            { path: 'assessor/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Assessor']}><AcompanhamentoEspecial /></PrivateRoute> },        
             
             
         ],
