@@ -1,4 +1,25 @@
-import { FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown, DatabaseBackup, Ruler, Gavel, Users, Scale,ChartArea, ChartScatter, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, Handshake, HandCoins, Fingerprint, ScanEye } from 'lucide-react';
+import { 
+    FileSearch, 
+    House, 
+    ChevronFirst, 
+    History, 
+    CloudUpload, 
+    ChevronDown, 
+    DatabaseBackup, 
+    Ruler, 
+    Gavel, 
+    Users, 
+    Scale,
+    ChartArea, 
+    ChartScatter, 
+    ChartNoAxesCombined, 
+    CircleDollarSign, 
+    PcCase, 
+    UserRoundSearch, 
+    ChartPie, 
+    Handshake, 
+    HandCoins, 
+} from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -7,8 +28,13 @@ export function Sidebar() {
     const [open, setOpen] = useState(true);
     const [uploadOpen, setUploadOpen] = useState(false);
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
-    const [dashboardOpen, setDashboardOpen] = useState(false);    
-    const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);    
+    const [dashboardOpen, setDashboardOpen] = useState(false); 
+    
+    {/**
+        const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
+        
+        */}
+        
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
@@ -170,13 +196,14 @@ export function Sidebar() {
 
                     )}
                 </div>
-                <div className="relative">
+                {/**
+                 *  <div className="relative">
                     <button
                         onClick={() => setRegimeEspecialOpen(!RegimeEspecialOpen)}
                         className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/regimeespecial") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
                         <Fingerprint className="h-6 w-6" />
-                        {open && <span className='font-medium'>Regime Especial de Cobrança</span>}
+                        {open && <span className='font-medium'>Regime Especial</span>}
                         {open && <ChevronDown className={`ml-auto transition-transform ${RegimeEspecialOpen ? "rotate-180" : ""}`} />}
                     </button>
 
@@ -201,6 +228,9 @@ export function Sidebar() {
 
                     )}
                 </div>
+                 * 
+                 */}
+               
 
                 <Link
                     to="/consultadebitos"
