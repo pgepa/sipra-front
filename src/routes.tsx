@@ -34,6 +34,7 @@ import { UploadSefa } from '@/pages/app/UploadSefa';
 import { PagamentosSiat } from '@/pages/app/DashboardPagamentosSiat';
 import { ConsultaDebitos } from '@/pages/app/ConsultaDebitos';
 import { UploadCentrot } from '@/pages/app/UploadCenprot';
+import { AcompanhamentoEspecial } from '@/pages/app/AcompanhamentoEspecial';
 
 
 
@@ -78,6 +79,7 @@ export const Router = createHashRouter([
             { path: '/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoProtesto /></PrivateRoute> },
             { path: '/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Administrador']}><PagamentosSiat /></PrivateRoute> },
             { path: '/consultadebitos', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaDebitos /></PrivateRoute> },
+            { path: '/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoEspecial /></PrivateRoute> },
             
         ],
     },

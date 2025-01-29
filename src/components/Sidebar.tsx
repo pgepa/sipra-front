@@ -18,7 +18,9 @@ import {
     UserRoundSearch, 
     ChartPie, 
     Handshake, 
-    HandCoins, 
+    HandCoins,
+    ScanEye,
+    Brain, 
 } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -28,12 +30,10 @@ export function Sidebar() {
     const [open, setOpen] = useState(true);
     const [uploadOpen, setUploadOpen] = useState(false);
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
-    const [dashboardOpen, setDashboardOpen] = useState(false); 
-    
-    {/**
-        const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
+    const [dashboardOpen, setDashboardOpen] = useState(false);    
+    const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
         
-        */}
+        
         
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
@@ -196,13 +196,13 @@ export function Sidebar() {
 
                     )}
                 </div>
-                {/**
-                 *  <div className="relative">
+                
+                 <div className="relative">
                     <button
                         onClick={() => setRegimeEspecialOpen(!RegimeEspecialOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/regimeespecial") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/rec") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
-                        <Fingerprint className="h-6 w-6" />
+                        <Brain className="h-6 w-6" />
                         {open && <span className='font-medium'>Regime Especial</span>}
                         {open && <ChevronDown className={`ml-auto transition-transform ${RegimeEspecialOpen ? "rotate-180" : ""}`} />}
                     </button>
@@ -211,8 +211,8 @@ export function Sidebar() {
                     {RegimeEspecialOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
-                                to="/dashboard/acompanhamentoprotesto"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/rec/acompanhamentoespecial"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/rec/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ScanEye className="h-5 w-5" />
                                 Acompanhamento EF
@@ -228,8 +228,6 @@ export function Sidebar() {
 
                     )}
                 </div>
-                 * 
-                 */}
                
 
                 <Link
