@@ -346,13 +346,13 @@ export function Protesto() {
 
 
                 <form
-                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-2'
+                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-2'
                     onSubmit={(e) => {
                         e.preventDefault();
                         fetchProtestos(1);
                     }}
                 >
-                    <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-6'>Filtros:</span>
+                    <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
                         <div className="relative">
@@ -828,11 +828,11 @@ export function Protesto() {
 
                     
 
-                    <CardFooter className="flex flex-row justify-start gap-2">
-                        <div className="relative flex items-center justify-center gap-2">
+                    <CardFooter className="flex flex-wrap justify-start gap-2 md:gap-4 sm:flex-col md:flex-row">
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <Button variant="default" size="xs" className='flex gap-2'>
+                                    <Button variant="default" size="xs" className='flex gap-2 w-full sm:w-auto'>
                                         <Search className='h-4 w-4' />
                                         Detalhes
                                     </Button>
@@ -1075,10 +1075,10 @@ export function Protesto() {
 
                         </div>
 
-                        <div className="relative flex flex-row items-center justify-center gap-2">
+                        <div className="relative flex flex-row items-center justify-center gap-2 w-full sm:w-auto">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20'>
+                                    <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 w-full sm:w-auto'>
 
                                         <SquareArrowOutUpRight className="h-4 w-4" />
 
@@ -1146,7 +1146,7 @@ export function Protesto() {
                         </div>
 
                         <div>
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700'>
+                            <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700 w-full sm:w-auto'>
 
                                 {protesto.status_saj}
 
@@ -1155,7 +1155,7 @@ export function Protesto() {
 
                         </div>
                         <div>
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800'>
+                            <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 w-full sm:w-auto'>
 
                                 {protesto.tipotributo}
 
@@ -1164,7 +1164,7 @@ export function Protesto() {
 
                         </div>
                         <div>
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800'>
+                            <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 w-full sm:w-auto'>
                                 Referência: {protesto.dtreferencia
                                 ? (() => {
                                     // Aqui, usamos o construtor Date para analisar a data diretamente
