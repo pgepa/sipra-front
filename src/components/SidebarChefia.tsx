@@ -1,16 +1,14 @@
-import { FileSearch, House, DatabaseBackup, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, ChartScatter, ChartArea, HandCoins } from 'lucide-react';
+import { FileSearch, House, DatabaseBackup, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, ChartNoAxesCombined, CircleDollarSign, PcCase, UserRoundSearch, ChartPie, ChartScatter, ChartArea, HandCoins, Brain, ScanEye } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export function SidebarChefia() {
     const location = useLocation();
     const [open, setOpen] = useState(true);
-
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
-
     const [dashboardOpen, setDashboardOpen] = useState(false);
-
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
+    const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
 
     return (
         <aside className={`bg-gray-200 p-3 mt-16 relative transition-all duration-300 ${open ? 'w-[17.5rem]' : 'w-20'}h-screen fixed top-0 left-0 z-40`}>
@@ -171,6 +169,7 @@ export function SidebarChefia() {
 
                     )}
 
+                   
                     <Link
                         to="/chefia/consultadebitos"
                         className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}
@@ -179,11 +178,40 @@ export function SidebarChefia() {
                         {open && <span className='font-medium'>Consulta de Débitos</span>}
                     </Link>
 
+                    <div className="relative">
+                        <button
+                            onClick={() => setRegimeEspecialOpen(!RegimeEspecialOpen)}
+                            className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/chefia/rec") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                        >
+                            <Brain className="h-6 w-6" />
+                            {open && <span className='font-medium'>Regime Especial</span>}
+                            {open && <ChevronDown className={`ml-auto transition-transform ${RegimeEspecialOpen ? "rotate-180" : ""}`} />}
+                        </button>
+
+
+                        {RegimeEspecialOpen && open && (
+                            <div className="ml-6 space-y-1">
+                                <Link
+                                    to="/chefia/rec/acompanhamentoespecial"
+                                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/rec/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                >
+                                    <ScanEye className="h-5 w-5" />
+                                    Acompanhamento EF
+                                </Link>
+
+
+                            </div>
+
+
+                        )}
+                    </div>
+
+
                     <Link
                         to="/chefia/statusdatabase"
                         className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/statusdatabase" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
-                        <DatabaseBackup  className="h-6 w-6" />
+                        <DatabaseBackup className="h-6 w-6" />
                         {open && <span className='font-medium'>Status Database</span>}
                     </Link>
 

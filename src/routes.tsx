@@ -102,6 +102,7 @@ export const Router = createHashRouter([
             { path: 'chefia/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Chefia']}><PagamentosSiat /></PrivateRoute> },
             { path: 'chefia/consultadebitos', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDebitos /></PrivateRoute> },
             { path: 'chefia/statusdatabase', element: <PrivateRoute allowedProfiles={['Chefia']}><UltimaAtualizacaoDatabase /></PrivateRoute> },
+            { path: '/chefia/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoEspecial /></PrivateRoute> },
             
             
             
