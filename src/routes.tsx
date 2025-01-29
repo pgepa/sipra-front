@@ -125,6 +125,7 @@ export const Router = createHashRouter([
             { path: 'procurador/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoCda /></PrivateRoute> },
             { path: 'procurador/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoProtesto /></PrivateRoute> },
             { path: 'procurador/consultadebitos', element: <PrivateRoute allowedProfiles={['Procurador']}><ConsultaDebitos /></PrivateRoute> },
+            { path: 'procurador/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoEspecial /></PrivateRoute> },
             
             
             
