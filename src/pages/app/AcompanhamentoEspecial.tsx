@@ -222,11 +222,11 @@ export function AcompanhamentoEspecial() {
 
 
 
-                    <CardFooter className="flex flex-row justify-start gap-2">
-                        <div className="relative flex items-center justify-center gap-2">
+                    <CardFooter className="flex flex-wrap justify-start gap-2 md:gap-4 sm:flex-col md:flex-row">
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <Button variant="default" size="xs" className='flex gap-2'>
+                                    <Button variant="default" size="xs"  className='flex gap-2 w-full sm:w-auto'>
                                         <Search className='h-4 w-4' />
                                         Detalhes
                                     </Button>
@@ -278,8 +278,8 @@ export function AcompanhamentoEspecial() {
 
                         </div>
 
-                        <div>
-                            <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20'>
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 cursor-default w-full sm:w-auto'>
 
                                 Valor: {processo.somavlcdas !== undefined && processo.somavlcdas !== null
                                     ? Number(processo.somavlcdas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -289,8 +289,8 @@ export function AcompanhamentoEspecial() {
 
 
 
-                        <div>
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700'>
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700 cursor-default w-full sm:w-auto'>
 
                                 {processo.assunto}
 
@@ -298,8 +298,8 @@ export function AcompanhamentoEspecial() {
 
 
                         </div>
-                        <div>
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800'>
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 cursor-default w-full sm:w-auto'>
 
                                 {processo.tramite}
 
