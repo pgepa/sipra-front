@@ -1145,7 +1145,7 @@ export function Protesto() {
 
                         </div>
 
-                        <div>
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700 w-full sm:w-auto cursor-default'>
 
                                 {protesto.status_saj}
@@ -1154,7 +1154,7 @@ export function Protesto() {
 
 
                         </div>
-                        <div>
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 w-full sm:w-auto cursor-default'>
 
                                 {protesto.tipotributo}
@@ -1163,7 +1163,7 @@ export function Protesto() {
 
 
                         </div>
-                        <div>
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 w-full sm:w-auto cursor-default'>
                                 Referência: {protesto.dtreferencia
                                 ? (() => {
