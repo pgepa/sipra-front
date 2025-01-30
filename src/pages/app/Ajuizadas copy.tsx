@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, SearchX, SquareArrowOutUpRight, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { GrDocumentExcel } from "react-icons/gr";
 import { format, parse } from 'date-fns';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from "@/components/ui/checkbox"
+
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from 'lucide-react';
 
@@ -93,7 +93,12 @@ export function Ajuizadas() {
 
     const token = localStorage.getItem('token');
 
-    
+    const toggleSortOrder = () => {
+        const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+        setSortOrder(newSortOrder);
+        setPage(1);
+    };
+
     const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
 
         try {
@@ -294,13 +299,13 @@ export function Ajuizadas() {
 
 
                 <form
-                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-2'
+                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-2'
                     onSubmit={(e) => {
                         e.preventDefault();
                         fetchProtestos(1);
                     }}
                 >
-                    <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
+                    <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-6'>Filtros:</span>
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
                         <div className="relative">
@@ -411,7 +416,7 @@ export function Ajuizadas() {
 
                     <div className='space-y-2'>
 
-                        <Label className='font-semibold text-sm text-gray-800'>Documento:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Documento:</Label>
                         <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
@@ -517,7 +522,7 @@ export function Ajuizadas() {
 
                     </div>
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Tributo:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Tipo de Tributo:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -584,7 +589,7 @@ export function Ajuizadas() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Prescrição Originária:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Indício de Prescrição Originária:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
@@ -651,442 +656,327 @@ export function Ajuizadas() {
                     </Pagination>
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 space-y-2 sm:space-y-0">
-                    <p className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-blue-300 text-center sm:text-left">
-                        {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
-                        <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
-                        <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')} >
-                            <SelectTrigger className="w-full sm:w-auto">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="desc">Maior Valor</SelectItem>
-                                <SelectItem value="asc">Menor Valor</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-
             </div>
 
-            {loading && (
-                <div className="flex justify-center items-start h-screen">
-                    <GridLoader size={16} color="#6b25c7" />
-                </div>
-            )}
+            <div className='border rounded-md overflow-x-auto mt-4 max-w-full'>
+                {loading ? (
+                    <div className="flex justify-center h-screen mt-10">
+                        <GridLoader size={16} color="#6b25c7" />
+                    </div>
+                ) : (
+                    <>
+                        {error ? (
+                            <div className='text-red-500 text-center'>{error}</div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <Table className="min-w-full">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className='w-[64px]'></TableHead>
 
-            {!loading && (!protestos || protestos.length === 0) && (
-                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground'>
-                    <p>Não foi encontrado nenhuma CDA para o(s) filtro(s) selecionado(s).</p>
-                    <p>Tente novamente com outros parâmetros.</p>
-                    <p>{error}</p>
-                    <SearchX className="h-12 w-12 mt-4" />
-                </div>
-            )}
+                                            <TableHead>CDA</TableHead>
+                                            <TableHead onClick={toggleSortOrder} className="cursor-pointer">
+                                                Valor CDA Atualizada {sortOrder === 'asc' ? '↑' : '↓'}
+                                            </TableHead>
+                                            <TableHead>Status (SAJ)</TableHead>
+                                            <TableHead>Último Histórico</TableHead>
+                                            <TableHead>Data Último Histórico</TableHead>
+                                            <TableHead >Origem da Dívida</TableHead>
+                                            <TableHead>Data Inscrição</TableHead>
+                                            <TableHead>Data Referência</TableHead>
+                                            <TableHead>Fundamento</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
 
-            {protestos.map((protesto) => (
-                <Card key={protesto.cda} className='shadow-md shadow-slate-400/20 mt-4'>
-                    <CardHeader className="flex-items-center flex-row justify-between space-y-0 pb-4">
-                        <div className="space-y-1">
-                            <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
-                                {protesto.contribuinte} - {protesto.docformatado}
-                            </CardTitle>
-                            <CardDescription>{protesto.cda}</CardDescription>
+                                    <TableBody>
+                                        {protestos.length > 0 ? (
+                                            protestos.map((protesto) => (
+                                                <TableRow key={protesto.cda}>
+                                                    <TableCell>
+                                                        <Dialog>
+                                                            <DialogTrigger asChild>
+                                                                <Button variant="default" size="xs">
+                                                                    <Search className='h-3 w-3' />
+                                                                </Button>
+                                                            </DialogTrigger>
+
+                                                            <DialogContent className="max-h-[90vh] overflow-y-auto">
+                                                                <DialogHeader>
+                                                                    <DialogTitle className='text-indigo-600 text-center text-xl'>{protesto.contribuinte}</DialogTitle>
+                                                                    <DialogDescription>Detalhes do Contribuinte</DialogDescription>
+                                                                </DialogHeader>
+
+                                                                <div className='space-y-6'>
+                                                                    <Table>
+                                                                        <TableBody>
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Documento</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.docformatado}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Número do Processo</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.numjudicial}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Tipo de Documento</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.tipodoc}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Natureza Jurídica</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.natjuridica}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Porte da Empresa</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.porte}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Situação Cadastral</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.situacaocadastral}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Data Situação Cadastral</TableCell>
+                                                                                <TableCell className='flex justify-end'>
+                                                                                    {protesto.dtsituacaocadastral
+                                                                                        ? (() => {
+                                                                                            const data = parse(protesto.dtsituacaocadastral, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
+
+                                                                                            if (!isNaN(data.getTime())) {
+                                                                                                return format(data, 'dd/MM/yyyy');
+                                                                                            } else {
+                                                                                                return 'Data inválida';
+                                                                                            }
+                                                                                        })()
+                                                                                        : '-'}
+                                                                                </TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Data Início de Atividade</TableCell>
+                                                                                <TableCell className='flex justify-end'>
+                                                                                    {protesto.dtinicioatividade
+                                                                                        ? (() => {
+                                                                                            const data = parse(protesto.dtinicioatividade, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
+
+                                                                                            if (!isNaN(data.getTime())) {
+                                                                                                return format(data, 'dd/MM/yyyy');
+                                                                                            } else {
+                                                                                                return 'Data inválida';
+                                                                                            }
+                                                                                        })()
+                                                                                        : '-'}
+                                                                                </TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Capital Social</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.capitalsocial !== undefined && protesto.capitalsocial !== null
+                                                                                    ? Number(protesto.capitalsocial).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Descrição</TableCell>
+                                                                                <TableCell className='flex text-justify'>{protesto.descricao}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Tipo de Tributo</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.tipotributo}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Valor CDA Original</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
+                                                                                    ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Multa Atualizada</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.vlmultaatualizada !== undefined && protesto.vlmultaatualizada !== null
+                                                                                    ? Number(protesto.vlmultaatualizada).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Juros Atualizados</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
+                                                                                    ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Imposto Atualizado</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
+                                                                                    ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                                                    : 'R$ 0,00'}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Data Status SAJ</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.dt_status_saj
+                                                                                    ? (() => {
+
+                                                                                        const data = new Date(protesto.dt_status_saj.replace(' ', 'T'));
+                                                                                        console.log('Data analisada:', data);
 
 
-                        </div>
-                    </CardHeader>
-                    <CardContent className="space-y-1">
-                        <span>
+                                                                                        if (!isNaN(data.getTime())) {
+                                                                                            return format(data, 'dd/MM/yyyy');
+                                                                                        } else {
+                                                                                            return 'Data inválida';
+                                                                                        }
+                                                                                    })()
+                                                                                    : '-'}</TableCell>
+                                                                            </TableRow>
 
-                            <p className="leading-7 [&:not(:first-child)]:mt-6">Origem da dívida: {protesto.origemdivida}</p>
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Ajuizada</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.flajuizada}</TableCell>
+                                                                            </TableRow>
 
-                        </span>
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Situação Protesto</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.sit_protesto}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Parcelamento</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.parcelamento}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Prescrito</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.prescrito}</TableCell>
+                                                                            </TableRow>
 
 
-                    </CardContent>
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Data Ajuizamento</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.dtajuizamento}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Quant. Registros DETRAN</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.qtdveiculos}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Quant. Registros SEMAS</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.qtdsemas}</TableCell>
+                                                                            </TableRow>
+
+                                                                            <TableRow>
+                                                                                <TableCell className='text-muted-foreground'>Quant. Registros ADEPARA</TableCell>
+                                                                                <TableCell className='flex justify-end'>{protesto.qtdadepara}</TableCell>
+                                                                            </TableRow>
 
 
+                                                                        </TableBody>
+                                                                    </Table>
+                                                                </div>
 
-                    <CardFooter className="flex flex-wrap justify-start gap-2 md:gap-4 sm:flex-col md:flex-row">
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button variant="default" size="xs" className='flex gap-2 w-full sm:w-auto'>
-                                        <Search className='h-4 w-4' />
-                                        Detalhes
-                                    </Button>
-
-                                </DialogTrigger>
-
-
-
-                                <DialogContent className="max-h-[90vh] overflow-y-auto">
-                                    <DialogHeader>
-                                        <DialogTitle className='text-indigo-600 text-center text-xl'>{protesto.contribuinte}</DialogTitle>
-                                        <DialogDescription>Detalhes do Contribuinte</DialogDescription>
-                                    </DialogHeader>
-
-                                    <div className='space-y-6'>
-                                        <Table>
-                                            <TableBody>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Nº Documento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.docformatado}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Tipo de Documento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.tipodoc}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Número do Processo</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.numjudicial}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Natureza Jurídica</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.natjuridica}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Porte da Empresa</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.porte}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Situação Cadastral</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.situacaocadastral}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Situação Cadastral</TableCell>
-                                                    <TableCell className='flex justify-end'>
-                                                        {protesto.dtsituacaocadastral
-                                                            ? (() => {
-                                                                const data = parse(protesto.dtsituacaocadastral, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
-
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy');
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
+                                                            </DialogContent>
+                                                        </Dialog>
                                                     </TableCell>
-                                                </TableRow>
 
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Início de Atividade</TableCell>
-                                                    <TableCell className='flex justify-end'>
-                                                        {protesto.dtinicioatividade
-                                                            ? (() => {
-                                                                const data = parse(protesto.dtinicioatividade, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
 
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy');
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
+                                                    <TableCell className='font-mono font-medium'>{protesto.cda}</TableCell>
+
+                                                    <TableCell className='font-medium'>
+                                                        {protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
+                                                            ? Number(protesto.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                            : 'R$ 0,00'}
                                                     </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data de Inscrição</TableCell>
-                                                    <TableCell className='flex justify-end'>
-                                                        {protesto.dtinscricao
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dtinscricao.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
 
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data de Referência</TableCell>
-                                                    <TableCell className='flex justify-end'>
+                                                    <TableCell>{protesto.status_saj}</TableCell>
 
-                                                        {protesto.dtreferencia
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dtreferencia.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
+                                                    <TableCell>{protesto.ulthistorico}</TableCell>
 
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-
-                                                    </TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Capital Social</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.capitalsocial !== undefined && protesto.capitalsocial !== null
-                                                        ? Number(protesto.capitalsocial).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Descrição</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.descricao}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Último Histórico</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.ulthistorico}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Último Histórico</TableCell>
-                                                    <TableCell className='flex justify-end'>
+                                                    <TableCell>
                                                         {protesto.dt_ulthist
                                                             ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dt_ulthist.replace(' ', 'T')); // Converte para formato ISO
+
+                                                                const data = new Date(protesto.dt_ulthist.replace(' ', 'T'));
                                                                 console.log('Data analisada:', data);
 
-                                                                // Verifica se a data é válida
+
                                                                 if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
+                                                                    return format(data, 'dd/MM/yyyy');
                                                                 } else {
                                                                     return 'Data inválida';
                                                                 }
                                                             })()
                                                             : '-'}
                                                     </TableCell>
+
+                                                    <TableCell>{protesto.origemdivida}</TableCell>
+
+                                                    <TableCell>
+                                                        {protesto.dtinscricao
+                                                            ? (() => {
+
+                                                                const data = new Date(protesto.dtinscricao.replace(' ', 'T'));
+                                                                console.log('Data analisada:', data);
+
+
+                                                                if (!isNaN(data.getTime())) {
+                                                                    return format(data, 'dd/MM/yyyy');
+                                                                } else {
+                                                                    return 'Data inválida';
+                                                                }
+                                                            })()
+                                                            : '-'}
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                        {protesto.dtreferencia
+                                                            ? (() => {
+
+                                                                const data = new Date(protesto.dtreferencia.replace(' ', 'T'));
+                                                                console.log('Data analisada:', data);
+
+
+                                                                if (!isNaN(data.getTime())) {
+                                                                    return format(data, 'dd/MM/yyyy');
+                                                                } else {
+                                                                    return 'Data inválida';
+                                                                }
+                                                            })()
+                                                            : '-'}
+                                                    </TableCell>
+
+
+
+
+
+                                                    <TableCell>{protesto.fundamento}</TableCell>
                                                 </TableRow>
+                                            ))
+                                        ) : (
+                                            <TableRow>
+                                                <TableCell colSpan={32} className='text-center font-semibold text-muted-foreground text-lg'>
+                                                    <p>Não foi encontrado nenhum registro para o(s) filtro(s) selecionado(s).</p>
+                                                    <p>Tente novamente como outros parâmetros.</p>
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
 
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Tipo de Tributo</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.tipotributo}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Valor CDA Original</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
-                                                        ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Multa Atualizada</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlmultaatualizada !== undefined && protesto.vlmultaatualizada !== null
-                                                        ? Number(protesto.vlmultaatualizada).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Juros Atualizados</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
-                                                        ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Imposto Atualizado</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
-                                                        ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Status SAJ</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.dt_status_saj
-                                                        ? (() => {
-
-                                                            const data = new Date(protesto.dt_status_saj.replace(' ', 'T'));
-                                                            console.log('Data analisada:', data);
+                            </div>
+                        )}
 
 
-                                                            if (!isNaN(data.getTime())) {
-                                                                return format(data, 'dd/MM/yyyy');
-                                                            } else {
-                                                                return 'Data inválida';
-                                                            }
-                                                        })()
-                                                        : '-'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Ajuizada</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.flajuizada}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Situação Protesto</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.sit_protesto}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Parcelamento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.parcelamento}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Fundamento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.fundamento}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Prescrito</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.prescrito}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Quant. Registros DETRAN</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.qtdveiculos}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Quant. Registros SEMAS</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.qtdsemas}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Quant. Registros ADEPARA</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.qtdadepara}</TableCell>
-                                                </TableRow>
-
-                                            </TableBody>
-                                        </Table>
-                                    </div>
-
-                                </DialogContent>
-                            </Dialog>
-
-
-
-                        </div>
-
-                        <div className="relative flex flex-row items-center justify-center gap-2 w-full sm:w-auto">
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 w-full sm:w-auto'>
-
-                                        <SquareArrowOutUpRight className="h-4 w-4" />
-
-                                        Valor CDA: {protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
-                                            ? Number(protesto.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                            : 'R$ 0,00'}
-                                    </Button>
-
-                                </DialogTrigger>
-
-
-
-                                <DialogContent className="max-h-[90vh] overflow-y-auto">
-                                    <DialogHeader>
-                                        <DialogTitle className='text-indigo-600 text-center text-xl'> Valor da CDA - {protesto.cda}</DialogTitle>
-
-                                    </DialogHeader>
-
-                                    <div className='space-y-6'>
-                                        <Table>
-                                            <TableBody>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Multa Atualizada</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlmultaatualizada !== undefined && protesto.vlmultaatualizada !== null
-                                                        ? Number(protesto.vlmultaatualizada).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Juros Atualizados</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
-                                                        ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Imposto Atualizado</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
-                                                        ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Valor da CDA atualizado</TableCell>
-                                                    <TableCell className='flex justify-end text-indigo-700 font-semibold'>{protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
-                                                        ? Number(protesto.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-
-
-
-
-
-                                            </TableBody>
-                                        </Table>
-                                    </div>
-
-                                </DialogContent>
-                            </Dialog>
-
-
-
-                        </div>
-
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700 w-full sm:w-auto cursor-default'>
-
-                                {protesto.status_saj}
-
-                            </Button>
-
-
-                        </div>
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 w-full sm:w-auto cursor-default'>
-
-                                {protesto.tipotributo}
-
-                            </Button>
-
-
-                        </div>
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 w-full sm:w-auto cursor-default'>
-                                Referência: {protesto.dtreferencia
-                                    ? (() => {
-                                        // Aqui, usamos o construtor Date para analisar a data diretamente
-                                        const data = new Date(protesto.dtreferencia.replace(' ', 'T')); // Converte para formato ISO
-                                        console.log('Data analisada:', data);
-
-                                        // Verifica se a data é válida
-                                        if (!isNaN(data.getTime())) {
-                                            return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                        } else {
-                                            return 'Data inválida';
-                                        }
-                                    })()
-                                    : '-'}
-
-                            </Button>
-
-
-                        </div>
-
-
-                    </CardFooter>
-                </Card>
-            ))}
+                    </>
+                )}
+            </div>
         </>
     );
 }
