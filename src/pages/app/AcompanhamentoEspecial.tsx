@@ -287,6 +287,14 @@ export function AcompanhamentoEspecial() {
                             </Button>
                         </div>
 
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 cursor-default w-full sm:w-auto'>
+
+                                CDA: {processo.qtdcdas}
+
+                            </Button>
+
+                        </div>
 
 
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
@@ -296,7 +304,6 @@ export function AcompanhamentoEspecial() {
 
                             </Button>
 
-
                         </div>
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 cursor-default w-full sm:w-auto'>
@@ -305,8 +312,8 @@ export function AcompanhamentoEspecial() {
 
                             </Button>
 
-
                         </div>
+                        
 
                     </CardFooter>
                 </Card>
