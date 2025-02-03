@@ -25,9 +25,8 @@ import {
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-export function Sidebar() {
+export function Sidebar({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
     const location = useLocation();
-    const [open, setOpen] = useState(true);
     const [uploadOpen, setUploadOpen] = useState(false);
     const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
     const [dashboardOpen, setDashboardOpen] = useState(false);    
@@ -38,9 +37,11 @@ export function Sidebar() {
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
 
     return (
-        <aside className={`bg-gray-200 p-3 mt-16 relative transition-all duration-300 ${open ? 'w-[17.5rem]' : 'w-20'}h-screen fixed top-0 left-0 z-40`}>
+        <aside className={`bg-gray-200 p-3 h-full relative transition-all duration-300 ${
+            open ? 'w-[17.5rem]' : 'w-20'
+        }`}>
             <ChevronFirst
-                className={`absolute cursor-pointer -right-3 top-4 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${open ? '' : 'rotate-180'}`}
+                className={`absolute cursor-pointer right-2 top-4 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${open ? '' : 'rotate-180'}`}
                 onClick={() => setOpen(!open)}
             />
             <nav className="space-y-2 mt-4 flex flex-col">

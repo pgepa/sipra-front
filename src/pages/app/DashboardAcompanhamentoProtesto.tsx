@@ -4,9 +4,9 @@ export function AcompanhamentoProtesto() {
     return (
         <>
             <Helmet title="Acompanhamento de Protesto" />
-            <div className='h-screen flex flex-col'>
+            <div className='h-screen flex flex-col -mt-4'>
 
-                 <div className="mt-6 flex flex-1">
+                 <div className="flex flex-1">
                     
                     <iframe 
                         title="Acompanhamento de Protesto" 
