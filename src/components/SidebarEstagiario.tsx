@@ -2,14 +2,15 @@ import { House, ChevronFirst, ChevronDown, CircleDollarSign, PcCase, UserRoundSe
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-export function SidebarEstagiario() {
-    const location = useLocation();
-    const [open, setOpen] = useState(true);    
+export function SidebarEstagiario({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
+    const location = useLocation();       
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
     const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
 
     return (
-        <aside className={`bg-gray-200 p-3 mt-16 relative transition-all duration-300 ${open ? 'w-[17.5rem]' : 'w-20'}h-screen fixed top-0 left-0 z-40`}>
+        <aside className={`bg-gray-200 p-3 h-full relative transition-all duration-300 ${
+            open ? 'w-[17.5rem]' : 'w-20'
+        }`}>
             <ChevronFirst
                 className={`absolute cursor-pointer -right-3 top-4 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${open ? '' : 'rotate-180'}`}
                 onClick={() => setOpen(!open)}
