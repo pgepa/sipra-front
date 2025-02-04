@@ -35,6 +35,7 @@ import { PagamentosSiat } from '@/pages/app/DashboardPagamentosSiat';
 import { ConsultaDebitos } from '@/pages/app/ConsultaDebitos';
 import { UploadCentrot } from '@/pages/app/UploadCenprot';
 import { AcompanhamentoEspecial } from '@/pages/app/AcompanhamentoEspecial';
+import { AppLayoutEstagiario } from '@/pages/_layouts/appEstagiario';
 
 
 
@@ -150,6 +151,23 @@ export const Router = createHashRouter([
             
         ],
     },
+
+    {
+        path: '/',
+        element: <AppLayoutEstagiario />,
+        errorElement: <NotFound/>,
+        children: [
+            { path: '/homeestagiario', element: <PrivateRoute allowedProfiles={['Estagiario']}><HomeAssessor /></PrivateRoute> },        
+            { path: 'estagiario/indiciopatrimonial/cnpj', element: <PrivateRoute allowedProfiles={['Estagiario']}><ConsultaPessoaJuridica /></PrivateRoute> },
+            { path: 'estagiario/indiciopatrimonial/cpf', element: <PrivateRoute allowedProfiles={['Estagiario']}><ConsultaPessoaFisica /></PrivateRoute> },        
+            { path: 'estagiario/consultadebitos', element: <PrivateRoute allowedProfiles={['Estagiario']}><ConsultaDebitos /></PrivateRoute> },        
+            { path: 'estagiario/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Estagiario']}><AcompanhamentoEspecial /></PrivateRoute> },        
+            
+            
+        ],
+    },
+
+
 
     
 ]);

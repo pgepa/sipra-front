@@ -47,6 +47,9 @@ export function SignIn() {
                 case "Assessor":
                     navigate('/homeassessor', { replace: true });
                     break;
+                case "Estagiario":
+                    navigate('/homeestagiario', { replace: true });
+                    break;
                 default:
                     navigate('/', { replace: true });
                     break;
