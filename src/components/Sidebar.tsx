@@ -94,15 +94,7 @@ export function Sidebar({ open, setOpen }: { open: boolean; setOpen: (open: bool
                                 Ajuizadas
                             </Link>
 
-                            {/*<Link
-                                to="/reguacobranca/cartacobranca"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/reguacobranca/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                            >
-                                <Mails className="h-5 w-5" />
-                                Carta Cobrança
-                            </Link> */}
-
-                            
+                                                        
 
                         </div>
                     )}
@@ -165,7 +157,7 @@ export function Sidebar({ open, setOpen }: { open: boolean; setOpen: (open: bool
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartPie  className="h-5 w-5" />
-                                Acompanhamento Protesto
+                                Protesto
                             </Link>
                             
                             <Link
@@ -173,7 +165,7 @@ export function Sidebar({ open, setOpen }: { open: boolean; setOpen: (open: bool
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartScatter className="h-5 w-5" />
-                                Acompanhamento PDA
+                                Gestão PDA
                             </Link>
 
                             <Link
@@ -181,14 +173,14 @@ export function Sidebar({ open, setOpen }: { open: boolean; setOpen: (open: bool
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartArea  className="h-5 w-5" />
-                                Acompanhamento CDAs
+                                CDAs
                             </Link>
                             <Link
                                 to="/dashboard/pagamentossiat"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/dashboard/pagamentossiat" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <Handshake className="h-5 w-5" />
-                                Pagamentos SIAT
+                                Pagamentos
                             </Link>
 
 
