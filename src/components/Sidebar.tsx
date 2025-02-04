@@ -208,8 +208,8 @@ export function Sidebar({ open, setOpen }: { open: boolean; setOpen: (open: bool
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/rec/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ScanEye className="h-5 w-5" />
-                                Acompanhamento EF
-                            </Link>                       
+                                Execução Fiscal
+                            </Link>                    
                             
 
                             

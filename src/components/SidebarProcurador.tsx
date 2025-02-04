@@ -135,7 +135,7 @@ export function SidebarProcurador() {
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartPie className="h-5 w-5" />
-                                Acompanhamento Protesto
+                                Protesto
                             </Link>
 
                             <Link
@@ -143,7 +143,7 @@ export function SidebarProcurador() {
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartScatter className="h-5 w-5" />
-                                Acompanhamento PDA
+                                Gestão PDA
                             </Link>
 
                             <Link
@@ -151,7 +151,7 @@ export function SidebarProcurador() {
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <ChartArea className="h-5 w-5" />
-                                Acompanhamento CDAs
+                                CDAs
                             </Link>
 
 
