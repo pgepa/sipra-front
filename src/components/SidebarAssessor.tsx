@@ -89,14 +89,14 @@ export function SidebarAssessor() {
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/indiciopatrimonial/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <PcCase className="h-5 w-5" />
-                                Pessoa Jurídica (CNPJ)
+                                Pessoa Jurídica
                             </Link>
                             <Link
                                 to="/assessor/indiciopatrimonial/cpf"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/indiciopatrimonial/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <UserRoundSearch className="h-5 w-5" />
-                                Pessoa Física (CPF)
+                                Pessoa Física
                             </Link>
 
 
@@ -131,7 +131,7 @@ export function SidebarAssessor() {
                                     className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/rec/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                                 >
                                     <ScanEye className="h-5 w-5" />
-                                    Acompanhamento EF
+                                    Execução Fiscal
                                 </Link>
 
 

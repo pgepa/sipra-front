@@ -66,15 +66,7 @@ export function SidebarProcurador() {
                                 Ajuizadas
                             </Link>
 
-                            {/*<Link
-                                to="/procurador/reguacobranca/cartacobranca"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/reguacobranca/cartacobranca" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                            >
-                                <Mails className="h-5 w-5" />
-                                Carta Cobrança
-                            </Link> */}
-
-
+                            
 
                         </div>
                     )}
@@ -98,14 +90,14 @@ export function SidebarProcurador() {
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/indiciopatrimonial/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <PcCase className="h-5 w-5" />
-                                Pessoa Jurídica (CNPJ)
+                                Pessoa Jurídica
                             </Link>
                             <Link
                                 to="/procurador/indiciopatrimonial/cpf"
                                 className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/indiciopatrimonial/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <UserRoundSearch className="h-5 w-5" />
-                                Pessoa Física (CPF)
+                                Pessoa Física
                             </Link>
 
 
@@ -114,7 +106,6 @@ export function SidebarProcurador() {
 
                     )}
                 </div>
-
 
 
                 <div className="relative">
@@ -187,7 +178,7 @@ export function SidebarProcurador() {
                                     className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/rec/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                                 >
                                     <ScanEye className="h-5 w-5" />
-                                    Acompanhamento EF
+                                    Execução Fiscal
                                 </Link>
 
 
