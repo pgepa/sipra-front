@@ -63,8 +63,10 @@ export function AccountMenu() {
                 return "Coordenação";
             case "Procurador":
                 return "Procurador";
-                case "Assessor":
+            case "Assessor":
                 return "Assessor";
+            case "Estagiario":
+                return "Estagiário";
             default:
                 return "Desconhecido";
         }
