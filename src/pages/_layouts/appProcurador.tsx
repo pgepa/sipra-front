@@ -1,5 +1,6 @@
 import { SidebarProcurador } from '@/components/SidebarProcurador';
 import { Header } from "@/components/ui/header";
+import { useState } from 'react';
 import { Outlet, useLocation } from "react-router-dom";
 
 export function AppLayoutProcurador() {
@@ -10,9 +11,10 @@ export function AppLayoutProcurador() {
         "/procurador/dashboard/acompanhamentoprotesto",
         "/procurador/dashboard/acompanhamentopda",
         "/procurador/dashboard/acompanhamentocda",
-        
+
     ];
     const isFullscreenPage = fullscreenPages.includes(pathname);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
 
     return (
@@ -22,13 +24,21 @@ export function AppLayoutProcurador() {
                 <Header />
             </div>
 
-            <div className="flex flex-1">
+            <div className="flex flex-1 pt-16">
 
-            <SidebarProcurador />
+                <div className={`thin-scrollbar left-0 z-40 overflow-y-auto fixed h-full bg-gray-200 transition-all duration-300 ${isSidebarOpen ? 'w-72' : 'w-20'
+                    }`}>
+
+                    <SidebarProcurador open={isSidebarOpen} setOpen={setIsSidebarOpen} />
+
+                </div>                
 
 
-                <main className={`flex-1 flex flex-col ${isFullscreenPage ? "p-0 pt-10" : "p-8 pt-20"
-                    } bg-gray-100`}
+                <main className={`thin-scrollbar flex-1 flex flex-col ${
+                    isSidebarOpen ? 'ml-72' : 'ml-20'
+                } ${
+                    isFullscreenPage ? "p-0" : "p-8"
+                } bg-gray-100 pt-4 h-[calc(100vh-4rem)] overflow-y-auto transition-all duration-300`}
                 >
 
                     <div className="flex-1">
