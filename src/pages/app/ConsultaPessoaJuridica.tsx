@@ -102,6 +102,18 @@ interface Adepara {
     bov_total: string;
 }
 
+interface Anac {
+    anofabricacao: string;
+    docbruto: string;
+    docproprietario: string;
+    ds_gravame: string;
+    marcamodelo: string;
+    nr_assentos: string;
+    proprietario: string;
+    sg_uf: string;
+
+}
+
 
 interface PessoaJuridicaData {
     cnpj: string;
@@ -112,6 +124,7 @@ interface PessoaJuridicaData {
     vwpartesprocesso: ParticipacaoProcessos[];
     vwcarsemas: Semas[];
     vwadepara: Adepara[];
+    anac: Anac[];
 }
 
 
@@ -330,7 +343,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             </span>
                                         </div>
 
-                                        {expandedSections[cnpj]?.dadosCadastrais  && (
+                                        {expandedSections[cnpj]?.dadosCadastrais && (
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                                 {cnpjData.vwrfbjucepa && cnpjData.vwrfbjucepa.length > 0 ? (
@@ -437,7 +450,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             >
                                                 <h2>Quadro Societário:</h2>
                                                 <span className="text-white text-xl">
-                                                {expandedSections[cnpj]?.socios ? '↑' : '↓'}
+                                                    {expandedSections[cnpj]?.socios ? '↑' : '↓'}
                                                 </span>
                                             </div>
 
@@ -864,6 +877,77 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                             </div>
 
                                         )}
+
+                                        <div>
+
+                                            <div
+                                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                                onClick={() => toggleSection(cnpj, 'anac')}
+                                            >
+                                                <h2>ANAC:</h2>
+                                                <span className="text-white text-xl">
+                                                    {expandedSections[cnpj]?.anac ? '↑' : '↓'}
+                                                </span>
+                                            </div>
+
+                                            {expandedSections[cnpj]?.anac && (
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                                    {cnpjData.anac && cnpjData.anac.length > 0 ? (
+                                                        cnpjData.anac.map((item, index) => (
+                                                            <div
+                                                                key={index}
+                                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                            >
+                                                                <div
+                                                                    className="w-2 h-full mr-4 rounded-lg"
+                                                                    style={{ backgroundColor: getRandomColor() }}
+                                                                />
+                                                                <div className="flex flex-wrap gap-4">
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Proprietário:</span>
+                                                                        <span className="text-muted-foreground">{item.proprietario}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Documento:</span>
+                                                                        <span className="text-muted-foreground">{item.docproprietario}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Marca/Modelo:</span>
+                                                                        <span className="text-muted-foreground">{item.marcamodelo}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Ano de Fabricação:</span>
+                                                                        <span className="text-muted-foreground text-center">{item.anofabricacao}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Gravame:</span>
+                                                                        <span className="text-muted-foreground">{item.ds_gravame}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Nº de Assentos:</span>
+                                                                        <span className="text-muted-foreground text-center">{item.nr_assentos}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">UF:</span>
+                                                                        <span className="text-muted-foreground">{item.sg_uf}</span>
+                                                                    </div>                                                                   
+
+
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <div>
+                                                            <p className='text-muted-foreground p-4'>Nenhum sócio encontrado.</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                            )}
+
+
+                                        </div>
 
 
                                     </div>
