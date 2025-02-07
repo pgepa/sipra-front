@@ -114,6 +114,24 @@ interface Anac {
 
 }
 
+interface Contratos {
+    docbruto: string;
+    dofornecedor: string;
+    dt_assinaturacontrato: string;
+    dt_fimvigencia: string;
+    dt_iniciovigencia: string;
+    formacontratacao: string;
+    nomefornecedor: string;
+    situacao: string;
+    unidadegestora_contratante: string;
+    vlcontratado: string;
+}
+
+interface Faturamento {
+    nudocumento: string;
+    observacao: string;
+}
+
 
 interface PessoaJuridicaData {
     cnpj: string;
@@ -125,6 +143,8 @@ interface PessoaJuridicaData {
     vwcarsemas: Semas[];
     vwadepara: Adepara[];
     anac: Anac[];
+    contratos: Contratos[];
+    faturamento: Faturamento[];
 }
 
 
@@ -931,6 +951,140 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                                     <div className="flex flex-col gap-1 min-w-[150px]">
                                                                         <span className="font-semibold text-slate-700">UF:</span>
                                                                         <span className="text-muted-foreground">{item.sg_uf}</span>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <div>
+                                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                            )}
+
+
+                                        </div>
+
+                                        <div>
+
+                                            <div
+                                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                                onClick={() => toggleSection(cnpj, 'contratos')}
+                                            >
+                                                <h2>Contratos:</h2>
+                                                <span className="text-white text-xl">
+                                                    {expandedSections[cnpj]?.contratos ? '↑' : '↓'}
+                                                </span>
+                                            </div>
+
+                                            {expandedSections[cnpj]?.contratos && (
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                                    {cnpjData.contratos && cnpjData.contratos.length > 0 ? (
+                                                        cnpjData.contratos.map((contrato, index) => (
+                                                            <div
+                                                                key={index}
+                                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                            >
+                                                                <div
+                                                                    className="w-2 h-full mr-4 rounded-lg"
+                                                                    style={{ backgroundColor: getRandomColor() }}
+                                                                />
+                                                                <div className="flex flex-wrap gap-4">
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Fornecedor:</span>
+                                                                        <span className="text-muted-foreground">{contrato.nomefornecedor}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Documento:</span>
+                                                                        <span className="text-muted-foreground">{contrato.dofornecedor}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Contratante:</span>
+                                                                        <span className="text-muted-foreground">{contrato.unidadegestora_contratante}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Assinatura do Contrato:</span>
+                                                                        <span className="text-muted-foreground text-center">{contrato.dt_assinaturacontrato}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Início da Vigência:</span>
+                                                                        <span className="text-muted-foreground">{contrato.dt_iniciovigencia}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Fim da Vigência:</span>
+                                                                        <span className="text-muted-foreground text-center">{contrato.dt_fimvigencia}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Forma de Contratação:</span>
+                                                                        <span className="text-muted-foreground">{contrato.formacontratacao}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Situação:</span>
+                                                                        <span className="text-muted-foreground">{contrato.situacao}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Valor do Contrato:</span>
+                                                                        <span className="text-muted-foreground">
+
+                                                                            {Number(contrato.vlcontratado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+
+                                                                        </span>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <div>
+                                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                            )}
+
+
+                                        </div>
+
+                                        <div>
+
+                                            <div
+                                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                                onClick={() => toggleSection(cnpj, 'faturamento')}
+                                            >
+                                                <h2>Faturamento:</h2>
+                                                <span className="text-white text-xl">
+                                                    {expandedSections[cnpj]?.faturamento ? '↑' : '↓'}
+                                                </span>
+                                            </div>
+
+                                            {expandedSections[cnpj]?.faturamento && (
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                                    {cnpjData.faturamento && cnpjData.faturamento.length > 0 ? (
+                                                        cnpjData.faturamento.map((item, index) => (
+                                                            <div
+                                                                key={index}
+                                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                            >
+                                                                <div
+                                                                    className="w-2 h-full mr-4 rounded-lg"
+                                                                    style={{ backgroundColor: getRandomColor() }}
+                                                                />
+                                                                <div className="flex flex-wrap gap-4">
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Documento:</span>
+                                                                        <span className="text-muted-foreground">{item.nudocumento}</span>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                        <span className="font-semibold text-slate-700">Observação:</span>
+                                                                        <span className="text-muted-foreground">{item.observacao}</span>
                                                                     </div>                                                                   
 
 
@@ -939,7 +1093,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                         ))
                                                     ) : (
                                                         <div>
-                                                            <p className='text-muted-foreground p-4'>Nenhum sócio encontrado.</p>
+                                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
                                                         </div>
                                                     )}
                                                 </div>
