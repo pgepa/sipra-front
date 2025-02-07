@@ -632,11 +632,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                             key={index}
                                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                                         >
-
-                                                            <div
-                                                                className="w-2 h-full mr-4 rounded-lg"
-                                                                style={{ backgroundColor: getRandomColor() }}
-                                                            />
+                                                            
 
                                                             <div className="flex flex-wrap gap-4">
                                                                 <div className="flex flex-col gap-1 min-w-[150px]">
@@ -782,12 +778,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                         <div
                                                             key={index}
                                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >
-
-                                                            <div
-                                                                className="w-2 h-full mr-4 rounded-lg"
-                                                                style={{ backgroundColor: getRandomColor() }}
-                                                            />
+                                                        >                                                            
 
                                                             <div className="flex flex-wrap gap-4">
                                                                 <div className="flex flex-col gap-1 min-w-[150px]">
@@ -849,12 +840,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                         <div
                                                             key={index}
                                                             className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >
-
-                                                            <div
-                                                                className="w-2 h-full mr-4 rounded-lg"
-                                                                style={{ backgroundColor: getRandomColor() }}
-                                                            />
+                                                        >                                                            
 
                                                             <div className="flex flex-wrap gap-4">
                                                                 <div className="flex flex-col gap-1 min-w-[150px]">
@@ -919,10 +905,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                                 key={index}
                                                                 className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                                             >
-                                                                <div
-                                                                    className="w-2 h-full mr-4 rounded-lg"
-                                                                    style={{ backgroundColor: getRandomColor() }}
-                                                                />
+                                                                
                                                                 <div className="flex flex-wrap gap-4">
                                                                     <div className="flex flex-col gap-1 min-w-[150px]">
                                                                         <span className="font-semibold text-slate-700">Proprietário:</span>
@@ -990,10 +973,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                                 key={index}
                                                                 className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                                             >
-                                                                <div
-                                                                    className="w-2 h-full mr-4 rounded-lg"
-                                                                    style={{ backgroundColor: getRandomColor() }}
-                                                                />
+                                                               
                                                                 <div className="flex flex-wrap gap-4">
                                                                     <div className="flex flex-col gap-1 min-w-[150px]">
                                                                         <span className="font-semibold text-slate-700">Fornecedor:</span>
@@ -1073,16 +1053,13 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                                 key={index}
                                                                 className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
                                                             >
-                                                                <div
-                                                                    className="w-2 h-full mr-4 rounded-lg"
-                                                                    style={{ backgroundColor: getRandomColor() }}
-                                                                />
-                                                                <div className="flex flex-wrap gap-4">
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                
+                                                                <div className="flex flex-wrap gap-4 items-start">
+                                                                    <div className="flex flex-col gap-1">
                                                                         <span className="font-semibold text-slate-700">Documento:</span>
                                                                         <span className="text-muted-foreground">{item.nudocumento}</span>
                                                                     </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                    <div className="flex flex-col gap-1">
                                                                         <span className="font-semibold text-slate-700">Observação:</span>
                                                                         <span className="text-muted-foreground">{item.observacao}</span>
                                                                     </div>                                                                   
