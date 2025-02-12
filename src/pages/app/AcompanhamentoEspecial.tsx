@@ -8,6 +8,7 @@ import { Search, SearchX } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { AiFillFilePdf } from 'react-icons/ai';
 
 
 interface ProtestoData {
@@ -33,6 +34,7 @@ interface ProtestoData {
     tramite: string;
     vara: string;
     vlacao: number;
+    pdf_links?: string[];
 }
 
 export function AcompanhamentoEspecial() {
@@ -126,6 +128,33 @@ export function AcompanhamentoEspecial() {
         return items;
     };
 
+    const handleDownloadPdf = async (url: string) => {
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao baixar PDF');
+            }
+
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = 'SIDA_Relatório de Pesquisa Patrimonial';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
 
 
     return (
@@ -134,21 +163,6 @@ export function AcompanhamentoEspecial() {
 
             <div className='flex flex-col gap-4'>
                 <h1 className='text-2xl font-bold text-slate-700 text-center'>Acompanhamento Especial</h1>
-
-                {
-                    /**
-                     *  <div className="flex gap-4 mt-4">
-                
-                                    <Button onClick={() => fetchProtestos(page, 'csv')} variant='default'>
-                                        <GrDocumentExcel className="h-4 w-4 mr-2" />
-                                        Baixar Planilha
-                                    </Button>
-                                </div>
-                     * 
-                     */
-                }
-
-
 
 
                 <div className="flex justify-start mt-2 mb-2">
@@ -226,7 +240,7 @@ export function AcompanhamentoEspecial() {
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <Button variant="default" size="xs"  className='flex gap-2 w-full sm:w-auto'>
+                                    <Button variant="default" size="xs" className='flex gap-2 w-full sm:w-auto'>
                                         <Search className='h-4 w-4' />
                                         Detalhes
                                     </Button>
@@ -313,7 +327,25 @@ export function AcompanhamentoEspecial() {
                             </Button>
 
                         </div>
-                        
+
+                        {processo.pdf_links && processo.pdf_links.length > 0 && (
+                            <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
+                                {processo.pdf_links.map((link, index) => (
+                                    <Button
+                                        key={index}
+                                        variant="secondary"
+                                        size="xs"
+                                        className='flex gap-2 bg-rose-200/20 text-rose-700 w-full sm:w-auto'
+                                        onClick={() => handleDownloadPdf(link)}
+                                    >
+                                        <AiFillFilePdf className="h-4 w-4 text-rose-700" />
+                                        PDF {index + 1}
+                                    </Button>
+                                ))}
+                            </div>
+                        )}
+
+
 
                     </CardFooter>
                 </Card>
