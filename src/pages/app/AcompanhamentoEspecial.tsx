@@ -4,11 +4,13 @@ import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
-import { Search, SearchX } from 'lucide-react';
+import { Search, SearchX, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AiFillFilePdf } from 'react-icons/ai';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 
 interface ProtestoData {
@@ -44,6 +46,7 @@ export function AcompanhamentoEspecial() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
+    const [filters, setFilters] = useState({ numformatado: '', pdf_links: '' });
 
 
     const token = localStorage.getItem('token');
@@ -62,9 +65,7 @@ export function AcompanhamentoEspecial() {
                     per_page: 25,
                     download: downloadFormat,
                     order: order,
-
-
-
+                    numformatado: filters.numformatado || undefined,
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -153,6 +154,15 @@ export function AcompanhamentoEspecial() {
             console.error(error);
         }
     };
+    const handleClearFilters = () => {
+        setFilters({
+            numformatado: '',
+            pdf_links: '',
+            
+        });
+        setPage(1);
+        fetchProcessos(1);
+    };
 
 
 
@@ -164,27 +174,45 @@ export function AcompanhamentoEspecial() {
             <div className='flex flex-col gap-4'>
                 <h1 className='text-2xl font-bold text-slate-700 text-center'>Acompanhamento Especial</h1>
 
-
-                <div className="flex justify-start mt-2 mb-2">
-                    <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer gap-2">
-                        <PaginationContent>
-                            {page > 1 && (
-                                <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
-                                    {page === 2 ? 'Primeira Página' : 'Anterior'}
-                                </PaginationPrevious>
-                            )}
-                            {renderPaginationItems()}
-                            {page < totalPages && (
-                                <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
-                                    Próxima
-                                </PaginationNext>
-                            )}
-                        </PaginationContent>
-                        <div className="text-sm mt-2 text-gray-600">
-                            Página {page} de {totalPages} ({totalItems} total de resultados)
+                <form
+                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-2'
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        fetchProcessos(1);
+                    }}
+                >
+                    <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
+                    <div className='space-y-2'>
+                        <Label className='font-semibold text-sm text-gray-800'>Nº Processo:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                placeholder='Busca por Nº Processo'
+                                className='pl-10 col-span-1'
+                                value={filters.numformatado}
+                                onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })}
+                            />
                         </div>
-                    </Pagination>
-                </div>
+
+
+                    </div>
+
+                    <Button type='submit' className='default mt-8'>
+                        <Search className="h-4 w-4 mr-2" />
+                        Pesquisar
+                    </Button>
+
+                    <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full sm:w-auto mt-8">
+                        <X className="h-4 w-4 mr-2" />
+                        Remover filtros
+                    </Button>
+
+                </form>
+
+
+
 
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 space-y-2 sm:space-y-0">
                     <p className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-blue-300 text-center sm:text-left">
@@ -350,6 +378,27 @@ export function AcompanhamentoEspecial() {
                     </CardFooter>
                 </Card>
             ))}
+
+            <div className="flex justify-start mt-3 mb-2">
+                <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer gap-2">
+                    <PaginationContent>
+                        {page > 1 && (
+                            <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
+                                {page === 2 ? 'Primeira Página' : 'Anterior'}
+                            </PaginationPrevious>
+                        )}
+                        {renderPaginationItems()}
+                        {page < totalPages && (
+                            <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
+                                Próxima
+                            </PaginationNext>
+                        )}
+                    </PaginationContent>
+                    <div className="text-sm mt-2 text-gray-600">
+                        Página {page} de {totalPages} ({totalItems} total de resultados)
+                    </div>
+                </Pagination>
+            </div>
         </>
     );
 }
