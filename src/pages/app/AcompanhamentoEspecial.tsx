@@ -37,6 +37,7 @@ interface ProtestoData {
     vara: string;
     vlacao: number;
     pdf_links?: string[];
+    pdf_links_cnpj?: string[];
 }
 
 export function AcompanhamentoEspecial() {
@@ -158,7 +159,7 @@ export function AcompanhamentoEspecial() {
         setFilters({
             numformatado: '',
             pdf_links: '',
-            
+
         });
         setPage(1);
         fetchProcessos(1);
@@ -356,9 +357,9 @@ export function AcompanhamentoEspecial() {
 
                         </div>
 
-                        {processo.pdf_links && processo.pdf_links.length > 0 && (
+                        {(processo.pdf_links || processo.pdf_links_cnpj) && (
                             <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                                {processo.pdf_links.map((link, index) => (
+                                {[...(processo.pdf_links || []), ...(processo.pdf_links_cnpj || [])].map((link, index) => (
                                     <Button
                                         key={index}
                                         variant="secondary"
@@ -372,6 +373,7 @@ export function AcompanhamentoEspecial() {
                                 ))}
                             </div>
                         )}
+
 
 
 
