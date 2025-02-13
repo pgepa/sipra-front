@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { AiFillFilePdf } from 'react-icons/ai';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 
 
 interface ProtestoData {
@@ -38,6 +39,7 @@ interface ProtestoData {
     vlacao: number;
     pdf_links?: string[];
     pdf_links_cnpj?: string[];
+    indicio: boolean;
 }
 
 export function AcompanhamentoEspecial() {
@@ -47,7 +49,10 @@ export function AcompanhamentoEspecial() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
-    const [filters, setFilters] = useState({ numformatado: '', pdf_links: '' });
+    const [indicio, setIndicio] = useState(false);
+    const [filters, setFilters] = useState({
+        numformatado: '',
+    });
 
 
     const token = localStorage.getItem('token');
@@ -67,6 +72,7 @@ export function AcompanhamentoEspecial() {
                     download: downloadFormat,
                     order: order,
                     numformatado: filters.numformatado || undefined,
+                    indicio: indicio ? true : undefined,
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -100,7 +106,7 @@ export function AcompanhamentoEspecial() {
 
     useEffect(() => {
         fetchProcessos(page);
-    }, [page]);
+    }, [page, indicio]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -158,9 +164,9 @@ export function AcompanhamentoEspecial() {
     const handleClearFilters = () => {
         setFilters({
             numformatado: '',
-            pdf_links: '',
 
         });
+        setIndicio(false);
         setPage(1);
         fetchProcessos(1);
     };
@@ -173,25 +179,27 @@ export function AcompanhamentoEspecial() {
             <Helmet title="RECC" />
 
             <div className='flex flex-col gap-4'>
-                <h1 className='text-2xl font-bold text-slate-700 text-center'>Acompanhamento Especial</h1>
+                <h1 className='text-2xl font-bold text-slate-700 text-center'>Execução Fiscal</h1>
+
+                <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
 
                 <form
-                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-2'
+                    className="flex flex-col sm:flex-row items-center gap-2 flex-wrap"
                     onSubmit={(e) => {
                         e.preventDefault();
                         fetchProcessos(1);
                     }}
                 >
-                    <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
+                    
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Nº Processo:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Número do Processo:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
                                 placeholder='Busca por Nº Processo'
-                                className='pl-10 col-span-1'
+                                className='pl-10 w-72'
                                 value={filters.numformatado}
                                 onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })}
                             />
@@ -200,6 +208,10 @@ export function AcompanhamentoEspecial() {
 
                     </div>
 
+                    <div className='flex items-center mt-8'>
+                        <span className='mr-2 font-semibold text-violet-700'>Indício Patrimonial</span>
+                        <Switch checked={indicio} onCheckedChange={setIndicio} />
+                    </div>
                     <Button type='submit' className='default mt-8'>
                         <Search className="h-4 w-4 mr-2" />
                         Pesquisar
