@@ -93,7 +93,7 @@ export function Ajuizadas() {
 
     const token = localStorage.getItem('token');
 
-    
+
     const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
 
         try {
@@ -630,27 +630,6 @@ export function Ajuizadas() {
 
 
 
-                <div className="flex justify-start mt-2">
-                    <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
-                        <PaginationContent>
-                            {page > 1 && (
-                                <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
-                                    {page === 2 ? 'Primeira Página' : 'Anterior'}
-                                </PaginationPrevious>
-                            )}
-                            {renderPaginationItems()}
-                            {page < totalPages && (
-                                <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
-                                    Próxima
-                                </PaginationNext>
-                            )}
-                        </PaginationContent>
-                        <div className="text-sm mt-2 text-gray-600">
-                            Página {page} de {totalPages} ({totalItems} total de resultados)
-                        </div>
-                    </Pagination>
-                </div>
-
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 space-y-2 sm:space-y-0">
                     <p className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-blue-300 text-center sm:text-left">
                         {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
@@ -1087,6 +1066,27 @@ export function Ajuizadas() {
                     </CardFooter>
                 </Card>
             ))}
+
+            <div className="flex justify-start mt-3">
+                <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
+                    <PaginationContent>
+                        {page > 1 && (
+                            <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
+                                {page === 2 ? 'Primeira Página' : 'Anterior'}
+                            </PaginationPrevious>
+                        )}
+                        {renderPaginationItems()}
+                        {page < totalPages && (
+                            <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
+                                Próxima
+                            </PaginationNext>
+                        )}
+                    </PaginationContent>
+                    <div className="text-sm mt-2 text-gray-600">
+                        Página {page} de {totalPages} ({totalItems} total de resultados)
+                    </div>
+                </Pagination>
+            </div>
         </>
     );
 }
