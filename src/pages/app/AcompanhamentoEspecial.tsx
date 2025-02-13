@@ -12,6 +12,7 @@ import { AiFillFilePdf } from 'react-icons/ai';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 
 interface ProtestoData {
@@ -50,6 +51,7 @@ export function AcompanhamentoEspecial() {
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [indicio, setIndicio] = useState(false);
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [filters, setFilters] = useState({
         numformatado: '',
     });
@@ -105,8 +107,8 @@ export function AcompanhamentoEspecial() {
     };
 
     useEffect(() => {
-        fetchProcessos(page);
-    }, [page, indicio]);
+        fetchProcessos(page, sortOrder);
+    }, [page, indicio, sortOrder]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -231,6 +233,19 @@ export function AcompanhamentoEspecial() {
                     <p className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-blue-300 text-center sm:text-left">
                         {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
                     </p>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+                        <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
+                        <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')} >
+                            <SelectTrigger className="w-full sm:w-auto">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="desc">Maior Valor</SelectItem>
+                                <SelectItem value="asc">Menor Valor</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
 
                 </div>
 
