@@ -92,7 +92,7 @@ export function Protesto() {
 
     const token = localStorage.getItem('token');
 
-    
+
 
     const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
 
@@ -653,7 +653,7 @@ export function Protesto() {
 
                     </div>
 
-                    
+
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Prescrição Originária:</Label>
                         <DropdownMenu>
@@ -743,49 +743,26 @@ export function Protesto() {
                     </Button>
                 </div>
 
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 space-y-2 sm:space-y-0">
+                    <p className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-blue-300 text-center sm:text-left">
+                        {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
+                    </p>
 
-
-                <div className="flex justify-start mt-2 mb-2">
-                    <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
-                        <PaginationContent>
-                            {page > 1 && (
-                                <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
-                                    {page === 2 ? 'Primeira Página' : 'Anterior'}
-                                </PaginationPrevious>
-                            )}
-                            {renderPaginationItems()}
-                            {page < totalPages && (
-                                <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
-                                    Próxima
-                                </PaginationNext>
-                            )}
-                        </PaginationContent>
-                        <div className="text-sm mt-2 text-gray-600">
-                            Página {page} de {totalPages} ({totalItems} total de resultados)
-                        </div>
-                    </Pagination>
+                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+                        <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
+                        <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')} >
+                            <SelectTrigger className="w-full sm:w-auto">
+                                <SelectValue placeholder="Escolha uma opção" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="desc">Maior Valor</SelectItem>
+                                <SelectItem value="asc">Menor Valor</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 space-y-2 sm:space-y-0">
-                        <p className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-blue-300 text-center sm:text-left">
-                        {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
-                        </p>
 
-                        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
-                            <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
-                            <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')} >
-                                <SelectTrigger className="w-full sm:w-auto">
-                                    <SelectValue placeholder="Escolha uma opção" />
-                                </SelectTrigger>
-                                <SelectContent>                                   
-                                    <SelectItem value="desc">Maior Valor</SelectItem>
-                                    <SelectItem value="asc">Menor Valor</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-
-                
 
             </div>
 
@@ -812,7 +789,7 @@ export function Protesto() {
                                 {protesto.contribuinte} - {protesto.docformatado}
                             </CardTitle>
                             <CardDescription>{protesto.cda}</CardDescription>
-                            
+
 
                         </div>
                     </CardHeader>
@@ -826,7 +803,7 @@ export function Protesto() {
 
                     </CardContent>
 
-                    
+
 
                     <CardFooter className="flex flex-wrap justify-start gap-2 md:gap-4 sm:flex-col md:flex-row">
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
@@ -930,7 +907,7 @@ export function Protesto() {
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data de Referência</TableCell>
                                                     <TableCell className='flex justify-end'>
-                                                    
+
                                                         {protesto.dtreferencia
                                                             ? (() => {
                                                                 // Aqui, usamos o construtor Date para analisar a data diretamente
@@ -945,7 +922,7 @@ export function Protesto() {
                                                                 }
                                                             })()
                                                             : '-'}
-                                                    
+
                                                     </TableCell>
                                                 </TableRow>
 
@@ -981,7 +958,7 @@ export function Protesto() {
                                                                 }
                                                             })()
                                                             : '-'}
-                                                        </TableCell>
+                                                    </TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
@@ -1166,19 +1143,19 @@ export function Protesto() {
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 w-full sm:w-auto cursor-default'>
                                 Referência: {protesto.dtreferencia
-                                ? (() => {
-                                    // Aqui, usamos o construtor Date para analisar a data diretamente
-                                    const data = new Date(protesto.dtreferencia.replace(' ', 'T')); // Converte para formato ISO
-                                    console.log('Data analisada:', data);
+                                    ? (() => {
+                                        // Aqui, usamos o construtor Date para analisar a data diretamente
+                                        const data = new Date(protesto.dtreferencia.replace(' ', 'T')); // Converte para formato ISO
+                                        console.log('Data analisada:', data);
 
-                                    // Verifica se a data é válida
-                                    if (!isNaN(data.getTime())) {
-                                        return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                    } else {
-                                        return 'Data inválida';
-                                    }
-                                })()
-                                : '-'}
+                                        // Verifica se a data é válida
+                                        if (!isNaN(data.getTime())) {
+                                            return format(data, 'dd/MM/yyyy'); // Formato desejado
+                                        } else {
+                                            return 'Data inválida';
+                                        }
+                                    })()
+                                    : '-'}
 
                             </Button>
 
@@ -1189,6 +1166,27 @@ export function Protesto() {
                     </CardFooter>
                 </Card>
             ))}
+
+            <div className="flex justify-start mt-3 mb-2">
+                <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
+                    <PaginationContent>
+                        {page > 1 && (
+                            <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
+                                {page === 2 ? 'Primeira Página' : 'Anterior'}
+                            </PaginationPrevious>
+                        )}
+                        {renderPaginationItems()}
+                        {page < totalPages && (
+                            <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
+                                Próxima
+                            </PaginationNext>
+                        )}
+                    </PaginationContent>
+                    <div className="text-sm mt-2 text-gray-600">
+                        Página {page} de {totalPages} ({totalItems} total de resultados)
+                    </div>
+                </Pagination>
+            </div>
         </>
     );
 }
