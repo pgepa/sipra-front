@@ -41,6 +41,7 @@ interface ProtestoData {
     pdf_links?: string[];
     pdf_links_cnpj?: string[];
     indicio: boolean;
+    dtentrada: string;
 }
 
 export function AcompanhamentoEspecial() {
@@ -192,7 +193,7 @@ export function AcompanhamentoEspecial() {
                         fetchProcessos(1);
                     }}
                 >
-                    
+
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Número do Processo:</Label>
                         <div className="relative">
@@ -271,12 +272,24 @@ export function AcompanhamentoEspecial() {
             {processos.map((processo) => (
                 <Card key={processo.cdprocesso} className='shadow-md shadow-slate-400/20 mt-4'>
                     <CardHeader className="flex-items-center flex-row justify-between space-y-0 pb-4">
-                        <div className="space-y-1">
-                            <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
-                                Processo: {processo.numformatado}
-                            </CardTitle>
-                            <CardDescription>{processo.comarca}</CardDescription>
+                        <div className="space-y-1 flex justify-between w-full">
+                            <div>
 
+                                <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
+                                    Processo: {processo.numformatado}
+                                </CardTitle>
+                                <CardDescription>{processo.comarca}</CardDescription>
+
+                            </div>
+
+                            <div>
+                                <div >
+                                    <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 cursor-default w-full sm:w-auto'>
+                                        Entrada: {processo.dtentrada}
+                                    </Button>
+                                </div>
+                                
+                            </div>
 
                         </div>
                     </CardHeader>
@@ -306,6 +319,7 @@ export function AcompanhamentoEspecial() {
 
 
                                 <DialogContent className="max-h-[90vh] overflow-y-auto">
+
                                     <DialogHeader>
                                         <DialogTitle className='text-indigo-600 text-center text-xl'>Processo: {processo.numformatado}</DialogTitle>
                                         <DialogDescription>Detalhes</DialogDescription>
