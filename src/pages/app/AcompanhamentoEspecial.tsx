@@ -53,6 +53,7 @@ export function AcompanhamentoEspecial() {
     const [totalItems, setTotalItems] = useState(0);
     const [indicio, setIndicio] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [orderby, setOrderby] = useState<'dtentrada' | 'somavlcdas'> ('dtentrada');
     const [filters, setFilters] = useState({
         numformatado: '',
     });
@@ -74,6 +75,7 @@ export function AcompanhamentoEspecial() {
                     per_page: 25,
                     download: downloadFormat,
                     order: order,
+                    orderby: orderby,
                     numformatado: filters.numformatado || undefined,
                     indicio: indicio ? true : undefined,
                 },
@@ -109,7 +111,7 @@ export function AcompanhamentoEspecial() {
 
     useEffect(() => {
         fetchProcessos(page, sortOrder);
-    }, [page, indicio, sortOrder]);
+    }, [page, indicio, sortOrder, orderby]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -237,13 +239,23 @@ export function AcompanhamentoEspecial() {
 
                     <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
                         <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
-                        <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')} >
+                        <Select value={orderby} onValueChange={(value) => setOrderby(value as 'dtentrada' | 'somavlcdas')}>
                             <SelectTrigger className="w-full sm:w-auto">
                                 <SelectValue placeholder="Escolha uma opção" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="desc">Maior Valor</SelectItem>
-                                <SelectItem value="asc">Menor Valor</SelectItem>
+                                <SelectItem value="dtentrada">Data de Entrada</SelectItem>
+                                <SelectItem value="somavlcdas">Valor</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')}>
+                            <SelectTrigger className="w-full sm:w-auto">
+                                <SelectValue placeholder="Escolha uma ordem" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="desc">Decrescente</SelectItem>
+                                <SelectItem value="asc">Crescente</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
