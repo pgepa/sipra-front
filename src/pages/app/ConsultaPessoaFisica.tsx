@@ -91,6 +91,13 @@ interface Adepara {
     bov_total: string;
 }
 
+interface Precatorio {
+    credito: string;
+    credor: string;
+    entidade: string;
+    valor: string;
+}
+
 
 interface PessoaFisicaData {
     cpf: string;
@@ -101,6 +108,7 @@ interface PessoaFisicaData {
     ParticipacaoemProcessos: ParticipacaoProcessos[];
     SEMAS: Semas[];
     ADEPARA: Adepara[];
+    Precatorio: Precatorio[];
 }
 
 
@@ -115,6 +123,7 @@ export const ConsultaPessoaFisica: React.FC = () => {
     const [showDetran, setShowDetran] = useState(false);
     const [showSemas, setShowSemas] = useState(false);
     const [showAdepara, setShowAdepara] = useState(false);
+    const [showPrecatorio, setShowPrecatorio] = useState(false);
     const [showDadosCadastrais, setShowDadosCadastrais] = useState(false);
     const [filters, setFilters] = useState({ cpf: ''});
     const [searched, setSearched] = useState(false);
@@ -787,6 +796,59 @@ export const ConsultaPessoaFisica: React.FC = () => {
                                                                 <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
                                                                 <span className="text-muted-foreground">{adepara.bov_total}</span>
                                                             </div>
+
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div>
+                                                        <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        )}
+
+<div
+                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
+                                            onClick={() => toggleSection(setShowPrecatorio)}
+                                        >
+                                            <h2>Precatório:</h2>
+                                            <span className="text-white text-xl">
+                                                {showPrecatorio ? '↑' : '↓'}
+                                            </span>
+                                        </div>
+
+                                        {showPrecatorio && (
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                                {cpfData.Precatorio && cpfData.Precatorio.length > 0 ? (
+                                                    cpfData.Precatorio.map((precatorios, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                                        >                                                          
+
+                                                            <div className="flex flex-wrap gap-4">
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Credor:</span>
+                                                                <span className="text-muted-foreground">{precatorios.credor}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Crédito:</span>
+                                                                <span className="text-muted-foreground">{precatorios.credito}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 min-w-[150px]">
+                                                                <span className="font-semibold text-slate-700">Entidade:</span>
+                                                                <span className="text-muted-foreground">{precatorios.entidade}</span>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1">
+                                                                <span className="font-semibold text-slate-700">Valor:</span>
+                                                                <span className="text-muted-foreground">
+                                                                    {Number(precatorios.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                                </span>
+                                                            </div>
+                                                            
 
                                                             </div>
                                                         </div>
