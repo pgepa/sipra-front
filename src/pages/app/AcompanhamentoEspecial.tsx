@@ -42,6 +42,7 @@ interface ProtestoData {
     pdf_links_cnpj?: string[];
     indicio: boolean;
     dtentrada: string;
+    parteprincipal: string;
 }
 
 export function AcompanhamentoEspecial() {
@@ -290,7 +291,7 @@ export function AcompanhamentoEspecial() {
                                 <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
                                     Processo: {processo.numformatado}
                                 </CardTitle>
-                                <CardDescription>{processo.comarca}</CardDescription>
+                                <CardDescription>{processo.vara}</CardDescription>
 
                             </div>
 
@@ -308,7 +309,7 @@ export function AcompanhamentoEspecial() {
                     <CardContent className="space-y-1">
                         <span>
 
-                            <p className="leading-7 [&:not(:first-child)]:mt-6">{processo.vara}</p>
+                            <p className="leading-7 [&:not(:first-child)]:mt-6 text-slate-800">{processo.parteprincipal}</p>
 
                         </span>
 
@@ -353,6 +354,10 @@ export function AcompanhamentoEspecial() {
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Classe</TableCell>
                                                     <TableCell className='flex justify-end'>{processo.classe}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell className='text-muted-foreground'>Comarca</TableCell>
+                                                    <TableCell className='flex justify-end'>{processo.comarca}</TableCell>
                                                 </TableRow>
 
 
