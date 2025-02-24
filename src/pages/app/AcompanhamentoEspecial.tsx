@@ -255,8 +255,8 @@ export function AcompanhamentoEspecial() {
                                 <SelectValue placeholder="Escolha uma ordem" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="desc">Decrescente</SelectItem>
-                                <SelectItem value="asc">Crescente</SelectItem>
+                                <SelectItem value="desc">Maior</SelectItem>
+                                <SelectItem value="asc">Menor</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
