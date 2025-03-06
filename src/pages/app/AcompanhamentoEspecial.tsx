@@ -43,6 +43,7 @@ interface ProtestoData {
     indicio: boolean;
     dtentrada: string;
     parteprincipal: string;
+    AE: boolean;
 }
 
 export function AcompanhamentoEspecial() {
@@ -53,6 +54,7 @@ export function AcompanhamentoEspecial() {
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [indicio, setIndicio] = useState(false);
+    const [acompanhamentoEspecial, setAcompanhamentoEspecial] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [orderby, setOrderby] = useState<'dtentrada' | 'somavlcdas'> ('dtentrada');
     const [filters, setFilters] = useState({
@@ -79,6 +81,7 @@ export function AcompanhamentoEspecial() {
                     orderby: orderby,
                     numformatado: filters.numformatado || undefined,
                     indicio: indicio ? true : undefined,
+                    AE: acompanhamentoEspecial ? true : undefined,
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -112,7 +115,7 @@ export function AcompanhamentoEspecial() {
 
     useEffect(() => {
         fetchProcessos(page, sortOrder);
-    }, [page, indicio, sortOrder, orderby]);
+    }, [page, indicio, acompanhamentoEspecial, sortOrder, orderby]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -173,6 +176,7 @@ export function AcompanhamentoEspecial() {
 
         });
         setIndicio(false);
+        setAcompanhamentoEspecial(false);
         setPage(1);
         fetchProcessos(1);
     };
@@ -217,6 +221,11 @@ export function AcompanhamentoEspecial() {
                     <div className='flex items-center mt-8'>
                         <span className='mr-2 font-semibold text-violet-700'>Indício Patrimonial</span>
                         <Switch checked={indicio} onCheckedChange={setIndicio} />
+                    </div>
+
+                    <div className='flex items-center mt-8'>
+                        <span className='mr-2 font-semibold text-violet-700'>Acompanhamento Especial</span>
+                        <Switch checked={acompanhamentoEspecial} onCheckedChange={setAcompanhamentoEspecial} />
                     </div>
                     <Button type='submit' className='default mt-8'>
                         <Search className="h-4 w-4 mr-2" />
