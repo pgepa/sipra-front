@@ -59,6 +59,7 @@ export function AcompanhamentoEspecial() {
     const [orderby, setOrderby] = useState<'dtentrada' | 'somavlcdas'> ('dtentrada');
     const [filters, setFilters] = useState({
         numformatado: '',
+        parteprincipal: '',
     });
 
 
@@ -80,6 +81,7 @@ export function AcompanhamentoEspecial() {
                     order: order,
                     orderby: orderby,
                     numformatado: filters.numformatado || undefined,
+                    parteprincipal: filters.parteprincipal || undefined,
                     indicio: indicio ? true : undefined,
                     AE: acompanhamentoEspecial ? true : undefined,
                 },
@@ -173,6 +175,7 @@ export function AcompanhamentoEspecial() {
     const handleClearFilters = () => {
         setFilters({
             numformatado: '',
+            parteprincipal: '',
 
         });
         setIndicio(false);
@@ -213,9 +216,24 @@ export function AcompanhamentoEspecial() {
                                 value={filters.numformatado}
                                 onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })}
                             />
+                        </div>                       
+
+
+                    </div>
+
+                    <div className='space-y-2'>
+                        <Label className='font-semibold text-sm text-gray-800'>Parte Principal:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                placeholder='Busca por Parte Principal'
+                                className='pl-10 w-72'
+                                value={filters.parteprincipal}
+                                onChange={(e) => setFilters({ ...filters, parteprincipal: e.target.value })}
+                            />
                         </div>
-
-
                     </div>
 
                     <div className='flex items-center mt-8'>
