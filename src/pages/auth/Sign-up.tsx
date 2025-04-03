@@ -124,7 +124,7 @@ export function SignUp() {
                                             <SelectItem value="Chefia">Coordenação</SelectItem>
                                             <SelectItem value="Procurador">Procurador</SelectItem>
                                             <SelectItem value="Assessor">Assessor</SelectItem>
-                                            <SelectItem value="Estagiario">Estagiário</SelectItem>
+                                            <SelectItem value="Estagiario">Externo</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 )}
