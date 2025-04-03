@@ -58,6 +58,8 @@ export const UserCard = () => {
                 return "Procurador";
             case "Assessor":
                 return "Assessor";
+            case "Estagiario":
+                return "Externo";
             default:
                 return "Desconhecido";
         }

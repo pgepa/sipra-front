@@ -66,7 +66,7 @@ export function AccountMenu() {
             case "Assessor":
                 return "Assessor";
             case "Estagiario":
-                return "Estagiário";
+                return "Externo";
             default:
                 return "Desconhecido";
         }
