@@ -44,11 +44,25 @@ export type UserCardProps = {
     cpf: string;
 };
 
+// Função para formatar CPF
+function formatCPF(cpf: string): string {
+    if (!cpf) return '';
+    
+    // Remove todos os caracteres não numéricos
+    const numericCPF = cpf.replace(/\D/g, '');
+    
+    // Aplica a formatação do CPF (000.000.000-00)
+    return numericCPF
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+}
+
 // Função para mapear os perfis
 const getPerfilDescription = (perfil?: string) => {
-    if (!perfil) return "Desconhecido"; // Evita erro se for undefined/null
+    if (!perfil) return "Desconhecido";
 
-    const formattedPerfil = perfil.trim(); // Remove espaços extras
+    const formattedPerfil = perfil.trim();
 
     switch (formattedPerfil) {
         case "Administrador":
@@ -64,7 +78,7 @@ const getPerfilDescription = (perfil?: string) => {
         case "Externo":
             return "Externo";
         default:
-            return `Desconhecido (${formattedPerfil})`; // Exibe o valor real para facilitar debug
+            return `Desconhecido (${formattedPerfil})`;
     }
 };
 
@@ -85,10 +99,16 @@ export const columns: ColumnDef<UserCardProps>[] = [
         cell: ({ row }) => <div className="text-violet-800 font-semibold">{row.getValue("nome")}</div>,
         enableSorting: true,
     },
+    
     {
         accessorKey: "email",
         header: "Email",
         cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    },
+    {
+        accessorKey: "cpf",
+        header: "CPF",
+        cell: ({ row }) => <div>{formatCPF(row.getValue("cpf"))}</div>,
     },
     {
         accessorKey: "perfil",
@@ -136,13 +156,7 @@ export function UserCard() {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
-                // Mapeia os usuários e converte o perfil antes de salvar no estado
-                const mappedUsers = response.data.map((user: UserCardProps) => ({
-                    ...user,
-                    perfil: getPerfilDescription(user.perfil), // Mapeia o perfil aqui
-                }));
-
-                setUsers(mappedUsers);
+                setUsers(response.data);
             } catch (error) {
                 console.error("Erro ao carregar usuários:", error);
             } finally {
