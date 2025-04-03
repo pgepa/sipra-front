@@ -19,11 +19,20 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { CirclePlus } from 'lucide-react';
 
+const cpfMask = (value: string) => {
+    return value
+        .replace(/\D/g, '') // Remove tudo que não for número
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+};
+
 const signUpForm = z.object({
     nome: z.string(),
     perfil: z.string(),
     email: z.string().email(),
     senha: z.string(),
+    cpf: z.string().min(11).max(14)
 });
 
 type SignUpForm = z.infer<typeof signUpForm>;
@@ -43,6 +52,7 @@ export function SignUp() {
                 perfil: data.perfil,
                 email: data.email,
                 senha: data.senha,
+                cpf: data.cpf.replace(/\D/g, '') // Remove pontos e traços
             };
 
             const token = localStorage.getItem('token');
@@ -92,20 +102,29 @@ export function SignUp() {
                             <Label htmlFor="nome" className="text-right">
                                 Nome
                             </Label>
-                            <Input
-                                id="nome"
-                                {...register('nome')}
-                                className="col-span-3"
-                            />
+                            <Input id="nome" {...register('nome')} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="email" className="text-right">
                                 E-mail
                             </Label>
-                            <Input
-                                id="email"
-                                {...register('email')}
-                                className="col-span-3"
+                            <Input id="email" {...register('email')} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="cpf" className="text-right">CPF</Label>
+                            <Controller
+                                name="cpf"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (
+                                    <Input
+                                        id="cpf"
+                                        value={cpfMask(field.value)}
+                                        onChange={(e) => field.onChange(cpfMask(e.target.value))}
+                                        maxLength={14}
+                                        className="col-span-3"
+                                    />
+                                )}
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
@@ -134,12 +153,7 @@ export function SignUp() {
                             <Label htmlFor="senha" className="text-right">
                                 Nova Senha
                             </Label>
-                            <Input
-                                id="senha"
-                                type="password"
-                                {...register('senha')}
-                                className="col-span-3"
-                            />
+                            <Input id="senha" type="password" {...register('senha')} className="col-span-3" />
                         </div>
                     </div>
                     <DialogFooter>
