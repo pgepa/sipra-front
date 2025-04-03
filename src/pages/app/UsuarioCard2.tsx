@@ -10,6 +10,7 @@ export type UserCardProps = {
     nome: string;
     email: string;
     perfil: string;
+    cpf: string;
     ativo: boolean;
 };
 

@@ -32,7 +32,10 @@ const signUpForm = z.object({
     perfil: z.string(),
     email: z.string().email(),
     senha: z.string(),
-    cpf: z.string().min(11).max(14)
+    cpf: z
+        .string()
+        .transform((val) => val.replace(/\D/g, '')) // Remove caracteres não numéricos
+        .refine((val) => /^\d{11}$/.test(val), { message: "CPF deve conter exatamente 11 números" })
 });
 
 type SignUpForm = z.infer<typeof signUpForm>;
@@ -69,9 +72,9 @@ export function SignUp() {
 
             if (response.ok) {
                 toast.success('Usuário cadastrado com sucesso.');
-                setIsDialogOpen(false); 
-                navigate('/usuarios'); 
-                window.location.reload(); 
+                setIsDialogOpen(false);
+                navigate('/usuarios');
+                window.location.reload();
             } else {
                 toast.error(result.error || 'Cadastro inválido, favor verificar todos os campos.');
             }
@@ -112,21 +115,31 @@ export function SignUp() {
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="cpf" className="text-right">CPF</Label>
-                            <Controller
-                                name="cpf"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <Input
-                                        id="cpf"
-                                        value={cpfMask(field.value)}
-                                        onChange={(e) => field.onChange(cpfMask(e.target.value))}
-                                        maxLength={14}
-                                        className="col-span-3"
-                                    />
-                                )}
-                            />
+                            <div className="col-span-3">
+                                <Controller
+                                    name="cpf"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field, fieldState }) => (
+                                        <>
+                                            <Input
+                                                id="cpf"
+                                                value={cpfMask(field.value)}
+                                                onChange={(e) => field.onChange(cpfMask(e.target.value))}
+                                                maxLength={14}
+                                                className={`w-full ${fieldState.error ? 'border-red' : ''}`}
+                                            />
+                                            {fieldState.error && (
+                                                <p className="text-red text-sm mt-1">
+                                                    {fieldState.error.message}
+                                                </p>
+                                            )}
+                                        </>
+                                    )}
+                                />
+                            </div>
                         </div>
+
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="id_perfil" className="text-right">Perfil:</Label>
                             <Controller

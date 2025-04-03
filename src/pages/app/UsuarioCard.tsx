@@ -41,6 +41,7 @@ export type UserCardProps = {
     email: string;
     perfil: string;
     ativo: boolean;
+    cpf: string;
 };
 
 // Função para mapear os perfis
