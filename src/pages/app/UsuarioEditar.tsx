@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { UserRoundPen } from 'lucide-react';
 
 const updateUserSchema = z.object({
     nome: z.string(),
@@ -78,7 +79,9 @@ export function UserEditar({ user }: UserEditarProps) {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" onClick={() => setIsDialogOpen(true)}>Editar usuário</Button>
+                <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
+                    <UserRoundPen className="h-4 w-4 text-indigo-700"/> 
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <form onSubmit={handleSubmit(handleUpdate)}>

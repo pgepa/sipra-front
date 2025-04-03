@@ -1,106 +1,240 @@
-import { useEffect, useState } from 'react';
-import { api } from '@/lib/axios';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { UserEditar } from '@/pages/app/UsuarioEditar';
-import { UserAtivo } from '@/pages/app/UsuarioStatus';
-import GridLoader from 'react-spinners/GridLoader';
+import * as React from "react";
+import { useEffect, useState } from "react";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { ChevronDown } from "lucide-react";
+import { api } from "@/lib/axios";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { UserEditar } from "@/pages/app/UsuarioEditar";
+import { UserAtivo } from "@/pages/app/UsuarioStatus";
+import GridLoader from "react-spinners/GridLoader";
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+
+
 
 export type UserCardProps = {
-    id: number;
-    nome: string;
-    email: string;
-    perfil: string;
-    ativo: boolean;
+  id: number;
+  nome: string;
+  email: string;
+  perfil: string;
+  ativo: boolean;
 };
 
-export const UserCard = () => {
-    const [users, setUsers] = useState<UserCardProps[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [filters] = useState({
-        nome: "",
-        email: "",
-        perfil: "",
-        ativo: "",
-    });
-    const [isFiltering] = useState(false);
+export const columns: ColumnDef<UserCardProps>[] = [
+    {
+        accessorKey: "nome",
+        header: ({ column }) => {
+          return (
+            <button
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              className="flex items-center gap-2"
+            >
+              Nome
+              <ChevronDown className={`w-4 h-4 transition-transform ${column.getIsSorted() === "asc" ? "rotate-180" : ""}`} />
+            </button>
+          );
+        },
+        cell: ({ row }) => <div>{row.getValue("nome")}</div>,
+        enableSorting: true,
+      },
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+  },
+  {
+    accessorKey: "perfil",
+    header: "Perfil",
+    cell: ({ row }) => <div>{row.getValue("perfil")}</div>,
+  },
+  {
+    accessorKey: "ativo",
+    header: "Status",
+    cell: ({ row }) => {
+      const user = row.original;
+      return <UserAtivo id={user.id} ativo={user.ativo} onStatusChange={() => {}} />;
+    },
+  },
+  {
+    id: "actions",
+    header: "Ações",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <div className="flex gap-2">
+            
+          <UserEditar user={user} />
+        </div>
+      );
+    },
+  },
+];
 
+export function UserCard() {
+  const [users, setUsers] = useState<UserCardProps[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+
+  useEffect(() => {
     const loadUserCard = async () => {
-        setLoading(true);
-        try {
-            const token = localStorage.getItem('token');
-            const route = isFiltering ? '/usuarios' : '/list_users';
-            const response = await api.get(route, {
-                params: {
-                    limite: 1000, // Obtém um número alto para garantir que todos os dados sejam carregados de uma vez
-                    ...filters,
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            setUsers(response.data);
-        } catch (error) {
-            console.error('Erro ao carregar usuários:', error);
-        } finally {
-            setLoading(false);
-        }
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const response = await api.get("/list_users", {
+          params: { limite: 1000 },
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar usuários:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+    loadUserCard();
+  }, []);
 
-    // Função para obter a descrição do perfil
-    const getPerfilDescription = (perfil: string) => {
-        switch (perfil) {
-            case "Administrador":
-                return "Administrador";
-            case "Chefia":
-                return "Coordenação";
-            case "Procurador":
-                return "Procurador";
-            case "Assessor":
-                return "Assessor";
-            case "Estagiario":
-                return "Externo";
-            default:
-                return "Desconhecido";
-        }
-    };
+  const table = useReactTable({
+    data: users,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: { sorting, columnFilters, columnVisibility, rowSelection },
+  });
 
-    const handleStatusChange = () => {
-        loadUserCard();
-    };
-
-    useEffect(() => {
-        loadUserCard();
-    }, [filters]);
-
-    return (
-        <>
-            {loading && (
-                <div className="flex justify-center items-center h-screen">
-                    <GridLoader size={16} color="#9655eb" />
-                </div>
-            )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-                {users.map((user) => (
-                    <Card key={user.id} className="flex flex-col p-4 bg-white rounded-lg shadow-xl">
-                        <CardHeader className="flex flex-col space-y-2 pb-4">
-                            <CardTitle className="text-xl font-semibold text-slate-700">
-                                {user.nome}
-                            </CardTitle>
-                            <CardDescription className="text-md text-gray-500">
-                                {getPerfilDescription(user.perfil)}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-1">
-                            <p className="text-indigo-700 text-base font-semibold">{user.email}</p>
-                        </CardContent>
-                        <CardFooter className="flex gap-2 mt-1">
-                            <UserEditar user={user} />
-                            <UserAtivo id={user.id} ativo={user.ativo} onStatusChange={handleStatusChange} />
-                        </CardFooter>
-                    </Card>
+  return (
+    <div className="w-full">
+      {loading && (
+        <div className="flex justify-center items-center h-screen">
+          <GridLoader size={16} color="#9655eb" />
+        </div>
+      )}
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filtrar por nome..."
+          value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("nome")?.setFilterValue(event.target.value)}
+          className="max-w-sm"
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Colunas <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                )
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
                 ))}
-            </div>
-        </>
-    );
-};
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  Nenhum resultado encontrado.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex justify-start mt-3 mb-2">
+  <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
+    <PaginationContent>
+      <PaginationPrevious
+        size="sm"
+        onClick={() => table.previousPage()}
+
+      >
+        Página Anterior
+      </PaginationPrevious>
+
+      <PaginationItem>
+        Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
+      </PaginationItem>
+
+      <PaginationNext
+        size="sm"
+        onClick={() => table.nextPage()}
+      >
+        Próxima Página
+      </PaginationNext>
+    </PaginationContent>
+  </Pagination>
+</div>
+
+    </div>
+  );
+}
