@@ -19,6 +19,46 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { CirclePlus } from 'lucide-react';
 
+// Função para validar dígitos verificadores do CPF
+function validateCPF(cpf: string): boolean {
+    cpf = cpf.replace(/\D/g, '');
+    
+    // Verifica se tem 11 dígitos ou se é uma sequência de números repetidos
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        return false;
+    }
+
+    let sum = 0;
+    let remainder;
+
+    // Valida primeiro dígito verificador
+    for (let i = 1; i <= 9; i++) {
+        sum += parseInt(cpf.substring(i-1, i)) * (11 - i);
+    }
+    remainder = (sum * 10) % 11;
+    if ((remainder === 10) || (remainder === 11)) {
+        remainder = 0;
+    }
+    if (remainder !== parseInt(cpf.substring(9, 10))) {
+        return false;
+    }
+
+    // Valida segundo dígito verificador
+    sum = 0;
+    for (let i = 1; i <= 10; i++) {
+        sum += parseInt(cpf.substring(i-1, i)) * (12 - i);
+    }
+    remainder = (sum * 10) % 11;
+    if ((remainder === 10) || (remainder === 11)) {
+        remainder = 0;
+    }
+    if (remainder !== parseInt(cpf.substring(10, 11))) {
+        return false;
+    }
+
+    return true;
+}
+
 const cpfMask = (value: string) => {
     return value
         .replace(/\D/g, '') // Remove tudo que não for número
@@ -35,7 +75,12 @@ const signUpForm = z.object({
     cpf: z
         .string()
         .transform((val) => val.replace(/\D/g, '')) // Remove caracteres não numéricos
-        .refine((val) => /^\d{11}$/.test(val), { message: "CPF deve conter exatamente 11 números" })
+        .refine((val) => val.length === 11, { 
+            message: "CPF deve conter exatamente 11 números" 
+        })
+        .refine((val) => validateCPF(val), { 
+            message: "CPF inválido (dígitos verificadores incorretos)" 
+        })
 });
 
 type SignUpForm = z.infer<typeof signUpForm>;
@@ -125,7 +170,12 @@ export function SignUp() {
                                             <Input
                                                 id="cpf"
                                                 value={cpfMask(field.value)}
-                                                onChange={(e) => field.onChange(cpfMask(e.target.value))}
+                                                onChange={(e) => {
+                                                    const unmasked = e.target.value.replace(/\D/g, '');
+                                                    if (unmasked.length <= 11) {
+                                                        field.onChange(unmasked);
+                                                    }
+                                                }}
                                                 maxLength={14}
                                                 className={`w-full ${fieldState.error ? 'border-red' : ''}`}
                                             />
@@ -147,7 +197,7 @@ export function SignUp() {
                                 control={control}
                                 defaultValue=""
                                 render={({ field }) => (
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className="col-span-3">
                                             <SelectValue placeholder="Escolha uma opção" />
                                         </SelectTrigger>
