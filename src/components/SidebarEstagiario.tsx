@@ -1,11 +1,10 @@
-import { House, ChevronFirst, ChevronDown, CircleDollarSign, PcCase, UserRoundSearch, HandCoins, ScanEye, Brain } from 'lucide-react';
+import { House, ChevronFirst, ChevronDown, CircleDollarSign, PcCase, UserRoundSearch, HandCoins } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export function SidebarEstagiario({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
     const location = useLocation();       
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
-    const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
 
     return (
         <aside className={`bg-gray-200 p-3 h-full relative transition-all duration-300 ${
@@ -64,34 +63,7 @@ export function SidebarEstagiario({ open, setOpen }: { open: boolean; setOpen: (
                         <HandCoins className="h-6 w-6" />
                         {open && <span className='font-medium'>Consulta de Débitos</span>}
                     </Link>
-
-                    <div className="relative">
-                        <button
-                            onClick={() => setRegimeEspecialOpen(!RegimeEspecialOpen)}
-                            className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/estagiario/recc") ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                        >
-                            <Brain className="h-6 w-6" />
-                            {open && <span className='font-medium'>Regime Especial</span>}
-                            {open && <ChevronDown className={`ml-auto transition-transform ${RegimeEspecialOpen ? "rotate-180" : ""}`} />}
-                        </button>
-
-
-                        {RegimeEspecialOpen && open && (
-                            <div className="ml-6 space-y-1">
-                                <Link
-                                    to="/estagiario/recc/acompanhamentoespecial"
-                                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/estagiario/recc/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                                >
-                                    <ScanEye className="h-5 w-5" />
-                                    Execução Fiscal
-                                </Link>
-
-
-                            </div>
-
-
-                        )}
-                    </div>
+                    
                 </div>
 
 
