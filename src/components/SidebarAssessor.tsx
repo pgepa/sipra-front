@@ -1,10 +1,9 @@
-import { FileSearch, House, ChevronFirst, ChevronDown, Ruler, Gavel, Scale, CircleDollarSign, PcCase, UserRoundSearch, HandCoins, ScanEye, Brain } from 'lucide-react';
+import { House, ChevronFirst, ChevronDown, CircleDollarSign, PcCase, UserRoundSearch, HandCoins, ScanEye, Brain } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export function SidebarAssessor({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
     const location = useLocation();
-    const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
     const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
     const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
 
@@ -25,52 +24,6 @@ export function SidebarAssessor({ open, setOpen }: { open: boolean; setOpen: (op
                     {open && <span className='font-medium'>Home</span>}
                 </Link>
 
-
-
-                <div className="relative">
-                    <button
-                        onClick={() => setReguaCobrancaOpen(!reguaCobrancaOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/assessor/reguacobranca") ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                    >
-                        <Ruler className="h-6 w-6" />
-                        {open && <span className='font-medium'>Régua de Cobrança</span>}
-                        {open && <ChevronDown className={`ml-auto transition-transform ${reguaCobrancaOpen ? "rotate-180" : ""}`} />}
-                    </button>
-
-
-                    {reguaCobrancaOpen && open && (
-                        <div className="ml-6 space-y-1">
-
-
-                            <Link
-                                to="/assessor/reguacobranca/protesto"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/reguacobranca/protesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                            >
-                                <FileSearch className="h-5 w-5" />
-                                Protesto
-                            </Link>
-
-                            <Link
-                                to="/assessor/reguacobranca/ajuizamento"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/reguacobranca/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                            >
-                                <Gavel className="h-5 w-5" />
-                                Para Ajuizamento
-                            </Link>
-
-                            <Link
-                                to="/assessor/reguacobranca/ajuizadas"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/reguacobranca/ajuizadas" ? "font-bold text-indigo-700" : "text-gray-500"}`}
-                            >
-                                <Scale className="h-5 w-5" />
-                                Ajuizadas
-                            </Link>
-
-
-
-                        </div>
-                    )}
-                </div>
 
                 <div className="relative">
                     <button
