@@ -13,14 +13,14 @@ import {
     ChartArea, 
     ChartScatter, 
     ChartNoAxesCombined, 
-    CircleDollarSign, 
     PcCase, 
     UserRoundSearch, 
     ChartPie, 
     Handshake, 
     HandCoins,
     ScanEye,
-    Brain, 
+    Brain,
+    UserRound, 
 } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -103,7 +103,7 @@ export function Sidebar({ open, setOpen }: { open: boolean; setOpen: (open: bool
                         onClick={() => setPessoasOpen(!pessoasOpen)}
                         className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/pessoas") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
-                        <CircleDollarSign className="h-6 w-6" />
+                        <UserRound className="h-6 w-6" />
                         {open && <span className='font-medium'>Pessoas</span>}
                         {open && <ChevronDown className={`ml-auto transition-transform ${pessoasOpen ? "rotate-180" : ""}`} />}
                     </button>

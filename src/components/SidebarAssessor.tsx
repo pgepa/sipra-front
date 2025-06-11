@@ -1,4 +1,4 @@
-import { House, ChevronFirst, ChevronDown, CircleDollarSign, PcCase, UserRoundSearch, HandCoins, ScanEye, Brain } from 'lucide-react';
+import { House, ChevronFirst, ChevronDown, PcCase, UserRoundSearch, HandCoins, ScanEye, Brain, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ export function SidebarAssessor({ open, setOpen }: { open: boolean; setOpen: (op
                         onClick={() => setPessoasOpen(!pessoasOpen)}
                         className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/assessor/pessoas") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
-                        <CircleDollarSign className="h-6 w-6" />
+                        <UserRound className="h-6 w-6" />
                         {open && <span className='font-medium'>Pessoas</span>}
                         {open && <ChevronDown className={`ml-auto transition-transform ${pessoasOpen ? "rotate-180" : ""}`} />}
                     </button>
