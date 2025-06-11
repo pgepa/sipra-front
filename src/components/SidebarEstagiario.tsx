@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 export function SidebarEstagiario({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
     const location = useLocation();       
-    const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
+    const [pessoasOpen, setPessoasOpen] = useState(false);
 
     return (
         <aside className={`bg-gray-200 p-3 h-full relative transition-all duration-300 ${
@@ -26,27 +26,27 @@ export function SidebarEstagiario({ open, setOpen }: { open: boolean; setOpen: (
 
                 <div className="relative">
                     <button
-                        onClick={() => setIndicioPatrimonialOpen(!indicioPatrimonialOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/estagiario/indiciopatrimonial") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                        onClick={() => setPessoasOpen(!pessoasOpen)}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/estagiario/pessoas") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
                         <CircleDollarSign className="h-6 w-6" />
-                        {open && <span className='font-medium'>Indício Patrimonial</span>}
-                        {open && <ChevronDown className={`ml-auto transition-transform ${indicioPatrimonialOpen ? "rotate-180" : ""}`} />}
+                        {open && <span className='font-medium'>Pessoas</span>}
+                        {open && <ChevronDown className={`ml-auto transition-transform ${pessoasOpen ? "rotate-180" : ""}`} />}
                     </button>
 
 
-                    {indicioPatrimonialOpen && open && (
+                    {pessoasOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
-                                to="/estagiario/indiciopatrimonial/cnpj"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/estagiario/indiciopatrimonial/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/estagiario/pessoas/cnpj"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/estagiario/pessoas/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <PcCase className="h-5 w-5" />
                                 Pessoa Jurídica
                             </Link>
                             <Link
-                                to="/estagiario/indiciopatrimonial/cpf"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/estagiario/indiciopatrimonial/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/estagiario/pessoas/cpf"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/estagiario/pessoas/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <UserRoundSearch className="h-5 w-5" />
                                 Pessoa Física
