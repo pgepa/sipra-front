@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 export function SidebarAssessor({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
     const location = useLocation();
-    const [indicioPatrimonialOpen, setIndicioPatrimonialOpen] = useState(false);
+    const [pessoasOpen, setPessoasOpen] = useState(false);
     const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
 
     return (
@@ -27,27 +27,27 @@ export function SidebarAssessor({ open, setOpen }: { open: boolean; setOpen: (op
 
                 <div className="relative">
                     <button
-                        onClick={() => setIndicioPatrimonialOpen(!indicioPatrimonialOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/assessor/indiciopatrimonial") ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                        onClick={() => setPessoasOpen(!pessoasOpen)}
+                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/assessor/pessoas") ? "font-bold text-indigo-700" : "text-gray-500"}`}
                     >
                         <CircleDollarSign className="h-6 w-6" />
-                        {open && <span className='font-medium'>Indício Patrimonial</span>}
-                        {open && <ChevronDown className={`ml-auto transition-transform ${indicioPatrimonialOpen ? "rotate-180" : ""}`} />}
+                        {open && <span className='font-medium'>Pessoas</span>}
+                        {open && <ChevronDown className={`ml-auto transition-transform ${pessoasOpen ? "rotate-180" : ""}`} />}
                     </button>
 
 
-                    {indicioPatrimonialOpen && open && (
+                    {pessoasOpen && open && (
                         <div className="ml-6 space-y-1">
                             <Link
-                                to="/assessor/indiciopatrimonial/cnpj"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/indiciopatrimonial/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/assessor/pessoas/cnpj"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/pessoas/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <PcCase className="h-5 w-5" />
                                 Pessoa Jurídica
                             </Link>
                             <Link
-                                to="/assessor/indiciopatrimonial/cpf"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/indiciopatrimonial/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}
+                                to="/assessor/pessoas/cpf"
+                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/pessoas/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}
                             >
                                 <UserRoundSearch className="h-5 w-5" />
                                 Pessoa Física
