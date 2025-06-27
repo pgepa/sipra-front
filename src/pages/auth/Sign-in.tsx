@@ -69,13 +69,13 @@ export function SignIn() {
                 <div className="w-[350px] flex flex-col justify-center gap-6 mx-auto">
                     <div className="flex flex-col items-center gap-2 text-center">
                         <img className="h-16 w-16 text-white" src={logo} alt="Logo" />
-                        <h1 className="text-2xl text-gray-800 font-semibold tracking-tighter">Acessar Painel</h1>
-                        <p className="text-sm text-gray-600 ">SiDA - Sistema de Inteligência da Dívida Ativa</p>
+                        <h1 className="text-2xl text-yellow-400 font-semibold tracking-tighter">Acessar Painel</h1>
+                        <p className="text-sm text-gray-300">SIDA - Sistema de Inteligência da Dívida Ativa</p>
                     </div>
 
                     <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email" className='font-semibold text-sm text-gray-800'>E-mail</Label>
+                            <Label htmlFor="email" className='font-semibold text-sm text-gray-300'>E-mail:</Label>
 
                             <div className="relative">
                                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
@@ -91,7 +91,7 @@ export function SignIn() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="senha" className='font-semibold text-sm text-gray-800'>Senha</Label>
+                            <Label htmlFor="senha" className='font-semibold text-sm text-gray-300'>Senha:</Label>
 
                             <div className="relative">
                                 <span  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
@@ -106,7 +106,7 @@ export function SignIn() {
 
                         {error && <p className="text-red-500">{error}</p>}
 
-                        <Button disabled={isSubmitting} className="w-full" type="submit">Entrar</Button>
+                        <Button disabled={isSubmitting} className="w-full bg-yellow-600 hover:bg-yellow-500 " type="submit">Entrar</Button>
                     </form>
 
 
