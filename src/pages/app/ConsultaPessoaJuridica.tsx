@@ -56,12 +56,12 @@ interface Debitos {
 }
 
 interface ParticipacaoProcessos {
-    nudocformatado: string;
+    nudocumento: string;
     tpparte: string;
     processosaj: string;
     numjudicial: string;
     classe: string;
-    assunto: string;
+    assuntoinstituicao: string;
     comarca: string;
     vara: string;
 }
@@ -637,7 +637,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                             <div className="flex flex-wrap gap-4">
                                                                 <div className="flex flex-col gap-1 min-w-[150px]">
                                                                     <span className="font-semibold text-slate-700">Documento:</span>
-                                                                    <span className="text-muted-foreground">{processo.nudocformatado}</span>
+                                                                    <span className="text-muted-foreground">{processo.nudocumento}</span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1 min-w-[150px]">
                                                                     <span className="font-semibold text-slate-700">Tipo Participação:</span>
@@ -657,7 +657,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                                 </div>
                                                                 <div className="flex flex-col gap-1 min-w-[150px]">
                                                                     <span className="font-semibold text-slate-700">Assunto:</span>
-                                                                    <span className="text-muted-foreground">{processo.assunto}</span>
+                                                                    <span className="text-muted-foreground">{processo.assuntoinstituicao}</span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1 min-w-[150px]">
                                                                     <span className="font-semibold text-slate-700">Comarca:</span>
