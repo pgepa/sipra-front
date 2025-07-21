@@ -19,6 +19,8 @@ import { ChevronDown } from 'lucide-react';
 
 
 
+
+
 interface ProtestoData {
     cda: string;
     contribuinte: string;
@@ -42,9 +44,8 @@ interface ProtestoData {
     vljurosatualizado: number;
     vlimpatualizado: number;
     vlcdaatualizado: number;
-    status_saj: string;
-    dt_status_saj: string;
-    ulthistorico: string | null;
+    statusdebito: string;
+    dtstatus: string;
     dt_ulthist: string | null;
     flajuizada: string;
     sit_protesto: string;
@@ -52,7 +53,6 @@ interface ProtestoData {
     prescrito: string;
     obs_end_protesto: string;
     periodoprotesto: string;
-    conveniadoieptb: string;
     uf: string;
 }
 
@@ -77,15 +77,13 @@ export function Protesto() {
         fundamento: '',
         vlcdaatualizado_min: '',
         vlcdaatualizado_max: '',
-        status_saj: [] as string[],
+        statusdebito: [] as string[],
         flajuizada: '',
         prescrito: [] as string[],
         obs_end_protesto: '',
         origemdivida: '',
-        ulthistorico: [] as string[],
         sit_protesto: [] as string[],
         uf: [] as string[],
-        conveniadoieptb: '',
     });
 
 
@@ -112,9 +110,8 @@ export function Protesto() {
                     uf: filters.uf.join(","),
                     porte: filters.porte.join(","),
                     situacaocadastral: filters.situacaocadastral.join(","),
-                    ulthistorico: filters.ulthistorico.join(","),
                     tipotributo: filters.tipotributo.join(","),
-                    status_saj: filters.status_saj.join(","),
+                    statusdebito: filters.statusdebito.join(","),
                     prescrito: filters.prescrito.join(","),
 
                 },
@@ -192,15 +189,13 @@ export function Protesto() {
             fundamento: '',
             vlcdaatualizado_min: '',
             vlcdaatualizado_max: '',
-            status_saj: [],
+            statusdebito: [],
             flajuizada: '',
             prescrito: [],
             obs_end_protesto: '',
             origemdivida: '',
-            ulthistorico: [],
             sit_protesto: [],
             uf: [],
-            conveniadoieptb: '',
         });
         setPage(1);
         fetchProtestos(1);
@@ -208,7 +203,7 @@ export function Protesto() {
         setIsAjuizadasSelected(true);
     };
 
-    const handleCheckboxChange = (type: 'sit_protesto' | 'uf' | 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
+    const handleCheckboxChange = (type: 'sit_protesto' | 'uf' | 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'prescrito', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -218,14 +213,17 @@ export function Protesto() {
         });
     };
     const situacoesProtesto = [
-        "Ag. Protesto",
-        "Cancelamento",
+        "Aguardando envio",
+        "Aguardando recebimento",
+        "Cancelado",
+        "Confirmado",
         "Devolvido",
-        "Kit Protesto Gerado",
-        "Não Protestado",
-        "Protestado",
+        "Enviado",
+        "Gerado",
         "Pago",
-        "Sustado"
+        "Protestado",
+        "Retirado",
+        "Sustado",
     ];
     const uf = [
         "AC",
@@ -272,29 +270,7 @@ export function Protesto() {
         "Suspensa",
     ]
 
-    const historicos = [
-        "Aguardando ajuizamento",
-        "Ajuizada",
-        "Cancelada",
-        "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
-        "Exclusão do Ajuizamento",
-        "Execução fiscal excluída",
-        "Execução fiscal extinta",
-        "Inscrita",
-        "Kit de ajuizamento excluído",
-        "Kit de protesto excluído",
-        "Kit de protesto gerado",
-        "Protesto pago",
-        "Protesto sustado",
-        "Processo protesto excluído",
-        "Processo protesto extinto",
-        "Protestada",
-        "Protestada por edital",
-        "Quitada",
-        "Suspensa",
-
-    ]
-
+    
     const tributos = [
         "Dívida Ativa ICMS",
         "Dívida Ativa IPVA",
@@ -305,7 +281,7 @@ export function Protesto() {
 
     ]
 
-    const statusSaj = [
+    const statusDebito = [
 
         "Inscrita",
         "Cancelada",
@@ -546,29 +522,7 @@ export function Protesto() {
 
                     </div>
 
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Último Histórico:</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>{filters.ulthistorico.length > 0 ? filters.ulthistorico.join(", ") : "Escolha uma opção"}</span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4 max-h-48 overflow-y-auto">
-                                {historicos.map((option) => (
-                                    <DropdownMenuItem key={option} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.ulthistorico.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('ulthistorico', option)}
-                                        />
-                                        <Label className="ml-2 font-normal">{option}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-
-                    </div>
+                   
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Tributo:</Label>
                         <DropdownMenu>
@@ -594,20 +548,20 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Status (SAJ):</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Status:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>{filters.status_saj.length > 0 ? filters.status_saj.join(", ") : "Escolha uma opção"}</span>
+                                    <span className='font-normal truncate'>{filters.statusdebito.length > 0 ? filters.statusdebito.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="p-4">
-                                {statusSaj.map((option) => (
+                                {statusDebito.map((option) => (
                                     <DropdownMenuItem key={option} className="flex items-center">
                                         <Checkbox
-                                            checked={filters.status_saj.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('status_saj', option)}
+                                            checked={filters.statusdebito.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('statusdebito', option)}
                                         />
                                         <Label className="ml-2 font-normal">{option}</Label>
                                     </DropdownMenuItem>
@@ -635,25 +589,7 @@ export function Protesto() {
 
                     </div>
 
-                    <div className='space-y-2'>
-
-                        <Label className='font-semibold text-sm text-gray-800'>Convênio IEPTB:</Label>
-
-                        <Select value={filters.conveniadoieptb} onValueChange={(value) => setFilters({ ...filters, conveniadoieptb: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="S">SIM</SelectItem>
-                                <SelectItem value="N">NÃO</SelectItem>
-
-                            </SelectContent>
-                        </Select>
-
-                    </div>
-
-
+                    
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Prescrição Originária:</Label>
                         <DropdownMenu>
@@ -937,10 +873,8 @@ export function Protesto() {
                                                     <TableCell className='text-muted-foreground'>Descrição</TableCell>
                                                     <TableCell className='flex justify-end'>{protesto.descricao}</TableCell>
                                                 </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Último Histórico</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.ulthistorico}</TableCell>
-                                                </TableRow>
+                                               
+                                               
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data Último Histórico</TableCell>
                                                     <TableCell className='flex justify-end'>
@@ -995,11 +929,11 @@ export function Protesto() {
                                                 </TableRow>
 
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Status SAJ</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.dt_status_saj
+                                                    <TableCell className='text-muted-foreground'>Data Status</TableCell>
+                                                    <TableCell className='flex justify-end'>{protesto.dtstatus
                                                         ? (() => {
 
-                                                            const data = new Date(protesto.dt_status_saj.replace(' ', 'T'));
+                                                            const data = new Date(protesto.dtstatus.replace(' ', 'T'));
                                                             console.log('Data analisada:', data);
 
 
@@ -1125,7 +1059,7 @@ export function Protesto() {
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700 w-full sm:w-auto cursor-default'>
 
-                                {protesto.status_saj}
+                                {protesto.statusdebito}
 
                             </Button>
 
