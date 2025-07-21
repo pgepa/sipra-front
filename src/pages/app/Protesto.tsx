@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Search, SearchX, SquareArrowOutUpRight, X } from 'lucide-react';
 import { GrDocumentExcel } from "react-icons/gr";
-import { format, parse } from 'date-fns';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
 import { Label } from '@/components/ui/label';
@@ -16,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from 'lucide-react';
+import { formatarData } from '@/lib/utils'; // Importe a função
 
 
 
@@ -46,7 +46,6 @@ interface ProtestoData {
     vlcdaatualizado: number;
     statusdebito: string;
     dtstatus: string;
-    dt_ulthist: string | null;
     flajuizada: string;
     sit_protesto: string;
     parcelamento: string;
@@ -283,13 +282,10 @@ export function Protesto() {
 
     const statusDebito = [
 
-        "Inscrita",
-        "Cancelada",
-        "Exclusão",
-        "Ajuizamento",
-        "Análise CDAs Legado",
-        "Quitada",
-        "Suspensa",
+        "Ativo",
+        "Cancelado",
+        "Extinto",
+        "Suspenso",
     ]
 
     const prescritos = [
@@ -790,76 +786,21 @@ export function Protesto() {
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data Situação Cadastral</TableCell>
-                                                    <TableCell className='flex justify-end'>
-                                                        {protesto.dtsituacaocadastral
-                                                            ? (() => {
-                                                                const data = parse(protesto.dtsituacaocadastral, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
-
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy');
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>
+                                                      <TableCell className='flex justify-end'>{formatarData(protesto.dtsituacaocadastral)}</TableCell>
+                                                    
                                                 </TableRow>
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data Início de Atividade</TableCell>
-                                                    <TableCell className='flex justify-end'>
-                                                        {protesto.dtinicioatividade
-                                                            ? (() => {
-                                                                const data = parse(protesto.dtinicioatividade, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
-
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy');
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>
+                                                      <TableCell className='flex justify-end'>{formatarData(protesto.dtinicioatividade)}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data de Inscrição</TableCell>
-                                                    <TableCell className='flex justify-end'>
-                                                        {protesto.dtinscricao
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dtinscricao.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
-
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>
+                                                     <TableCell className='flex justify-end'>{formatarData(protesto.dtinscricao)}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data de Referência</TableCell>
-                                                    <TableCell className='flex justify-end'>
-
-                                                        {protesto.dtreferencia
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dtreferencia.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
-
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-
-                                                    </TableCell>
+                                                     <TableCell className='flex justify-end'>{formatarData(protesto.dtreferencia)}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
@@ -872,28 +813,8 @@ export function Protesto() {
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Descrição</TableCell>
                                                     <TableCell className='flex justify-end'>{protesto.descricao}</TableCell>
-                                                </TableRow>
-                                               
-                                               
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Último Histórico</TableCell>
-                                                    <TableCell className='flex justify-end'>
-                                                        {protesto.dt_ulthist
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dt_ulthist.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
-
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>
-                                                </TableRow>
+                                                </TableRow>                                             
+                                                                                              
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Tipo de Tributo</TableCell>
@@ -930,20 +851,7 @@ export function Protesto() {
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data Status</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.dtstatus
-                                                        ? (() => {
-
-                                                            const data = new Date(protesto.dtstatus.replace(' ', 'T'));
-                                                            console.log('Data analisada:', data);
-
-
-                                                            if (!isNaN(data.getTime())) {
-                                                                return format(data, 'dd/MM/yyyy');
-                                                            } else {
-                                                                return 'Data inválida';
-                                                            }
-                                                        })()
-                                                        : '-'}</TableCell>
+                                                      <TableCell className='flex justify-end'>{formatarData(protesto.dtstatus)}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
@@ -1076,21 +984,7 @@ export function Protesto() {
                         </div>
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 w-full sm:w-auto cursor-default'>
-                                Referência: {protesto.dtreferencia
-                                    ? (() => {
-                                        // Aqui, usamos o construtor Date para analisar a data diretamente
-                                        const data = new Date(protesto.dtreferencia.replace(' ', 'T')); // Converte para formato ISO
-                                        console.log('Data analisada:', data);
-
-                                        // Verifica se a data é válida
-                                        if (!isNaN(data.getTime())) {
-                                            return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                        } else {
-                                            return 'Data inválida';
-                                        }
-                                    })()
-                                    : '-'}
-
+                                Referência: {formatarData(protesto.dtreferencia)}
                             </Button>
 
 
