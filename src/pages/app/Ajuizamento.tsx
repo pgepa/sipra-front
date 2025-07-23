@@ -22,7 +22,7 @@ interface ProtestoData {
     cda: string;
     contribuinte: string;
     docformatado: string;
-    doc_raiz: string;
+    docraiz: string;
     tpdoc: string;
     natjuridica: string | null;
     porte: string | null;
@@ -55,7 +55,7 @@ interface ProtestoData {
     qtdveiculos: string;
     qtdsemas: string;
     qtdadepara: string;
-    nudocumento: string;
+    documento: string;
 }
 
 export function Ajuizamento() {
@@ -68,10 +68,10 @@ export function Ajuizamento() {
     const [isCNPJSelected, setIsCNPJSelected] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [filters, setFilters] = useState({
-        nudocumento: '',
+        documento: '',
         contribuinte: '',
         tpdoc: '',
-        doc_raiz: '',
+        docraiz: '',
         porte: [] as string[],
         situacaocadastral: [] as string[],
         tipotributo: [] as string[],
@@ -175,7 +175,7 @@ export function Ajuizamento() {
 
     const handleClearFilters = () => {
         setFilters({
-            nudocumento: '',
+            documento: '',
             contribuinte: '',
             tpdoc: '',
             porte: [],
@@ -188,7 +188,7 @@ export function Ajuizamento() {
             prescrito: [],
             origemdivida: '',
             indiciopatrimonial: '',
-            doc_raiz: '',
+            docraiz: '',
         });
         setPage(1);
         fetchProtestos(1);
@@ -275,8 +275,8 @@ export function Ajuizamento() {
                             <Input
                                 placeholder='Buscar por CPF/CNPJ'
                                 className='pl-10 col-span-1'
-                                value={filters.nudocumento}
-                                onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
+                                value={filters.documento}
+                                onChange={(e) => setFilters({ ...filters, documento: e.target.value })}
                             />
 
                         </div>
@@ -293,8 +293,8 @@ export function Ajuizamento() {
                             <Input
                                 placeholder='Buscar por CNPJ/Raiz'
                                 className='pl-10 col-span-1'
-                                value={filters.doc_raiz}
-                                onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
+                                value={filters.docraiz}
+                                onChange={(e) => setFilters({ ...filters, docraiz: e.target.value })}
                             />
                         </div>
 
