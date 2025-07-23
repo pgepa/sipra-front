@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
 import { AiFillFilePdf } from 'react-icons/ai';
+import { formatarData } from '@/lib/utils';
 
 interface DadosCadastrais {
     docformatado: string;
@@ -514,11 +515,11 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                                                                     </div>
                                                                     <div className="flex flex-col gap-1 min-w-[150px]">
                                                                         <span className="font-semibold text-slate-700">Entrada Sociedade:</span>
-                                                                        <span className="text-muted-foreground">{socio.dt_entrada_sociedade}</span>
+                                                                        <span className="text-muted-foreground">{formatarData(socio.dt_entrada_sociedade)}</span>
                                                                     </div>
                                                                     <div className="flex flex-col gap-1 min-w-[150px]">
                                                                         <span className="font-semibold text-slate-700">Saída Sociedade:</span>
-                                                                        <span className="text-muted-foreground">{socio.dt_saida_sociedade}</span>
+                                                                        <span className="text-muted-foreground">{formatarData(socio.dt_saida_sociedade)}</span>
                                                                     </div>
                                                                     <div className="flex flex-col gap-1 min-w-[150px]">
                                                                         <span className="font-semibold text-slate-700">Status Sociedade:</span>
