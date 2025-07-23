@@ -215,12 +215,10 @@ export function Protesto() {
         "Aguardando envio",
         "Aguardando recebimento",
         "Cancelado",
-        "Confirmado",
         "Devolvido",
         "Enviado",
         "Gerado",
         "Pago",
-        "Protestado",
         "Retirado",
         "Sustado",
     ];
