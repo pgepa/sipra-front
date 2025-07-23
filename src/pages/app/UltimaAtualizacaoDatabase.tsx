@@ -3,20 +3,12 @@ import { api } from '@/lib/axios';
 import { Badge } from "@/components/ui/badge";
 import { Helmet } from 'react-helmet-async';
 import { Bot, Cog, AlertTriangle } from 'lucide-react';
+import { formatarData } from '@/lib/utils';
 
 interface UserData {
     tabela: string;
     ultima_atualizacao: string;
 }
-
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-};
 
 const isOutdated = (tabela: string, ultimaAtualizacao: string): boolean => {
     const hoje = new Date();
@@ -111,7 +103,7 @@ export const UltimaAtualizacaoDatabase: React.FC = () => {
                                             </Badge>
                                         </span>
                                         <span className="text-muted-foreground">
-                                            Última Atualização: {formatDate(dados.ultima_atualizacao)}
+                                            Última Atualização: {formatarData(dados.ultima_atualizacao)}
                                         </span>
                                     </div>
 

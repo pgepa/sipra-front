@@ -1,13 +1,14 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { format, parse, isValid } from 'date-fns'; // Importamos 'isValid' para uma verificação mais clara
+import { format, parse, isValid } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 
 /**
  * Formata uma string de data vinda da API para o formato dd/MM/yyyy.
  * Suporta os formatos:
- * - "EEE, dd MMM yyyy HH:mm:ss 'GMT'" (ex: "Thu, 28 Jun 1984 00:00:00 GMT")
+ * - "EEE, dd MMM yyyy HH:mm:ss 'GMT'" (ex: "Wed, 23 Jul 2025 12:55:45 GMT")
  * - "yyyy-MM-dd HH:mm:ss.SSS"         (ex: "1984-06-28 00:00:00.000")
+ * - "yyyy-MM-dd HH:mm:ss xx"          (ex: "2025-07-22 23:06:08 -0300")
  * @param dataString A data em um dos formatos de string suportados.
  * @returns A data formatada como 'dd/MM/yyyy', ou '-' se a entrada for nula/indefinida, ou 'Data inválida' se o formato não for reconhecido.
  */
@@ -17,34 +18,38 @@ export function formatarData(dataString: string | null | undefined): string {
     return '-';
   }
 
-  // 2. Define os formatos de entrada que a função tentará interpretar
-  const formatoGMT = "EEE, dd MMM yyyy HH:mm:ss 'GMT'";
-  const formatoComMillis = "yyyy-MM-dd HH:mm:ss.SSS";
+  // 2. Define uma lista com todos os formatos de entrada que a função suporta.
+  // A ordem importa: formatos mais específicos ou comuns devem vir primeiro.
+  const formatosPossiveis = [
+    "EEE, dd MMM yyyy HH:mm:ss 'GMT'", // Formato original
+    "yyyy-MM-dd HH:mm:ss.SSS",         // Formato com milissegundos
+    "yyyy-MM-dd HH:mm:ss xx"           // NOVO: Formato com timezone offset (-0300)
+  ];
 
-  // --- LÓGICA ATUALIZADA ---
-  // Tenta o primeiro formato (o original)
-  let data = parse(
-    dataString,
-    formatoGMT,
-    new Date(),
-    { locale: enUS } // Importante para meses como "Jun"
-  );
+  let data: Date | null = null;
 
-  // Se o primeiro formato falhar, tenta o novo formato
-  if (!isValid(data)) {
-    data = parse(
+  // 3. Itera sobre a lista de formatos e tenta fazer o parse
+  for (const formato of formatosPossiveis) {
+    const dataTentativa = parse(
       dataString,
-      formatoComMillis,
+      formato,
       new Date(),
+      // O locale é crucial para o formato GMT com nomes de meses em inglês
       { locale: enUS }
     );
+
+    // Se o parse for bem-sucedido, armazena a data e interrompe o laço
+    if (isValid(dataTentativa)) {
+      data = dataTentativa;
+      break;
+    }
   }
 
-  // 4. Verifica se algum dos parses funcionou e retorna a data formatada
-  if (isValid(data)) {
-    return format(data, 'dd/MM/yyyy'); // Formato de saída: 28/06/1984
+  // 4. Se uma data válida foi encontrada, formata e retorna
+  if (data) {
+    return format(data, 'dd/MM/yyyy'); // Ex: 22/07/2025
   } else {
-    // Se ambos falharem, retorna um valor padrão
+    // Se nenhum formato da lista funcionou, retorna o valor padrão
     return 'Data inválida';
   }
 }
