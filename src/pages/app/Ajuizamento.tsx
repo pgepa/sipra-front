@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Search, SearchX, SquareArrowOutUpRight, X } from 'lucide-react';
 import { GrDocumentExcel } from "react-icons/gr";
-import { format, parse } from 'date-fns';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
 import { Label } from '@/components/ui/label';
@@ -16,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from 'lucide-react';
+import { formatarData } from '@/lib/utils';
 
 
 interface ProtestoData {
@@ -23,7 +23,7 @@ interface ProtestoData {
     contribuinte: string;
     docformatado: string;
     doc_raiz: string;
-    tipodoc: string;
+    tpdoc: string;
     natjuridica: string | null;
     porte: string | null;
     situacaocadastral: string | null;
@@ -41,10 +41,8 @@ interface ProtestoData {
     vljurosatualizado: number;
     vlimpatualizado: number;
     vlcdaatualizado: number;
-    status_saj: string;
-    dt_status_saj: string;
-    ulthistorico: string | null;
-    dt_ulthist: string | null;
+    statusdebito: string;
+    dtstatus: string;    
     flajuizada: string;
     sit_protesto: string;
     parcelamento: string;
@@ -72,18 +70,17 @@ export function Ajuizamento() {
     const [filters, setFilters] = useState({
         nudocumento: '',
         contribuinte: '',
-        tipodoc: '',
+        tpdoc: '',
         doc_raiz: '',
         porte: [] as string[],
         situacaocadastral: [] as string[],
         tipotributo: [] as string[],
         vlcdaatualizado_min: '',
         vlcdaatualizado_max: '',
-        status_saj: [] as string[],
+        statusdebito: [] as string[],
         parcelamento: '',
         prescrito: [] as string[],
         origemdivida: '',
-        ulthistorico: [] as string[],
         indiciopatrimonial: '',
     });
 
@@ -109,9 +106,8 @@ export function Ajuizamento() {
 
                     porte: filters.porte.join(","),
                     situacaocadastral: filters.situacaocadastral.join(","),
-                    ulthistorico: filters.ulthistorico.join(","),
                     tipotributo: filters.tipotributo.join(","),
-                    status_saj: filters.status_saj.join(","),
+                    statusdebito: filters.statusdebito.join(","),
                     prescrito: filters.prescrito.join(","),
 
                 },
@@ -181,17 +177,16 @@ export function Ajuizamento() {
         setFilters({
             nudocumento: '',
             contribuinte: '',
-            tipodoc: '',
+            tpdoc: '',
             porte: [],
             situacaocadastral: [],
             tipotributo: [],
             vlcdaatualizado_min: '',
             vlcdaatualizado_max: '',
-            status_saj: [],
+            statusdebito: [],
             parcelamento: '',
             prescrito: [],
             origemdivida: '',
-            ulthistorico: [],
             indiciopatrimonial: '',
             doc_raiz: '',
         });
@@ -200,7 +195,7 @@ export function Ajuizamento() {
         setIsCNPJSelected(false);
     };
 
-    const handleCheckboxChange = (type: 'porte' | 'situacaocadastral' | 'ulthistorico' | 'tipotributo' | 'status_saj' | 'prescrito', value: string) => {
+    const handleCheckboxChange = (type: 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'prescrito', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -225,28 +220,6 @@ export function Ajuizamento() {
         "Suspensa",
     ]
 
-    const historicos = [
-        "Aguardando ajuizamento",
-        "Ajuizada",
-        "Cancelada",
-        "EXCLUSÃO AJUIZAMENTO ANÁLISE CDAS LEGADO",
-        "Exclusão do Ajuizamento",
-        "Execução fiscal excluída",
-        "Execução fiscal extinta",
-        "Inscrita",
-        "Kit de ajuizamento excluído",
-        "Kit de protesto excluído",
-        "Kit de protesto gerado",
-        "Protesto pago",
-        "Protesto sustado",
-        "Processo protesto excluído",
-        "Processo protesto extinto",
-        "Protestada",
-        "Protestada por edital",
-        "Quitada",
-        "Suspensa",
-
-    ]
 
     const tributos = [
         "Dívida Ativa ICMS",
@@ -258,13 +231,12 @@ export function Ajuizamento() {
 
     ]
 
-    const statusSaj = [
+    const statusDebito = [
 
-        "Inscrita",
-        "Exclusão",
-        "Ajuizamento",
-        "Análise CDAs Legado",
-        "Suspensa",
+        "Ativo",
+        "Extinto",
+        "Suspenso",
+        "Cancelado",
     ]
 
     const prescritos = [
@@ -274,12 +246,9 @@ export function Ajuizamento() {
     ]
 
     const handleDocumentTypeChange = (value: string) => {
-        setFilters({ ...filters, tipodoc: value });
+        setFilters({ ...filters, tpdoc: value });
         setIsCNPJSelected(value === "CNPJ");
     };
-
-
-
 
 
     return (
@@ -402,7 +371,7 @@ export function Ajuizamento() {
                     <div className='space-y-2'>
 
                         <Label className='font-semibold text-sm text-gray-800'>Documento:</Label>
-                        <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
+                        <Select value={filters.tpdoc} onValueChange={handleDocumentTypeChange}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
                             </SelectTrigger>
@@ -485,30 +454,6 @@ export function Ajuizamento() {
                     </div>
 
 
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Último Histórico:</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>{filters.ulthistorico.length > 0 ? filters.ulthistorico.join(", ") : "Escolha uma opção"}</span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4 max-h-48 overflow-y-auto">
-                                {historicos.map((option) => (
-                                    <DropdownMenuItem key={option} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.ulthistorico.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('ulthistorico', option)}
-                                        />
-                                        <Label className="ml-2 font-normal">{option}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-
-                    </div>
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>Tributo:</Label>
                         <DropdownMenu>
@@ -534,20 +479,20 @@ export function Ajuizamento() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Status (SAJ):</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Status:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>{filters.status_saj.length > 0 ? filters.status_saj.join(", ") : "Escolha uma opção"}</span>
+                                    <span className='font-normal truncate'>{filters.statusdebito.length > 0 ? filters.statusdebito.join(", ") : "Escolha uma opção"}</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="p-4">
-                                {statusSaj.map((option) => (
+                                {statusDebito.map((option) => (
                                     <DropdownMenuItem key={option} className="flex items-center">
                                         <Checkbox
-                                            checked={filters.status_saj.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('status_saj', option)}
+                                            checked={filters.statusdebito.includes(option)}
+                                            onCheckedChange={() => handleCheckboxChange('statusdebito', option)}
                                         />
                                         <Label className="ml-2 font-normal">{option}</Label>
                                     </DropdownMenuItem>
@@ -710,7 +655,7 @@ export function Ajuizamento() {
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Tipo de Documento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.tipodoc}</TableCell>
+                                                    <TableCell className='flex justify-end'>{protesto.tpdoc}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
@@ -731,73 +676,27 @@ export function Ajuizamento() {
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data Situação Cadastral</TableCell>
                                                     <TableCell className='flex justify-end'>
-                                                        {protesto.dtsituacaocadastral
-                                                            ? (() => {
-                                                                const data = parse(protesto.dtsituacaocadastral, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
-
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy');
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
+                                                        {formatarData(protesto.dtsituacaocadastral)}
                                                     </TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data Início de Atividade</TableCell>
                                                     <TableCell className='flex justify-end'>
-                                                        {protesto.dtinicioatividade
-                                                            ? (() => {
-                                                                const data = parse(protesto.dtinicioatividade, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date());
-
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy');
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
+                                                        {formatarData(protesto.dtinicioatividade)}
                                                     </TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data de Inscrição</TableCell>
                                                     <TableCell className='flex justify-end'>
-                                                        {protesto.dtinscricao
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dtinscricao.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
-
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
+                                                        {formatarData(protesto.dtinscricao)}
                                                     </TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Data de Referência</TableCell>
                                                     <TableCell className='flex justify-end'>
 
-                                                        {protesto.dtreferencia
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dtreferencia.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
-
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
+                                                        {formatarData(protesto.dtreferencia)}
 
                                                     </TableCell>
                                                 </TableRow>
@@ -812,30 +711,8 @@ export function Ajuizamento() {
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Descrição</TableCell>
                                                     <TableCell className='flex justify-end'>{protesto.descricao}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Último Histórico</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.ulthistorico}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Último Histórico</TableCell>
-                                                    <TableCell className='flex justify-end'>
-                                                        {protesto.dt_ulthist
-                                                            ? (() => {
-                                                                // Aqui, usamos o construtor Date para analisar a data diretamente
-                                                                const data = new Date(protesto.dt_ulthist.replace(' ', 'T')); // Converte para formato ISO
-                                                                console.log('Data analisada:', data);
-
-                                                                // Verifica se a data é válida
-                                                                if (!isNaN(data.getTime())) {
-                                                                    return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                                                } else {
-                                                                    return 'Data inválida';
-                                                                }
-                                                            })()
-                                                            : '-'}
-                                                    </TableCell>
-                                                </TableRow>
+                                                </TableRow>                                              
+                                                
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Tipo de Tributo</TableCell>
@@ -871,21 +748,9 @@ export function Ajuizamento() {
                                                 </TableRow>
 
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Status SAJ</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.dt_status_saj
-                                                        ? (() => {
-
-                                                            const data = new Date(protesto.dt_status_saj.replace(' ', 'T'));
-                                                            console.log('Data analisada:', data);
-
-
-                                                            if (!isNaN(data.getTime())) {
-                                                                return format(data, 'dd/MM/yyyy');
-                                                            } else {
-                                                                return 'Data inválida';
-                                                            }
-                                                        })()
-                                                        : '-'}</TableCell>
+                                                    <TableCell className='text-muted-foreground'>Data Status</TableCell>
+                                                    <TableCell className='flex justify-end'>
+                                                        {formatarData(protesto.dtstatus)}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
@@ -1011,7 +876,7 @@ export function Ajuizamento() {
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700 w-full sm:w-auto cursor-default'>
 
-                                {protesto.status_saj}
+                                {protesto.statusdebito}
 
                             </Button>
 
@@ -1028,23 +893,8 @@ export function Ajuizamento() {
                         </div>
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 w-full sm:w-auto cursor-default'>
-                                Referência: {protesto.dtreferencia
-                                    ? (() => {
-                                        // Aqui, usamos o construtor Date para analisar a data diretamente
-                                        const data = new Date(protesto.dtreferencia.replace(' ', 'T')); // Converte para formato ISO
-                                        console.log('Data analisada:', data);
-
-                                        // Verifica se a data é válida
-                                        if (!isNaN(data.getTime())) {
-                                            return format(data, 'dd/MM/yyyy'); // Formato desejado
-                                        } else {
-                                            return 'Data inválida';
-                                        }
-                                    })()
-                                    : '-'}
-
+                                Referência: {formatarData(protesto.dtreferencia)}
                             </Button>
-
 
                         </div>
 
