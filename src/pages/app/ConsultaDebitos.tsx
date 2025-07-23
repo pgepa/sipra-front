@@ -8,7 +8,7 @@ import { Search, X } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { AiFillFilePdf } from 'react-icons/ai';
-
+import { formatarData } from '@/lib/utils';
 
 // Define your interfaces (não modificado, já está correto no original)
 interface DadosCDA {
@@ -404,7 +404,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Data de Inscrição:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.dtinscricao}</span>
+                                                                    <span className="text-muted-foreground">{formatarData(cadastro.dtinscricao)}</span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Tipo Débito:</span>
@@ -416,7 +416,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Data de Referência:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.dtreferencia}</span>
+                                                                    <span className="text-muted-foreground">{formatarData(cadastro.dtreferencia)}</span>
                                                                 </div>
                                                                 
                                                                 <div className="flex flex-col gap-1">
@@ -438,7 +438,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Data Atualização Saldo:</span>
                                                                     <span className="text-muted-foreground">
-                                                                        {cadastro.dtatualizacaosaldo}
+                                                                        {formatarData(cadastro.dtatualizacaosaldo)}
                                                                     </span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
@@ -451,7 +451,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Data Ajuizamento:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.dtajuizamento}</span>
+                                                                    <span className="text-muted-foreground">{formatarData(cadastro.dtajuizamento)}</span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Prescrição:</span>
@@ -560,7 +560,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-semibold text-slate-700">Data do Parcelamento:</span>
-                                                                    <span className="text-muted-foreground">{parcelamento.dtparcelamento}</span>
+                                                                    <span className="text-muted-foreground">{formatarData(parcelamento.dtparcelamento)}</span>
                                                                 </div>
 
                                                                 <div className="flex flex-col gap-1">
@@ -585,7 +585,7 @@ export const ConsultaDebitos: React.FC = () => {
                                                                     <span className="font-semibold text-slate-700">Data Término Parcelamento:</span>
 
                                                                     <span className="text-muted-foreground">
-                                                                        {new Date(parcelamento.dtterminopar).toLocaleDateString('pt-BR')}
+                                                                        {formatarData(parcelamento.dtterminopar)}
                                                                     </span>
 
                                                                 </div>
