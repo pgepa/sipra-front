@@ -58,10 +58,10 @@ export function AcompanhamentoEspecial() {
     const [indicio, setIndicio] = useState(false);
     const [acompanhamentoEspecial, setAcompanhamentoEspecial] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [orderby] = useState<'somavlcdas'> ('somavlcdas');
+    const [orderby] = useState<'somavlcdas'>('somavlcdas');
     const [filters, setFilters] = useState({
         numformatado: '',
-        
+
     });
 
 
@@ -176,7 +176,7 @@ export function AcompanhamentoEspecial() {
     const handleClearFilters = () => {
         setFilters({
             numformatado: '',
-        
+
 
         });
         setIndicio(false);
@@ -217,11 +217,11 @@ export function AcompanhamentoEspecial() {
                                 value={filters.numformatado}
                                 onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })}
                             />
-                        </div>                       
+                        </div>
 
 
-                    </div>                   
-                   
+                    </div>
+
 
                     <div className='flex items-center mt-8'>
                         <span className='mr-2 font-semibold text-violet-700'>Indício Patrimonial</span>
@@ -254,7 +254,7 @@ export function AcompanhamentoEspecial() {
 
                     <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
                         <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
-                       
+
 
                         <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')}>
                             <SelectTrigger className="w-full sm:w-auto">
@@ -301,10 +301,10 @@ export function AcompanhamentoEspecial() {
 
                             </div>
 
-                           
+
 
                         </div>
-                    </CardHeader>                
+                    </CardHeader>
 
 
 
@@ -336,7 +336,7 @@ export function AcompanhamentoEspecial() {
                                                     <TableCell className='flex justify-end'>{processo.chefia}</TableCell>
                                                 </TableRow>
 
-                                                
+
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Classe</TableCell>
