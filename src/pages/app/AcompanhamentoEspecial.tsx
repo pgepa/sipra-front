@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Search, SearchX, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AiFillFilePdf } from 'react-icons/ai';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -18,14 +18,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 interface ProtestoData {
 
     apensamento: string;
-    area: string;
+    idprocesso: string;
     assunto: string;
+    materia: string;
+    tpprocesso: string;
+    motivo: string;
+    qualificacao: string;
     cdprocesso: string;
-    cdprocessoapensado: string | null;
+    idprocessoapensado: string | null;
     chefia: string;
     classe: string;
     comarca: string;
-    flpendaberta: string;
+    demandaaberta: string;
     judicialapensado: string | null;
     numformatado: string;
     numprocesso: string;
@@ -34,15 +38,13 @@ interface ProtestoData {
     processoapensado: string | null;
     procuradoria: string;
     qtdcdas: number;
-    somavlcdas: number;
-    tramite: string;
-    vara: string;
-    vlacao: number;
+    somavlcdas: string;
+    status: string;
+    juizo: string;
+    vlacao: string;
     pdf_links?: string[];
     pdf_links_cnpj?: string[];
     indicio: boolean;
-    dtentrada: string;
-    parteprincipal: string;
     AE: boolean;
 }
 
@@ -56,10 +58,10 @@ export function AcompanhamentoEspecial() {
     const [indicio, setIndicio] = useState(false);
     const [acompanhamentoEspecial, setAcompanhamentoEspecial] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [orderby, setOrderby] = useState<'dtentrada' | 'somavlcdas'> ('dtentrada');
+    const [orderby] = useState<'somavlcdas'> ('somavlcdas');
     const [filters, setFilters] = useState({
         numformatado: '',
-        parteprincipal: '',
+        
     });
 
 
@@ -81,7 +83,6 @@ export function AcompanhamentoEspecial() {
                     order: order,
                     orderby: orderby,
                     numformatado: filters.numformatado || undefined,
-                    parteprincipal: filters.parteprincipal || undefined,
                     indicio: indicio ? true : undefined,
                     AE: acompanhamentoEspecial ? true : undefined,
                 },
@@ -175,7 +176,7 @@ export function AcompanhamentoEspecial() {
     const handleClearFilters = () => {
         setFilters({
             numformatado: '',
-            parteprincipal: '',
+        
 
         });
         setIndicio(false);
@@ -219,22 +220,8 @@ export function AcompanhamentoEspecial() {
                         </div>                       
 
 
-                    </div>
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Parte Principal:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder='Busca por Parte Principal'
-                                className='pl-10 w-72'
-                                value={filters.parteprincipal}
-                                onChange={(e) => setFilters({ ...filters, parteprincipal: e.target.value })}
-                            />
-                        </div>
-                    </div>
+                    </div>                   
+                   
 
                     <div className='flex items-center mt-8'>
                         <span className='mr-2 font-semibold text-violet-700'>Indício Patrimonial</span>
@@ -267,15 +254,7 @@ export function AcompanhamentoEspecial() {
 
                     <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
                         <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
-                        <Select value={orderby} onValueChange={(value) => setOrderby(value as 'dtentrada' | 'somavlcdas')}>
-                            <SelectTrigger className="w-full sm:w-auto">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="dtentrada">Data de Entrada</SelectItem>
-                                <SelectItem value="somavlcdas">Valor</SelectItem>
-                            </SelectContent>
-                        </Select>
+                       
 
                         <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')}>
                             <SelectTrigger className="w-full sm:w-auto">
@@ -318,30 +297,14 @@ export function AcompanhamentoEspecial() {
                                 <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
                                     Processo: {processo.numformatado}
                                 </CardTitle>
-                                <CardDescription>{processo.vara}</CardDescription>
+                                <CardDescription>{processo.juizo}</CardDescription>
 
                             </div>
 
-                            <div>
-                                <div >
-                                    <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 cursor-default w-full sm:w-auto'>
-                                        Entrada: {processo.dtentrada}
-                                    </Button>
-                                </div>
-                                
-                            </div>
+                           
 
                         </div>
-                    </CardHeader>
-                    <CardContent className="space-y-1">
-                        <span>
-
-                            <p className="leading-7 [&:not(:first-child)]:mt-6 text-slate-800">{processo.parteprincipal}</p>
-
-                        </span>
-
-
-                    </CardContent>
+                    </CardHeader>                
 
 
 
@@ -373,10 +336,7 @@ export function AcompanhamentoEspecial() {
                                                     <TableCell className='flex justify-end'>{processo.chefia}</TableCell>
                                                 </TableRow>
 
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Área</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.area}</TableCell>
-                                                </TableRow>
+                                                
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Classe</TableCell>
@@ -436,7 +396,7 @@ export function AcompanhamentoEspecial() {
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 cursor-default w-full sm:w-auto'>
 
-                                {processo.tramite}
+                                {processo.status}
 
                             </Button>
 
