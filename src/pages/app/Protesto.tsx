@@ -218,7 +218,6 @@ export function Protesto() {
         "Devolvido",
         "Enviado",
         "Gerado",
-        "Pago",
         "Retirado",
         "Sustado",
     ];
