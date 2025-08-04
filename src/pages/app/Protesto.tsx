@@ -355,7 +355,7 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Origem Débito:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Fundamento:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
@@ -885,7 +885,7 @@ export function Protesto() {
                                                     <TableCell className='flex justify-end'>{protesto.parcelamento}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Origem Débito</TableCell>
+                                                    <TableCell className='text-muted-foreground'>Fundamento</TableCell>
                                                     <TableCell className='flex justify-end'>{protesto.fundamento}</TableCell>
                                                 </TableRow>
 
