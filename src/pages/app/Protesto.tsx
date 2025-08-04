@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from 'lucide-react';
-import { formatarData } from '@/lib/utils'; // Importe a função
+import { formatarData } from '@/lib/utils'; 
 
 
 
@@ -354,13 +354,13 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Fundamento:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Origem Débito:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
-                                placeholder='Fundamento'
+                                placeholder='Origem do Débito'
                                 className='pl-10 col-span-1'
                                 value={filters.fundamento}
                                 onChange={(e) => setFilters({ ...filters, fundamento: e.target.value })}
@@ -427,7 +427,7 @@ export function Protesto() {
 
                     <div className='space-y-2'>
 
-                        <Label className='font-semibold text-sm text-gray-800'>Documento:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Tipo Documento:</Label>
                         <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Escolha uma opção" />
@@ -541,7 +541,7 @@ export function Protesto() {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Status:</Label>
+                        <Label className='font-semibold text-sm text-gray-800'>Status Débito:</Label>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="w-full text-left flex justify-between items-center">
