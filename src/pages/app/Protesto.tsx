@@ -53,6 +53,7 @@ interface ProtestoData {
     obs_end_protesto: string;
     periodoprotesto: string;
     uf: string;
+    municipio: string;
 }
 
 export function Protesto() {
@@ -63,11 +64,12 @@ export function Protesto() {
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [isCNPJSelected, setIsCNPJSelected] = useState(false);
-    const [isAjuizadasSelected, setIsAjuizadasSelected] = useState(true);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [isAjuizadasSelected, setIsAjuizadasSelected] = useState(true);
     const [filters, setFilters] = useState({
         nudocumento: '',
         contribuinte: '',
+        municipio: '',
         tipodoc: '',
         natjuridica: '',
         porte: [] as string[],
@@ -180,6 +182,7 @@ export function Protesto() {
         setFilters({
             nudocumento: '',
             contribuinte: '',
+            municipio: '',
             tipodoc: '',
             natjuridica: '',
             porte: [],
@@ -300,8 +303,6 @@ export function Protesto() {
         setFilters({ ...filters, flajuizada: value });
         setIsAjuizadasSelected(value === "N");
     };
-
-
 
 
 
@@ -627,6 +628,24 @@ export function Protesto() {
                         </Select>
 
                     </div>
+
+                     <div className='space-y-2'>
+                        <Label className='font-semibold text-sm text-gray-800'>Município:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+
+                            <Input
+                                placeholder='Informe o município'
+                                className='pl-10 col-span-1'
+                                value={filters.municipio}
+                                onChange={(e) => setFilters({ ...filters, municipio: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>UF:</Label>
                         <DropdownMenu>
@@ -866,7 +885,7 @@ export function Protesto() {
                                                     <TableCell className='flex justify-end'>{protesto.parcelamento}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Fundamento</TableCell>
+                                                    <TableCell className='text-muted-foreground'>Origem Débito</TableCell>
                                                     <TableCell className='flex justify-end'>{protesto.fundamento}</TableCell>
                                                 </TableRow>
 
@@ -879,6 +898,18 @@ export function Protesto() {
                                                     <TableCell className='text-muted-foreground'>Endereço Protesto</TableCell>
                                                     <TableCell className='flex justify-end'>{protesto.obs_end_protesto}</TableCell>
                                                 </TableRow>
+
+                                                <TableRow>
+                                                    <TableCell className='text-muted-foreground'>Município</TableCell>
+                                                    <TableCell className='flex justify-end'>{protesto.municipio}</TableCell>
+                                                </TableRow>
+
+                                                <TableRow>
+                                                    <TableCell className='text-muted-foreground'>UF</TableCell>
+                                                    <TableCell className='flex justify-end'>{protesto.uf}</TableCell>
+                                                </TableRow>
+
+                                                
 
                                             </TableBody>
                                         </Table>
