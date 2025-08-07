@@ -7,19 +7,22 @@ import { Button } from '@/components/ui/button';
 import { Search, SearchX, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AiFillFilePdf } from 'react-icons/ai';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { formatarData } from '@/lib/utils';
 
 
 interface ProtestoData {
 
     apensamento: string;
+    atualizadoem: string;
+    data_ajuizamento: string;
+    fluxo: string;
     idprocesso: string;
-    assunto: string;
     materia: string;
     tpprocesso: string;
     motivo: string;
@@ -28,8 +31,6 @@ interface ProtestoData {
     idprocessoapensado: string | null;
     chefia: string;
     classe: string;
-    comarca: string;
-    demandaaberta: string;
     judicialapensado: string | null;
     numformatado: string;
     numprocesso: string;
@@ -46,6 +47,8 @@ interface ProtestoData {
     pdf_links_cnpj?: string[];
     indicio: boolean;
     AE: boolean;
+    parteprincipal: string;
+    mesaprocurador: string;
 }
 
 export function AcompanhamentoEspecial() {
@@ -294,17 +297,24 @@ export function AcompanhamentoEspecial() {
                         <div className="space-y-1 flex justify-between w-full">
                             <div>
 
-                                <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
+                                <CardTitle className="text-lg text-indigo-700 dark:text-blue-300 ">
                                     Processo: {processo.numformatado}
                                 </CardTitle>
                                 <CardDescription>{processo.juizo}</CardDescription>
 
                             </div>
-
-
-
                         </div>
                     </CardHeader>
+
+                    <CardContent className="space-y-1">
+                        <span>
+
+                            <p className=" text-zinc-800"> {processo.parteprincipal}</p>
+
+                        </span>
+
+
+                    </CardContent>
 
 
 
@@ -326,32 +336,45 @@ export function AcompanhamentoEspecial() {
                                     <DialogHeader>
                                         <DialogTitle className='text-indigo-600 text-center text-xl'>Processo: {processo.numformatado}</DialogTitle>
                                         <DialogDescription>Detalhes</DialogDescription>
+                                        <DialogDescription className="text-indigo-600 font-medium">{processo.parteprincipal}</DialogDescription>
+                                        
                                     </DialogHeader>
 
                                     <div className='space-y-6'>
                                         <Table>
                                             <TableBody>
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Chefia</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.chefia}</TableCell>
+                                                    <TableCell className='text-muted-foreground'>Data de Atualização</TableCell>
+                                                    <TableCell className='flex justify-end'>{processo.atualizadoem}</TableCell>                                                    
                                                 </TableRow>
-
-
 
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Classe</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.classe}</TableCell>
+                                                    <TableCell className='text-muted-foreground'>Data de Ajuizamento</TableCell>
+                                                    <TableCell className='flex justify-end'>{formatarData(processo.data_ajuizamento)}</TableCell>
                                                 </TableRow>
+
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Comarca</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.comarca}</TableCell>
+                                                    <TableCell className='text-muted-foreground'>Mesa Procurador</TableCell>
+                                                    <TableCell className='flex justify-end'>{processo.mesaprocurador}</TableCell>
                                                 </TableRow>
+
+                                                 <TableRow>
+                                                    <TableCell className='text-muted-foreground'>Apensamento</TableCell>
+                                                    <TableCell className='flex justify-end'>{processo.apensamento}</TableCell>
+                                                </TableRow>                                              
 
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Valor da Ação</TableCell>
-                                                    <TableCell className='flex justify-end text-indigo-700 font-semibold'>{processo.vlacao !== undefined && processo.vlacao !== null
+                                                    <TableCell className='flex justify-end'>{processo.vlacao !== undefined && processo.vlacao !== null
                                                         ? Number(processo.vlacao).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                                        : 'R$ 0,00'}</TableCell>
+                                                </TableRow>
+
+                                                <TableRow>
+                                                    <TableCell className='text-muted-foreground'>Valor Consolidado</TableCell>
+                                                    <TableCell className='flex justify-end'>{processo.somavlcdas !== undefined && processo.somavlcdas !== null
+                                                        ? Number(processo.somavlcdas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                                                         : 'R$ 0,00'}</TableCell>
                                                 </TableRow>
 
@@ -365,11 +388,19 @@ export function AcompanhamentoEspecial() {
 
 
                         </div>
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 cursor-default w-full sm:w-auto'>
+
+                                Valor da Ação: {processo.vlacao !== undefined && processo.vlacao !== null
+                                    ? Number(processo.vlacao).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                    : 'R$ 0,00'}
+                            </Button>
+                        </div>
 
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 cursor-default w-full sm:w-auto'>
 
-                                Valor: {processo.somavlcdas !== undefined && processo.somavlcdas !== null
+                                Valor Consolidado: {processo.somavlcdas !== undefined && processo.somavlcdas !== null
                                     ? Number(processo.somavlcdas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                                     : 'R$ 0,00'}
                             </Button>
@@ -385,14 +416,7 @@ export function AcompanhamentoEspecial() {
                         </div>
 
 
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700 cursor-default w-full sm:w-auto'>
-
-                                {processo.assunto}
-
-                            </Button>
-
-                        </div>
+                      
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 cursor-default w-full sm:w-auto'>
 
