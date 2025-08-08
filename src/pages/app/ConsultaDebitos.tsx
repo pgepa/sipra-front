@@ -251,13 +251,13 @@ export const ConsultaDebitos: React.FC = () => {
             <Helmet title="Consulta de Débitos" />
 
             <div className="flex flex-col gap-4">
-                <h1 className="text-2xl font-bold text-slate-700 text-center">Consulta de Débitos</h1>
+                
 
                 <form
                     className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-2"
                     onSubmit={handleSubmit}
                 >
-                    <span className="text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-6">Filtros:</span>
+                    
                     <div className="space-y-2">
                         <Label className="font-semibold text-sm text-gray-800">Nº CDA:</Label>
                         <div className="relative">

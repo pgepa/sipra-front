@@ -199,9 +199,9 @@ export function AcompanhamentoEspecial() {
             <Helmet title="RECC" />
 
             <div className='flex flex-col gap-4'>
-                <h1 className='text-2xl font-bold text-slate-700 text-center'>Execução Fiscal</h1>
+               
 
-                <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
+                
 
                 <form
                     className="flex flex-col sm:flex-row items-center gap-2 flex-wrap"
@@ -212,7 +212,7 @@ export function AcompanhamentoEspecial() {
                 >
 
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Número do Processo:</Label>
+                        <Label className='font-semibold text-sm text-gray-700'>Número do Processo:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />

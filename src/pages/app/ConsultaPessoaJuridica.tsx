@@ -276,7 +276,7 @@ export const ConsultaPessoaJuridica: React.FC = () => {
                     className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-2"
                     onSubmit={handleSubmit}
                 >
-                    <span className="text-sm font-semibold col-span-2 sm:col-span-3 lg:col-span-6">Filtros:</span>
+                    
                     <div className="space-y-2">
                         <Label className="font-semibold text-sm text-gray-800">Nº CNPJ:</Label>
                         <div className="relative">

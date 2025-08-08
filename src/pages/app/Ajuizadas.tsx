@@ -288,8 +288,7 @@ export function Ajuizadas() {
         <>
             <Helmet title="Ajuizadas" />
 
-            <div className='flex flex-col gap-4'>
-                <h1 className='text-2xl font-bold text-slate-700 text-center'>Ajuizadas</h1>
+            <div className='flex flex-col gap-4'>           
 
 
 
@@ -300,7 +299,7 @@ export function Ajuizadas() {
                         fetchProtestos(1);
                     }}
                 >
-                    <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
+                    
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
                         <div className="relative">

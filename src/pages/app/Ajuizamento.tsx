@@ -255,8 +255,7 @@ export function Ajuizamento() {
         <>
             <Helmet title="Ajuizamento" />
 
-            <div className='flex flex-col gap-4'>
-                <h1 className='text-2xl font-bold text-slate-700 text-center'>Para Ajuizamento</h1>
+            <div className='flex flex-col gap-4'>               
 
                 <form
                     className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-2'
@@ -265,7 +264,7 @@ export function Ajuizamento() {
                         fetchProtestos(1);
                     }}
                 >
-                    <span className='text-base font-semibold col-span-2 sm:col-span-3 lg:col-span-5'>Filtros:</span>
+                   
                     <div className='space-y-2'>
                         <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
                         <div className="relative">
