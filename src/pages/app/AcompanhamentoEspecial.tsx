@@ -49,6 +49,9 @@ interface ProtestoData {
     AE: boolean;
     parteprincipal: string;
     mesaprocurador: string;
+    assuntoinstituicao: string;
+    demandaaberta: string;
+    
 }
 
 export function AcompanhamentoEspecial() {
@@ -343,40 +346,32 @@ export function AcompanhamentoEspecial() {
                                     <div className='space-y-6'>
                                         <Table>
                                             <TableBody>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data de Atualização</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.atualizadoem}</TableCell>                                                    
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data de Ajuizamento</TableCell>
-                                                    <TableCell className='flex justify-end'>{formatarData(processo.data_ajuizamento)}</TableCell>
-                                                </TableRow>
-
+                                               
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Mesa Procurador</TableCell>
                                                     <TableCell className='flex justify-end'>{processo.mesaprocurador}</TableCell>
+                                                </TableRow>                                               
+
+                                                <TableRow>
+                                                    <TableCell className='text-muted-foreground'>Ajuizamento</TableCell>
+                                                    <TableCell className='flex justify-end'>{formatarData(processo.data_ajuizamento)}</TableCell>
+                                                </TableRow>
+
+
+                                                 <TableRow>
+                                                    <TableCell className='text-muted-foreground'>Assunto Instituição</TableCell>
+                                                    <TableCell className='flex justify-end'>{processo.assuntoinstituicao}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell className='text-muted-foreground'>Demanda em Aberto</TableCell>
+                                                    <TableCell className='flex justify-end'>{processo.demandaaberta}</TableCell>
                                                 </TableRow>
 
                                                  <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Apensamento</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.apensamento}</TableCell>
-                                                </TableRow>                                              
-
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Valor da Ação</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.vlacao !== undefined && processo.vlacao !== null
-                                                        ? Number(processo.vlacao).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Valor Consolidado</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.somavlcdas !== undefined && processo.somavlcdas !== null
-                                                        ? Number(processo.somavlcdas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
+                                                    <TableCell className='text-muted-foreground'>Juízo</TableCell>
+                                                    <TableCell className='flex text-end justify-end'>{processo.juizo}</TableCell>                                                    
+                                                </TableRow>                                            
+                                                                                               
 
                                             </TableBody>
                                         </Table>
