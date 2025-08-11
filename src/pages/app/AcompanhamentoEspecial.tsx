@@ -51,6 +51,8 @@ interface ProtestoData {
     mesaprocurador: string;
     assuntoinstituicao: string;
     demandaaberta: string;
+    comarca: string;
+    vlprocesso: string;
     
 }
 
@@ -303,7 +305,7 @@ export function AcompanhamentoEspecial() {
                                 <CardTitle className="text-lg text-indigo-700 dark:text-blue-300 ">
                                     Processo: {processo.numformatado}
                                 </CardTitle>
-                                <CardDescription>{processo.juizo}</CardDescription>
+                                <CardDescription>{processo.comarca}</CardDescription>
 
                             </div>
                         </div>
@@ -386,20 +388,11 @@ export function AcompanhamentoEspecial() {
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 cursor-default w-full sm:w-auto'>
 
-                                Valor da Ação: {processo.vlacao !== undefined && processo.vlacao !== null
-                                    ? Number(processo.vlacao).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                Valor Processo: {processo.vlprocesso !== undefined && processo.vlprocesso !== null
+                                    ? Number(processo.vlprocesso).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                                     : 'R$ 0,00'}
                             </Button>
-                        </div>
-
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 cursor-default w-full sm:w-auto'>
-
-                                Valor Consolidado: {processo.somavlcdas !== undefined && processo.somavlcdas !== null
-                                    ? Number(processo.somavlcdas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                    : 'R$ 0,00'}
-                            </Button>
-                        </div>
+                        </div>                        
 
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 cursor-default w-full sm:w-auto'>
