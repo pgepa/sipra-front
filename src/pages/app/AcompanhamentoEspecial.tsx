@@ -139,7 +139,7 @@ export function AcompanhamentoEspecial() {
     useEffect(() => {
         setPage(1); // opcional: resetar página ao mudar filtro
         fetchProcessos(1, sortOrder);
-    }, [ indicio, acompanhamentoEspecial, sortOrder]);
+    }, [indicio, acompanhamentoEspecial, sortOrder]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -206,7 +206,7 @@ export function AcompanhamentoEspecial() {
         setIndicio(false);
         setAcompanhamentoEspecial(false);
         setPage(1);
-        
+
     };
 
 
@@ -218,11 +218,9 @@ export function AcompanhamentoEspecial() {
 
             <div className='flex flex-col gap-4'>
 
-
-
                 <form
                     // Adicionamos 'items-end' para alinhar os itens na base, o que funciona bem para botões e campos
-                    className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 items-end'
+                    className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-2 items-end'
                     onSubmit={(e) => {
                         e.preventDefault();
                         fetchProcessos(1);
@@ -270,7 +268,7 @@ export function AcompanhamentoEspecial() {
                             </span>
                             <Input
                                 id='vlProcessoMin'
-                                placeholder='Busca por Valor Mínimo'
+                                placeholder='Valor Mínimo'
                                 className='pl-10 w-full' // Use w-full para responsividade
                                 value={filters.vlprocesso_min}
                                 onChange={(e) => setFilters({ ...filters, vlprocesso_min: e.target.value })}
@@ -286,7 +284,7 @@ export function AcompanhamentoEspecial() {
                             </span>
                             <Input
                                 id='vlProcessoMax'
-                                placeholder='Busca por Valor Mínimo'
+                                placeholder='Valor Máximo'
                                 className='pl-10 w-full' // Use w-full para responsividade
                                 value={filters.vlprocesso_max}
                                 onChange={(e) => setFilters({ ...filters, vlprocesso_max: e.target.value })}
@@ -297,15 +295,19 @@ export function AcompanhamentoEspecial() {
 
 
                     {/* FILTRO 3: Indício Patrimonial (Switch) */}
-                    <div className='flex items-center gap-2 pb-2'>
+                    <div className='flex items-center justify-center gap-2 w-full h-10 px-3 border rounded-md'>
+                        <Label htmlFor='indicio' className='font-semibold text-sm text-violet-700 cursor-pointer'>
+                            Indício Patrimonial
+                        </Label> 
                         <Switch id='indicio' checked={indicio} onCheckedChange={setIndicio} />
-                        <Label htmlFor='indicio' className='font-semibold text-violet-700 cursor-pointer'>Indício Patrimonial</Label>
                     </div>
 
                     {/* FILTRO 4: Acompanhamento Especial (Switch) */}
-                    <div className='flex items-center gap-2 pb-2'>
+                    <div className='flex items-center justify-center w-full h-10 px-3 border rounded-md'>
+                        <Label htmlFor='acompanhamento' className='font-semibold text-sm text-violet-700 cursor-pointer'>
+                            Acompanhamento Especial
+                        </Label>
                         <Switch id='acompanhamento' checked={acompanhamentoEspecial} onCheckedChange={setAcompanhamentoEspecial} />
-                        <Label htmlFor='acompanhamento' className='font-semibold text-violet-700 cursor-pointer'>Acompanhamento Especial</Label>
                     </div>
 
                     {/* BOTÃO 1: Pesquisar */}
