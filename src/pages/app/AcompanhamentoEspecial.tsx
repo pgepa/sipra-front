@@ -53,7 +53,14 @@ interface ProtestoData {
     demandaaberta: string;
     comarca: string;
     vlprocesso: string;
-    
+
+}
+
+interface Filters {
+    numformatado: string;
+    comarca: string;
+    vlprocesso_min: string; // pode ser string porque input normalmente é string
+    vlprocesso_max: string;
 }
 
 export function AcompanhamentoEspecial() {
@@ -67,9 +74,11 @@ export function AcompanhamentoEspecial() {
     const [acompanhamentoEspecial, setAcompanhamentoEspecial] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [orderby] = useState<'somavlcdas'>('somavlcdas');
-    const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState<Filters>({
         numformatado: '',
-
+        comarca: '',
+        vlprocesso_min: '',
+        vlprocesso_max: '',
     });
 
 
@@ -93,6 +102,9 @@ export function AcompanhamentoEspecial() {
                     numformatado: filters.numformatado || undefined,
                     indicio: indicio ? true : undefined,
                     AE: acompanhamentoEspecial ? true : undefined,
+                    comarca: filters.comarca || undefined,
+                    vlprocesso_min: filters.vlprocesso_min || undefined,
+                    vlprocesso_max: filters.vlprocesso_max || undefined,
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -125,8 +137,9 @@ export function AcompanhamentoEspecial() {
     };
 
     useEffect(() => {
-        fetchProcessos(page, sortOrder);
-    }, [page, indicio, acompanhamentoEspecial, sortOrder, orderby]);
+        setPage(1); // opcional: resetar página ao mudar filtro
+        fetchProcessos(1, sortOrder);
+    }, [ indicio, acompanhamentoEspecial, sortOrder]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -184,13 +197,16 @@ export function AcompanhamentoEspecial() {
     const handleClearFilters = () => {
         setFilters({
             numformatado: '',
+            comarca: '',
+            vlprocesso_min: '',
+            vlprocesso_max: '',
 
 
         });
         setIndicio(false);
         setAcompanhamentoEspecial(false);
         setPage(1);
-        fetchProcessos(1);
+        
     };
 
 
@@ -201,51 +217,105 @@ export function AcompanhamentoEspecial() {
             <Helmet title="RECC" />
 
             <div className='flex flex-col gap-4'>
-               
 
-                
+
 
                 <form
-                    className="flex flex-col sm:flex-row items-center gap-2 flex-wrap"
+                    // Adicionamos 'items-end' para alinhar os itens na base, o que funciona bem para botões e campos
+                    className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 items-end'
                     onSubmit={(e) => {
                         e.preventDefault();
                         fetchProcessos(1);
                     }}
                 >
-
+                    {/* FILTRO 1: Número do Processo */}
                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-700'>Número do Processo:</Label>
+                        <Label htmlFor='numProcesso' className='font-semibold text-sm text-gray-700'>Número do Processo:</Label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <Search className="h-4 w-4 text-gray-500" />
                             </span>
                             <Input
+                                id='numProcesso'
                                 placeholder='Busca por Nº Processo'
-                                className='pl-10 w-72'
+                                className='pl-10 w-full' // Use w-full para responsividade
                                 value={filters.numformatado}
                                 onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })}
                             />
                         </div>
+                    </div>
 
+                    {/* FILTRO 2: Comarca */}
+                    <div className='space-y-2'>
+                        <Label htmlFor='comarca' className='font-semibold text-sm text-gray-800'>Comarca:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                id='comarca'
+                                placeholder='Busca por Comarca'
+                                className='pl-10 w-full' // Use w-full para responsividade
+                                value={filters.comarca}
+                                onChange={(e) => setFilters({ ...filters, comarca: e.target.value })}
+                            />
+                        </div>
+                    </div>
 
+                    <div className='space-y-2'>
+                        <Label htmlFor='vlProcessoMin' className='font-semibold text-sm text-gray-700'>Valor Mínimo:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                id='vlProcessoMin'
+                                placeholder='Busca por Valor Mínimo'
+                                className='pl-10 w-full' // Use w-full para responsividade
+                                value={filters.vlprocesso_min}
+                                onChange={(e) => setFilters({ ...filters, vlprocesso_min: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className='space-y-2'>
+                        <Label htmlFor='vlProcessoMax' className='font-semibold text-sm text-gray-700'>Valor Máximo:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                id='vlProcessoMax'
+                                placeholder='Busca por Valor Mínimo'
+                                className='pl-10 w-full' // Use w-full para responsividade
+                                value={filters.vlprocesso_max}
+                                onChange={(e) => setFilters({ ...filters, vlprocesso_max: e.target.value })}
+                            />
+                        </div>
                     </div>
 
 
-                    <div className='flex items-center mt-8'>
-                        <span className='mr-2 font-semibold text-violet-700'>Indício Patrimonial</span>
-                        <Switch checked={indicio} onCheckedChange={setIndicio} />
+
+                    {/* FILTRO 3: Indício Patrimonial (Switch) */}
+                    <div className='flex items-center gap-2 pb-2'>
+                        <Switch id='indicio' checked={indicio} onCheckedChange={setIndicio} />
+                        <Label htmlFor='indicio' className='font-semibold text-violet-700 cursor-pointer'>Indício Patrimonial</Label>
                     </div>
 
-                    <div className='flex items-center mt-8'>
-                        <span className='mr-2 font-semibold text-violet-700'>Acompanhamento Especial</span>
-                        <Switch checked={acompanhamentoEspecial} onCheckedChange={setAcompanhamentoEspecial} />
+                    {/* FILTRO 4: Acompanhamento Especial (Switch) */}
+                    <div className='flex items-center gap-2 pb-2'>
+                        <Switch id='acompanhamento' checked={acompanhamentoEspecial} onCheckedChange={setAcompanhamentoEspecial} />
+                        <Label htmlFor='acompanhamento' className='font-semibold text-violet-700 cursor-pointer'>Acompanhamento Especial</Label>
                     </div>
-                    <Button type='submit' className='default mt-8'>
+
+                    {/* BOTÃO 1: Pesquisar */}
+                    <Button type='submit' className='default w-full'>
                         <Search className="h-4 w-4 mr-2" />
                         Pesquisar
                     </Button>
 
-                    <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full sm:w-auto mt-8">
+                    {/* BOTÃO 2: Limpar Filtros */}
+                    <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full">
                         <X className="h-4 w-4 mr-2" />
                         Remover filtros
                     </Button>
@@ -342,17 +412,17 @@ export function AcompanhamentoEspecial() {
                                         <DialogTitle className='text-indigo-600 text-center text-xl'>Processo: {processo.numformatado}</DialogTitle>
                                         <DialogDescription>Detalhes</DialogDescription>
                                         <DialogDescription className="text-indigo-600 font-medium">{processo.parteprincipal}</DialogDescription>
-                                        
+
                                     </DialogHeader>
 
                                     <div className='space-y-6'>
                                         <Table>
                                             <TableBody>
-                                               
+
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Mesa Procurador</TableCell>
                                                     <TableCell className='flex justify-end'>{processo.mesaprocurador}</TableCell>
-                                                </TableRow>                                               
+                                                </TableRow>
 
                                                 <TableRow>
                                                     <TableCell className='text-muted-foreground'>Ajuizamento</TableCell>
@@ -360,7 +430,7 @@ export function AcompanhamentoEspecial() {
                                                 </TableRow>
 
 
-                                                 <TableRow>
+                                                <TableRow>
                                                     <TableCell className='text-muted-foreground'>Assunto Instituição</TableCell>
                                                     <TableCell className='flex justify-end'>{processo.assuntoinstituicao}</TableCell>
                                                 </TableRow>
@@ -369,11 +439,11 @@ export function AcompanhamentoEspecial() {
                                                     <TableCell className='flex justify-end'>{processo.demandaaberta}</TableCell>
                                                 </TableRow>
 
-                                                 <TableRow>
+                                                <TableRow>
                                                     <TableCell className='text-muted-foreground'>Juízo</TableCell>
-                                                    <TableCell className='flex text-end justify-end'>{processo.juizo}</TableCell>                                                    
-                                                </TableRow>                                            
-                                                                                               
+                                                    <TableCell className='flex text-end justify-end'>{processo.juizo}</TableCell>
+                                                </TableRow>
+
 
                                             </TableBody>
                                         </Table>
@@ -392,7 +462,7 @@ export function AcompanhamentoEspecial() {
                                     ? Number(processo.vlprocesso).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                                     : 'R$ 0,00'}
                             </Button>
-                        </div>                        
+                        </div>
 
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 cursor-default w-full sm:w-auto'>
@@ -404,7 +474,7 @@ export function AcompanhamentoEspecial() {
                         </div>
 
 
-                      
+
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 cursor-default w-full sm:w-auto'>
 
