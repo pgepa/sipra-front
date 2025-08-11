@@ -4,10 +4,11 @@ import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
-import { Briefcase, FileDown, FileText, Landmark, Search, X } from 'lucide-react';
+import { Search, SearchX, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { AiFillFilePdf } from 'react-icons/ai';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -217,55 +218,113 @@ export function AcompanhamentoEspecial() {
 
             <div className='flex flex-col gap-4'>
 
-                {/* SEÇÃO DE FILTROS */}
-                <Card className="shadow-sm border-slate-200">
-                    <CardHeader>
-                        <CardTitle className='text-gray-800'>Filtros de Pesquisa</CardTitle>
-                        <CardDescription>Utilize os campos abaixo para refinar sua busca de processos.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form
-                            className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 items-end'
-                            onSubmit={(e) => { e.preventDefault(); fetchProcessos(1, sortOrder); }}
-                        >
-                            {/* Filtros de Input */}
-                            <div className='space-y-1.5'>
-                                <Label htmlFor='numProcesso' className='font-semibold text-sm text-gray-800'>Número do Processo</Label>
-                                <Input id='numProcesso' placeholder='0000000-00.0000.0.00.0000' value={filters.numformatado} onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })} />
-                            </div>
-                            <div className='space-y-1.5'>
-                                <Label htmlFor='comarca' className='font-semibold text-sm text-gray-800' >Comarca</Label>
-                                <Input id='comarca' placeholder='Ex: São Paulo' value={filters.comarca} onChange={(e) => setFilters({ ...filters, comarca: e.target.value })} />
-                            </div>
-                            <div className='space-y-1.5'>
-                                <Label htmlFor='vlProcessoMin' className='font-semibold text-sm text-gray-800'>Valor Mínimo</Label>
-                                <Input id='vlProcessoMin' type="number" placeholder='R$ 1.000,00' value={filters.vlprocesso_min} onChange={(e) => setFilters({ ...filters, vlprocesso_min: e.target.value })} />
-                            </div>
-                            <div className='space-y-1.5'>
-                                <Label htmlFor='vlProcessoMax' className='font-semibold text-sm text-gray-800'>Valor Máximo</Label>
-                                <Input id='vlProcessoMax' type="number" placeholder='R$ 50.000,00' value={filters.vlprocesso_max} onChange={(e) => setFilters({ ...filters, vlprocesso_max: e.target.value })} />
-                            </div>
+                <form
+                    // Adicionamos 'items-end' para alinhar os itens na base, o que funciona bem para botões e campos
+                    className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-2 items-end'
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        fetchProcessos(1);
+                    }}
+                >
+                    {/* FILTRO 1: Número do Processo */}
+                    <div className='space-y-2'>
+                        <Label htmlFor='numProcesso' className='font-semibold text-sm text-gray-700'>Número do Processo:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                id='numProcesso'
+                                placeholder='Busca por Nº Processo'
+                                className='pl-10 w-full' // Use w-full para responsividade
+                                value={filters.numformatado}
+                                onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })}
+                            />
+                        </div>
+                    </div>
 
-                            {/* Filtros de Switch */}
-                            <div className='flex items-center justify-between w-full h-10 px-3 border border-slate-200 rounded-md bg-white'>
-                                <Label htmlFor='indicio' className='text-sm font-medium text-slate-800 cursor-pointer'>Indício Patrimonial</Label>
-                                <Switch id='indicio' checked={indicio} onCheckedChange={setIndicio} />
-                            </div>
-                            <div className='flex items-center justify-between w-full h-10 px-3 border border-slate-200 rounded-md bg-white'>
-                                <Label htmlFor='acompanhamento' className='text-sm font-medium text-slate-800 cursor-pointer'>Acomp. Especial</Label>
-                                <Switch id='acompanhamento' checked={acompanhamentoEspecial} onCheckedChange={setAcompanhamentoEspecial} />
-                            </div>
+                    {/* FILTRO 2: Comarca */}
+                    <div className='space-y-2'>
+                        <Label htmlFor='comarca' className='font-semibold text-sm text-gray-800'>Comarca:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                id='comarca'
+                                placeholder='Busca por Comarca'
+                                className='pl-10 w-full' // Use w-full para responsividade
+                                value={filters.comarca}
+                                onChange={(e) => setFilters({ ...filters, comarca: e.target.value })}
+                            />
+                        </div>
+                    </div>
 
-                            {/* Botões de Ação */}
-                            <Button type='submit' className='default w-full'>
-                                <Search className="h-4 w-4 mr-2" /> Pesquisar
-                            </Button>
-                            <Button onClick={handleClearFilters} variant="outline" className="w-full">
-                                <X className="h-4 w-4 mr-2" /> Limpar Filtros
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
+                    <div className='space-y-2'>
+                        <Label htmlFor='vlProcessoMin' className='font-semibold text-sm text-gray-700'>Valor Mínimo:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                id='vlProcessoMin'
+                                placeholder='Valor Mínimo'
+                                className='pl-10 w-full' // Use w-full para responsividade
+                                value={filters.vlprocesso_min}
+                                onChange={(e) => setFilters({ ...filters, vlprocesso_min: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className='space-y-2'>
+                        <Label htmlFor='vlProcessoMax' className='font-semibold text-sm text-gray-700'>Valor Máximo:</Label>
+                        <div className="relative">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-gray-500" />
+                            </span>
+                            <Input
+                                id='vlProcessoMax'
+                                placeholder='Valor Máximo'
+                                className='pl-10 w-full' // Use w-full para responsividade
+                                value={filters.vlprocesso_max}
+                                onChange={(e) => setFilters({ ...filters, vlprocesso_max: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+
+
+                    {/* FILTRO 3: Indício Patrimonial (Switch) */}
+                    <div className='flex items-center justify-center gap-2 w-full h-10 px-3 border rounded-md'>
+                        <Label htmlFor='indicio' className='font-semibold text-sm text-violet-700 cursor-pointer'>
+                            Indício Patrimonial
+                        </Label> 
+                        <Switch id='indicio' checked={indicio} onCheckedChange={setIndicio} />
+                    </div>
+
+                    {/* FILTRO 4: Acompanhamento Especial (Switch) */}
+                    <div className='flex items-center justify-center w-full h-10 px-3 border rounded-md'>
+                        <Label htmlFor='acompanhamento' className='font-semibold text-sm text-violet-700 cursor-pointer'>
+                            Acompanhamento Especial
+                        </Label>
+                        <Switch id='acompanhamento' checked={acompanhamentoEspecial} onCheckedChange={setAcompanhamentoEspecial} />
+                    </div>
+
+                    {/* BOTÃO 1: Pesquisar */}
+                    <Button type='submit' className='default w-full'>
+                        <Search className="h-4 w-4 mr-2" />
+                        Pesquisar
+                    </Button>
+
+                    {/* BOTÃO 2: Limpar Filtros */}
+                    <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full">
+                        <X className="h-4 w-4 mr-2" />
+                        Remover filtros
+                    </Button>
+
+                </form>
+
+
 
 
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 space-y-2 sm:space-y-0">
@@ -301,14 +360,11 @@ export function AcompanhamentoEspecial() {
             )}
 
             {!loading && (!processos || processos.length === 0) && (
-                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground bg-white py-20 rounded-lg shadow-md'>
-
-                    <FileText className="mx-auto h-12 w-12 text-slate-400" />
-                    <h3 className="mt-4 text-lg font-semibold text-slate-800">Nenhum resultado encontrado</h3>
-                    <p className="mt-1 text-sm text-slate-500">Tente ajustar os filtros para encontrar o que procura.</p>
-
+                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground'>
+                    <p>Não foi encontrado nenhuma CDA para o(s) filtro(s) selecionado(s).</p>
+                    <p>Tente novamente com outros parâmetros.</p>
                     <p>{error}</p>
-
+                    <SearchX className="h-12 w-12 mt-4" />
                 </div>
             )}
 
@@ -321,21 +377,18 @@ export function AcompanhamentoEspecial() {
                                 <CardTitle className="text-lg text-indigo-700 dark:text-blue-300 ">
                                     Processo: {processo.numformatado}
                                 </CardTitle>
-                                <CardDescription className="flex items-center gap-2 mt-1">
-                                    <Landmark className="h-3.5 w-3.5" />
-                                    {processo.comarca}
-                                </CardDescription>
+                                <CardDescription>{processo.comarca}</CardDescription>
 
                             </div>
                         </div>
                     </CardHeader>
 
                     <CardContent className="space-y-1">
-                        <div className="flex items-center gap-3 text-sm text-slate-700">
-                            <Briefcase className="h-4 w-4 text-slate-400" />
-                            {processo.parteprincipal}
+                        <span>
 
-                        </div>
+                            <p className=" text-zinc-800"> {processo.parteprincipal}</p>
+
+                        </span>
 
 
                     </CardContent>
@@ -413,8 +466,6 @@ export function AcompanhamentoEspecial() {
                             </Button>
                         </div>
 
-
-
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 cursor-default w-full sm:w-auto'>
 
@@ -445,7 +496,7 @@ export function AcompanhamentoEspecial() {
                                         className='flex gap-2 bg-rose-200/20 text-rose-700 w-full sm:w-auto'
                                         onClick={() => handleDownloadPdf(link)}
                                     >
-                                        <FileDown className="h-4 w-4" />
+                                        <AiFillFilePdf className="h-4 w-4 text-rose-700" />
                                         Baixar PDF {index + 1}
                                     </Button>
                                 ))}
