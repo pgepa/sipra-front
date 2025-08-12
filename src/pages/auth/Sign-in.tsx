@@ -87,7 +87,7 @@ export function SignIn() {
 
                             </div>
                             
-                            {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                            {errors.email && <p className="text-slate-100">{errors.email.message}</p>}
                         </div>
 
                         <div className="space-y-2">
@@ -101,10 +101,10 @@ export function SignIn() {
                                 <Input id="senha" className='pl-10 col-span-1' placeholder="Sua senha" type="password" {...register("senha")} />
                             </div>
                             
-                            {errors.senha && <p className="text-red-500">{errors.senha.message}</p>}
+                            {errors.senha && <p className="text-slate-100">{errors.senha.message}</p>}
                         </div>
 
-                        {error && <p className="text-red-500">{error}</p>}
+                        {error && <p className="text-slate-100">{error}</p>}
 
                         <Button disabled={isSubmitting} className="w-full bg-yellow-600 hover:bg-yellow-500 " type="submit">Entrar</Button>
                     </form>
