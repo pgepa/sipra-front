@@ -213,6 +213,149 @@ export function AcompanhamentoEspecial() {
 
     };
 
+    const comarcas = [
+        "Comarca de São Francisco do Pará",
+        "Comarca de Ourém",
+        "Comarca de Prainha",
+        "Comarca de Xinguara",
+        "Comarca de São Miguel do Guamá",
+        "Comarca de Portel",
+        "Comarca de Bonito",
+        "Comarca de Anajás",
+        "Comarca de São Paulo - Foro Regional V - São Miguel Paulista",
+        "Comarca de Magalhães Barata",
+        "Comarca de Faro",
+        "Comarca de Santana do Araguaia",
+        "Comarca de São Luís",
+        "Comarca de Carpina",
+        "Comarca de Mãe do Rio",
+        "Comarca de Mojú",
+        "Comarca de Benevides",
+        "Comarca de Óbidos",
+        "Comarca de São João de Pirabas",
+        "Comarca de Icoaraci",
+        "Comarca de Anapú",
+        "Comarca de Santa Maria do Pará",
+        "Comarca de Capitão Poço",
+        "Comarca de Jacundá",
+        "Comarca de Santa Izabel do Pará",
+        "Comarca de Breves",
+        "Comarca de Peixe-Boi",
+        "Comarca de Vitória do Xingu",
+        "Comarca de Primavera",
+        "Comarca de Cachoeira do Arari",
+        "Comarca de Bagre",
+        "Ananindeua",
+        "Comarca de Marituba",
+        "Comarca do Recife",
+        "Comarca de Muaná",
+        "Comarca de Salvaterra",
+        "Comarca de São João do Araguaia",
+        "Comarca de Bragança",
+        "Comarca de Arapongas",
+        "Comarca de Breu Branco",
+        "Comarca de Vigia",
+        "Comarca de Eldorado dos Carajás",
+        "Comarca de Belém",
+        "Comarca de Bujarú",
+        "Comarca de Tucuruí",
+        "Comarca de Santa Cruz do Arari",
+        "Comarca de Monte Dourado",
+        "Comarca de Cachoeira do Piriá",
+        "Comarca de Santarém",
+        "Comarca de Abaetetuba",
+        "Comarca de Monte Alegre",
+        "Comarca de Ananindeua",
+        "Marabá",
+        "Comarca de Acará",
+        "Subseção Judiciária de Santarém",
+        "Comarca de Ponta de Pedras",
+        "Comarca de Itaituba",
+        "Comarca de Oeiras do Pará",
+        "Comarca de Ulianópolis",
+        "Comarca de São Félix do Xingu",
+        "Comarca de Cametá",
+        "Comarca de Sobral",
+        "Comarca de Gurupá",
+        "Comarca de Paragominas",
+        "Comarca de Tomé- Açu",
+        "Comarca de Redenção",
+        "Comarca de Marabá",
+        "Comarca de Goianésia do Pará",
+        "Comarca de Nova Timboteua",
+        "Comarca de Capanema",
+        "Comarca de Mocajuba",
+        "Comarca de Rio Maria",
+        "Comarca de Aveiro",
+        "Comarca de Augusto Corrêa",
+        "Comarca de Uruará",
+        "Comarca de Rondon do Pará",
+        "Comarca de Oriximiná",
+        "Comarca de Terra Santa",
+        "Comarca de Medicilandia",
+        "Comarca de Aurora do Pará",
+        "Comarca de Rurópolis",
+        "Comarca de Porto de Moz",
+        "Comarca de Limoeiro do Ajuru",
+        "Comarca de Pacajá",
+        "Comarca de Canaã dos Carajás",
+        "Comarca de Marapanim",
+        "Comarca de Senador José Porfírio",
+        "Comarca de São Domingos do Capim",
+        "Comarca de São Geraldo do Araguaia",
+        "Comarca de Baião",
+        "Comarca de Juruti",
+        "Comarca de Ourilândia do Norte",
+        "Comarca de Curralinho",
+        "Comarca de Santo Antônio do Tauá",
+        "Subseção Judiciária de Marabá-PA",
+        "Seção Judiciária do Pará",
+        "Tribunal de Justiça do Pará",
+        "Comarca de Curuçá",
+        "Comarca de Brasil Novo",
+        "Comarca de Irituia",
+        "Comarca de Santarém Novo",
+        "Comarca de Salinópolis",
+        "Comarca de Chaves",
+        "Comarca de Conceição do Araguaia",
+        "Comarca de Quatipurú",
+        "Comarca da Capital",
+        "Subseção Judiciária de Paragominas",
+        "Comarca de Guarapuava",
+        "Comarca de Itupiranga",
+        "Comarca de Igarapé-Açú",
+        "Comarca de Santa Luzia do Pará",
+        "Comarca de Igarapé-Miri",
+        "Comarca de São Domingos do Araguaia",
+        "Tribunal Regional do Trabalho da 8a Região",
+        "Comarca de Novo Repartimento",
+        "Comarca de Tailândia",
+        "Comarca de Jacareacanga",
+        "Comarca de Novo Progresso",
+        "Comarca de Parauapebas",
+        "Comarca de Inhangapi",
+        "Comarca de Ipixuna do Pará",
+        "Comarca de Tucumã",
+        "Comarca de Barcarena",
+        "Comarca de Garrafão do Norte",
+        "Comarca de São Caetano de Odivelas",
+        "Comarca de Concórdia do Pará",
+        "Comarca de Dom Eliseu",
+        "Comarca de São Sebastião da Boa Vista",
+        "Comarca de Alenquer",
+        "Comarca de Colares",
+        "Comarca de Soure",
+        "Comarca de Almeirim",
+        "Comarca de Melgaço",
+        "Comarca de Afuá",
+        "Comarca de Curionópolis",
+        "Comarca de Maracanã",
+        "Comarca de Viseu",
+        "Comarca de Altamira",
+        "Comarca de Castanhal"
+    ];
+
+
 
 
 
@@ -238,10 +381,25 @@ export function AcompanhamentoEspecial() {
                                 <Label htmlFor='numProcesso' className='font-semibold text-sm text-gray-800'>Número do Processo</Label>
                                 <Input id='numProcesso' placeholder='0000000-00.0000.0.00.0000' value={filters.numformatado} onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })} />
                             </div>
-                            <div className='space-y-1.5'>
-                                <Label htmlFor='comarca' className='font-semibold text-sm text-gray-800' >Comarca</Label>
-                                <Input id='comarca' placeholder='Ex: Belém' value={filters.comarca} onChange={(e) => setFilters({ ...filters, comarca: e.target.value })} />
+                            <div className="space-y-2">
+                                <Label className="font-semibold text-sm text-gray-800">Comarca</Label>
+                                <Select
+                                    value={filters.comarca}
+                                    onValueChange={(value) => setFilters({ ...filters, comarca: value })}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Escolha uma opção" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {comarcas.map((nome) => (
+                                            <SelectItem key={nome} value={nome}>
+                                                {nome}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
+                            
                             <div className='space-y-1.5'>
                                 <Label htmlFor='vlProcessoMin' className='font-semibold text-sm text-gray-800'>Valor Mínimo</Label>
                                 <Input id='vlProcessoMin' type="number" placeholder='R$ 1.000,00' value={filters.vlprocesso_min} onChange={(e) => setFilters({ ...filters, vlprocesso_min: e.target.value })} />
@@ -334,13 +492,13 @@ export function AcompanhamentoEspecial() {
                             </div>
                             <div>
                                 <Label className='mr-2 text-slate-500'>Status Processo:</Label>
-                                <Badge variant={processo.status === 'ATIVA' ? 'default' : 'secondary'} 
-                                        className={processo.status === 'ATIVA' ? 'bg-green-100 text-green-800 border-green-200 hover:text-white' : 'bg-slate-100 text-slate-600 border-slate-200'}>
-                                            {processo.status}
+                                <Badge variant={processo.status === 'ATIVA' ? 'default' : 'secondary'}
+                                    className={processo.status === 'ATIVA' ? 'bg-green-100 text-green-800 border-green-200 hover:text-white' : 'bg-slate-100 text-slate-600 border-slate-200'}>
+                                    {processo.status}
                                 </Badge>
-                                
+
                             </div>
-                            
+
                         </div>
                     </CardHeader>
 
@@ -375,7 +533,7 @@ export function AcompanhamentoEspecial() {
 
                                         <DialogTitle className='text-violet-600 text-center text-xl'>Processo: {processo.numformatado}</DialogTitle>
                                         <DialogDescription className='text-center'>{processo.parteprincipal}</DialogDescription>
-                                
+
                                     </DialogHeader>
 
                                     <div className='space-y-6'>
@@ -438,7 +596,7 @@ export function AcompanhamentoEspecial() {
 
                             </Button>
 
-                        </div>                        
+                        </div>
 
                         {(processo.pdf_links || processo.pdf_links_cnpj) && (
                             <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
