@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
-import { Briefcase, FileDown, FileText, Landmark, Search, X } from 'lucide-react';
+import { Briefcase, FileDown, FileText, Landmark, Scale, Search, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { formatarData } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 
 interface ProtestoData {
@@ -136,10 +137,14 @@ export function AcompanhamentoEspecial() {
     };
 
     useEffect(() => {
-        setPage(1); // opcional: resetar página ao mudar filtro
-        fetchProcessos(1, sortOrder);
-    }, [indicio, acompanhamentoEspecial, sortOrder]);
 
+        fetchProcessos(page, sortOrder);
+    }, [page, indicio, acompanhamentoEspecial, sortOrder]);
+
+
+    useEffect(() => {
+        setPage(1);
+    }, [indicio, acompanhamentoEspecial, sortOrder, filters]);
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setPage(newPage);
@@ -235,7 +240,7 @@ export function AcompanhamentoEspecial() {
                             </div>
                             <div className='space-y-1.5'>
                                 <Label htmlFor='comarca' className='font-semibold text-sm text-gray-800' >Comarca</Label>
-                                <Input id='comarca' placeholder='Ex: São Paulo' value={filters.comarca} onChange={(e) => setFilters({ ...filters, comarca: e.target.value })} />
+                                <Input id='comarca' placeholder='Ex: Belém' value={filters.comarca} onChange={(e) => setFilters({ ...filters, comarca: e.target.value })} />
                             </div>
                             <div className='space-y-1.5'>
                                 <Label htmlFor='vlProcessoMin' className='font-semibold text-sm text-gray-800'>Valor Mínimo</Label>
@@ -315,7 +320,7 @@ export function AcompanhamentoEspecial() {
             {processos.map((processo) => (
                 <Card key={processo.cdprocesso} className='shadow-md shadow-slate-400/20 mt-4'>
                     <CardHeader className="flex-items-center flex-row justify-between space-y-0 pb-4">
-                        <div className="space-y-1 flex justify-between w-full">
+                        <div className="flex justify-between items-start w-full">
                             <div>
 
                                 <CardTitle className="text-lg text-indigo-700 dark:text-blue-300 ">
@@ -327,6 +332,9 @@ export function AcompanhamentoEspecial() {
                                 </CardDescription>
 
                             </div>
+                            <Badge variant={processo.status === 'ATIVA' ? 'default' : 'secondary'} className={processo.status === 'ATIVA' ? 'bg-green-100 text-green-800 border-green-200 hover:text-white' : 'bg-slate-100 text-slate-600 border-slate-200'}>
+                                            {processo.status}
+                            </Badge>
                         </div>
                     </CardHeader>
 
@@ -369,27 +377,27 @@ export function AcompanhamentoEspecial() {
                                             <TableBody>
 
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Mesa Procurador</TableCell>
+                                                    <TableCell className='font-medium text-slate-500'>Mesa Procurador</TableCell>
                                                     <TableCell className='flex justify-end'>{processo.mesaprocurador}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Ajuizamento</TableCell>
+                                                    <TableCell className='font-medium text-slate-500'>Ajuizamento</TableCell>
                                                     <TableCell className='flex justify-end'>{formatarData(processo.data_ajuizamento)}</TableCell>
                                                 </TableRow>
 
 
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Assunto Instituição</TableCell>
+                                                    <TableCell className='font-medium text-slate-500'>Assunto Instituição</TableCell>
                                                     <TableCell className='flex justify-end'>{processo.assuntoinstituicao}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Demanda em Aberto</TableCell>
+                                                    <TableCell className='font-medium text-slate-500'>Demanda em Aberto</TableCell>
                                                     <TableCell className='flex justify-end'>{processo.demandaaberta}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Juízo</TableCell>
+                                                    <TableCell className='font-medium text-slate-500'>Juízo</TableCell>
                                                     <TableCell className='flex text-end justify-end'>{processo.juizo}</TableCell>
                                                 </TableRow>
 
@@ -407,6 +415,8 @@ export function AcompanhamentoEspecial() {
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 cursor-default w-full sm:w-auto'>
 
+                                <Scale className="h-4 w-4" />
+
                                 Valor Processo: {processo.vlprocesso !== undefined && processo.vlprocesso !== null
                                     ? Number(processo.vlprocesso).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                                     : 'R$ 0,00'}
@@ -422,18 +432,7 @@ export function AcompanhamentoEspecial() {
 
                             </Button>
 
-                        </div>
-
-
-
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 cursor-default w-full sm:w-auto'>
-
-                                {processo.status}
-
-                            </Button>
-
-                        </div>
+                        </div>                        
 
                         {(processo.pdf_links || processo.pdf_links_cnpj) && (
                             <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
