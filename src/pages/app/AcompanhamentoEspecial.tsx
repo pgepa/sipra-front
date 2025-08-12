@@ -366,10 +366,10 @@ export function AcompanhamentoEspecial() {
                                 <DialogContent className="max-h-[90vh] overflow-y-auto">
 
                                     <DialogHeader>
+                                        
                                         <DialogTitle className='text-indigo-600 text-center text-xl'>Processo: {processo.numformatado}</DialogTitle>
-                                        <DialogDescription>Detalhes</DialogDescription>
-                                        <DialogDescription className="text-indigo-600 font-medium">{processo.parteprincipal}</DialogDescription>
-
+                                        <DialogDescription className='text-center'>{processo.parteprincipal}</DialogDescription>
+                                
                                     </DialogHeader>
 
                                     <div className='space-y-6'>
