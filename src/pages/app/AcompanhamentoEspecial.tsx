@@ -323,7 +323,7 @@ export function AcompanhamentoEspecial() {
                         <div className="flex justify-between items-start w-full">
                             <div>
 
-                                <CardTitle className="text-lg text-indigo-700 dark:text-blue-300 ">
+                                <CardTitle className="text-lg text-violet-600 dark:text-blue-300 ">
                                     Processo: {processo.numformatado}
                                 </CardTitle>
                                 <CardDescription className="flex items-center gap-2 mt-1">
@@ -332,9 +332,15 @@ export function AcompanhamentoEspecial() {
                                 </CardDescription>
 
                             </div>
-                            <Badge variant={processo.status === 'ATIVA' ? 'default' : 'secondary'} className={processo.status === 'ATIVA' ? 'bg-green-100 text-green-800 border-green-200 hover:text-white' : 'bg-slate-100 text-slate-600 border-slate-200'}>
+                            <div>
+                                <Label className='mr-2 text-slate-500'>Status Processo:</Label>
+                                <Badge variant={processo.status === 'ATIVA' ? 'default' : 'secondary'} 
+                                        className={processo.status === 'ATIVA' ? 'bg-green-100 text-green-800 border-green-200 hover:text-white' : 'bg-slate-100 text-slate-600 border-slate-200'}>
                                             {processo.status}
-                            </Badge>
+                                </Badge>
+                                
+                            </div>
+                            
                         </div>
                     </CardHeader>
 
@@ -366,8 +372,8 @@ export function AcompanhamentoEspecial() {
                                 <DialogContent className="max-h-[90vh] overflow-y-auto">
 
                                     <DialogHeader>
-                                        
-                                        <DialogTitle className='text-indigo-600 text-center text-xl'>Processo: {processo.numformatado}</DialogTitle>
+
+                                        <DialogTitle className='text-violet-600 text-center text-xl'>Processo: {processo.numformatado}</DialogTitle>
                                         <DialogDescription className='text-center'>{processo.parteprincipal}</DialogDescription>
                                 
                                     </DialogHeader>
@@ -413,7 +419,7 @@ export function AcompanhamentoEspecial() {
 
                         </div>
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 cursor-default w-full sm:w-auto'>
+                            <Button variant="outline" size="xs" className='flex gap-2 text-violet-700 hover:text-violet-800 hover:bg-violet-200/20 cursor-default w-full sm:w-auto'>
 
                                 <Scale className="h-4 w-4" />
 
