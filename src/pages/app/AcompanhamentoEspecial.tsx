@@ -137,7 +137,6 @@ export function AcompanhamentoEspecial() {
     };
 
     useEffect(() => {
-
         fetchProcessos(page, sortOrder);
     }, [page, indicio, acompanhamentoEspecial, sortOrder]);
 
@@ -145,6 +144,7 @@ export function AcompanhamentoEspecial() {
     useEffect(() => {
         setPage(1);
     }, [indicio, acompanhamentoEspecial, sortOrder, filters]);
+
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setPage(newPage);
@@ -223,9 +223,9 @@ export function AcompanhamentoEspecial() {
             <div className='flex flex-col gap-4'>
 
                 {/* SEÇÃO DE FILTROS */}
-                <Card className="shadow-sm border-slate-200">
+                <Card className="shadow-md shadow-slate-400/20 border-slate-200">
                     <CardHeader>
-                        <CardTitle className='text-gray-800'>Filtros de Pesquisa</CardTitle>
+                        <CardTitle className='text-violet-800'>Filtros de Pesquisa</CardTitle>
                         <CardDescription>Utilize os campos abaixo para refinar sua busca de processos.</CardDescription>
                     </CardHeader>
                     <CardContent>
