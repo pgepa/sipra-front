@@ -19,6 +19,7 @@ import { formatarData } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 
 
+
 interface ProtestoData {
     cda: string;
     contribuinte: string;
@@ -69,6 +70,23 @@ interface ProtestoData {
     statusdebito: string;
 }
 
+interface Filters {
+    documento: string;
+    contribuinte: string;
+    docraiz: string;
+    tpdoc: string;
+    porte: string[];
+    situacaocadastral: string[];
+    tipotributo: string[];
+    vlcdaatualizado_min: string;
+    vlcdaatualizado_max: string;
+    statusdebito: string[];
+    parcelamento: string;
+    prescrito: string[];
+    origemdivida: string;
+    indiciopatrimonial: string;
+}
+
 export function Ajuizadas() {
     const [protestos, setProtestos] = useState<ProtestoData[]>([]);
     const [loading, setLoading] = useState(true);
@@ -78,7 +96,9 @@ export function Ajuizadas() {
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [filters, setFilters] = useState({
+    const [orderby] = useState<'vlcdaatualizado'>('vlcdaatualizado');
+
+    const [filters, setFilters] = useState<Filters>({
         documento: '',
         contribuinte: '',
         docraiz: '',
@@ -96,15 +116,12 @@ export function Ajuizadas() {
     });
 
     const token = localStorage.getItem('token');
+    
 
-    // AJUSTE 1: A função agora aceita um parâmetro opcional 'currentFilters'.
-    // Isso é útil para quando precisamos garantir que a busca use os filtros mais recentes,
-    // especialmente após uma operação assíncrona como 'setFilters'.
     const fetchProtestos = async (
         currentPage = 1,
         order = 'desc',
         downloadFormat = '',
-        currentFilters = filters
     ) => {
         try {
             setLoading(true);
@@ -115,13 +132,23 @@ export function Ajuizadas() {
                     page: currentPage,
                     per_page: 25,
                     download: downloadFormat,
-                    order,
-                    ...currentFilters,
-                    porte: currentFilters.porte.join(','),
-                    situacaocadastral: currentFilters.situacaocadastral.join(','),
-                    tipotributo: currentFilters.tipotributo.join(','),
-                    statusdebito: currentFilters.statusdebito.join(','),
-                    prescrito: currentFilters.prescrito.join(','),
+                    order: order,
+                    orderby: orderby,
+                    porte: filters.porte.join(',') || undefined,
+                    documento: filters.documento || undefined,
+                    contribuinte: filters.contribuinte || undefined,
+                    situacaocadastral: filters.situacaocadastral.join(',') || undefined,
+                    tipotributo: filters.tipotributo.join(',') || undefined,
+                    statusdebito: filters.statusdebito.join(',') || undefined,
+                    parcelamento: filters.parcelamento || undefined,
+                    prescrito: filters.prescrito.join(',') || undefined,
+                    origemdivida: filters.origemdivida || undefined,
+                    indiciopatrimonial: filters.indiciopatrimonial || undefined,
+                    tpdoc: filters.tpdoc || undefined,
+                    vlcdaatualizado_min: filters.vlcdaatualizado_min || undefined,
+                    vlcdaatualizado_max: filters.vlcdaatualizado_max || undefined,
+                    docraiz: filters.docraiz || undefined,
+
                 },
                 headers: { Authorization: `Bearer ${token}` },
                 responseType: downloadFormat ? 'blob' : 'json',
@@ -149,10 +176,26 @@ export function Ajuizadas() {
             setLoading(false);
         }
     };
-
     useEffect(() => {
-        fetchProtestos(page, sortOrder, '', filters);
-    }, [page, sortOrder]);
+        fetchProtestos(1, sortOrder);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // Busca quando filtros ou paginação mudam
+    useEffect(() => {
+        fetchProtestos(page, sortOrder);
+    }, [filters, page, sortOrder]);
+
+
+    // Sempre que filtros mudarem, resetar página para 1
+    const updateFilters = (newFilters: Partial<Filters>) => {
+        setFilters(prev => {
+            const updated = { ...prev, ...newFilters };
+            return updated;
+        });
+        setPage(1);
+    };
+
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -182,9 +225,9 @@ export function Ajuizadas() {
         return items;
     };
 
-    // AJUSTE 2: Lógica de limpar filtros corrigida.
+
     const handleClearFilters = () => {
-        const clearedFilters = {
+        setFilters({
             documento: '',
             contribuinte: '',
             porte: [],
@@ -199,22 +242,14 @@ export function Ajuizadas() {
             origemdivida: '',
             indiciopatrimonial: '',
             docraiz: '',
-        };
-
-        setFilters(clearedFilters);
-        setPage(1);
+        });
         setIsCNPJSelected(false);
-        // Chama a busca passando explicitamente os filtros limpos para garantir consistência.
-        fetchProtestos(1, sortOrder, '', clearedFilters);
-    };
-
-    // AJUSTE 3: Lógica de pesquisa corrigida para respeitar a ordenação atual.
-    const handleSearch = () => {
         setPage(1);
-        fetchProtestos(1, sortOrder, '', filters); // passamos filters
     };
 
-    const handleCheckboxChange = (type: 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'prescrito', value: string) => {
+
+
+    const handleCheckboxChange = (type: keyof Pick<Filters, 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'prescrito'>, value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -222,6 +257,7 @@ export function Ajuizadas() {
 
             return { ...prevFilters, [type]: newFilter };
         });
+        setPage(1);
     };
 
     const portes = ["Empresa de Pequeno Porte", "Micro Empresa", "Demais"];
@@ -231,7 +267,7 @@ export function Ajuizadas() {
     const prescritos = ["Dentro do prazo prescricional", "Possível Prescrição", "Prestes a prescrever"];
 
     const handleDocumentTypeChange = (value: string) => {
-        setFilters({ ...filters, tpdoc: value });
+        updateFilters({ tpdoc: value });
         setIsCNPJSelected(value === "CNPJ");
     };
 
@@ -273,7 +309,12 @@ export function Ajuizadas() {
                             className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 items-end'
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                handleSearch();
+                                // Dispara a lógica de busca do useEffect.
+                                if (page !== 1) {
+                                    setPage(1);
+                                } else {
+                                    fetchProtestos(1, sortOrder);
+                                }
                             }}
                         >
                             <div className='space-y-2'>
@@ -514,7 +555,10 @@ export function Ajuizadas() {
                                 </DropdownMenu>
                             </div>
 
-                            <Button type='submit' className='default mt-8'>
+                            <Button
+                                type='submit'
+                                className='default mt-8'
+                            >
                                 <Search className="h-4 w-4 mr-2" />
                                 Pesquisar
                             </Button>
@@ -575,8 +619,8 @@ export function Ajuizadas() {
                 </div>
             )}
 
-            {protestos.map((protesto) => (
-                <Card key={protesto.cda} className='shadow-md shadow-slate-400/20 mt-4'>
+            {protestos.map((protesto, index) => (
+                <Card key={`${protesto}-${index}`} className='shadow-md shadow-slate-400/20 mt-4'>
                     <CardHeader className="flex-items-center flex-row justify-between space-y-0 pb-4">
                         <div className="flex justify-between items-start w-full">
                             <div>
