@@ -81,6 +81,7 @@ interface Filters {
     vlcdaatualizado_min: string;
     vlcdaatualizado_max: string;
     statusdebito: string[];
+    sit_protesto: string[];
     parcelamento: string;
     prescrito: string[];
     origemdivida: string;
@@ -109,6 +110,7 @@ export function Ajuizadas() {
         vlcdaatualizado_min: '',
         vlcdaatualizado_max: '',
         statusdebito: [] as string[],
+        sit_protesto: [] as string[],
         parcelamento: '',
         prescrito: [] as string[],
         origemdivida: '',
@@ -140,6 +142,7 @@ export function Ajuizadas() {
                     situacaocadastral: filters.situacaocadastral.join(',') || undefined,
                     tipotributo: filters.tipotributo.join(',') || undefined,
                     statusdebito: filters.statusdebito.join(',') || undefined,
+                    sit_protesto: filters.sit_protesto.join(',') || undefined,
                     parcelamento: filters.parcelamento || undefined,
                     prescrito: filters.prescrito.join(',') || undefined,
                     origemdivida: filters.origemdivida || undefined,
@@ -237,11 +240,13 @@ export function Ajuizadas() {
             vlcdaatualizado_min: '',
             vlcdaatualizado_max: '',
             statusdebito: [],
+            sit_protesto: [],
             parcelamento: '',
             prescrito: [],
             origemdivida: '',
             indiciopatrimonial: '',
             docraiz: '',
+
         });
         setIsCNPJSelected(false);
         setPage(1);
@@ -249,7 +254,7 @@ export function Ajuizadas() {
 
 
 
-    const handleCheckboxChange = (type: keyof Pick<Filters, 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'prescrito'>, value: string) => {
+    const handleCheckboxChange = (type: keyof Pick<Filters, 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'sit_protesto' | 'prescrito'>, value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -264,6 +269,7 @@ export function Ajuizadas() {
     const situacaoCadastral = ["Ativa", "Baixada", "Inapta", "Nula", "Suspensa"];
     const tributos = ["Dívida Ativa ICMS", "Dívida Ativa IPVA", "Dívida Ativa ITCD", "Dívida Ativa não tributária", "Dívida Ativa TFRH", "Dívida Ativa TFRM"];
     const statusDebito = ["Ativo", "Cancelado", "Extinto", "Suspenso"];
+    const situacaoProtesto = ["Aguardando envio", "Aguardando recebimento", "Cancelado", "Confirmado", "Devolvido", "Enviado", "Gerado", "Não Protestado", "Pago", "Protestado", "Retirado", "Sustado"];
     const prescritos = ["Dentro do prazo prescricional", "Possível Prescrição", "Prestes a prescrever"];
 
     const handleDocumentTypeChange = (value: string) => {
@@ -513,6 +519,29 @@ export function Ajuizadas() {
                                                 <Checkbox
                                                     checked={filters.statusdebito.includes(option)}
                                                     onCheckedChange={() => handleCheckboxChange('statusdebito', option)}
+                                                />
+                                                <Label className="ml-2 font-normal">{option}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+
+                             <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Situação Protesto:</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                            <span className='font-normal truncate'>{filters.sit_protesto.length > 0 ? filters.sit_protesto.join(", ") : "Escolha uma opção"}</span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4">
+                                        {situacaoProtesto.map((option) => (
+                                            <DropdownMenuItem key={option} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.sit_protesto.includes(option)}
+                                                    onCheckedChange={() => handleCheckboxChange('sit_protesto', option)}
                                                 />
                                                 <Label className="ml-2 font-normal">{option}</Label>
                                             </DropdownMenuItem>
