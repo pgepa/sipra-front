@@ -698,6 +698,7 @@ export function Ajuizadas() {
                                                 <InfoItem label="Multa Atualizada" value={formatarMoeda(protesto.vlmultaatualizada)} />
                                                 <InfoItem label="Juros Atualizados" value={formatarMoeda(protesto.vljurosatualizado)} />
                                                 <InfoItem label="Imposto Atualizado" value={formatarMoeda(protesto.vlimpatualizado)} />
+                                                <InfoItem label="CDA Atualizada" value={formatarMoeda(protesto.vlcdaatualizado)} />
                                             </dl>
                                         </section>
                                         <section>
@@ -722,7 +723,7 @@ export function Ajuizadas() {
                                             </dl>
                                         </section>
                                         <section>
-                                            <InfoItem label="Fundamento Legal / Descrição" value={<p className="font-normal text-sm whitespace-pre-wrap">{protesto.fundamento || protesto.descricao}</p>} />
+                                            <InfoItem label="Fundamento Legal / Descrição" value={<p className="text-sm whitespace-pre-wrap">{protesto.fundamento || protesto.descricao}</p>} />
                                         </section>
                                     </div>
                                 </DialogContent>
