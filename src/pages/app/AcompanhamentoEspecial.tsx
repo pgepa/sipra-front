@@ -412,7 +412,7 @@ export function AcompanhamentoEspecial() {
                             </div>
 
                             {/* Filtros de Switch */}
-                            <div className='space-y-2'>
+                            <div className='space-y-1.5'>
                                 <Label className='font-semibold text-sm text-gray-800'>Indício Patrimonial:</Label>
                                 <Select value={filters.indicio} onValueChange={(value) => setFilters({ ...filters, indicio: value })}>
                                     <SelectTrigger className="w-full">
