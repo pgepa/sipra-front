@@ -45,7 +45,7 @@ interface ProtestoData {
     vlacao: string;
     pdf_links?: string[];
     pdf_links_cnpj?: string[];
-    indicio: boolean;
+    indicio: string | null;
     AE: boolean;
     parteprincipal: string;
     mesaprocurador: string;
@@ -61,6 +61,7 @@ interface Filters {
     comarca: string;
     vlprocesso_min: string; // pode ser string porque input normalmente é string
     vlprocesso_max: string;
+    indicio: string;
 }
 
 export function AcompanhamentoEspecial() {
@@ -70,7 +71,7 @@ export function AcompanhamentoEspecial() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
-    const [indicio, setIndicio] = useState(false);
+    
     const [acompanhamentoEspecial, setAcompanhamentoEspecial] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
     const [orderby] = useState<'somavlcdas'>('somavlcdas');
@@ -79,6 +80,7 @@ export function AcompanhamentoEspecial() {
         comarca: '',
         vlprocesso_min: '',
         vlprocesso_max: '',
+        indicio: ' ',
     });
 
 
@@ -100,7 +102,7 @@ export function AcompanhamentoEspecial() {
                     order: order,
                     orderby: orderby,
                     numformatado: filters.numformatado || undefined,
-                    indicio: indicio ? true : undefined,
+                    indicio: filters.indicio || undefined,
                     AE: acompanhamentoEspecial ? true : undefined,
                     comarca: filters.comarca || undefined,
                     vlprocesso_min: filters.vlprocesso_min || undefined,
@@ -138,12 +140,12 @@ export function AcompanhamentoEspecial() {
 
     useEffect(() => {
         fetchProcessos(page, sortOrder);
-    }, [page, indicio, acompanhamentoEspecial, sortOrder]);
+    }, [page, acompanhamentoEspecial, sortOrder]);
 
 
     useEffect(() => {
         setPage(1);
-    }, [indicio, acompanhamentoEspecial, sortOrder, filters]);
+    }, [acompanhamentoEspecial, sortOrder, filters]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -204,10 +206,10 @@ export function AcompanhamentoEspecial() {
             comarca: '',
             vlprocesso_min: '',
             vlprocesso_max: '',
+            indicio: ' ',
 
 
         });
-        setIndicio(false);
         setAcompanhamentoEspecial(false);
         setPage(1);
 
@@ -410,9 +412,18 @@ export function AcompanhamentoEspecial() {
                             </div>
 
                             {/* Filtros de Switch */}
-                            <div className='flex items-center justify-between w-full h-10 px-3 border border-slate-200 rounded-md bg-white'>
-                                <Label htmlFor='indicio' className='text-sm font-medium text-slate-800 cursor-pointer'>Indício Patrimonial</Label>
-                                <Switch id='indicio' checked={indicio} onCheckedChange={setIndicio} />
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Indício Patrimonial:</Label>
+                                <Select value={filters.indicio} onValueChange={(value) => setFilters({ ...filters, indicio: value })}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Escolha uma opção" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value=" ">Todos</SelectItem>
+                                        <SelectItem value="true">SIM</SelectItem>
+                                        <SelectItem value="false">NÃO</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className='flex items-center justify-between w-full h-10 px-3 border border-slate-200 rounded-md bg-white'>
                                 <Label htmlFor='acompanhamento' className='text-sm font-medium text-slate-800 cursor-pointer'>Acomp. Especial</Label>
