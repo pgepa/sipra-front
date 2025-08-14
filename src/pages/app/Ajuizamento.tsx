@@ -647,7 +647,7 @@ export function Ajuizamento() {
 
                     </CardHeader>
                     <CardContent className="space-y-1">
-                        <div className="flex items-center gap-3 text-md text-slate-700">
+                        <div className="flex items-center gap-3 text-sm text-slate-700">
                             <Briefcase className="h-5 w-5 text-slate-400" />
                             Origem da Dívida: {protesto.origemdivida}
                         </div>
