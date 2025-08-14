@@ -6,7 +6,7 @@ import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building2, FileText, Scale, Search, SearchX, SquareArrowOutUpRight, User, X } from 'lucide-react';
+import { Briefcase, Building2, FileText, Scale, Search, SquareArrowOutUpRight, User, X } from 'lucide-react';
 import { GrDocumentExcel } from "react-icons/gr";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
@@ -640,11 +640,13 @@ export function Ajuizadas() {
             )}
 
             {!loading && (!protestos || protestos.length === 0) && (
-                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground'>
-                    <p>Não foi encontrado nenhuma CDA para o(s) filtro(s) selecionado(s).</p>
-                    <p>Tente novamente com outros parâmetros.</p>
+                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground bg-white py-20 rounded-lg shadow-md'>
+
+                   <FileText className="mx-auto h-12 w-12 text-slate-400" />
+                    <h3 className="mt-4 text-lg font-semibold text-slate-800">Nenhum resultado encontrado</h3>
+                    <p className="mt-1 text-sm text-slate-500">Tente ajustar os filtros para encontrar o que procura.</p>
+
                     <p>{error}</p>
-                    <SearchX className="h-12 w-12 mt-4" />
                 </div>
             )}
 
