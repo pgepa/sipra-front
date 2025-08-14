@@ -384,13 +384,11 @@ export function Ajuizadas() {
                             </div>
                             <div className='space-y-2'>
                                 <Label className='font-semibold text-sm text-gray-800'>Valor Mínimo:</Label>
-                                <div className="relative">
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <Search className="h-4 w-4 text-gray-500" />
-                                    </span>
+                                <div className="relative">                                   
                                     <Input
-                                        placeholder='Informe somente números'
-                                        className='pl-10 col-span-1'
+                                        placeholder='R$ 1.000,00'
+                                        type="number" 
+                                        className='col-span-1'
                                         value={filters.vlcdaatualizado_min}
                                         onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
                                     />
@@ -398,13 +396,11 @@ export function Ajuizadas() {
                             </div>
                             <div className='space-y-2'>
                                 <Label className='font-semibold text-sm text-gray-800'>Valor Máximo:</Label>
-                                <div className="relative">
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <Search className="h-4 w-4 text-gray-500" />
-                                    </span>
+                                <div className="relative">                                    
                                     <Input
-                                        placeholder='Informe somente números'
-                                        className='pl-10 col-span-1'
+                                        placeholder='R$ 50.000,00'
+                                        type="number"
+                                        className='col-span-1'
                                         value={filters.vlcdaatualizado_max}
                                         onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
                                     />
