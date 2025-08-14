@@ -651,7 +651,7 @@ export function Ajuizadas() {
                     <CardHeader className="flex-items-center flex-row justify-between space-y-0 pb-4">
                         <div className="flex justify-between items-start w-full">
                             <div>
-                                <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
+                                <CardTitle className="text-lg text-violet-600 dark:text-blue-300">
                                     {protesto.contribuinte} - {protesto.docformatado}
                                 </CardTitle>
                                 <CardDescription className='flex gap-2'>
@@ -749,9 +749,16 @@ export function Ajuizadas() {
                                                 <InfoItem label="Registros ADEPARÁ" value={protesto.qtdadepara} />
                                             </dl>
                                         </section>
-                                        <section>
-                                            <InfoItem label="Fundamento Legal / Descrição" value={<p className="text-sm whitespace-pre-wrap">{protesto.fundamento || protesto.descricao}</p>} />
+                                         <section>
+                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Detalhes Protesto</h2>
+                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
+                                                <InfoItem label="Descrição" value={protesto.descricao} />
+                                                <InfoItem label="Fundamento" value={protesto.fundamento} />
+                                                <InfoItem label="Origem da Dívida" value={protesto.origemdivida} />
+
+                                            </dl>
                                         </section>
+                                        
                                     </div>
                                 </DialogContent>
                             </Dialog>

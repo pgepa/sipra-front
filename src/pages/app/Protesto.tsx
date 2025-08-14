@@ -931,16 +931,7 @@ export function Protesto() {
 
 
                         </div>
-
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-indigo-200/20 text-indigo-700 w-full sm:w-auto cursor-default'>
-
-                                {protesto.statusdebito}
-
-                            </Button>
-
-
-                        </div>
+                       
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
                             <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 w-full sm:w-auto cursor-default'>
 
