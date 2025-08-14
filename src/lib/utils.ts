@@ -57,3 +57,17 @@ export function formatarData(dataString: string | null | undefined): string {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function formatarBooleano(valor: string | null | undefined): string {
+        if (valor === 'S') return 'Sim';
+        if (valor === 'N') return 'Não';
+        return valor || '-';
+    }
+
+export function formatarMoeda(valor: string | number | null | undefined): string {
+        const numero = Number(valor);
+        if (valor === null || valor === undefined || isNaN(numero)) {
+            return 'R$ 0,00';
+        }
+        return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }

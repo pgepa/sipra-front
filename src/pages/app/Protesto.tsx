@@ -6,7 +6,7 @@ import { api } from '@/lib/axios';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, SearchX, SquareArrowOutUpRight, X } from 'lucide-react';
+import { Briefcase, Building2, FileText, Search, SquareArrowOutUpRight, User, X } from 'lucide-react';
 import { GrDocumentExcel } from "react-icons/gr";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GridLoader from 'react-spinners/GridLoader';
@@ -15,11 +15,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from 'lucide-react';
-import { formatarData } from '@/lib/utils'; 
-
-
-
-
+import { formatarBooleano, formatarData, formatarMoeda } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 interface ProtestoData {
     cda: string;
@@ -269,7 +266,7 @@ export function Protesto() {
         "Suspensa",
     ]
 
-    
+
     const tributos = [
         "Dívida Ativa ICMS",
         "Dívida Ativa IPVA",
@@ -304,381 +301,396 @@ export function Protesto() {
         setIsAjuizadasSelected(value === "N");
     };
 
+    const InfoItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
+        <div className="flex flex-col">
+            <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
+            <dd className="mt-1 text-base text-foreground font-semibold">{value || '-'}</dd>
+        </div>
+    );
+
 
 
     return (
         <>
             <Helmet title="Protesto" />
 
-            <div className='flex flex-col gap-4'>         
+            <div className='flex flex-col gap-4'>
 
+                <Card className="shadow-md shadow-slate-400/20 border-slate-200">
 
+                    <CardHeader>
+                        <CardTitle className='text-violet-800'>Filtros de Pesquisa</CardTitle>
+                        <CardDescription>Utilize os campos abaixo para refinar sua busca de processos.</CardDescription>
+                    </CardHeader>
 
-                <form
-                    className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mt-2'
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        fetchProtestos(1);
-                    }}
-                >                    
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder='Buscar por CPF/CNPJ'
-                                className='pl-10 col-span-1'
-                                value={filters.nudocumento}
-                                onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
-                            />
-                        </div>
+                    <CardContent>
 
-                    </div>
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Nome do Contribuinte:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-
-                            <Input
-                                placeholder='Contribuinte'
-                                className='pl-10 col-span-1'
-                                value={filters.contribuinte}
-                                onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
-                            />
-                        </div>
-                    </div>
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Fundamento:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder='Origem do Débito'
-                                className='pl-10 col-span-1'
-                                value={filters.fundamento}
-                                onChange={(e) => setFilters({ ...filters, fundamento: e.target.value })}
-                            />
-                        </div>
-                    </div>
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Origem da Dívida:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder='Origem da dívida'
-                                className='pl-10 col-span-1'
-                                value={filters.origemdivida}
-                                onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
-                            />
-
-                        </div>
-
-                    </div>
-
-                    <div className='space-y-2'>
-
-                        <Label className='font-semibold text-sm text-gray-800'>Valor Mínino:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-
-                            <Input
-                                placeholder='Informe somente números'
-                                className='pl-10 col-span-1'
-                                value={filters.vlcdaatualizado_min}
-                                onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
-                            />
-
-                        </div>
-
-
-
-                    </div>
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Valor Máximo:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder='Informe somente números'
-                                className='pl-10 col-span-1'
-                                value={filters.vlcdaatualizado_max}
-                                onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
-                            />
-                        </div>
-
-
-
-                    </div>
-
-
-                    <div className='space-y-2'>
-
-                        <Label className='font-semibold text-sm text-gray-800'>Tipo Documento:</Label>
-                        <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="CPF">CPF</SelectItem>
-                                <SelectItem value="CNPJ">CNPJ</SelectItem>
-                            </SelectContent>
-                        </Select>
-
-                    </div>
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Porte:</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
-                                    <span className='font-normal truncate'>
-                                        {filters.porte.length > 0 ? filters.porte.join(", ") : "Escolha uma opção"}
+                        <form
+                            className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 items-end'
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                fetchProtestos(1);
+                            }}
+                        >
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
+                                <div className="relative">
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <Search className="h-4 w-4 text-gray-500" />
                                     </span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4">
-                                {portes.map((option) => (
-                                    <DropdownMenuItem key={option} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.porte.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('porte', option)}
-                                        />
-                                        <Label className="ml-2 font-normal">{option}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                                    <Input
+                                        placeholder='Buscar por CPF/CNPJ'
+                                        className='pl-10 col-span-1'
+                                        value={filters.nudocumento}
+                                        onChange={(e) => setFilters({ ...filters, nudocumento: e.target.value })}
+                                    />
+                                </div>
 
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Situação Cadastral (RFB):</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
-                                    <span className='font-normal truncate'>
-                                        {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
+                            </div>
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Nome do Contribuinte:</Label>
+                                <div className="relative">
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <Search className="h-4 w-4 text-gray-500" />
                                     </span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4">
-                                {situacaoCadastral.map((option) => (
-                                    <DropdownMenuItem key={option} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.situacaocadastral.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('situacaocadastral', option)}
-                                        />
-                                        <Label className="ml-2 font-normal">{option}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
 
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Situação Protesto:</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>{filters.sit_protesto.length > 0 ? filters.sit_protesto.join(", ") : "Escolha uma opção"}</span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4">
-                                {situacoesProtesto.map((situacao) => (
-                                    <DropdownMenuItem key={situacao} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.sit_protesto.includes(situacao)}
-                                            onCheckedChange={() => handleCheckboxChange('sit_protesto', situacao)}
-                                        />
-                                        <Label className="ml-2 font-normal">{situacao}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                                    <Input
+                                        placeholder='Contribuinte'
+                                        className='pl-10 col-span-1'
+                                        value={filters.contribuinte}
+                                        onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
+                                    />
+                                </div>
+                            </div>
 
-                    </div>
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Fundamento:</Label>
+                                <div className="relative">
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <Search className="h-4 w-4 text-gray-500" />
+                                    </span>
+                                    <Input
+                                        placeholder='Fundamento'
+                                        className='pl-10 col-span-1'
+                                        value={filters.fundamento}
+                                        onChange={(e) => setFilters({ ...filters, fundamento: e.target.value })}
+                                    />
+                                </div>
+                            </div>
 
-                   
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Tributo:</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>{filters.tipotributo.length > 0 ? filters.tipotributo.join(", ") : "Escolha uma opção"}</span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4">
-                                {tributos.map((option) => (
-                                    <DropdownMenuItem key={option} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.tipotributo.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('tipotributo', option)}
-                                        />
-                                        <Label className="ml-2 font-normal">{option}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Origem da Dívida:</Label>
+                                <div className="relative">
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <Search className="h-4 w-4 text-gray-500" />
+                                    </span>
+                                    <Input
+                                        placeholder='Origem da dívida'
+                                        className='pl-10 col-span-1'
+                                        value={filters.origemdivida}
+                                        onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
+                                    />
 
-                    </div>
+                                </div>
 
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Status Débito:</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>{filters.statusdebito.length > 0 ? filters.statusdebito.join(", ") : "Escolha uma opção"}</span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4">
-                                {statusDebito.map((option) => (
-                                    <DropdownMenuItem key={option} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.statusdebito.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('statusdebito', option)}
-                                        />
-                                        <Label className="ml-2 font-normal">{option}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                            </div>
 
-                    </div>
+                            <div className='space-y-2'>
 
-                    <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Valor Mínino:</Label>
+                                <div className="relative">                               
 
-                        <Label className='font-semibold text-sm text-gray-800'>Ajuizada:</Label>
+                                    <Input
+                                        placeholder='R$ 1.000,00'
+                                        type="number" 
+                                        className='col-span-1'
+                                        value={filters.vlcdaatualizado_min}
+                                        onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
+                                    />
 
-                        <Select value={filters.flajuizada} onValueChange={handleDocumentTypeAjuizada}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="S">SIM</SelectItem>
-                                <SelectItem value="N">NÃO</SelectItem>
-
-                            </SelectContent>
-                        </Select>
-
-                    </div>
-
-                    
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Prescrição Originária:</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isAjuizadasSelected}>
-                                    <span className='font-normal truncate'>{filters.prescrito.length > 0 ? filters.prescrito.join(", ") : "Escolha uma opção"}</span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4">
-                                {prescritos.map((option) => (
-                                    <DropdownMenuItem key={option} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.prescrito.includes(option)}
-                                            onCheckedChange={() => handleCheckboxChange('prescrito', option)}
-                                        />
-                                        <Label className="ml-2 font-normal">{option}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-
-                    </div>
-
-                    <div className='space-y-2'>
-
-                        <Label className='font-semibold text-sm text-gray-800'>Endereço Protesto:</Label>
-
-                        <Select value={filters.obs_end_protesto} onValueChange={(value) => setFilters({ ...filters, obs_end_protesto: value })}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-
-                                <SelectItem value="Endereço Extenso">Endereço Extenso</SelectItem>
-                                <SelectItem value="Endereço Incompleto">Endereço Incompleto</SelectItem>
-                                <SelectItem value="Endereço Insuficiente">Endereço Insuficiente</SelectItem>
-                                <SelectItem value="Endereço Nulo">Endereço Nulo</SelectItem>
-                                <SelectItem value="Endereço válido para Protesto">Endereço válido para Protesto</SelectItem>
-
-                            </SelectContent>
-                        </Select>
-
-                    </div>
-
-                     <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>Município:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-
-                            <Input
-                                placeholder='Informe o município'
-                                className='pl-10 col-span-1'
-                                value={filters.municipio}
-                                onChange={(e) => setFilters({ ...filters, municipio: e.target.value })}
-                            />
-                        </div>
-                    </div>
-
-
-                    <div className='space-y-2'>
-                        <Label className='font-semibold text-sm text-gray-800'>UF:</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                    <span className='font-normal truncate'>{filters.uf.length > 0 ? filters.uf.join(", ") : "Escolha uma opção"}</span>
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="p-4 max-h-60 overflow-y-auto">
-                                {uf.map((estado) => (
-                                    <DropdownMenuItem key={estado} className="flex items-center">
-                                        <Checkbox
-                                            checked={filters.uf.includes(estado)}
-                                            onCheckedChange={() => handleCheckboxChange('uf', estado)}
-                                        />
-                                        <Label className="ml-2 font-normal">{estado}</Label>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                                </div>
 
 
 
-                    <Button type='submit' className='default mt-8'>
-                        <Search className="h-4 w-4 mr-2" />
-                        Pesquisar
-                    </Button>
+                            </div>
 
-                    <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full sm:w-auto mt-8">
-                        <X className="h-4 w-4 mr-2" />
-                        Remover filtros
-                    </Button>
-                </form>
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Valor Máximo:</Label>
+                                <div className="relative">
+                                    
+                                    <Input
+                                        placeholder='R$ 50.000,00'
+                                        type="number"
+                                        className='col-span-1'
+                                        value={filters.vlcdaatualizado_max}
+                                        onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
+                                    />
+                                </div>
+
+
+
+                            </div>
+
+
+                            <div className='space-y-2'>
+
+                                <Label className='font-semibold text-sm text-gray-800'>Tipo Documento:</Label>
+                                <Select value={filters.tipodoc} onValueChange={handleDocumentTypeChange}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Escolha uma opção" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="CPF">CPF</SelectItem>
+                                        <SelectItem value="CNPJ">CNPJ</SelectItem>
+                                    </SelectContent>
+                                </Select>
+
+                            </div>
+
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Porte:</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
+                                            <span className='font-normal truncate'>
+                                                {filters.porte.length > 0 ? filters.porte.join(", ") : "Escolha uma opção"}
+                                            </span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4">
+                                        {portes.map((option) => (
+                                            <DropdownMenuItem key={option} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.porte.includes(option)}
+                                                    onCheckedChange={() => handleCheckboxChange('porte', option)}
+                                                />
+                                                <Label className="ml-2 font-normal">{option}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+
+
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Situação Cadastral (RFB):</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
+                                            <span className='font-normal truncate'>
+                                                {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
+                                            </span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4">
+                                        {situacaoCadastral.map((option) => (
+                                            <DropdownMenuItem key={option} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.situacaocadastral.includes(option)}
+                                                    onCheckedChange={() => handleCheckboxChange('situacaocadastral', option)}
+                                                />
+                                                <Label className="ml-2 font-normal">{option}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Situação Protesto:</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                            <span className='font-normal truncate'>{filters.sit_protesto.length > 0 ? filters.sit_protesto.join(", ") : "Escolha uma opção"}</span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4">
+                                        {situacoesProtesto.map((situacao) => (
+                                            <DropdownMenuItem key={situacao} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.sit_protesto.includes(situacao)}
+                                                    onCheckedChange={() => handleCheckboxChange('sit_protesto', situacao)}
+                                                />
+                                                <Label className="ml-2 font-normal">{situacao}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+
+                            </div>
+
+
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Tributo:</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                            <span className='font-normal truncate'>{filters.tipotributo.length > 0 ? filters.tipotributo.join(", ") : "Escolha uma opção"}</span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4">
+                                        {tributos.map((option) => (
+                                            <DropdownMenuItem key={option} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.tipotributo.includes(option)}
+                                                    onCheckedChange={() => handleCheckboxChange('tipotributo', option)}
+                                                />
+                                                <Label className="ml-2 font-normal">{option}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+
+                            </div>
+
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Status Débito:</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                            <span className='font-normal truncate'>{filters.statusdebito.length > 0 ? filters.statusdebito.join(", ") : "Escolha uma opção"}</span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4">
+                                        {statusDebito.map((option) => (
+                                            <DropdownMenuItem key={option} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.statusdebito.includes(option)}
+                                                    onCheckedChange={() => handleCheckboxChange('statusdebito', option)}
+                                                />
+                                                <Label className="ml-2 font-normal">{option}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+
+                            </div>
+
+                            <div className='space-y-2'>
+
+                                <Label className='font-semibold text-sm text-gray-800'>Ajuizada:</Label>
+
+                                <Select value={filters.flajuizada} onValueChange={handleDocumentTypeAjuizada}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Escolha uma opção" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+
+                                        <SelectItem value="S">SIM</SelectItem>
+                                        <SelectItem value="N">NÃO</SelectItem>
+
+                                    </SelectContent>
+                                </Select>
+
+                            </div>
+
+
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Prescrição Originária:</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isAjuizadasSelected}>
+                                            <span className='font-normal truncate'>{filters.prescrito.length > 0 ? filters.prescrito.join(", ") : "Escolha uma opção"}</span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4">
+                                        {prescritos.map((option) => (
+                                            <DropdownMenuItem key={option} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.prescrito.includes(option)}
+                                                    onCheckedChange={() => handleCheckboxChange('prescrito', option)}
+                                                />
+                                                <Label className="ml-2 font-normal">{option}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+
+                            </div>
+
+                            <div className='space-y-2'>
+
+                                <Label className='font-semibold text-sm text-gray-800'>Endereço Protesto:</Label>
+
+                                <Select value={filters.obs_end_protesto} onValueChange={(value) => setFilters({ ...filters, obs_end_protesto: value })}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Escolha uma opção" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+
+                                        <SelectItem value="Endereço Extenso">Endereço Extenso</SelectItem>
+                                        <SelectItem value="Endereço Incompleto">Endereço Incompleto</SelectItem>
+                                        <SelectItem value="Endereço Insuficiente">Endereço Insuficiente</SelectItem>
+                                        <SelectItem value="Endereço Nulo">Endereço Nulo</SelectItem>
+                                        <SelectItem value="Endereço válido para Protesto">Endereço válido para Protesto</SelectItem>
+
+                                    </SelectContent>
+                                </Select>
+
+                            </div>
+
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Município:</Label>
+                                <div className="relative">
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <Search className="h-4 w-4 text-gray-500" />
+                                    </span>
+
+                                    <Input
+                                        placeholder='Ex: Belém'
+                                        className='pl-10 col-span-1'
+                                        value={filters.municipio}
+                                        onChange={(e) => setFilters({ ...filters, municipio: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+
+                            <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>UF:</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                            <span className='font-normal truncate'>{filters.uf.length > 0 ? filters.uf.join(", ") : "Escolha uma opção"}</span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4 max-h-60 overflow-y-auto">
+                                        {uf.map((estado) => (
+                                            <DropdownMenuItem key={estado} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.uf.includes(estado)}
+                                                    onCheckedChange={() => handleCheckboxChange('uf', estado)}
+                                                />
+                                                <Label className="ml-2 font-normal">{estado}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+
+
+
+                            <Button type='submit' className='default mt-8'>
+                                <Search className="h-4 w-4 mr-2" />
+                                Pesquisar
+                            </Button>
+
+                            <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full sm:w-auto mt-8">
+                                <X className="h-4 w-4 mr-2" />
+                                Remover filtros
+                            </Button>
+                        </form>
+
+                    </CardContent>
+
+                </Card>
 
 
                 <div className="flex gap-4 mt-4">
@@ -719,37 +731,48 @@ export function Protesto() {
             )}
 
             {!loading && (!protestos || protestos.length === 0) && (
-                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground'>
-                    <p>Não foi encontrado nenhuma CDA para o(s) filtro(s) selecionado(s).</p>
-                    <p>Tente novamente com outros parâmetros.</p>
+                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground bg-white py-20 rounded-lg shadow-md'>
+
+                    <FileText className="mx-auto h-12 w-12 text-slate-400" />
+                    <h3 className="mt-4 text-lg font-semibold text-slate-800">Nenhum resultado encontrado</h3>
+                    <p className="mt-1 text-sm text-slate-500">Tente ajustar os filtros para encontrar o que procura.</p>
+
                     <p>{error}</p>
-                    <SearchX className="h-12 w-12 mt-4" />
+
                 </div>
             )}
 
             {protestos.map((protesto) => (
                 <Card key={protesto.cda} className='shadow-md shadow-slate-400/20 mt-4'>
                     <CardHeader className="flex-items-center flex-row justify-between space-y-0 pb-4">
-                        <div className="space-y-1">
-                            <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
-                                {protesto.contribuinte} - {protesto.docformatado}
-                            </CardTitle>
-                            <CardDescription>{protesto.cda}</CardDescription>
 
+                        <div className="flex justify-between items-start w-full">
+                            <div>
+                                <CardTitle className="text-lg text-indigo-700 dark:text-blue-300">
+                                    {protesto.contribuinte} - {protesto.docformatado}
+                                </CardTitle>
+                                <CardDescription className='flex gap-2'>
+                                    <FileText className="h-4 w-4" />
+                                    CDA: {protesto.cda}
+                                </CardDescription>
 
+                            </div>
+
+                            <div>
+                                <Label className='mr-2 text-slate-500'>Status Débito:</Label>
+                                <Badge variant={protesto.statusdebito === 'Ativo' ? 'default' : 'secondary'}
+                                    className={protesto.statusdebito === 'Ativo' ? 'bg-green-100 text-green-800 border-green-200 hover:text-white' : 'bg-slate-100 text-slate-600 border-slate-200'}>
+                                    {protesto.statusdebito}
+                                </Badge>
+                            </div>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-1">
-                        <span>
-
-                            <p className="leading-7 [&:not(:first-child)]:mt-6">Origem da dívida: {protesto.origemdivida}</p>
-
-                        </span>
-
-
+                        <div className="flex items-center gap-3 text-md text-slate-700">
+                            <Briefcase className="h-5 w-5 text-slate-400" />
+                            Origem da Dívida: {protesto.origemdivida}
+                        </div>
                     </CardContent>
-
-
 
                     <CardFooter className="flex flex-wrap justify-start gap-2 md:gap-4 sm:flex-col md:flex-row">
                         <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
@@ -762,155 +785,74 @@ export function Protesto() {
 
                                 </DialogTrigger>
 
-
-
-                                <DialogContent className="max-h-[90vh] overflow-y-auto">
-                                    <DialogHeader>
-                                        <DialogTitle className='text-indigo-600 text-center text-xl'>{protesto.contribuinte}</DialogTitle>
-                                        <DialogDescription>Detalhes do Contribuinte</DialogDescription>
+                                <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl md:max-w-4xl lg:max-w-6xl">
+                                    <DialogHeader className="pt-6 px-6">
+                                        <div className="flex items-center gap-4">
+                                            {protesto.tipodoc === 'CNPJ'
+                                                ? <Building2 className="h-8 w-8 text-primary" />
+                                                : <User className="h-8 w-8 text-primary" />
+                                            }
+                                            <div>
+                                                <DialogTitle className='text-2xl font-bold text-foreground'>
+                                                    {protesto.contribuinte}
+                                                </DialogTitle>
+                                                <DialogDescription className="text-base">
+                                                    {protesto.docformatado}
+                                                </DialogDescription>
+                                            </div>
+                                        </div>
                                     </DialogHeader>
 
-                                    <div className='space-y-6'>
-                                        <Table>
-                                            <TableBody>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Nº Documento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.docformatado}</TableCell>
-                                                </TableRow>
+                                    <div className="px-6 pb-6 space-y-8">
 
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Tipo de Documento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.tipodoc}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Natureza Jurídica</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.natjuridica}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Porte da Empresa</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.porte}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Situação Cadastral</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.situacaocadastral}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Situação Cadastral</TableCell>
-                                                      <TableCell className='flex justify-end'>{formatarData(protesto.dtsituacaocadastral)}</TableCell>
-                                                    
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Início de Atividade</TableCell>
-                                                      <TableCell className='flex justify-end'>{formatarData(protesto.dtinicioatividade)}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data de Inscrição</TableCell>
-                                                     <TableCell className='flex justify-end'>{formatarData(protesto.dtinscricao)}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data de Referência</TableCell>
-                                                     <TableCell className='flex justify-end'>{formatarData(protesto.dtreferencia)}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Capital Social</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.capitalsocial !== undefined && protesto.capitalsocial !== null
-                                                        ? Number(protesto.capitalsocial).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Descrição</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.descricao}</TableCell>
-                                                </TableRow>                                             
-                                                                                              
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Tipo de Tributo</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.tipotributo}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Valor CDA Original</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlcdaoriginal !== undefined && protesto.vlcdaoriginal !== null
-                                                        ? Number(protesto.vlcdaoriginal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Multa Atualizada</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlmultaatualizada !== undefined && protesto.vlmultaatualizada !== null
-                                                        ? Number(protesto.vlmultaatualizada).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Juros Atualizados</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
-                                                        ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Imposto Atualizado</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
-                                                        ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Data Status</TableCell>
-                                                      <TableCell className='flex justify-end'>{formatarData(protesto.dtstatus)}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Ajuizada</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.flajuizada}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Situação Protesto</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.sit_protesto}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Parcelamento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.parcelamento}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Fundamento</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.fundamento}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Prescrito</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.prescrito}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Endereço Protesto</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.obs_end_protesto}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Município</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.municipio}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>UF</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.uf}</TableCell>
-                                                </TableRow>
-
+                                        <section>
+                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Identificação</h2>
+                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">                                                
+                                                <InfoItem label="Natureza Jurídica" value={protesto.natjuridica} />
+                                                <InfoItem label="Porte da Empresa" value={protesto.porte} />
+                                                <InfoItem label="Tipo de Tributo" value={protesto.tipotributo} />                                                
+                                                <InfoItem label="Tipo de Documento" value={protesto.tipodoc} />
+                                                <InfoItem label="Município" value={protesto.municipio} />
+                                                <InfoItem label="UF" value={protesto.uf} />
+                                            </dl>
+                                        </section>
+                                        <section>
+                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Valores (R$)</h2>
+                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
+                                                <InfoItem label="Capital Social" value={formatarMoeda(protesto.capitalsocial)} />
+                                                <InfoItem label="CDA Original" value={formatarMoeda(protesto.vlcdaoriginal)} />
+                                                <InfoItem label="Multa Atualizada" value={formatarMoeda(protesto.vlmultaatualizada)} />
+                                                <InfoItem label="Juros Atualizados" value={formatarMoeda(protesto.vljurosatualizado)} />
+                                                <InfoItem label="Imposto Atualizado" value={formatarMoeda(protesto.vlimpatualizado)} />
+                                                <InfoItem label="CDA Atualizada" value={formatarMoeda(protesto.vlcdaatualizado)} />
+                                            </dl>
+                                        </section>
+                                        <section>
+                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Situação e Prazos</h2>
+                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
+                                                <InfoItem label="Situação Cadastral" value={protesto.situacaocadastral} />
+                                                <InfoItem label="Data Sit. Cadastral" value={formatarData(protesto.dtsituacaocadastral)} />
+                                                <InfoItem label="Início da Atividade" value={formatarData(protesto.dtinicioatividade)} />
+                                                <InfoItem label="Data de Inscrição" value={formatarData(protesto.dtinscricao)} />
+                                                <InfoItem label="Ajuizada" value={formatarBooleano(protesto.flajuizada)} />
+                                                <InfoItem label="Situação Protesto" value={protesto.sit_protesto} />
+                                                <InfoItem label="Parcelamento" value={formatarBooleano(protesto.parcelamento)} />
+                                                <InfoItem label="Prescrito" value={protesto.prescrito} />
+                                                <InfoItem label="Data Status" value={formatarData(protesto.dtstatus)} />
+                                                <InfoItem label="Data Referência" value={formatarData(protesto.dtreferencia)} />
+                                                <InfoItem label="Endereço Protesto" value={protesto.obs_end_protesto} />
+                                            </dl>
+                                        </section>
+                                        <section>
+                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Detalhes Protesto</h2>
+                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
+                                                <InfoItem label="Descrição" value={protesto.descricao} />
+                                                <InfoItem label="Fundamento" value={protesto.fundamento} />
+                                                <InfoItem label="Origem da Dívida" value={protesto.origemdivida} />                                                                                                
                                                 
-
-                                            </TableBody>
-                                        </Table>
+                                            </dl>
+                                        </section>                                       
+                                      
                                     </div>
 
                                 </DialogContent>
