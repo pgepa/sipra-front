@@ -65,25 +65,24 @@ export function SignIn() {
     return (
         <>
             <Helmet title="Login" />
-            <div className="p-8">
-                <div className="w-[350px] flex flex-col justify-center gap-6 mx-auto">
+            
+                <div className="mx-auto flex w-full max-w-md flex-col justify-center space-y-6">
                     <div className="flex flex-col items-center gap-2 text-center">
-                        <img className="h-16 w-16 text-white" src={logo} alt="Logo" />
-                        <h1 className="text-2xl text-yellow-400 font-semibold tracking-tighter">Acessar Painel</h1>
-                        <p className="text-sm text-gray-300">SIDA - Sistema de Inteligência da Dívida Ativa</p>
+                        <img className="h-16 w-16" src={logo} alt="Logo" />
+                        <h1 className="text-2xl text-yellow-300 font-semibold">Login</h1>
+                        <p className="text-sm text-slate-100">SIDA - Sistema de Inteligência da Dívida Ativa</p>
                     </div>
 
                     <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email" className='font-semibold text-sm text-gray-300'>E-mail:</Label>
+                            <Label htmlFor="email" className='text-slate-100'>E-mail:</Label>
 
-                            <div className="relative">
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
+                            <div className="relative">                        
 
-                                    <LucideUser className="h-5 w-5 text-gray-500"/>
-                                </span>                           
+                                <LucideUser className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-600" />
+                                                        
 
-                                <Input id="email" className='pl-10 col-span-1' placeholder="Seu e-mail" type="email" {...register("email")} />
+                                <Input id="email" className="pl-10 text-slate-600 placeholder:text-slate-600" placeholder="seu@email.com" type="email" {...register("email")} />
 
                             </div>
                             
@@ -91,14 +90,13 @@ export function SignIn() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="senha" className='font-semibold text-sm text-gray-300'>Senha:</Label>
+                            <Label htmlFor="senha" className='text-slate-100'>Senha:</Label>
 
                             <div className="relative">
-                                <span  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
-                                <LockKeyhole className="h-5 w-5 text-gray-500" />                            
-                                </span>
-
-                                <Input id="senha" className='pl-10 col-span-1' placeholder="Sua senha" type="password" {...register("senha")} />
+                                
+                                <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-600" />                            
+                                
+                                <Input id="senha" className="pl-10 text-slate-600 placeholder:text-slate-600" placeholder="Sua senha" type="password" {...register("senha")} />
                             </div>
                             
                             {errors.senha && <p className="text-slate-100">{errors.senha.message}</p>}
@@ -106,12 +104,12 @@ export function SignIn() {
 
                         {error && <p className="text-slate-100">{error}</p>}
 
-                        <Button disabled={isSubmitting} className="w-full bg-yellow-600 hover:bg-yellow-500 " type="submit">Entrar</Button>
+                        <Button disabled={isSubmitting} className="w-full text-slate-100 font-semibold rounded-lg shadow-md bg-yellow-500 hover:bg-yellow-600 " type="submit">Entrar</Button>
                     </form>
 
 
                 </div>
-            </div>
+            
         </>
     );
 }
