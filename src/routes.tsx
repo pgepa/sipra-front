@@ -39,6 +39,7 @@ import { AppLayoutEstagiario } from '@/pages/_layouts/appEstagiario';
 
 
 
+
 export const Router = createHashRouter([
 
     {
@@ -81,7 +82,7 @@ export const Router = createHashRouter([
             { path: '/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Administrador']}><PagamentosSiat /></PrivateRoute> },
             { path: '/consultadebitos', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaDebitos /></PrivateRoute> },
             { path: '/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoEspecial /></PrivateRoute> },
-            
+             
         ],
     },
 

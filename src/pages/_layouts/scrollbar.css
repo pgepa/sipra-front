@@ -5,30 +5,36 @@
   }
   
   .thin-scrollbar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 1px;
+    background: transparent;    
   }
   
   .thin-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 1px;
+    background-color: rgba(100, 116, 139, 0.5);
+    border-radius: 9999px;
+    border: 2px solid transparent; /* "padding" para afinar */
+    background-clip: content-box;  /* garante que a borda faça efeito */
+    transition: background 0.3s ease;
   }
   
   .thin-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background-color: rgba(100, 116, 139, 0.8);
   }
   
   /* Para Firefox */
   .thin-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 #f1f1f1;
+    scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
   }
   
   /* Ajustes específicos para o sidebar */
   .bg-gray-200 .thin-scrollbar::-webkit-scrollbar-track {
-    background: #e5e7eb;
+     background-color: rgba(55, 65, 81, 0.4);
   }
   
   .bg-gray-200 .thin-scrollbar::-webkit-scrollbar-thumb {
-    background: #9ca3af;
-  }
+  background-color: rgba(55, 65, 81, 0.4);
+}
+
+  .bg-gray-200 .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(55, 65, 81, 0.7);
+}
