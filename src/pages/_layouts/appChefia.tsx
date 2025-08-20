@@ -21,7 +21,9 @@ export function AppLayoutChefia() {
         <div className="flex min-h-screen flex-col antialiased">
 
             <div className="fixed top-0 left-0 right-0 z-50">
-                <Header />
+                <Header onMenuClick={function (): void {
+                    throw new Error('Function not implemented.');
+                } } />
             </div>
 
             <div className="flex flex-1 pt-16">

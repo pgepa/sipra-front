@@ -81,7 +81,7 @@ export const Router = createHashRouter([
             { path: '/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoProtesto /></PrivateRoute> },
             { path: '/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Administrador']}><PagamentosSiat /></PrivateRoute> },
             { path: '/consultadebitos', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaDebitos /></PrivateRoute> },
-            { path: '/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoEspecial /></PrivateRoute> },
+            { path: '/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoEspecial /></PrivateRoute> },
              
         ],
     },
@@ -104,7 +104,7 @@ export const Router = createHashRouter([
             { path: 'chefia/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Chefia']}><PagamentosSiat /></PrivateRoute> },
             { path: 'chefia/consultadebitos', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDebitos /></PrivateRoute> },
             { path: 'chefia/statusdatabase', element: <PrivateRoute allowedProfiles={['Chefia']}><UltimaAtualizacaoDatabase /></PrivateRoute> },
-            { path: 'chefia/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoEspecial /></PrivateRoute> },
+            { path: 'chefia/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoEspecial /></PrivateRoute> },
             
             
             
@@ -127,7 +127,7 @@ export const Router = createHashRouter([
             { path: 'procurador/dashboard/acompanhamentocda', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoCda /></PrivateRoute> },
             { path: 'procurador/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoProtesto /></PrivateRoute> },
             { path: 'procurador/consultadebitos', element: <PrivateRoute allowedProfiles={['Procurador']}><ConsultaDebitos /></PrivateRoute> },
-            { path: 'procurador/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoEspecial /></PrivateRoute> },
+            { path: 'procurador/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoEspecial /></PrivateRoute> },
             
             
             
@@ -147,7 +147,7 @@ export const Router = createHashRouter([
             { path: 'assessor/pessoas/cnpj', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaJuridica /></PrivateRoute> },
             { path: 'assessor/pessoas/cpf', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaFisica /></PrivateRoute> },        
             { path: 'assessor/consultadebitos', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaDebitos /></PrivateRoute> },        
-            { path: 'assessor/rec/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Assessor']}><AcompanhamentoEspecial /></PrivateRoute> },        
+            { path: 'assessor/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Assessor']}><AcompanhamentoEspecial /></PrivateRoute> },        
             
             
         ],

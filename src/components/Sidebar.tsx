@@ -2,7 +2,8 @@ import {
     FileSearch, House, ChevronFirst, History, CloudUpload, ChevronDown,
     DatabaseBackup, Ruler, Gavel, Users, Scale, ChartArea, ChartScatter,
     ChartNoAxesCombined, PcCase, UserRoundSearch, ChartPie, Handshake,
-    HandCoins, ScanEye, Brain, UserRound, X
+    HandCoins, UserRound, X,
+    ShieldCheck
 } from 'lucide-react';
 import { useState as useStateSidebar } from 'react';
 import { Link, useLocation as useLocationSidebar } from 'react-router-dom'; 
@@ -102,14 +103,14 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (op
 
                         {/* Regime Especial */}
                         <div className="relative">
-                            <button onClick={() => setRegimeEspecialOpen(!regimeEspecialOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/rec") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                                <Brain className="h-6 w-6" />
+                            <button onClick={() => setRegimeEspecialOpen(!regimeEspecialOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/recc") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
+                                <ShieldCheck className="h-6 w-6" />
                                 {isOpen && <span className='font-medium'>Regime Especial</span>}
                                 {isOpen && <ChevronDown className={`ml-auto transition-transform ${regimeEspecialOpen ? "rotate-180" : ""}`} />}
                             </button>
                             {regimeEspecialOpen && isOpen && (
                                 <div className="ml-6 space-y-1">
-                                    <Link to="/rec/acompanhamentoespecial" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/rec/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ScanEye className="h-5 w-5" /> Execução Fiscal</Link>
+                                    <Link to="/recc/acompanhamentoespecial" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/recc/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Gavel className="h-5 w-5" /> Execução Fiscal</Link>
                                 </div>
                             )}
                         </div>
