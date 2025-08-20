@@ -1,333 +1,138 @@
 import {
-    FileSearch,
-    House,
-    DatabaseBackup,
-    ChevronFirst,
-    ChevronDown,
-    Ruler,
-    Gavel,
-    Scale,
-    ChartNoAxesCombined,
-    PcCase,
-    UserRoundSearch,
-    ChartPie,
-    ChartScatter,
-    ChartArea,
-    HandCoins,
-    Brain,
-    ScanEye,
-    UserRound,
+    FileSearch, House, ChevronFirst, ChevronDown,
+    DatabaseBackup, Ruler, Gavel, Scale, ChartArea, ChartScatter,
+    ChartNoAxesCombined, PcCase, UserRoundSearch, ChartPie, Handshake,
+    HandCoins, UserRound, X,
+    ShieldCheck
 } from 'lucide-react';
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState as useStateSidebar } from 'react';
+import { Link, useLocation as useLocationSidebar } from 'react-router-dom';
 
-export function SidebarChefia({
-    open,
-    setOpen,
-}: {
-    open: boolean;
-    setOpen: (open: boolean) => void;
-}) {
-    const location = useLocation();
-    const [reguaCobrancaOpen, setReguaCobrancaOpen] = useState(false);
-    const [dashboardOpen, setDashboardOpen] = useState(false);
-    const [pessoasOpen, setPessoasOpen] = useState(false);
-    const [RegimeEspecialOpen, setRegimeEspecialOpen] = useState(false);
+
+export function SidebarChefia({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
+    const location = useLocationSidebar();
+    const [reguaCobrancaOpen, setReguaCobrancaOpen] = useStateSidebar(false);
+    const [dashboardOpen, setDashboardOpen] = useStateSidebar(false);
+    const [regimeEspecialOpen, setRegimeEspecialOpen] = useStateSidebar(false);
+    const [pessoasOpen, setPessoasOpen] = useStateSidebar(false);
 
     return (
-        <aside
-            className={`bg-gray-200 p-3 h-full relative transition-all duration-300 ${
-                open ? 'w-[17.5rem]' : 'w-20'
-            }`}
-        >
-            <ChevronFirst
-                className={`absolute cursor-pointer -right-3 top-4 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${
-                    open ? '' : 'rotate-180'
-                }`}
-                onClick={() => setOpen(!open)}
-            />
-            <nav className="space-y-2 mt-4 flex flex-col">
-                <Link
-                    to="/homechefia"
-                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                        location.pathname === '/homechefia'
-                            ? 'font-bold text-indigo-700'
-                            : 'text-gray-500'
-                    }`}
-                >
-                    <House className="h-6 w-6" />
-                    {open && <span className="font-medium">Home</span>}
-                </Link>
+        <>
+            {isOpen && (
+                <div
+                    onClick={() => setIsOpen(false)}
+                    className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+                ></div>
+            )}
 
-                <div className="relative">
+            <aside className={`thin-scrollbar fixed top-0 lg:top-16 left-0 h-full bg-gray-200 z-40 transition-transform duration-300 ease-in-out
+                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+                md:translate-x-0
+                ${isOpen ? 'w-72' : 'md:w-20'}
+            `}>
+                <div className="p-3 h-full flex flex-col">
                     <button
-                        onClick={() => setReguaCobrancaOpen(!reguaCobrancaOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${
-                            location.pathname.startsWith(
-                                '/chefia/reguacobranca'
-                            )
-                                ? 'font-bold text-indigo-700'
-                                : 'text-gray-500'
-                        }`}
+                        className={`absolute hidden md:block cursor-pointer -right-6 top-2 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${isOpen ? '' : 'rotate-180'}`}
+                        onClick={() => setIsOpen(!isOpen)}
                     >
-                        <Ruler className="h-6 w-6" />
-                        {open && (
-                            <span className="font-medium">
-                                Régua de Cobrança
-                            </span>
-                        )}
-                        {open && (
-                            <ChevronDown
-                                className={`ml-auto transition-transform ${
-                                    reguaCobrancaOpen ? 'rotate-180' : ''
-                                }`}
-                            />
-                        )}
+                        <ChevronFirst />
                     </button>
 
-                    {reguaCobrancaOpen && open && (
-                        <div className="ml-6 space-y-1">
-                            <Link
-                                to="/chefia/reguacobranca/protesto"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname ===
-                                    '/chefia/reguacobranca/protesto'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <FileSearch className="h-5 w-5" />
-                                Protesto
-                            </Link>
-
-                            <Link
-                                to="/chefia/reguacobranca/ajuizamento"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname ===
-                                    '/chefia/reguacobranca/ajuizamento'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <Gavel className="h-5 w-5" />
-                                Para Ajuizamento
-                            </Link>
-
-                            <Link
-                                to="/chefia/reguacobranca/ajuizadas"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname ===
-                                    '/chefia/reguacobranca/ajuizadas'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <Scale className="h-5 w-5" />
-                                Ajuizadas
-                            </Link>
-                        </div>
-                    )}
-                </div>
-
-                <div className="relative">
                     <button
-                        onClick={() => setPessoasOpen(!pessoasOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${
-                            location.pathname.startsWith('/chefia/pessoas')
-                                ? 'font-bold text-indigo-700'
-                                : 'text-gray-500'
-                        }`}
+                        className="md:hidden text-gray-700 self-end mb-4"
+                        onClick={() => setIsOpen(false)}
                     >
-                        <UserRound className="h-6 w-6" />
-                        {open && <span className="font-medium">Pessoas</span>}
-                        {open && (
-                            <ChevronDown
-                                className={`ml-auto transition-transform ${
-                                    pessoasOpen ? 'rotate-180' : ''
-                                }`}
-                            />
-                        )}
+                        <X className="h-6 w-6" />
                     </button>
 
-                    {pessoasOpen && open && (
-                        <div className="ml-6 space-y-1">
-                            <Link
-                                to="/chefia/pessoas/cnpj"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname === '/chefia/pessoas/cnpj'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <PcCase className="h-5 w-5" />
-                                Pessoa Jurídica
-                            </Link>
-                            <Link
-                                to="/chefia/pessoas/cpf"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname === '/chefia/pessoas/cpf'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <UserRoundSearch className="h-5 w-5" />
-                                Pessoa Física
-                            </Link>
-                        </div>
-                    )}
-                </div>
+                    <nav className="space-y-2 mt-4 flex-grow overflow-y-auto">
+                        {/* HOME */}
+                        <Link to="/homechefia" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/homechefia" ? "font-bold text-indigo-700" : "text-gray-500"}`}>
+                            <House className="h-6 w-6" />
+                            {isOpen && <span className='font-medium'>Home</span>}
+                        </Link>
 
-                <div className="relative">
-                    <button
-                        onClick={() => setDashboardOpen(!dashboardOpen)}
-                        className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${
-                            location.pathname.startsWith('/chefia/dashboard')
-                                ? 'font-bold text-indigo-700'
-                                : 'text-gray-500'
-                        }`}
-                    >
-                        <ChartNoAxesCombined className="h-6 w-6" />
-                        {open && <span className="font-medium">Dashboard</span>}
-                        {open && (
-                            <ChevronDown
-                                className={`ml-auto transition-transform ${
-                                    dashboardOpen ? 'rotate-180' : ''
-                                }`}
-                            />
-                        )}
-                    </button>
-
-                    {dashboardOpen && open && (
-                        <div className="ml-6 space-y-1">
-                            <Link
-                                to="/chefia/dashboard/acompanhamentoprotesto"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname ===
-                                    '/chefia/dashboard/acompanhamentoprotesto'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <ChartPie className="h-5 w-5" />
-                                Protesto
-                            </Link>
-
-                            <Link
-                                to="/chefia/dashboard/acompanhamentopda"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname ===
-                                    '/chefia/dashboard/acompanhamentopda'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <ChartScatter className="h-5 w-5" />
-                                Gestão PDA
-                            </Link>
-
-                            <Link
-                                to="/chefia/dashboard/acompanhamentocda"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname ===
-                                    '/chefia/dashboard/acompanhamentocda'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <ChartArea className="h-5 w-5" />
-                                CDAs
-                            </Link>
-
-                            <Link
-                                to="/chefia/dashboard/pagamentossiat"
-                                className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                    location.pathname ===
-                                    '/chefia/dashboard/pagamentossiat'
-                                        ? 'font-bold text-indigo-700'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                <ChartArea className="h-5 w-5" />
-                                Pagamentos
-                            </Link>
-                        </div>
-                    )}
-
-                    <Link
-                        to="/chefia/consultadebitos"
-                        className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                            location.pathname === '/chefia/consultadebitos'
-                                ? 'font-bold text-indigo-700'
-                                : 'text-gray-500'
-                        }`}
-                    >
-                        <HandCoins className="h-6 w-6" />
-                        {open && (
-                            <span className="font-medium">
-                                Consulta de Débitos
-                            </span>
-                        )}
-                    </Link>
-
-                    <div className="relative">
-                        <button
-                            onClick={() =>
-                                setRegimeEspecialOpen(!RegimeEspecialOpen)
-                            }
-                            className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${
-                                location.pathname.startsWith('/chefia/rec')
-                                    ? 'font-bold text-indigo-700'
-                                    : 'text-gray-500'
-                            }`}
-                        >
-                            <Brain className="h-6 w-6" />
-                            {open && (
-                                <span className="font-medium">
-                                    Regime Especial
-                                </span>
+                        {/* Régua de Cobrança */}
+                        <div className="relative">
+                            <button onClick={() => setReguaCobrancaOpen(!reguaCobrancaOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/chefia/reguacobranca") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
+                                <Ruler className="h-6 w-6" />
+                                {isOpen && <span className='font-medium'>Régua de Cobrança</span>}
+                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${reguaCobrancaOpen ? "rotate-180" : ""}`} />}
+                            </button>
+                            {reguaCobrancaOpen && isOpen && (
+                                <div className="ml-6 space-y-1">
+                                    <Link to="/chefia/reguacobranca/protesto" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/reguacobranca/protesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}><FileSearch className="h-5 w-5" /> Protesto</Link>
+                                    <Link to="/chefia/reguacobranca/ajuizamento" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/reguacobranca/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Gavel className="h-5 w-5" /> Para Ajuizamento</Link>
+                                    <Link to="/chefia/reguacobranca/ajuizadas" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/reguacobranca/ajuizadas" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Scale className="h-5 w-5" /> Ajuizadas</Link>
+                                </div>
                             )}
-                            {open && (
-                                <ChevronDown
-                                    className={`ml-auto transition-transform ${
-                                        RegimeEspecialOpen ? 'rotate-180' : ''
-                                    }`}
-                                />
+                        </div>
+
+                        {/* Pessoas */}
+                        <div className="relative">
+                            <button onClick={() => setPessoasOpen(!pessoasOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/chefia/pessoas") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
+                                <UserRound className="h-6 w-6" />
+                                {isOpen && <span className='font-medium'>Pessoas</span>}
+                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${pessoasOpen ? "rotate-180" : ""}`} />}
+                            </button>
+                            {pessoasOpen && isOpen && (
+                                <div className="ml-6 space-y-1">
+                                    <Link to="/chefia/pessoas/cnpj" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/pessoas/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}><PcCase className="h-5 w-5" /> Pessoa Jurídica</Link>
+                                    <Link to="/chefia/pessoas/cpf" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/pessoas/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}><UserRoundSearch className="h-5 w-5" /> Pessoa Física</Link>
+                                </div>
                             )}
-                        </button>
+                        </div>
 
-                        {RegimeEspecialOpen && open && (
-                            <div className="ml-6 space-y-1">
-                                <Link
-                                    to="/chefia/rec/acompanhamentoespecial"
-                                    className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                                        location.pathname ===
-                                        '/chefia/rec/acompanhamentoespecial'
-                                            ? 'font-bold text-indigo-700'
-                                            : 'text-gray-500'
-                                    }`}
-                                >
-                                    <ScanEye className="h-5 w-5" />
-                                    Execução Fiscal
-                                </Link>
-                            </div>
-                        )}
-                    </div>
+                        {/* Dashboard */}
+                        <div className="relative">
+                            <button onClick={() => setDashboardOpen(!dashboardOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/chefia/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
+                                <ChartNoAxesCombined className="h-6 w-6" />
+                                {isOpen && <span className='font-medium'>Dashboard</span>}
+                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${dashboardOpen ? "rotate-180" : ""}`} />}
+                            </button>
+                            {dashboardOpen && isOpen && (
+                                <div className="ml-6 space-y-1">
+                                    <Link to="/chefia/dashboard/acompanhamentoprotesto" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ChartPie className="h-5 w-5" /> Protesto</Link>
+                                    <Link to="/chefia/dashboard/acompanhamentopda" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ChartScatter className="h-5 w-5" /> Gestão PDA</Link>
+                                    <Link to="/chefia/dashboard/acompanhamentocda" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ChartArea className="h-5 w-5" /> CDAs</Link>
+                                    <Link to="/chefia/dashboard/pagamentossiat" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/dashboard/pagamentossiat" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Handshake className="h-5 w-5" /> Pagamentos</Link>
+                                </div>
+                            )}
+                        </div>
 
-                    <Link
-                        to="/chefia/statusdatabase"
-                        className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${
-                            location.pathname === '/chefia/statusdatabase'
-                                ? 'font-bold text-indigo-700'
-                                : 'text-gray-500'
-                        }`}
-                    >
-                        <DatabaseBackup className="h-6 w-6" />
-                        {open && (
-                            <span className="font-medium">Status Database</span>
-                        )}
-                    </Link>
+                        {/* Consulta de Débitos */}
+
+                        <Link to="/chefia/consultadebitos" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}>
+                            <HandCoins className="h-6 w-6" />
+                            {isOpen && <span className='font-medium'>Consulta de Débitos</span>}
+                        </Link>
+
+                        {/* Regime Especial */}
+                        <div className="relative">
+                            <button onClick={() => setRegimeEspecialOpen(!regimeEspecialOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/chefia/recc") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
+                                <ShieldCheck className="h-6 w-6" />
+                                {isOpen && <span className='font-medium'>Regime Especial</span>}
+                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${regimeEspecialOpen ? "rotate-180" : ""}`} />}
+                            </button>
+                            {regimeEspecialOpen && isOpen && (
+                                <div className="ml-6 space-y-1">
+                                    <Link to="/chefia/recc/acompanhamentoespecial" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/recc/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Gavel className="h-5 w-5" /> Execução Fiscal</Link>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Status Database */}
+
+                        <Link to="/chefia/statusdatabase" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/chefia/statusdatabase" ? "font-bold text-indigo-700" : "text-gray-500"}`}>
+                            <DatabaseBackup className="h-6 w-6" />
+                            {isOpen && <span className='font-medium'>Status Database</span>}
+                        </Link>
+                        
+
+
+                    </nav>
                 </div>
-            </nav>
-        </aside>
+            </aside>
+        </>
     );
 }
