@@ -82,47 +82,51 @@ export const UltimaAtualizacaoDatabase: React.FC = () => {
     return (
         <>
             <Helmet title="Status Database" />
-            <div className="flex flex-col gap-4">
-                <h1 className="text-2xl font-bold text-slate-700 text-center">Status Database</h1>
+            <div className="flex flex-col gap-6 px-4 sm:px-6 lg:px-8">
+                <h1 className="text-2xl font-bold text-slate-700 text-center">
+                    Status Database
+                </h1>
 
-                <div className="w-full max-w-4xl mx-auto p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                <div className="w-full max-w-6xl mx-auto">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                         {data.map((dados, index) => {
-                            const status = tabelasManuais.includes(dados.tabela) ? "manual" : "automática";
+                            const status = tabelasManuais.includes(dados.tabela)
+                                ? "manual"
+                                : "automática";
                             const outdated = isOutdated(dados.tabela, dados.ultima_atualizacao);
 
                             return (
                                 <div
                                     key={index}
-                                    className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
+                                    className="flex flex-col justify-between bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-200 h-full"
                                 >
+                                    {/* Infos principais */}
                                     <div className="flex flex-col gap-2">
-                                        <span className="text-lg font-semibold flex gap-2 text-gray-800">
-                                            <Badge variant="default" className="text-base">
+                                        <span className="text-lg font-semibold flex flex-wrap gap-2 text-gray-800">
+                                            <Badge variant="default" className="text-base truncate max-w-full">
                                                 Tabela: {dados.tabela}
                                             </Badge>
                                         </span>
-                                        <span className="text-muted-foreground">
+                                        <span className="text-sm text-muted-foreground break-words">
                                             Última Atualização: {formatarData(dados.ultima_atualizacao)}
                                         </span>
                                     </div>
 
-                                    {/* Exibição do Status alinhado à direita com alerta e ícone */}
-                                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                                    {/* Status */}
+                                    <div className="flex items-center justify-end gap-2 mt-4 text-lg font-semibold text-gray-800">
                                         {outdated && (
                                             <div className="flex items-center gap-1 text-orange-600">
                                                 <AlertTriangle size={20} />
-                                                
                                             </div>
                                         )}
                                         {status === "manual" ? (
                                             <>
-                                                <Cog className="text-slate-600" size={20} />
+                                                <Cog className="text-slate-600 shrink-0" size={20} />
                                                 <span className="text-slate-600">Manual</span>
                                             </>
                                         ) : (
                                             <>
-                                                <Bot className="text-violet-500" size={20} />
+                                                <Bot className="text-violet-500 shrink-0" size={20} />
                                                 <span className="text-violet-500">Automática</span>
                                             </>
                                         )}
@@ -133,6 +137,7 @@ export const UltimaAtualizacaoDatabase: React.FC = () => {
                     </div>
                 </div>
             </div>
+
         </>
     );
 };
