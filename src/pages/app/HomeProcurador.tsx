@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import logo from '@/assets/Logo SIDA.png';
+import logo from '@/assets/Logo_Nova.png';
 
 export function HomeProcurador() {
     return (
