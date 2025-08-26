@@ -75,13 +75,13 @@ export function SidebarAssessor({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                         {/* Regime Especial */}
                         <div className="relative">
                             <button onClick={() => setRegimeEspecialOpen(!regimeEspecialOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/assessor/recc") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                                <ShieldCheck className="h-6 w-6" />
-                                {isOpen && <span className='font-medium'>Regime Especial</span>}
+                                <Gavel className="h-6 w-6" />
+                                {isOpen && <span className='font-medium'>Execução Fiscal</span>}
                                 {isOpen && <ChevronDown className={`ml-auto transition-transform ${regimeEspecialOpen ? "rotate-180" : ""}`} />}
                             </button>
                             {regimeEspecialOpen && isOpen && (
                                 <div className="ml-6 space-y-1">
-                                    <Link to="/assessor/recc/acompanhamentoespecial" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/recc/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Gavel className="h-5 w-5" /> Execução Fiscal</Link>
+                                    <Link to="/assessor/recc/acompanhamentoespecial" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/assessor/recc/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ShieldCheck className="h-5 w-5" />Regime Especial</Link>
                                 </div>
                             )}
                         </div>

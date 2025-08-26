@@ -104,17 +104,18 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (op
                         {/* Regime Especial */}
                         <div className="relative">
                             <button onClick={() => setRegimeEspecialOpen(!regimeEspecialOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/recc") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                                <ShieldCheck className="h-6 w-6" />
-                                {isOpen && <span className='font-medium'>Regime Especial</span>}
+                                <Gavel className="h-6 w-6" />
+                                {isOpen && <span className='font-medium'>Execução Especial</span>}
                                 {isOpen && <ChevronDown className={`ml-auto transition-transform ${regimeEspecialOpen ? "rotate-180" : ""}`} />}
                             </button>
                             {regimeEspecialOpen && isOpen && (
                                 <div className="ml-6 space-y-1">
-                                    <Link to="/recc/acompanhamentoespecial" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/recc/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Gavel className="h-5 w-5" /> Execução Fiscal</Link>
+                                    <Link to="/recc/acompanhamentoespecial" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/recc/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ShieldCheck className="h-5 w-5" /> Regime Especial</Link>
                                 </div>
                             )}
                         </div>
 
+                         {/* Consulta de Débitos */}
                         <Link to="/consultadebitos" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}>
                             <HandCoins className="h-6 w-6" />
                             {isOpen && <span className='font-medium'>Consulta de Débitos</span>}
