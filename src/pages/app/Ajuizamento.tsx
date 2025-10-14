@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Helmet } from 'react-helmet-async';
@@ -57,6 +57,7 @@ interface ProtestoData {
     qtdsemas: string;
     qtdadepara: string;
     documento: string;
+    vlconsolidado: number;
 }
 
 export function Ajuizamento() {
@@ -76,13 +77,14 @@ export function Ajuizamento() {
         porte: [] as string[],
         situacaocadastral: [] as string[],
         tipotributo: [] as string[],
-        vlcdaatualizado_min: '',
-        vlcdaatualizado_max: '',
+        vlconsolidado_min: '',
+        vlconsolidado_max: '',
         statusdebito: [] as string[],
         parcelamento: '',
         prescrito: [] as string[],
         origemdivida: '',
         indiciopatrimonial: '',
+        sit_protesto: [] as string[],
     });
 
 
@@ -90,7 +92,7 @@ export function Ajuizamento() {
     const token = localStorage.getItem('token');
 
 
-    const fetchProtestos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
+    const fetchProtestos = useCallback(async (currentPage = 1, order = 'desc', downloadFormat = '') => {
 
         try {
             setLoading(true);
@@ -110,6 +112,7 @@ export function Ajuizamento() {
                     tipotributo: filters.tipotributo.join(","),
                     statusdebito: filters.statusdebito.join(","),
                     prescrito: filters.prescrito.join(","),
+                    sit_protesto: filters.sit_protesto.join(","),
 
                 },
                 headers: {
@@ -140,7 +143,7 @@ export function Ajuizamento() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filters, token]);
 
     useEffect(() => {
         fetchProtestos(page, sortOrder);
@@ -182,21 +185,22 @@ export function Ajuizamento() {
             porte: [],
             situacaocadastral: [],
             tipotributo: [],
-            vlcdaatualizado_min: '',
-            vlcdaatualizado_max: '',
+            vlconsolidado_min: '',
+            vlconsolidado_max: '',
             statusdebito: [],
             parcelamento: '',
             prescrito: [],
             origemdivida: '',
             indiciopatrimonial: '',
             docraiz: '',
+            sit_protesto: [],
         });
         setPage(1);
         fetchProtestos(1);
         setIsCNPJSelected(false);
     };
 
-    const handleCheckboxChange = (type: 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'prescrito', value: string) => {
+    const handleCheckboxChange = (type: 'porte' | 'sit_protesto' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'prescrito', value: string) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
@@ -219,7 +223,24 @@ export function Ajuizamento() {
         "Inapta",
         "Nula",
         "Suspensa",
-    ]
+    ];
+
+    const situacoesProtesto = [
+        "Aguardando envio",
+        "Aguardando recebimento",
+        "Cancelado",
+        "Confirmado",
+        "Devolvido",
+        "Enviado",
+        "Gerado",
+        "Não protestado",
+        "Pago",
+        "Protestado",
+        "Retirado",
+        "Sustado"      
+        
+        
+    ];
 
 
     const tributos = [
@@ -356,8 +377,8 @@ export function Ajuizamento() {
                                         placeholder='R$ 1.000,00'
                                         type="number"
                                         className='col-span-1'
-                                        value={filters.vlcdaatualizado_min}
-                                        onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
+                                        value={filters.vlconsolidado_min}
+                                        onChange={(e) => setFilters({ ...filters, vlconsolidado_min: e.target.value })}
                                     />
                                 </div>
 
@@ -372,8 +393,8 @@ export function Ajuizamento() {
                                         placeholder='R$ 50.000,00'
                                         type="number"
                                         className='col-span-1'
-                                        value={filters.vlcdaatualizado_max}
-                                        onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
+                                        value={filters.vlconsolidado_max}
+                                        onChange={(e) => setFilters({ ...filters, vlconsolidado_max: e.target.value })}
                                     />
                                 </div>
 
@@ -507,6 +528,30 @@ export function Ajuizamento() {
                                                     onCheckedChange={() => handleCheckboxChange('statusdebito', option)}
                                                 />
                                                 <Label className="ml-2 font-normal">{option}</Label>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+
+                            </div>
+
+                             <div className='space-y-2'>
+                                <Label className='font-semibold text-sm text-gray-800'>Situação Protesto:</Label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
+                                            <span className='font-normal truncate'>{filters.sit_protesto.length > 0 ? filters.sit_protesto.join(", ") : "Escolha uma opção"}</span>
+                                            <ChevronDown className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="p-4">
+                                        {situacoesProtesto.map((situacao) => (
+                                            <DropdownMenuItem key={situacao} className="flex items-center">
+                                                <Checkbox
+                                                    checked={filters.sit_protesto.includes(situacao)}
+                                                    onCheckedChange={() => handleCheckboxChange('sit_protesto', situacao)}
+                                                />
+                                                <Label className="ml-2 font-normal">{situacao}</Label>
                                             </DropdownMenuItem>
                                         ))}
                                     </DropdownMenuContent>
@@ -693,8 +738,8 @@ export function Ajuizamento() {
                                                 <InfoItem label="Natureza Jurídica" value={protesto.natjuridica} />
                                                 <InfoItem label="Porte da Empresa" value={protesto.porte} />
                                                 <InfoItem label="Tipo de Tributo" value={protesto.tipotributo} />
-                                                <InfoItem label="Tipo de Documento" value={protesto.tpdoc} />                                               
-                                                
+                                                <InfoItem label="Tipo de Documento" value={protesto.tpdoc} />
+
                                             </dl>
                                         </section>
                                         <section>
@@ -706,6 +751,7 @@ export function Ajuizamento() {
                                                 <InfoItem label="Juros Atualizados" value={formatarMoeda(protesto.vljurosatualizado)} />
                                                 <InfoItem label="Imposto Atualizado" value={formatarMoeda(protesto.vlimpatualizado)} />
                                                 <InfoItem label="CDA Atualizada" value={formatarMoeda(protesto.vlcdaatualizado)} />
+                                                <InfoItem label="Valor Consolidado" value={formatarMoeda(protesto.vlconsolidado)} />
                                             </dl>
                                         </section>
                                         <section>
@@ -724,10 +770,10 @@ export function Ajuizamento() {
                                                 <InfoItem label="Endereço Protesto" value={protesto.obs_end_protesto} />
                                             </dl>
                                         </section>
-                                         <section>
+                                        <section>
                                             <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Indicadores Patrimoniais</h2>
                                             <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
-                                               <InfoItem label="Registros DETRAN" value={protesto.qtdveiculos} />
+                                                <InfoItem label="Registros DETRAN" value={protesto.qtdveiculos} />
                                                 <InfoItem label="Registros SEMAS" value={protesto.qtdsemas} />
                                                 <InfoItem label="Registros ADEPARÁ" value={protesto.qtdadepara} />
 
@@ -819,6 +865,15 @@ export function Ajuizamento() {
                             </Dialog>
 
 
+
+                        </div>
+
+                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <Button variant="secondary" size="xs" className='flex gap-2 bg-green-200/20 text-green-700 w-full sm:w-auto cursor-default'>
+                                Valor Consolidado: {protesto.vlconsolidado !== undefined && protesto.vlconsolidado !== null
+                                            ? Number(protesto.vlconsolidado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                            : 'R$ 0,00'}
+                            </Button>
 
                         </div>
 
