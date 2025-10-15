@@ -1,240 +1,118 @@
-import { useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building2, FileText, Scale, Search, SquareArrowOutUpRight, User, X } from 'lucide-react';
-import { GrDocumentExcel } from "react-icons/gr";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { GrDocumentExcel } from 'react-icons/gr';
 import GridLoader from 'react-spinners/GridLoader';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from 'lucide-react';
-import { formatarData } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-
-
-
-interface ProtestoData {
-    cda: string;
-    contribuinte: string;
-    docformatado: string;
-    docraiz: string;
-    tpdoc: string;
-    natjuridica: string | null;
-    porte: string | null;
-    situacaocadastral: string | null;
-    dtsituacaocadastral: string | null;
-    dtinicioatividade: string | null;
-    capitalsocial: string | null;
-    descricao: string | null;
-    dtinscricao: string;
-    dtreferencia: string;
-    tipotributo: string;
-    fundamento: string;
-    origemdivida: string;
-    vlcdaoriginal: string;
-    vlmultaatualizada: string;
-    vljurosatualizado: string;
-    vlimpatualizado: string;
-    vlcdaatualizado: string;
-    status: string;
-    dtstatus: string;
-    flajuizada: string;
-    sit_protesto: string;
-    parcelamento: string;
-    prescrito: string;
-    indiciopatrimonial: string;
-    qtdveiculos: number;
-    qtdsemas: string | null;
-    qtdadepara: string | null;
-    documento: string;
-    dtajuizamento: string;
-    numjudicial: string;
-    assunto: string;
-    classe: string;
-    comarca: string;
-    flvincprocesso: string;
-    juizo: string;
-    motivo: string;
-    nuprojudicial: string;
-    observ_status: string | null;
-    qtdanac: number | null;
-    qtdontratos: number | null;
-    qtdprecatorio: number | null;
-    statusdebito: string;
-}
-
-interface Filters {
-    documento: string;
-    contribuinte: string;
-    docraiz: string;
-    tpdoc: string;
-    porte: string[];
-    situacaocadastral: string[];
-    tipotributo: string[];
-    vlcdaatualizado_min: string;
-    vlcdaatualizado_max: string;
-    statusdebito: string[];
-    sit_protesto: string[];
-    parcelamento: string;
-    prescrito: string[];
-    origemdivida: string;
-    indiciopatrimonial: string;
-}
+import { EmptyState } from '@/components/EmptyState';
+import { MultiSelectDropdown } from '@/components/MultiSelectDropdown';
+import { FilterSection } from '@/components/FilterSection';
+import { SearchInput } from '@/components/SearchInput';
+import { AjuizadaCard } from './components/AjuizadaCard';
+import { AjuizadaData, AjuizadasFilterState } from './types/ajuizadas.types';
+import { AJUIZADAS_FILTER_OPTIONS } from './constants/ajuizadas.constants';
 
 export function Ajuizadas() {
-    const [protestos, setProtestos] = useState<ProtestoData[]>([]);
+    const [protestos, setProtestos] = useState<AjuizadaData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [page, setPage] = useState(1);
-    const [isCNPJSelected, setIsCNPJSelected] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
+    const [isCNPJSelected, setIsCNPJSelected] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [orderby] = useState<'vlcdaatualizado'>('vlcdaatualizado');
-
-    const [filters, setFilters] = useState<Filters>({
+    const [filters, setFilters] = useState<AjuizadasFilterState>({
         documento: '',
         contribuinte: '',
         docraiz: '',
         tpdoc: '',
-        porte: [] as string[],
-        situacaocadastral: [] as string[],
-        tipotributo: [] as string[],
+        porte: [],
+        situacaocadastral: [],
+        tipotributo: [],
         vlcdaatualizado_min: '',
         vlcdaatualizado_max: '',
-        statusdebito: [] as string[],
-        sit_protesto: [] as string[],
+        statusdebito: [],
+        sit_protesto: [],
         parcelamento: '',
-        prescrito: [] as string[],
+        prescrito: [],
         origemdivida: '',
         indiciopatrimonial: '',
     });
 
     const token = localStorage.getItem('token');
-    
 
-    const fetchProtestos = async (
-        currentPage = 1,
-        order = 'desc',
-        downloadFormat = '',
-    ) => {
-        try {
-            setLoading(true);
-            setError(null);
+    const fetchProtestos = useCallback(
+        async (currentPage = 1, order = 'desc', downloadFormat = '') => {
+            try {
+                setLoading(true);
+                setError(null);
 
-            const response = await api.get('/buscaajuizadas', {
-                params: {
-                    page: currentPage,
-                    per_page: 25,
-                    download: downloadFormat,
-                    order: order,
-                    orderby: orderby,
-                    porte: filters.porte.join(',') || undefined,
-                    documento: filters.documento || undefined,
-                    contribuinte: filters.contribuinte || undefined,
-                    situacaocadastral: filters.situacaocadastral.join(',') || undefined,
-                    tipotributo: filters.tipotributo.join(',') || undefined,
-                    statusdebito: filters.statusdebito.join(',') || undefined,
-                    sit_protesto: filters.sit_protesto.join(',') || undefined,
-                    parcelamento: filters.parcelamento || undefined,
-                    prescrito: filters.prescrito.join(',') || undefined,
-                    origemdivida: filters.origemdivida || undefined,
-                    indiciopatrimonial: filters.indiciopatrimonial || undefined,
-                    tpdoc: filters.tpdoc || undefined,
-                    vlcdaatualizado_min: filters.vlcdaatualizado_min || undefined,
-                    vlcdaatualizado_max: filters.vlcdaatualizado_max || undefined,
-                    docraiz: filters.docraiz || undefined,
+                const response = await api.get('/buscaajuizadas', {
+                    params: {
+                        page: currentPage,
+                        per_page: 25,
+                        download: downloadFormat,
+                        order: order,
+                        orderby: 'vlcdaatualizado',
+                        ...filters,
+                        porte: filters.porte.join(','),
+                        situacaocadastral: filters.situacaocadastral.join(','),
+                        tipotributo: filters.tipotributo.join(','),
+                        statusdebito: filters.statusdebito.join(','),
+                        sit_protesto: filters.sit_protesto.join(','),
+                        prescrito: filters.prescrito.join(','),
+                    },
+                    headers: { Authorization: `Bearer ${token}` },
+                    responseType: downloadFormat ? 'blob' : 'json',
+                });
 
-                },
-                headers: { Authorization: `Bearer ${token}` },
-                responseType: downloadFormat ? 'blob' : 'json',
-            });
-
-            if (downloadFormat) {
-                const blob = new Blob([response.data], { type: 'text/csv' });
-                const link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = `protestos.${downloadFormat}`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(link.href);
-            } else {
-                setProtestos(response.data.data);
-                setTotalItems(response.data.total_items);
-                setTotalPages(Math.ceil(response.data.total_items / 25));
+                if (downloadFormat) {
+                    const blob = new Blob([response.data], { type: 'text/csv' });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = `ajuizadas.${downloadFormat}`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                } else {
+                    setProtestos(response.data.data);
+                    setTotalItems(response.data.total_items);
+                    setTotalPages(Math.ceil(response.data.total_items / 25));
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                setProtestos([]);
+                setError('Erro ao buscar dados. Tente novamente mais tarde.');
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error('Erro ao buscar dados de protestos:', error);
-            setProtestos([]);
-            setError('Erro ao buscar dados de protestos. Tente novamente mais tarde.');
-        } finally {
-            setLoading(false);
-        }
-    };
-    useEffect(() => {
-        fetchProtestos(1, sortOrder);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        },
+        [filters, token]
+    );
 
-    // Busca quando filtros ou paginação mudam
     useEffect(() => {
         fetchProtestos(page, sortOrder);
-    }, [filters, page, sortOrder]);
-
-
-    // Sempre que filtros mudarem, resetar página para 1
-    const updateFilters = (newFilters: Partial<Filters>) => {
-        setFilters(prev => {
-            const updated = { ...prev, ...newFilters };
-            return updated;
-        });
-        setPage(1);
-    };
-
+    }, [page, sortOrder, fetchProtestos]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setPage(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
-
-    const renderPaginationItems = () => {
-        const items = [];
-        const startPage = Math.max(page - 2, 1);
-        const endPage = Math.min(page + 2, totalPages);
-
-        for (let i = startPage; i <= endPage; i++) {
-            items.push(
-                <PaginationItem key={i}>
-                    <PaginationLink
-                        size="sm"
-                        onClick={() => handlePageChange(i)}
-                        className={i === page ? "bg-blue-500 text-white" : "text-blue-500"}
-                    >
-                        {i}
-                    </PaginationLink>
-                </PaginationItem>
-            );
-        }
-
-        return items;
-    };
-
 
     const handleClearFilters = () => {
         setFilters({
             documento: '',
             contribuinte: '',
-            porte: [],
+            docraiz: '',
             tpdoc: '',
+            porte: [],
             situacaocadastral: [],
             tipotributo: [],
             vlcdaatualizado_min: '',
@@ -245,605 +123,352 @@ export function Ajuizadas() {
             prescrito: [],
             origemdivida: '',
             indiciopatrimonial: '',
-            docraiz: '',
-
         });
-        setIsCNPJSelected(false);
         setPage(1);
+        setIsCNPJSelected(false);
     };
 
-
-
-    const handleCheckboxChange = (type: keyof Pick<Filters, 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'sit_protesto' | 'prescrito'>, value: string) => {
+    const handleCheckboxChange = (
+        type: keyof Pick<AjuizadasFilterState, 'porte' | 'situacaocadastral' | 'tipotributo' | 'statusdebito' | 'sit_protesto' | 'prescrito'>,
+        value: string
+    ) => {
         setFilters((prevFilters) => {
             const newFilter = prevFilters[type].includes(value)
                 ? prevFilters[type].filter((item: string) => item !== value)
                 : [...prevFilters[type], value];
-
             return { ...prevFilters, [type]: newFilter };
         });
-        setPage(1);
     };
-
-    const portes = ["Empresa de Pequeno Porte", "Micro Empresa", "Demais"];
-    const situacaoCadastral = ["Ativa", "Baixada", "Inapta", "Nula", "Suspensa"];
-    const tributos = ["Dívida Ativa ICMS", "Dívida Ativa IPVA", "Dívida Ativa ITCD", "Dívida Ativa não tributária", "Dívida Ativa TFRH", "Dívida Ativa TFRM"];
-    const statusDebito = ["Ativo", "Cancelado", "Extinto", "Suspenso"];
-    const situacaoProtesto = ["Aguardando envio", "Aguardando recebimento", "Cancelado", "Confirmado", "Devolvido", "Enviado", "Gerado", "Não Protestado", "Pago", "Protestado", "Retirado", "Sustado"];
-    const prescritos = ["Dentro do prazo prescricional", "Possível Prescrição", "Prestes a prescrever"];
 
     const handleDocumentTypeChange = (value: string) => {
-        updateFilters({ tpdoc: value });
-        setIsCNPJSelected(value === "CNPJ");
+        setFilters({ ...filters, tpdoc: value });
+        setIsCNPJSelected(value === 'CNPJ');
     };
 
-    function formatarBooleano(valor: string | null | undefined): string {
-        if (valor === 'S') return 'Sim';
-        if (valor === 'N') return 'Não';
-        return valor || '-';
-    }
-
-    function formatarMoeda(valor: string | number | null | undefined): string {
-        const numero = Number(valor);
-        if (valor === null || valor === undefined || isNaN(numero)) {
-            return 'R$ 0,00';
-        }
-        return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    const InfoItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
-        <div className="flex flex-col">
-            <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
-            <dd className="mt-1 text-base text-foreground font-semibold">{value || '-'}</dd>
-        </div>
-    );
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setPage(1);
+        fetchProtestos(1, sortOrder);
+    };
 
     return (
         <>
             <Helmet title="Ajuizadas" />
 
-            <div className='flex flex-col gap-4'>
-                <Card className="shadow-md shadow-slate-400/20 border-slate-200">
-                    <CardHeader>
-                        <CardTitle className='text-violet-800'>Filtros de Pesquisa</CardTitle>
-                        <CardDescription>Utilize os campos abaixo para refinar sua busca.</CardDescription>
+            <div className="flex flex-col gap-6 p-4 md:p-6 max-w-[1600px] mx-auto">
+                {/* Header */}
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                        CDAs Ajuizadas
+                    </h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Consulte e gerencie CDAs que foram ajuizadas
+                    </p>
+                </div>
+
+                {/* Filters Card */}
+                <Card className="shadow-lg border-gray-200 dark:border-gray-800">
+                    <CardHeader className="space-y-1">
+                        <CardTitle className="text-xl text-violet-700 dark:text-violet-400">
+                            Filtros de Pesquisa
+                        </CardTitle>
+                        <CardDescription className="text-gray-600 dark:text-gray-400">
+                            Utilize os campos abaixo para refinar sua busca
+                        </CardDescription>
                     </CardHeader>
 
                     <CardContent>
-                        {/* AJUSTE 4: O onSubmit agora chama a função handleSearch centralizada. */}
-                        <form
-                            className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 items-end'
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                // Dispara a lógica de busca do useEffect.
-                                if (page !== 1) {
-                                    setPage(1);
-                                } else {
-                                    fetchProtestos(1, sortOrder);
-                                }
-                            }}
-                        >
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>CPF/CNPJ:</Label>
-                                <div className="relative">
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <Search className="h-4 w-4 text-gray-500" />
-                                    </span>
-                                    <Input
-                                        placeholder='Buscar por CPF/CNPJ'
-                                        className='pl-10 col-span-1'
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                {/* CPF/CNPJ */}
+                                <FilterSection label="CPF/CNPJ">
+                                    <SearchInput
+                                        placeholder="Buscar por CPF/CNPJ"
                                         value={filters.documento}
-                                        onChange={(e) => setFilters({ ...filters, documento: e.target.value })}
+                                        onChange={(value) => setFilters({ ...filters, documento: value })}
                                     />
-                                </div>
-                            </div>
-                            {/* ... O restante do seu formulário permanece igual ... */}
+                                </FilterSection>
 
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>CNPJ Raiz:</Label>
-                                <div className="relative">
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <Search className="h-4 w-4 text-gray-500" />
-                                    </span>
-                                    <Input
-                                        placeholder='Buscar por CNPJ/Raiz'
-                                        className='pl-10 col-span-1'
+                                {/* CNPJ Raiz */}
+                                <FilterSection label="CNPJ Raiz">
+                                    <SearchInput
+                                        placeholder="Buscar por CNPJ Raiz"
                                         value={filters.docraiz}
-                                        onChange={(e) => setFilters({ ...filters, docraiz: e.target.value })}
+                                        onChange={(value) => setFilters({ ...filters, docraiz: value })}
                                     />
-                                </div>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Nome Contribuinte:</Label>
-                                <div className="relative">
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <Search className="h-4 w-4 text-gray-500" />
-                                    </span>
-                                    <Input
-                                        placeholder='Contribuinte'
-                                        className='pl-10 col-span-1'
+                                </FilterSection>
+
+                                {/* Nome Contribuinte */}
+                                <FilterSection label="Nome Contribuinte">
+                                    <SearchInput
+                                        placeholder="Nome do contribuinte"
                                         value={filters.contribuinte}
-                                        onChange={(e) => setFilters({ ...filters, contribuinte: e.target.value })}
+                                        onChange={(value) => setFilters({ ...filters, contribuinte: value })}
                                     />
+                                </FilterSection>
 
-                                </div>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Origem da Dívida:</Label>
-                                <div className="relative">
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <Search className="h-4 w-4 text-gray-500" />
-                                    </span>
-                                    <Input
-                                        placeholder='Origem da dívida'
-                                        className='pl-10 col-span-1'
+                                {/* Origem da Dívida */}
+                                <FilterSection label="Origem da Dívida">
+                                    <SearchInput
+                                        placeholder="Origem da dívida"
                                         value={filters.origemdivida}
-                                        onChange={(e) => setFilters({ ...filters, origemdivida: e.target.value })}
+                                        onChange={(value) => setFilters({ ...filters, origemdivida: value })}
                                     />
-                                </div>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Valor Mínimo:</Label>
-                                <div className="relative">                                   
-                                    <Input
-                                        placeholder='R$ 1.000,00'
-                                        type="number" 
-                                        className='col-span-1'
-                                        value={filters.vlcdaatualizado_min}
-                                        onChange={(e) => setFilters({ ...filters, vlcdaatualizado_min: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Valor Máximo:</Label>
-                                <div className="relative">                                    
-                                    <Input
-                                        placeholder='R$ 50.000,00'
+                                </FilterSection>
+
+                                {/* Valor Mínimo */}
+                                <FilterSection label="Valor Mínimo">
+                                    <SearchInput
                                         type="number"
-                                        className='col-span-1'
-                                        value={filters.vlcdaatualizado_max}
-                                        onChange={(e) => setFilters({ ...filters, vlcdaatualizado_max: e.target.value })}
+                                        placeholder="R$ 1.000,00"
+                                        value={filters.vlcdaatualizado_min}
+                                        onChange={(value) => setFilters({ ...filters, vlcdaatualizado_min: value })}
                                     />
-                                </div>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Documento:</Label>
-                                <Select value={filters.tpdoc} onValueChange={handleDocumentTypeChange}>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Escolha uma opção" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="CPF">CPF</SelectItem>
-                                        <SelectItem value="CNPJ">CNPJ</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Porte:</Label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
-                                            <span className='font-normal truncate'>
-                                                {filters.porte.length > 0 ? filters.porte.join(", ") : "Escolha uma opção"}
-                                            </span>
-                                            <ChevronDown className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="p-4">
-                                        {portes.map((option) => (
-                                            <DropdownMenuItem key={option} className="flex items-center">
-                                                <Checkbox
-                                                    checked={filters.porte.includes(option)}
-                                                    onCheckedChange={() => handleCheckboxChange('porte', option)}
-                                                />
-                                                <Label className="ml-2 font-normal">{option}</Label>
-                                            </DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Situação Cadastral (RFB):</Label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full text-left flex justify-between items-center" disabled={!isCNPJSelected}>
-                                            <span className='font-normal truncate'>
-                                                {filters.situacaocadastral.length > 0 ? filters.situacaocadastral.join(", ") : "Escolha uma opção"}
-                                            </span>
-                                            <ChevronDown className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="p-4">
-                                        {situacaoCadastral.map((option) => (
-                                            <DropdownMenuItem key={option} className="flex items-center">
-                                                <Checkbox
-                                                    checked={filters.situacaocadastral.includes(option)}
-                                                    onCheckedChange={() => handleCheckboxChange('situacaocadastral', option)}
-                                                />
-                                                <Label className="ml-2 font-normal">{option}</Label>
-                                            </DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Indício Patrimonial:</Label>
-                                <Select value={filters.indiciopatrimonial} onValueChange={(value) => setFilters({ ...filters, indiciopatrimonial: value })}>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Escolha uma opção" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="S">SIM</SelectItem>
-                                        <SelectItem value="N">NÃO</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Tributo:</Label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                            <span className='font-normal truncate'>{filters.tipotributo.length > 0 ? filters.tipotributo.join(", ") : "Escolha uma opção"}</span>
-                                            <ChevronDown className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="p-4">
-                                        {tributos.map((option) => (
-                                            <DropdownMenuItem key={option} className="flex items-center">
-                                                <Checkbox
-                                                    checked={filters.tipotributo.includes(option)}
-                                                    onCheckedChange={() => handleCheckboxChange('tipotributo', option)}
-                                                />
-                                                <Label className="ml-2 font-normal">{option}</Label>
-                                            </DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Status Débito:</Label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                            <span className='font-normal truncate'>{filters.statusdebito.length > 0 ? filters.statusdebito.join(", ") : "Escolha uma opção"}</span>
-                                            <ChevronDown className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="p-4">
-                                        {statusDebito.map((option) => (
-                                            <DropdownMenuItem key={option} className="flex items-center">
-                                                <Checkbox
-                                                    checked={filters.statusdebito.includes(option)}
-                                                    onCheckedChange={() => handleCheckboxChange('statusdebito', option)}
-                                                />
-                                                <Label className="ml-2 font-normal">{option}</Label>
-                                            </DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                </FilterSection>
+
+                                {/* Valor Máximo */}
+                                <FilterSection label="Valor Máximo">
+                                    <SearchInput
+                                        type="number"
+                                        placeholder="R$ 50.000,00"
+                                        value={filters.vlcdaatualizado_max}
+                                        onChange={(value) => setFilters({ ...filters, vlcdaatualizado_max: value })}
+                                    />
+                                </FilterSection>
+
+                                {/* Tipo de Documento */}
+                                <FilterSection label="Tipo de Documento">
+                                    <Select value={filters.tpdoc} onValueChange={handleDocumentTypeChange}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Escolha uma opção" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="CPF">CPF</SelectItem>
+                                            <SelectItem value="CNPJ">CNPJ</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FilterSection>
+
+                                {/* Porte */}
+                                <FilterSection label="Porte">
+                                    <MultiSelectDropdown
+                                        options={AJUIZADAS_FILTER_OPTIONS.portes}
+                                        selectedValues={filters.porte}
+                                        onValueChange={(value) => handleCheckboxChange('porte', value)}
+                                        disabled={!isCNPJSelected}
+                                    />
+                                </FilterSection>
+
+                                {/* Situação Cadastral */}
+                                <FilterSection label="Situação Cadastral (RFB)">
+                                    <MultiSelectDropdown
+                                        options={AJUIZADAS_FILTER_OPTIONS.situacaoCadastral}
+                                        selectedValues={filters.situacaocadastral}
+                                        onValueChange={(value) => handleCheckboxChange('situacaocadastral', value)}
+                                        disabled={!isCNPJSelected}
+                                    />
+                                </FilterSection>
+
+                                {/* Indício Patrimonial */}
+                                <FilterSection label="Indício Patrimonial">
+                                    <Select
+                                        value={filters.indiciopatrimonial}
+                                        onValueChange={(value) => setFilters({ ...filters, indiciopatrimonial: value })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Escolha uma opção" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="S">SIM</SelectItem>
+                                            <SelectItem value="N">NÃO</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FilterSection>
+
+                                {/* Tributo */}
+                                <FilterSection label="Tributo">
+                                    <MultiSelectDropdown
+                                        options={AJUIZADAS_FILTER_OPTIONS.tributos}
+                                        selectedValues={filters.tipotributo}
+                                        onValueChange={(value) => handleCheckboxChange('tipotributo', value)}
+                                    />
+                                </FilterSection>
+
+                                {/* Status Débito */}
+                                <FilterSection label="Status Débito">
+                                    <MultiSelectDropdown
+                                        options={AJUIZADAS_FILTER_OPTIONS.statusDebito}
+                                        selectedValues={filters.statusdebito}
+                                        onValueChange={(value) => handleCheckboxChange('statusdebito', value)}
+                                    />
+                                </FilterSection>
+
+                                {/* Situação Protesto */}
+                                <FilterSection label="Situação Protesto">
+                                    <MultiSelectDropdown
+                                        options={AJUIZADAS_FILTER_OPTIONS.situacaoProtesto}
+                                        selectedValues={filters.sit_protesto}
+                                        onValueChange={(value) => handleCheckboxChange('sit_protesto', value)}
+                                    />
+                                </FilterSection>
+
+                                {/* Parcelamento */}
+                                <FilterSection label="Parcelamento">
+                                    <Select
+                                        value={filters.parcelamento}
+                                        onValueChange={(value) => setFilters({ ...filters, parcelamento: value })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Escolha uma opção" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="S">SIM</SelectItem>
+                                            <SelectItem value="N">NÃO</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FilterSection>
+
+                                {/* Prescrição Originária */}
+                                <FilterSection label="Prescrição Originária">
+                                    <MultiSelectDropdown
+                                        options={AJUIZADAS_FILTER_OPTIONS.prescritos}
+                                        selectedValues={filters.prescrito}
+                                        onValueChange={(value) => handleCheckboxChange('prescrito', value)}
+                                    />
+                                </FilterSection>
                             </div>
 
-                             <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Situação Protesto:</Label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                            <span className='font-normal truncate'>{filters.sit_protesto.length > 0 ? filters.sit_protesto.join(", ") : "Escolha uma opção"}</span>
-                                            <ChevronDown className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="p-4">
-                                        {situacaoProtesto.map((option) => (
-                                            <DropdownMenuItem key={option} className="flex items-center">
-                                                <Checkbox
-                                                    checked={filters.sit_protesto.includes(option)}
-                                                    onCheckedChange={() => handleCheckboxChange('sit_protesto', option)}
-                                                />
-                                                <Label className="ml-2 font-normal">{option}</Label>
-                                            </DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                            {/* Action Buttons */}
+                            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <Button
+                                    type="submit"
+                                    className="flex-1 sm:flex-none bg-violet-600 hover:bg-violet-700 transition-colors"
+                                >
+                                    <Search className="h-4 w-4 mr-2" />
+                                    Pesquisar
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={handleClearFilters}
+                                    variant="outline"
+                                    className="flex-1 sm:flex-none"
+                                >
+                                    <X className="h-4 w-4 mr-2" />
+                                    Limpar Filtros
+                                </Button>
                             </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Parcelamento:</Label>
-                                <Select value={filters.parcelamento} onValueChange={(value) => setFilters({ ...filters, parcelamento: value })}>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Escolha uma opção" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="S">SIM</SelectItem>
-                                        <SelectItem value="N">NÃO</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className='space-y-2'>
-                                <Label className='font-semibold text-sm text-gray-800'>Prescrição Originária:</Label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full text-left flex justify-between items-center">
-                                            <span className='font-normal truncate'>{filters.prescrito.length > 0 ? filters.prescrito.join(", ") : "Escolha uma opção"}</span>
-                                            <ChevronDown className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="p-4">
-                                        {prescritos.map((option) => (
-                                            <DropdownMenuItem key={option} className="flex items-center">
-                                                <Checkbox
-                                                    checked={filters.prescrito.includes(option)}
-                                                    onCheckedChange={() => handleCheckboxChange('prescrito', option)}
-                                                />
-                                                <Label className="ml-2 font-normal">{option}</Label>
-                                            </DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-
-                            <Button
-                                type='submit'
-                                className='default mt-8'
-                            >
-                                <Search className="h-4 w-4 mr-2" />
-                                Pesquisar
-                            </Button>
-
-                            <Button onClick={handleClearFilters} type="button" variant="outline" size="default" className="w-full sm:w-auto mt-8">
-                                <X className="h-4 w-4 mr-2" />
-                                Remover filtros
-                            </Button>
                         </form>
                     </CardContent>
                 </Card>
 
-                {/* ... O resto do seu JSX (parte de exibição dos resultados) permanece exatamente o mesmo. Ele já é reativo às mudanças de estado. ... */}
+                {/* Results Header */}
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+                    <div className="flex items-center gap-2">
+                        <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                            {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
+                        </p>
+                    </div>
 
-                <div className="flex gap-4 mt-4">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="flex items-center gap-2">
+                            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                Ordenar por:
+                            </Label>
+                            <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')}>
+                                <SelectTrigger className="w-full sm:w-[180px]">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="desc">Maior Valor</SelectItem>
+                                    <SelectItem value="asc">Menor Valor</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
 
-                    <Button onClick={() => fetchProtestos(page, sortOrder, 'csv')} variant='default'>
-                        <GrDocumentExcel className="h-4 w-4 mr-2" />
-                        Baixar Planilha
-                    </Button>
-                </div>
-
-
-
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 space-y-2 sm:space-y-0">
-                    <p className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-blue-300 text-center sm:text-left">
-                        {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
-                        <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
-                        <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')} >
-                            <SelectTrigger className="w-full sm:w-auto">
-                                <SelectValue placeholder="Escolha uma opção" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="desc">Maior Valor</SelectItem>
-                                <SelectItem value="asc">Menor Valor</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <Button
+                            onClick={() => fetchProtestos(page, sortOrder, 'csv')}
+                            variant="default"
+                            className="bg-green-600 hover:bg-green-700 transition-colors"
+                        >
+                            <GrDocumentExcel className="h-4 w-4 mr-2" />
+                            Exportar CSV
+                        </Button>
                     </div>
                 </div>
 
-            </div>
-
-            {loading && (
-                <div className="flex justify-center items-start h-screen">
-                    <GridLoader size={16} color="#6b25c7" />
-                </div>
-            )}
-
-            {!loading && (!protestos || protestos.length === 0) && (
-                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground bg-white py-20 rounded-lg shadow-md'>
-
-                   <FileText className="mx-auto h-12 w-12 text-slate-400" />
-                    <h3 className="mt-4 text-lg font-semibold text-slate-800">Nenhum resultado encontrado</h3>
-                    <p className="mt-1 text-sm text-slate-500">Tente ajustar os filtros para encontrar o que procura.</p>
-
-                    <p>{error}</p>
-                </div>
-            )}
-
-            {protestos.map((protesto, index) => (
-                <Card key={`${protesto}-${index}`} className='shadow-md shadow-slate-400/20 mt-4'>
-                    <CardHeader className="flex-items-center flex-row justify-between space-y-0 pb-4">
-                        <div className="flex justify-between items-start w-full">
-                            <div>
-                                <CardTitle className="text-lg text-violet-600 dark:text-blue-300">
-                                    {protesto.contribuinte} - {protesto.docformatado}
-                                </CardTitle>
-                                <CardDescription className='flex gap-2'>
-                                    <FileText className="h-4 w-4" />
-                                    CDA: {protesto.cda}
-                                </CardDescription>
-                                <CardDescription className='flex gap-2'>
-                                    <Scale className="h-4 w-4" />
-                                    Nº PROCESSO: {protesto.numjudicial}
-                                </CardDescription>
-                            </div>
-
-                            <div>
-                                <Label className='mr-2 text-slate-500'>Status Débito:</Label>
-                                <Badge variant={protesto.statusdebito === 'Ativo' ? 'default' : 'secondary'}
-                                    className={protesto.statusdebito === 'Ativo' ? 'bg-green-100 text-green-800 border-green-200 hover:text-white' : 'bg-slate-100 text-slate-600 border-slate-200'}>
-                                    {protesto.statusdebito}
-                                </Badge>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="space-y-1">
-                        <div className="flex items-center gap-3 text-sm text-slate-700">
-                            <Briefcase className="h-4 w-4 text-slate-400" />
-                            Origem da Dívida: {protesto.origemdivida}
-                        </div>
-                    </CardContent>
-
-                    <CardFooter className="flex flex-wrap justify-start gap-2 md:gap-4 sm:flex-col md:flex-row">
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Dialog >
-                                <DialogTrigger asChild>
-                                    <Button variant="default" size="xs" className='flex gap-2 w-full sm:w-auto'>
-                                        <Search className='h-4 w-4' />
-                                        Detalhes
-                                    </Button>
-                                </DialogTrigger>
-
-                                <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl md:max-w-4xl lg:max-w-6xl">
-                                    <DialogHeader className="pt-6 px-6">
-                                        <div className="flex items-center gap-4">
-                                            {protesto.tpdoc === 'CNPJ'
-                                                ? <Building2 className="h-8 w-8 text-primary" />
-                                                : <User className="h-8 w-8 text-primary" />
-                                            }
-                                            <div>
-                                                <DialogTitle className='text-2xl font-bold text-foreground'>
-                                                    {protesto.contribuinte}
-                                                </DialogTitle>
-                                                <DialogDescription className="text-base">
-                                                    {protesto.docformatado}
-                                                </DialogDescription>
-                                            </div>
-                                        </div>
-                                    </DialogHeader>
-                                    <div className="px-6 pb-6 space-y-8">
-                                        <section>
-                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Identificação</h2>
-                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
-                                                <InfoItem label="Nº Processo Judicial" value={protesto.numjudicial} />
-                                                <InfoItem label="Natureza Jurídica" value={protesto.natjuridica} />
-                                                <InfoItem label="Porte da Empresa" value={protesto.porte} />
-                                                <InfoItem label="Tipo de Tributo" value={protesto.tipotributo} />
-                                            </dl>
-                                        </section>
-                                        <section>
-                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Valores (R$)</h2>
-                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
-                                                <InfoItem label="Capital Social" value={formatarMoeda(protesto.capitalsocial)} />
-                                                <InfoItem label="CDA Original" value={formatarMoeda(protesto.vlcdaoriginal)} />
-                                                <InfoItem label="Multa Atualizada" value={formatarMoeda(protesto.vlmultaatualizada)} />
-                                                <InfoItem label="Juros Atualizados" value={formatarMoeda(protesto.vljurosatualizado)} />
-                                                <InfoItem label="Imposto Atualizado" value={formatarMoeda(protesto.vlimpatualizado)} />
-                                                <InfoItem label="CDA Atualizada" value={formatarMoeda(protesto.vlcdaatualizado)} />
-                                            </dl>
-                                        </section>
-                                        <section>
-                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Situação e Prazos</h2>
-                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
-                                                <InfoItem label="Situação Cadastral" value={protesto.situacaocadastral} />
-                                                <InfoItem label="Data Sit. Cadastral" value={formatarData(protesto.dtsituacaocadastral)} />
-                                                <InfoItem label="Início da Atividade" value={formatarData(protesto.dtinicioatividade)} />
-                                                <InfoItem label="Data de Inscrição" value={formatarData(protesto.dtinscricao)} />
-                                                <InfoItem label="Ajuizada" value={formatarBooleano(protesto.flajuizada)} />
-                                                <InfoItem label="Situação Protesto" value={protesto.sit_protesto} />
-                                                <InfoItem label="Parcelamento" value={formatarBooleano(protesto.parcelamento)} />
-                                                <InfoItem label="Prescrito" value={protesto.prescrito} />
-                                            </dl>
-                                        </section>
-                                        <section>
-                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Indicadores Patrimoniais</h2>
-                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
-                                                <InfoItem label="Registros DETRAN" value={protesto.qtdveiculos} />
-                                                <InfoItem label="Registros SEMAS" value={protesto.qtdsemas} />
-                                                <InfoItem label="Registros ADEPARÁ" value={protesto.qtdadepara} />
-                                            </dl>
-                                        </section>
-                                         <section>
-                                            <h2 className="text-lg font-semibold text-primary mb-3 pb-2 border-b">Detalhes Protesto</h2>
-                                            <dl className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-8 gap-y-5">
-                                                <InfoItem label="Descrição" value={protesto.descricao} />
-                                                <InfoItem label="Fundamento" value={protesto.fundamento} />
-                                                <InfoItem label="Origem da Dívida" value={protesto.origemdivida} />
-
-                                            </dl>
-                                        </section>
-                                        
-                                    </div>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                        <div className="relative flex flex-row items-center justify-center gap-2 w-full sm:w-auto">
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button variant="outline" size="xs" className='flex gap-2 text-indigo-800 hover:text-indigo-700 hover:bg-indigo-200/20 w-full sm:w-auto'>
-                                        <SquareArrowOutUpRight className="h-4 w-4" />
-                                        Valor CDA: {protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
-                                            ? Number(protesto.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                            : 'R$ 0,00'}
-                                    </Button>
-                                </DialogTrigger>
-
-                                <DialogContent className="max-h-[90vh] overflow-y-auto">
-                                    <DialogHeader>
-                                        <DialogTitle className='text-indigo-600 text-center text-xl'> Valor da CDA - {protesto.cda}</DialogTitle>
-                                    </DialogHeader>
-                                    <div className='space-y-6'>
-                                        <Table>
-                                            <TableBody>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Multa Atualizada</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlmultaatualizada !== undefined && protesto.vlmultaatualizada !== null
-                                                        ? Number(protesto.vlmultaatualizada).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Juros Atualizados</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vljurosatualizado !== undefined && protesto.vljurosatualizado !== null
-                                                        ? Number(protesto.vljurosatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Imposto Atualizado</TableCell>
-                                                    <TableCell className='flex justify-end'>{protesto.vlimpatualizado !== undefined && protesto.vlimpatualizado !== null
-                                                        ? Number(protesto.vlimpatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='text-muted-foreground'>Valor da CDA atualizado</TableCell>
-                                                    <TableCell className='flex justify-end text-indigo-700 font-semibold'>{protesto.vlcdaatualizado !== undefined && protesto.vlcdaatualizado !== null
-                                                        ? Number(protesto.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                                        : 'R$ 0,00'}</TableCell>
-                                                </TableRow>
-                                            </TableBody>
-                                        </Table>
-                                    </div>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-blue-200/20 text-blue-800 w-full sm:w-auto cursor-default'>
-                                {protesto.tipotributo}
-                            </Button>
-                        </div>
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 w-full sm:w-auto cursor-default'>
-                                Referência: {formatarData(protesto.dtreferencia)}
-                            </Button>
-                        </div>
-                    </CardFooter>
-                </Card>
-            ))}
-
-            <div className="flex justify-start mt-3 mb-2">
-                <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
-                    <PaginationContent>
-                        {page > 1 && (
-                            <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
-                                {page === 2 ? 'Primeira Página' : 'Anterior'}
-                            </PaginationPrevious>
-                        )}
-                        {renderPaginationItems()}
-                        {page < totalPages && (
-                            <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
-                                Próxima
-                            </PaginationNext>
-                        )}
-                    </PaginationContent>
-                    <div className="text-sm mt-2 text-gray-600">
-                        Página {page} de {totalPages} ({totalItems} total de resultados)
+                {/* Loading State */}
+                {loading && (
+                    <div className="flex justify-center items-center py-20">
+                        <GridLoader size={16} color="#7c3aed" />
                     </div>
-                </Pagination>
+                )}
+
+                {/* Empty State */}
+                {!loading && (!protestos || protestos.length === 0) && (
+                    <EmptyState error={error} />
+                )}
+
+                {/* Results Grid */}
+                {!loading && protestos && protestos.length > 0 && (
+                    <>
+                        <div className="grid grid-cols-1 gap-4">
+                            {protestos.map((protesto, index) => (
+                                <AjuizadaCard key={`${protesto.cda}-${index}`} ajuizada={protesto} />
+                            ))}
+                        </div>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    Página {page} de {totalPages}
+                                </p>
+
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handlePageChange(page - 1)}
+                                        disabled={page === 1}
+                                        className="gap-1"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" />
+                                        Anterior
+                                    </Button>
+
+                                    <div className="hidden sm:flex items-center gap-1">
+                                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                            const pageNum = Math.max(1, Math.min(page - 2, totalPages - 4)) + i;
+                                            if (pageNum > totalPages) return null;
+                                            return (
+                                                <Button
+                                                    key={pageNum}
+                                                    variant={page === pageNum ? 'default' : 'outline'}
+                                                    size="sm"
+                                                    onClick={() => handlePageChange(pageNum)}
+                                                    className={page === pageNum ? 'bg-violet-600' : ''}
+                                                >
+                                                    {pageNum}
+                                                </Button>
+                                            );
+                                        })}
+                                    </div>
+
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handlePageChange(page + 1)}
+                                        disabled={page === totalPages}
+                                        className="gap-1"
+                                    >
+                                        Próxima
+                                        <ChevronRight className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </>
     );

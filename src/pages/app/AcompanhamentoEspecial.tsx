@@ -1,81 +1,30 @@
-import { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
-import { Briefcase, FileDown, FileText, Landmark, Scale, Search, X } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { formatarData } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-
-
-interface ProtestoData {
-
-    apensamento: string;
-    atualizadoem: string;
-    data_ajuizamento: string;
-    fluxo: string;
-    idprocesso: string;
-    materia: string;
-    tpprocesso: string;
-    motivo: string;
-    qualificacao: string;
-    cdprocesso: string;
-    idprocessoapensado: string | null;
-    chefia: string;
-    classe: string;
-    judicialapensado: string | null;
-    numformatado: string;
-    numprocesso: string;
-    orgao: string;
-    nvprocesso: string;
-    processoapensado: string | null;
-    procuradoria: string;
-    qtdcdas: number;
-    somavlcdas: string;
-    status: string;
-    juizo: string;
-    vlacao: string;
-    pdf_links?: string[];
-    pdf_links_cnpj?: string[];
-    indicio: string | null;
-    AE: boolean;
-    parteprincipal: string;
-    mesaprocurador: string;
-    assuntoinstituicao: string;
-    demandaaberta: string;
-    comarca: string;
-    vlprocesso: string;
-
-}
-
-interface Filters {
-    numformatado: string;
-    comarca: string;
-    vlprocesso_min: string; // pode ser string porque input normalmente é string
-    vlprocesso_max: string;
-    indicio: string;
-}
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { EmptyState } from '@/components/EmptyState';
+import { FilterSection } from '@/components/FilterSection';
+import { SearchInput } from '@/components/SearchInput';
+import { AcompanhamentoCard } from './components/AcompanhamentoCard';
+import { AcompanhamentoData, AcompanhamentoFilterState } from './types/acompanhamento.types';
+import { COMARCAS } from './constants/acompanhamento.constants';
 
 export function AcompanhamentoEspecial() {
-    const [processos, setProcessos] = useState<ProtestoData[]>([]);
+    const [processos, setProcessos] = useState<AcompanhamentoData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
-    
     const [acompanhamentoEspecial, setAcompanhamentoEspecial] = useState(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [orderby] = useState<'somavlcdas'>('somavlcdas');
-    const [filters, setFilters] = useState<Filters>({
+    const [filters, setFilters] = useState<AcompanhamentoFilterState>({
         numformatado: '',
         comarca: '',
         vlprocesso_min: '',
@@ -83,96 +32,80 @@ export function AcompanhamentoEspecial() {
         indicio: ' ',
     });
 
-
     const token = localStorage.getItem('token');
 
+    const fetchProcessos = useCallback(
+        async (currentPage = 1, order = 'desc', downloadFormat = '') => {
+            try {
+                setLoading(true);
+                setError(null);
 
+                const response = await api.get('/consultarecc', {
+                    params: {
+                        page: currentPage,
+                        per_page: 25,
+                        download: downloadFormat,
+                        order: order,
+                        orderby: 'somavlcdas',
+                        numformatado: filters.numformatado || undefined,
+                        indicio: filters.indicio || undefined,
+                        AE: acompanhamentoEspecial ? true : undefined,
+                        comarca: filters.comarca || undefined,
+                        vlprocesso_min: filters.vlprocesso_min || undefined,
+                        vlprocesso_max: filters.vlprocesso_max || undefined,
+                    },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    responseType: downloadFormat ? 'blob' : 'json',
+                });
 
-    const fetchProcessos = async (currentPage = 1, order = 'desc', downloadFormat = '') => {
-
-        try {
-            setLoading(true);
-            setError(null);
-
-            const response = await api.get('/consultarecc', {
-                params: {
-                    page: currentPage,
-                    per_page: 25,
-                    download: downloadFormat,
-                    order: order,
-                    orderby: orderby,
-                    numformatado: filters.numformatado || undefined,
-                    indicio: filters.indicio || undefined,
-                    AE: acompanhamentoEspecial ? true : undefined,
-                    comarca: filters.comarca || undefined,
-                    vlprocesso_min: filters.vlprocesso_min || undefined,
-                    vlprocesso_max: filters.vlprocesso_max || undefined,
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                responseType: downloadFormat ? 'blob' : 'json',
-            });
-
-            if (downloadFormat) {
-                const blob = new Blob([response.data], { type: 'text/csv' });
-                const link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = `processos.${downloadFormat}`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(link.href);
-            } else {
-                setProcessos(response.data.data);
-                setTotalItems(response.data.total_items);
-                setTotalPages(Math.ceil(response.data.total_items / 25));
+                if (downloadFormat) {
+                    const blob = new Blob([response.data], { type: 'text/csv' });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = `processos.${downloadFormat}`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                } else {
+                    setProcessos(response.data.data);
+                    setTotalItems(response.data.total_items);
+                    setTotalPages(Math.ceil(response.data.total_items / 25));
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                setProcessos([]);
+                setError('Erro ao buscar dados. Tente novamente mais tarde.');
+            } finally {
+                setLoading(false);
             }
-
-        } catch (error) {
-            console.error('Erro ao buscar dados de processos:', error);
-            setProcessos([]);
-            setError('Erro ao buscar dados de processos. Tente novamente mais tarde.');
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+        [filters, acompanhamentoEspecial, token]
+    );
 
     useEffect(() => {
         fetchProcessos(page, sortOrder);
-    }, [page, acompanhamentoEspecial, sortOrder]);
-
-
-    useEffect(() => {
-        setPage(1);
-    }, [acompanhamentoEspecial, sortOrder, filters]);
+    }, [page, sortOrder, fetchProcessos]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setPage(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 
-    const renderPaginationItems = () => {
-        const items = [];
-        const startPage = Math.max(page - 2, 1);
-        const endPage = Math.min(page + 2, totalPages);
-
-        for (let i = startPage; i <= endPage; i++) {
-            items.push(
-                <PaginationItem key={i}>
-                    <PaginationLink
-                        size="sm"
-                        onClick={() => handlePageChange(i)}
-                        className={i === page ? "bg-blue-500 text-white" : "text-blue-500"}
-                    >
-                        {i}
-                    </PaginationLink>
-                </PaginationItem>
-            );
-        }
-
-        return items;
+    const handleClearFilters = () => {
+        setFilters({
+            numformatado: '',
+            comarca: '',
+            vlprocesso_min: '',
+            vlprocesso_max: '',
+            indicio: ' ',
+        });
+        setAcompanhamentoEspecial(false);
+        setPage(1);
     };
 
     const handleDownloadPdf = async (url: string) => {
@@ -191,467 +124,262 @@ export function AcompanhamentoEspecial() {
             const blobUrl = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = blobUrl;
-            a.download = 'SIDA_Relatório de Pesquisa Patrimonial';
+            a.download = 'SIDA_Relatorio_Pesquisa_Patrimonial.pdf';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(blobUrl);
         } catch (error) {
-            console.error(error);
+            console.error('Erro ao baixar PDF:', error);
+            alert('Erro ao baixar PDF. Tente novamente.');
         }
     };
-    const handleClearFilters = () => {
-        setFilters({
-            numformatado: '',
-            comarca: '',
-            vlprocesso_min: '',
-            vlprocesso_max: '',
-            indicio: ' ',
 
-
-        });
-        setAcompanhamentoEspecial(false);
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         setPage(1);
-
+        fetchProcessos(1, sortOrder);
     };
-
-    const comarcas = [
-        "Comarca de São Francisco do Pará",
-        "Comarca de Ourém",
-        "Comarca de Prainha",
-        "Comarca de Xinguara",
-        "Comarca de São Miguel do Guamá",
-        "Comarca de Portel",
-        "Comarca de Bonito",
-        "Comarca de Anajás",
-        "Comarca de São Paulo - Foro Regional V - São Miguel Paulista",
-        "Comarca de Magalhães Barata",
-        "Comarca de Faro",
-        "Comarca de Santana do Araguaia",
-        "Comarca de São Luís",
-        "Comarca de Carpina",
-        "Comarca de Mãe do Rio",
-        "Comarca de Mojú",
-        "Comarca de Benevides",
-        "Comarca de Óbidos",
-        "Comarca de São João de Pirabas",
-        "Comarca de Icoaraci",
-        "Comarca de Anapú",
-        "Comarca de Santa Maria do Pará",
-        "Comarca de Capitão Poço",
-        "Comarca de Jacundá",
-        "Comarca de Santa Izabel do Pará",
-        "Comarca de Breves",
-        "Comarca de Peixe-Boi",
-        "Comarca de Vitória do Xingu",
-        "Comarca de Primavera",
-        "Comarca de Cachoeira do Arari",
-        "Comarca de Bagre",
-        "Ananindeua",
-        "Comarca de Marituba",
-        "Comarca do Recife",
-        "Comarca de Muaná",
-        "Comarca de Salvaterra",
-        "Comarca de São João do Araguaia",
-        "Comarca de Bragança",
-        "Comarca de Arapongas",
-        "Comarca de Breu Branco",
-        "Comarca de Vigia",
-        "Comarca de Eldorado dos Carajás",
-        "Comarca de Belém",
-        "Comarca de Bujarú",
-        "Comarca de Tucuruí",
-        "Comarca de Santa Cruz do Arari",
-        "Comarca de Monte Dourado",
-        "Comarca de Cachoeira do Piriá",
-        "Comarca de Santarém",
-        "Comarca de Abaetetuba",
-        "Comarca de Monte Alegre",
-        "Comarca de Ananindeua",
-        "Marabá",
-        "Comarca de Acará",
-        "Subseção Judiciária de Santarém",
-        "Comarca de Ponta de Pedras",
-        "Comarca de Itaituba",
-        "Comarca de Oeiras do Pará",
-        "Comarca de Ulianópolis",
-        "Comarca de São Félix do Xingu",
-        "Comarca de Cametá",
-        "Comarca de Sobral",
-        "Comarca de Gurupá",
-        "Comarca de Paragominas",
-        "Comarca de Tomé- Açu",
-        "Comarca de Redenção",
-        "Comarca de Marabá",
-        "Comarca de Goianésia do Pará",
-        "Comarca de Nova Timboteua",
-        "Comarca de Capanema",
-        "Comarca de Mocajuba",
-        "Comarca de Rio Maria",
-        "Comarca de Aveiro",
-        "Comarca de Augusto Corrêa",
-        "Comarca de Uruará",
-        "Comarca de Rondon do Pará",
-        "Comarca de Oriximiná",
-        "Comarca de Terra Santa",
-        "Comarca de Medicilandia",
-        "Comarca de Aurora do Pará",
-        "Comarca de Rurópolis",
-        "Comarca de Porto de Moz",
-        "Comarca de Limoeiro do Ajuru",
-        "Comarca de Pacajá",
-        "Comarca de Canaã dos Carajás",
-        "Comarca de Marapanim",
-        "Comarca de Senador José Porfírio",
-        "Comarca de São Domingos do Capim",
-        "Comarca de São Geraldo do Araguaia",
-        "Comarca de Baião",
-        "Comarca de Juruti",
-        "Comarca de Ourilândia do Norte",
-        "Comarca de Curralinho",
-        "Comarca de Santo Antônio do Tauá",
-        "Subseção Judiciária de Marabá-PA",
-        "Seção Judiciária do Pará",
-        "Tribunal de Justiça do Pará",
-        "Comarca de Curuçá",
-        "Comarca de Brasil Novo",
-        "Comarca de Irituia",
-        "Comarca de Santarém Novo",
-        "Comarca de Salinópolis",
-        "Comarca de Chaves",
-        "Comarca de Conceição do Araguaia",
-        "Comarca de Quatipurú",
-        "Comarca da Capital",
-        "Subseção Judiciária de Paragominas",
-        "Comarca de Guarapuava",
-        "Comarca de Itupiranga",
-        "Comarca de Igarapé-Açú",
-        "Comarca de Santa Luzia do Pará",
-        "Comarca de Igarapé-Miri",
-        "Comarca de São Domingos do Araguaia",
-        "Tribunal Regional do Trabalho da 8a Região",
-        "Comarca de Novo Repartimento",
-        "Comarca de Tailândia",
-        "Comarca de Jacareacanga",
-        "Comarca de Novo Progresso",
-        "Comarca de Parauapebas",
-        "Comarca de Inhangapi",
-        "Comarca de Ipixuna do Pará",
-        "Comarca de Tucumã",
-        "Comarca de Barcarena",
-        "Comarca de Garrafão do Norte",
-        "Comarca de São Caetano de Odivelas",
-        "Comarca de Concórdia do Pará",
-        "Comarca de Dom Eliseu",
-        "Comarca de São Sebastião da Boa Vista",
-        "Comarca de Alenquer",
-        "Comarca de Colares",
-        "Comarca de Soure",
-        "Comarca de Almeirim",
-        "Comarca de Melgaço",
-        "Comarca de Afuá",
-        "Comarca de Curionópolis",
-        "Comarca de Maracanã",
-        "Comarca de Viseu",
-        "Comarca de Altamira",
-        "Comarca de Castanhal"
-    ];
-
-
-
-
 
     return (
         <>
             <Helmet title="RECC" />
 
-            <div className='flex flex-col gap-4'>
+            <div className="flex flex-col gap-6 p-4 md:p-6 max-w-[1600px] mx-auto">
+                {/* Header */}
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                        Regime Especial
+                    </h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Consulte e acompanhe processos judiciais
+                    </p>
+                </div>
 
-                {/* SEÇÃO DE FILTROS */}
-                <Card className="shadow-md shadow-slate-400/20 border-slate-200">
-                    <CardHeader>
-                        <CardTitle className='text-violet-800'>Filtros de Pesquisa</CardTitle>
-                        <CardDescription>Utilize os campos abaixo para refinar sua busca de processos.</CardDescription>
+                {/* Filters Card */}
+                <Card className="shadow-lg border-gray-200 dark:border-gray-800">
+                    <CardHeader className="space-y-1">
+                        <CardTitle className="text-xl text-violet-700 dark:text-violet-400">
+                            Filtros de Pesquisa
+                        </CardTitle>
+                        <CardDescription className="text-gray-600 dark:text-gray-400">
+                            Utilize os campos abaixo para refinar sua busca de processos
+                        </CardDescription>
                     </CardHeader>
+
                     <CardContent>
-                        <form
-                            className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 items-end'
-                            onSubmit={(e) => { e.preventDefault(); fetchProcessos(1, sortOrder); }}
-                        >
-                            {/* Filtros de Input */}
-                            <div className='space-y-1.5'>
-                                <Label htmlFor='numProcesso' className='font-semibold text-sm text-gray-800'>Número do Processo</Label>
-                                <Input id='numProcesso' placeholder='0000000-00.0000.0.00.0000' value={filters.numformatado} onChange={(e) => setFilters({ ...filters, numformatado: e.target.value })} />
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                {/* Número do Processo */}
+                                <FilterSection label="Número do Processo">
+                                    <SearchInput
+                                        placeholder="0000000-00.0000.0.00.0000"
+                                        value={filters.numformatado}
+                                        onChange={(value) => setFilters({ ...filters, numformatado: value })}
+                                    />
+                                </FilterSection>
+
+                                {/* Comarca */}
+                                <FilterSection label="Comarca">
+                                    <Select
+                                        value={filters.comarca}
+                                        onValueChange={(value) => setFilters({ ...filters, comarca: value })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Escolha uma comarca" />
+                                        </SelectTrigger>
+                                        <SelectContent className="max-h-[300px]">
+                                            {COMARCAS.map((comarca) => (
+                                                <SelectItem key={comarca} value={comarca}>
+                                                    {comarca}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </FilterSection>
+
+                                {/* Valor Mínimo */}
+                                <FilterSection label="Valor Mínimo">
+                                    <SearchInput
+                                        type="number"
+                                        placeholder="R$ 1.000,00"
+                                        value={filters.vlprocesso_min}
+                                        onChange={(value) => setFilters({ ...filters, vlprocesso_min: value })}
+                                    />
+                                </FilterSection>
+
+                                {/* Valor Máximo */}
+                                <FilterSection label="Valor Máximo">
+                                    <SearchInput
+                                        type="number"
+                                        placeholder="R$ 50.000,00"
+                                        value={filters.vlprocesso_max}
+                                        onChange={(value) => setFilters({ ...filters, vlprocesso_max: value })}
+                                    />
+                                </FilterSection>
+
+                                {/* Indício Patrimonial */}
+                                <FilterSection label="Indício Patrimonial">
+                                    <Select
+                                        value={filters.indicio}
+                                        onValueChange={(value) => setFilters({ ...filters, indicio: value })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Escolha uma opção" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value=" ">Todos</SelectItem>
+                                            <SelectItem value="true">SIM</SelectItem>
+                                            <SelectItem value="false">NÃO</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FilterSection>
+
+                                {/* Acompanhamento Especial */}
+                                <div className="space-y-2">
+                                    <Label className="font-semibold text-sm text-gray-700 dark:text-gray-300">
+                                        Acompanhamento Especial
+                                    </Label>
+                                    <div className="flex items-center justify-between h-10 px-3 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900">
+                                        <Label
+                                            htmlFor="acompanhamento"
+                                            className="text-sm font-medium text-gray-800 dark:text-gray-200 cursor-pointer"
+                                        >
+                                            Filtrar por AE
+                                        </Label>
+                                        <Switch
+                                            id="acompanhamento"
+                                            checked={acompanhamentoEspecial}
+                                            onCheckedChange={setAcompanhamentoEspecial}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label className="font-semibold text-sm text-gray-800">Comarca</Label>
-                                <Select
-                                    value={filters.comarca}
-                                    onValueChange={(value) => setFilters({ ...filters, comarca: value })}
+
+                            {/* Action Buttons */}
+                            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <Button
+                                    type="submit"
+                                    className="flex-1 sm:flex-none bg-violet-600 hover:bg-violet-700 transition-colors"
                                 >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Escolha uma opção" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {comarcas.map((nome) => (
-                                            <SelectItem key={nome} value={nome}>
-                                                {nome}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                    <Search className="h-4 w-4 mr-2" />
+                                    Pesquisar
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={handleClearFilters}
+                                    variant="outline"
+                                    className="flex-1 sm:flex-none"
+                                >
+                                    <X className="h-4 w-4 mr-2" />
+                                    Limpar Filtros
+                                </Button>
                             </div>
-                            
-                            <div className='space-y-1.5'>
-                                <Label htmlFor='vlProcessoMin' className='font-semibold text-sm text-gray-800'>Valor Mínimo</Label>
-                                <Input id='vlProcessoMin' type="number" placeholder='R$ 1.000,00' value={filters.vlprocesso_min} onChange={(e) => setFilters({ ...filters, vlprocesso_min: e.target.value })} />
-                            </div>
-                            <div className='space-y-1.5'>
-                                <Label htmlFor='vlProcessoMax' className='font-semibold text-sm text-gray-800'>Valor Máximo</Label>
-                                <Input id='vlProcessoMax' type="number" placeholder='R$ 50.000,00' value={filters.vlprocesso_max} onChange={(e) => setFilters({ ...filters, vlprocesso_max: e.target.value })} />
-                            </div>
-
-                            {/* Filtros de Switch */}
-                            <div className='space-y-1.5'>
-                                <Label className='font-semibold text-sm text-gray-800'>Indício Patrimonial:</Label>
-                                <Select value={filters.indicio} onValueChange={(value) => setFilters({ ...filters, indicio: value })}>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Escolha uma opção" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value=" ">Todos</SelectItem>
-                                        <SelectItem value="true">SIM</SelectItem>
-                                        <SelectItem value="false">NÃO</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className='flex items-center justify-between w-full h-10 px-3 border border-slate-200 rounded-md bg-white'>
-                                <Label htmlFor='acompanhamento' className='text-sm font-medium text-slate-800 cursor-pointer'>Acomp. Especial</Label>
-                                <Switch id='acompanhamento' checked={acompanhamentoEspecial} onCheckedChange={setAcompanhamentoEspecial} />
-                            </div>
-
-                            {/* Botões de Ação */}
-                            <Button type='submit' className='default w-full'>
-                                <Search className="h-4 w-4 mr-2" /> Pesquisar
-                            </Button>
-                            <Button onClick={handleClearFilters} variant="outline" className="w-full">
-                                <X className="h-4 w-4 mr-2" /> Limpar Filtros
-                            </Button>
                         </form>
                     </CardContent>
                 </Card>
 
+                {/* Results Header */}
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+                    <div className="flex items-center gap-2">
+                        <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                            {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
+                        </p>
+                    </div>
 
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 space-y-2 sm:space-y-0">
-                    <p className="text-lg sm:text-xl font-semibold text-slate-700 dark:text-blue-300 text-center sm:text-left">
-                        {Number(totalItems).toLocaleString('pt-BR')} resultados encontrados
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
-                        <Label className="font-semibold text-sm text-gray-800 dark:text-white text-center sm:text-left">Ordenação:</Label>
-
-
+                    <div className="flex items-center gap-2">
+                        <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                            Ordenar por:
+                        </Label>
                         <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')}>
-                            <SelectTrigger className="w-full sm:w-auto">
-                                <SelectValue placeholder="Escolha uma ordem" />
+                            <SelectTrigger className="w-full sm:w-[180px]">
+                                <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="desc">Maior</SelectItem>
-                                <SelectItem value="asc">Menor</SelectItem>
+                                <SelectItem value="desc">Maior Valor</SelectItem>
+                                <SelectItem value="asc">Menor Valor</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
-
                 </div>
 
+                {/* Loading State */}
+                {loading && (
+                    <div className="flex justify-center items-center py-20">
+                        <GridLoader size={16} color="#7c3aed" />
+                    </div>
+                )}
 
+                {/* Empty State */}
+                {!loading && (!processos || processos.length === 0) && (
+                    <EmptyState error={error} />
+                )}
 
-            </div>
-
-            {loading && (
-                <div className="flex justify-center items-start h-screen">
-                    <GridLoader size={16} color="#6b25c7" />
-                </div>
-            )}
-
-            {!loading && (!processos || processos.length === 0) && (
-                <div className='text-xl items-center flex flex-col font-semibold text-justify mt-4 text-muted-foreground bg-white py-20 rounded-lg shadow-md'>
-
-                    <FileText className="mx-auto h-12 w-12 text-slate-400" />
-                    <h3 className="mt-4 text-lg font-semibold text-slate-800">Nenhum resultado encontrado</h3>
-                    <p className="mt-1 text-sm text-slate-500">Tente ajustar os filtros para encontrar o que procura.</p>
-
-                    <p>{error}</p>
-
-                </div>
-            )}
-
-            {processos.map((processo) => (
-                <Card key={processo.cdprocesso} className='shadow-md shadow-slate-400/20 mt-4'>
-                    <CardHeader className="flex-items-center flex-row justify-between space-y-0 pb-4">
-                        <div className="flex justify-between items-start w-full">
-                            <div>
-
-                                <CardTitle className="text-lg text-violet-600 dark:text-blue-300 ">
-                                    Processo: {processo.numformatado}
-                                </CardTitle>
-                                <CardDescription className="flex items-center gap-2 mt-1">
-                                    <Landmark className="h-3.5 w-3.5" />
-                                    {processo.comarca}
-                                </CardDescription>
-
-                            </div>
-                            <div>
-                                <Label className='mr-2 text-slate-500'>Status Processo:</Label>
-                                <Badge variant={processo.status === 'ATIVA' ? 'default' : 'secondary'}
-                                    className={processo.status === 'ATIVA' ? 'bg-green-100 text-green-800 border-green-200 hover:text-white' : 'bg-slate-100 text-slate-600 border-slate-200'}>
-                                    {processo.status}
-                                </Badge>
-
-                            </div>
-
-                        </div>
-                    </CardHeader>
-
-                    <CardContent className="space-y-1">
-                        <div className="flex items-center gap-3 text-sm text-slate-700">
-                            <Briefcase className="h-4 w-4 text-slate-400" />
-                            {processo.parteprincipal}
-
+                {/* Results Grid */}
+                {!loading && processos && processos.length > 0 && (
+                    <>
+                        <div className="grid grid-cols-1 gap-4">
+                            {processos.map((processo) => (
+                                <AcompanhamentoCard
+                                    key={processo.cdprocesso}
+                                    processo={processo}
+                                    onDownloadPdf={handleDownloadPdf}
+                                />
+                            ))}
                         </div>
 
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    Página {page} de {totalPages}
+                                </p>
 
-                    </CardContent>
-
-
-
-                    <CardFooter className="flex flex-wrap justify-start gap-2 md:gap-4 sm:flex-col md:flex-row">
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button variant="default" size="xs" className='flex gap-2 w-full sm:w-auto'>
-                                        <Search className='h-4 w-4' />
-                                        Detalhes
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handlePageChange(page - 1)}
+                                        disabled={page === 1}
+                                        className="gap-1"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" />
+                                        Anterior
                                     </Button>
 
-                                </DialogTrigger>
-
-
-
-                                <DialogContent className="max-h-[90vh] overflow-y-auto">
-
-                                    <DialogHeader>
-
-                                        <DialogTitle className='text-violet-600 text-center text-xl'>Processo: {processo.numformatado}</DialogTitle>
-                                        <DialogDescription className='text-center'>{processo.parteprincipal}</DialogDescription>
-
-                                    </DialogHeader>
-
-                                    <div className='space-y-6'>
-                                        <Table>
-                                            <TableBody>
-
-                                                <TableRow>
-                                                    <TableCell className='font-medium text-slate-500'>Mesa Procurador</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.mesaprocurador}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='font-medium text-slate-500'>Ajuizamento</TableCell>
-                                                    <TableCell className='flex justify-end'>{formatarData(processo.data_ajuizamento)}</TableCell>
-                                                </TableRow>
-
-
-                                                <TableRow>
-                                                    <TableCell className='font-medium text-slate-500'>Assunto Instituição</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.assuntoinstituicao}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell className='font-medium text-slate-500'>Demanda em Aberto</TableCell>
-                                                    <TableCell className='flex justify-end'>{processo.demandaaberta}</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell className='font-medium text-slate-500'>Juízo</TableCell>
-                                                    <TableCell className='flex text-end justify-end'>{processo.juizo}</TableCell>
-                                                </TableRow>
-
-
-                                            </TableBody>
-                                        </Table>
+                                    <div className="hidden sm:flex items-center gap-1">
+                                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                            const pageNum = Math.max(1, Math.min(page - 2, totalPages - 4)) + i;
+                                            if (pageNum > totalPages) return null;
+                                            return (
+                                                <Button
+                                                    key={pageNum}
+                                                    variant={page === pageNum ? 'default' : 'outline'}
+                                                    size="sm"
+                                                    onClick={() => handlePageChange(pageNum)}
+                                                    className={page === pageNum ? 'bg-violet-600' : ''}
+                                                >
+                                                    {pageNum}
+                                                </Button>
+                                            );
+                                        })}
                                     </div>
 
-                                </DialogContent>
-                            </Dialog>
-
-
-
-                        </div>
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="outline" size="xs" className='flex gap-2 text-violet-700 hover:text-violet-800 hover:bg-violet-200/20 cursor-default w-full sm:w-auto'>
-
-                                <Scale className="h-4 w-4" />
-
-                                Valor Processo: {processo.vlprocesso !== undefined && processo.vlprocesso !== null
-                                    ? Number(processo.vlprocesso).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                                    : 'R$ 0,00'}
-                            </Button>
-                        </div>
-
-
-
-                        <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                            <Button variant="secondary" size="xs" className='flex gap-2 bg-violet-200/20 text-violet-800 cursor-default w-full sm:w-auto'>
-
-                                CDA: {processo.qtdcdas}
-
-                            </Button>
-
-                        </div>
-
-                        {(processo.pdf_links || processo.pdf_links_cnpj) && (
-                            <div className="relative flex items-center justify-center gap-2 w-full sm:w-auto">
-                                {[...(processo.pdf_links || []), ...(processo.pdf_links_cnpj || [])].map((link, index) => (
                                     <Button
-                                        key={index}
-                                        variant="secondary"
-                                        size="xs"
-                                        className='flex gap-2 bg-rose-200/20 text-rose-700 w-full sm:w-auto'
-                                        onClick={() => handleDownloadPdf(link)}
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handlePageChange(page + 1)}
+                                        disabled={page === totalPages}
+                                        className="gap-1"
                                     >
-                                        <FileDown className="h-4 w-4" />
-                                        Baixar PDF {index + 1}
+                                        Próxima
+                                        <ChevronRight className="h-4 w-4" />
                                     </Button>
-                                ))}
+                                </div>
                             </div>
                         )}
-
-
-
-
-                    </CardFooter>
-                </Card>
-            ))}
-
-            <div className="flex justify-start mt-3 mb-2">
-                <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer gap-2">
-                    <PaginationContent>
-                        {page > 1 && (
-                            <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
-                                {page === 2 ? 'Primeira Página' : 'Anterior'}
-                            </PaginationPrevious>
-                        )}
-                        {renderPaginationItems()}
-                        {page < totalPages && (
-                            <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
-                                Próxima
-                            </PaginationNext>
-                        )}
-                    </PaginationContent>
-                    <div className="text-sm mt-2 text-gray-600">
-                        Página {page} de {totalPages} ({totalItems} total de resultados)
-                    </div>
-                </Pagination>
+                    </>
+                )}
             </div>
         </>
     );

@@ -1,0 +1,32 @@
+export const FILTER_OPTIONS = {
+    portes: ['Empresa de Pequeno Porte', 'Micro Empresa', 'Demais'],
+    situacaoCadastral: ['Ativa', 'Baixada', 'Inapta', 'Nula', 'Suspensa'],
+    situacoesProtesto: [
+        'Aguardando envio',
+        'Aguardando recebimento',
+        'Cancelado',
+        'Confirmado',
+        'Devolvido',
+        'Enviado',
+        'Gerado',
+        'Não protestado',
+        'Pago',
+        'Protestado',
+        'Retirado',
+        'Sustado',
+    ],
+    tributos: [
+        'Dívida Ativa ICMS',
+        'Dívida Ativa IPVA',
+        'Dívida Ativa ITCD',
+        'Dívida Ativa não tributária',
+        'Dívida Ativa TFRH',
+        'Dívida Ativa TFRM',
+    ],
+    statusDebito: ['Ativo', 'Extinto', 'Suspenso', 'Cancelado'],
+    prescritos: [
+        'Dentro do prazo prescricional',
+        'Possível Prescrição',
+        'Prestes a prescrever',
+    ],
+};

@@ -1,127 +1,115 @@
 import {
-    FileSearch, House, ChevronFirst, ChevronDown,
-    Ruler, Gavel, Scale, ChartArea, ChartScatter,
-    ChartNoAxesCombined, PcCase, UserRoundSearch, ChartPie,
-    HandCoins, UserRound, X,
-    ShieldCheck
+    FileSearch, House, ChevronFirst, Ruler, Gavel, Scale, ChartArea,
+    ChartScatter, ChartNoAxesCombined, PcCase, UserRoundSearch, ChartPie,
+    HandCoins, UserRound, X, ShieldCheck
 } from 'lucide-react';
-import { useState as useStateSidebar } from 'react';
-import { Link, useLocation as useLocationSidebar } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
+import { SidebarLink } from './sidebar/SidebarLink';
+import { SidebarGroup } from './sidebar/SidebarGroup';
+import { SidebarSubLink } from './sidebar/SidebarSubLink';
+import { cn } from '@/lib/utils';
 
 export function SidebarProcurador({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
-    const location = useLocationSidebar();
-    const [reguaCobrancaOpen, setReguaCobrancaOpen] = useStateSidebar(false);
-    const [dashboardOpen, setDashboardOpen] = useStateSidebar(false);
-    const [regimeEspecialOpen, setRegimeEspecialOpen] = useStateSidebar(false);
-    const [pessoasOpen, setPessoasOpen] = useStateSidebar(false);
+    const location = useLocation();
 
     return (
         <>
             {isOpen && (
                 <div
                     onClick={() => setIsOpen(false)}
-                    className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-                ></div>
+                    className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm"
+                />
             )}
 
-            <aside className={`thin-scrollbar fixed top-0 lg:top-16 left-0 h-full bg-gray-200 z-40 transition-transform duration-300 ease-in-out
-                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-                md:translate-x-0
-                ${isOpen ? 'w-72' : 'md:w-20'}
-            `}>
+            <aside
+                className={cn(
+                    'thin-scrollbar fixed top-0 lg:top-16 left-0 h-full z-40',
+                    'bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800',
+                    'transition-all duration-300 ease-in-out',
+                    isOpen ? 'translate-x-0' : '-translate-x-full',
+                    'md:translate-x-0',
+                    isOpen ? 'w-72' : 'md:w-20'
+                )}
+            >
                 <div className="p-3 h-full flex flex-col">
                     <button
-                        className={`absolute hidden md:block cursor-pointer -right-6 top-2 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${isOpen ? '' : 'rotate-180'}`}
+                        className={cn(
+                            'absolute hidden md:flex items-center justify-center',
+                            '-right-3 top-4 w-6 h-6 rounded-full',
+                            'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700',
+                            'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400',
+                            'shadow-md hover:shadow-lg transition-all duration-200',
+                            !isOpen && 'rotate-180'
+                        )}
                         onClick={() => setIsOpen(!isOpen)}
                     >
-                        <ChevronFirst />
+                        <ChevronFirst className="h-4 w-4" />
                     </button>
 
                     <button
-                        className="md:hidden text-gray-700 self-end mb-4"
+                        className="md:hidden text-gray-700 dark:text-gray-300 self-end mb-4 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                         onClick={() => setIsOpen(false)}
                     >
                         <X className="h-6 w-6" />
                     </button>
 
-                    <nav className="space-y-2 mt-4 flex-grow overflow-y-auto">
-                        {/* HOME */}
-                        <Link to="/homeprocurador" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/homeprocurador" ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                            <House className="h-6 w-6" />
-                            {isOpen && <span className='font-medium'>Home</span>}
-                        </Link>
+                    <nav className="space-y-1 mt-4 flex-grow overflow-y-auto">
+                        <SidebarLink
+                            to="/homeprocurador"
+                            icon={House}
+                            label="Home"
+                            isActive={location.pathname === "/homeprocurador"}
+                            isOpen={isOpen}
+                        />
 
-                        {/* Régua de Cobrança */}
-                        <div className="relative">
-                            <button onClick={() => setReguaCobrancaOpen(!reguaCobrancaOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/procurador/reguacobranca") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                                <Ruler className="h-6 w-6" />
-                                {isOpen && <span className='font-medium'>Régua de Cobrança</span>}
-                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${reguaCobrancaOpen ? "rotate-180" : ""}`} />}
-                            </button>
-                            {reguaCobrancaOpen && isOpen && (
-                                <div className="ml-6 space-y-1">
-                                    <Link to="/procurador/reguacobranca/protesto" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/reguacobranca/protesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}><FileSearch className="h-5 w-5" /> Protesto</Link>
-                                    <Link to="/procurador/reguacobranca/ajuizamento" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/reguacobranca/ajuizamento" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Gavel className="h-5 w-5" /> Para Ajuizamento</Link>
-                                    <Link to="/procurador/reguacobranca/ajuizadas" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/reguacobranca/ajuizadas" ? "font-bold text-indigo-700" : "text-gray-500"}`}><Scale className="h-5 w-5" /> Ajuizadas</Link>
-                                </div>
-                            )}
-                        </div>
+                        <SidebarGroup
+                            icon={Ruler}
+                            label="Régua de Cobrança"
+                            isActive={location.pathname.startsWith("/procurador/reguacobranca")}
+                            isOpen={isOpen}
+                        >
+                            <SidebarSubLink to="/procurador/reguacobranca/protesto" icon={FileSearch} label="Protesto" isActive={location.pathname === "/procurador/reguacobranca/protesto"} />
+                            <SidebarSubLink to="/procurador/reguacobranca/ajuizamento" icon={Gavel} label="Para Ajuizamento" isActive={location.pathname === "/procurador/reguacobranca/ajuizamento"} />
+                            <SidebarSubLink to="/procurador/reguacobranca/ajuizadas" icon={Scale} label="Ajuizadas" isActive={location.pathname === "/procurador/reguacobranca/ajuizadas"} />
+                        </SidebarGroup>
 
-                        {/* Pessoas */}
-                        <div className="relative">
-                            <button onClick={() => setPessoasOpen(!pessoasOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/procurador/pessoas") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                                <UserRound className="h-6 w-6" />
-                                {isOpen && <span className='font-medium'>Pessoas</span>}
-                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${pessoasOpen ? "rotate-180" : ""}`} />}
-                            </button>
-                            {pessoasOpen && isOpen && (
-                                <div className="ml-6 space-y-1">
-                                    <Link to="/procurador/pessoas/cnpj" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/pessoas/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}><PcCase className="h-5 w-5" /> Pessoa Jurídica</Link>
-                                    <Link to="/procurador/pessoas/cpf" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/pessoas/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}><UserRoundSearch className="h-5 w-5" /> Pessoa Física</Link>
-                                </div>
-                            )}
-                        </div>
+                        <SidebarGroup
+                            icon={UserRound}
+                            label="Pessoas"
+                            isActive={location.pathname.startsWith("/procurador/pessoas")}
+                            isOpen={isOpen}
+                        >
+                            <SidebarSubLink to="/procurador/pessoas/cnpj" icon={PcCase} label="Pessoa Jurídica" isActive={location.pathname === "/procurador/pessoas/cnpj"} />
+                            <SidebarSubLink to="/procurador/pessoas/cpf" icon={UserRoundSearch} label="Pessoa Física" isActive={location.pathname === "/procurador/pessoas/cpf"} />
+                        </SidebarGroup>
 
-                        {/* Dashboard */}
-                        <div className="relative">
-                            <button onClick={() => setDashboardOpen(!dashboardOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/procurador/dashboard") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                                <ChartNoAxesCombined className="h-6 w-6" />
-                                {isOpen && <span className='font-medium'>Dashboard</span>}
-                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${dashboardOpen ? "rotate-180" : ""}`} />}
-                            </button>
-                            {dashboardOpen && isOpen && (
-                                <div className="ml-6 space-y-1">
-                                    <Link to="/procurador/dashboard/acompanhamentoprotesto" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentoprotesto" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ChartPie className="h-5 w-5" /> Protesto</Link>
-                                    <Link to="/procurador/dashboard/acompanhamentopda" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentopda" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ChartScatter className="h-5 w-5" /> Gestão PDA</Link>
-                                    <Link to="/procurador/dashboard/acompanhamentocda" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/dashboard/acompanhamentocda" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ChartArea className="h-5 w-5" /> CDAs</Link>
-                                </div>
-                            )}
-                        </div>
+                        <SidebarGroup
+                            icon={ChartNoAxesCombined}
+                            label="Dashboard"
+                            isActive={location.pathname.startsWith("/procurador/dashboard")}
+                            isOpen={isOpen}
+                        >
+                            <SidebarSubLink to="/procurador/dashboard/acompanhamentoprotesto" icon={ChartPie} label="Protesto" isActive={location.pathname === "/procurador/dashboard/acompanhamentoprotesto"} />
+                            <SidebarSubLink to="/procurador/dashboard/acompanhamentopda" icon={ChartScatter} label="Gestão PDA" isActive={location.pathname === "/procurador/dashboard/acompanhamentopda"} />
+                            <SidebarSubLink to="/procurador/dashboard/acompanhamentocda" icon={ChartArea} label="CDAs" isActive={location.pathname === "/procurador/dashboard/acompanhamentocda"} />
+                        </SidebarGroup>
 
-                        {/* Consulta de Débitos */}
+                        <SidebarLink
+                            to="/procurador/consultadebitos"
+                            icon={HandCoins}
+                            label="Consulta de Débitos"
+                            isActive={location.pathname === "/procurador/consultadebitos"}
+                            isOpen={isOpen}
+                        />
 
-                        <Link to="/procurador/consultadebitos" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                            <HandCoins className="h-6 w-6" />
-                            {isOpen && <span className='font-medium'>Consulta de Débitos</span>}
-                        </Link>
-
-                        {/* Regime Especial */}
-                        <div className="relative">
-                            <button onClick={() => setRegimeEspecialOpen(!regimeEspecialOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/procurador/recc") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                                <Gavel className="h-6 w-6" />
-                                {isOpen && <span className='font-medium'>Execução Fiscal</span>}
-                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${regimeEspecialOpen ? "rotate-180" : ""}`} />}
-                            </button>
-                            {regimeEspecialOpen && isOpen && (
-                                <div className="ml-6 space-y-1">
-                                    <Link to="/procurador/recc/acompanhamentoespecial" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/procurador/recc/acompanhamentoespecial" ? "font-bold text-indigo-700" : "text-gray-500"}`}><ShieldCheck className="h-5 w-5" />Regime Especial</Link>
-                                </div>
-                            )}
-                        </div>
-
-
-
+                        <SidebarGroup
+                            icon={Gavel}
+                            label="Execução Fiscal"
+                            isActive={location.pathname.startsWith("/procurador/recc")}
+                            isOpen={isOpen}
+                        >
+                            <SidebarSubLink to="/procurador/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/procurador/recc/acompanhamentoespecial"} />
+                        </SidebarGroup>
                     </nav>
                 </div>
             </aside>

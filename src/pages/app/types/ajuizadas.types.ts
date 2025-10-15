@@ -1,0 +1,67 @@
+export interface AjuizadaData {
+    cda: string;
+    contribuinte: string;
+    docformatado: string;
+    docraiz: string;
+    tpdoc: string;
+    natjuridica: string | null;
+    porte: string | null;
+    situacaocadastral: string | null;
+    dtsituacaocadastral: string | null;
+    dtinicioatividade: string | null;
+    capitalsocial: string | null;
+    descricao: string | null;
+    dtinscricao: string;
+    dtreferencia: string;
+    tipotributo: string;
+    fundamento: string;
+    origemdivida: string;
+    vlcdaoriginal: string;
+    vlmultaatualizada: string;
+    vljurosatualizado: string;
+    vlimpatualizado: string;
+    vlcdaatualizado: string;
+    status: string;
+    dtstatus: string;
+    flajuizada: string;
+    sit_protesto: string;
+    parcelamento: string;
+    prescrito: string;
+    indiciopatrimonial: string;
+    qtdveiculos: number;
+    qtdsemas: string | null;
+    qtdadepara: string | null;
+    documento: string;
+    dtajuizamento: string;
+    numjudicial: string;
+    assunto: string;
+    classe: string;
+    comarca: string;
+    flvincprocesso: string;
+    juizo: string;
+    motivo: string;
+    nuprojudicial: string;
+    observ_status: string | null;
+    qtdanac: number | null;
+    qtdontratos: number | null;
+    qtdprecatorio: number | null;
+    statusdebito: string;
+}
+
+export interface AjuizadasFilterState {
+    documento: string;
+    contribuinte: string;
+    docraiz: string;
+    tpdoc: string;
+    porte: string[];
+    situacaocadastral: string[];
+    tipotributo: string[];
+    vlcdaatualizado_min: string;
+    vlcdaatualizado_max: string;
+    statusdebito: string[];
+    sit_protesto: string[];
+    parcelamento: string;
+    prescrito: string[];
+    origemdivida: string;
+    indiciopatrimonial: string;
+}

@@ -1,66 +1,66 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '@/lib/axios';
-import { Badge } from "@/components/ui/badge";
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { Helmet } from 'react-helmet-async';
-import { Bot, Cog, AlertTriangle } from 'lucide-react';
+import { Bot, Cog, AlertTriangle, Database } from 'lucide-react';
 import { formatarData } from '@/lib/utils';
+import GridLoader from 'react-spinners/GridLoader';
+import { EmptyState } from '@/components/EmptyState';
 
-interface UserData {
+interface DatabaseStatus {
     tabela: string;
     ultima_atualizacao: string;
 }
+
+const TABELAS_MANUAIS = [
+    'jucepapj',
+    'jucepavinculo',
+    'detrancargaveiculo',
+    'detranmarcamodelo',
+    'adepara',
+];
+
+const LIMITES_ATUALIZACAO = {
+    meses6: ['jucepapj', 'jucepavinculo', 'adepara', 'cdsefa'],
+    dias30: ['rfbempcpfs', 'rfbnaturezas', 'rfbqualificacoes', 'rfbestabelecimentos', 'rfbempresas'],
+    dias10: 'default',
+};
 
 const isOutdated = (tabela: string, ultimaAtualizacao: string): boolean => {
     const hoje = new Date();
     const ultimaData = new Date(ultimaAtualizacao);
 
-    // Critérios de atualização
-    const limiteMeses = 6;
-    const limite30Dias = 30;
-    const limite10Dias = 10;
-
-    if (['jucepapj', 'jucepavinculo', 'adepara', 'cdsefa'].includes(tabela)) {
-        // Verifica se ultrapassou 6 meses para essas tabelas
+    if (LIMITES_ATUALIZACAO.meses6.includes(tabela)) {
         const dataLimite = new Date(hoje);
-        dataLimite.setMonth(dataLimite.getMonth() - limiteMeses);
+        dataLimite.setMonth(dataLimite.getMonth() - 6);
         return ultimaData < dataLimite;
-    } else if (['rfbempcpfs', 'rfbnaturezas', 'rfbqualificacoes', 'rfbestabelecimentos', 'rfbempresas'].includes(tabela)) {
-        // Verifica se ultrapassou 30 dias para essas tabelas
+    } else if (LIMITES_ATUALIZACAO.dias30.includes(tabela)) {
         const dataLimite = new Date(hoje);
-        dataLimite.setDate(dataLimite.getDate() - limite30Dias);
+        dataLimite.setDate(dataLimite.getDate() - 30);
         return ultimaData < dataLimite;
     } else {
-        // Verifica se ultrapassou 10 dias para as demais tabelas
         const dataLimite = new Date(hoje);
-        dataLimite.setDate(dataLimite.getDate() - limite10Dias);
+        dataLimite.setDate(dataLimite.getDate() - 10);
         return ultimaData < dataLimite;
     }
 };
 
-export const UltimaAtualizacaoDatabase: React.FC = () => {
-    const [data, setData] = useState<UserData[]>([]);
-    const [loading, setLoading] = useState(true); // Estado para carregamento
-    const [error, setError] = useState<string | null>(null); // Estado para erro
-
-    const tabelasManuais = [
-        'jucepapj',
-        'jucepavinculo',
-        'detrancargaveiculo',
-        'detranmarcamodelo',
-        'adepara'
-    ];
+export function UltimaAtualizacaoDatabase() {
+    const [data, setData] = useState<DatabaseStatus[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        console.log('Token:', token);
 
-        api.get('/ultima_atualizacao', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        api
+            .get('/ultima_atualizacao', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
             .then((response) => {
-                console.log('Response data:', response.data);
                 setData(response.data);
                 setLoading(false);
             })
@@ -71,73 +71,187 @@ export const UltimaAtualizacaoDatabase: React.FC = () => {
             });
     }, []);
 
-    if (loading) {
-        return <div className="text-center">Carregando...</div>;
-    }
+    const getStatusInfo = (tabela: string, ultimaAtualizacao: string) => {
+        const isManual = TABELAS_MANUAIS.includes(tabela);
+        const outdated = isOutdated(tabela, ultimaAtualizacao);
 
-    if (error) {
-        return <div className="text-center text-red-500">{error}</div>;
-    }
+        return {
+            isManual,
+            outdated,
+            statusColor: outdated ? 'border-orange-300' : 'border-gray-200',
+            statusBg: outdated ? 'bg-orange-50 dark:bg-orange-950/20' : 'bg-white dark:bg-gray-900',
+        };
+    };
+
+    const stats = {
+        total: data.length,
+        manuais: data.filter((d) => TABELAS_MANUAIS.includes(d.tabela)).length,
+        automaticas: data.filter((d) => !TABELAS_MANUAIS.includes(d.tabela)).length,
+        desatualizadas: data.filter((d) => isOutdated(d.tabela, d.ultima_atualizacao)).length,
+    };
 
     return (
         <>
             <Helmet title="Status Database" />
-            <div className="flex flex-col gap-6 px-4 sm:px-6 lg:px-8">
-                <h1 className="text-2xl font-bold text-slate-700 text-center">
-                    Status Database
-                </h1>
 
-                <div className="w-full max-w-6xl mx-auto">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                        {data.map((dados, index) => {
-                            const status = tabelasManuais.includes(dados.tabela)
-                                ? "manual"
-                                : "automática";
-                            const outdated = isOutdated(dados.tabela, dados.ultima_atualizacao);
+            <div className="flex flex-col gap-6 p-4 md:p-6 max-w-[1600px] mx-auto">
+                {/* Header */}
+                <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-3">
+                        <Database className="h-8 w-8 text-violet-600" />
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                            Status do Banco de Dados
+                        </h1>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Acompanhe o status de atualização das tabelas do sistema
+                    </p>
+                </div>
 
-                            return (
-                                <div
-                                    key={index}
-                                    className="flex flex-col justify-between bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-200 h-full"
-                                >
-                                    {/* Infos principais */}
-                                    <div className="flex flex-col gap-2">
-                                        <span className="text-lg font-semibold flex flex-wrap gap-2 text-gray-800">
-                                            <Badge variant="default" className="text-base truncate max-w-full">
-                                                Tabela: {dados.tabela}
-                                            </Badge>
-                                        </span>
-                                        <span className="text-sm text-muted-foreground break-words">
-                                            Última Atualização: {formatarData(dados.ultima_atualizacao)}
-                                        </span>
+                {/* Loading State */}
+                {loading && (
+                    <div className="flex justify-center items-center py-20">
+                        <GridLoader size={16} color="#7c3aed" />
+                    </div>
+                )}
+
+                {/* Error State */}
+                {!loading && error && <EmptyState error={error} />}
+
+                {/* Stats Cards */}
+                {!loading && !error && data.length > 0 && (
+                    <>
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <Card className="border-gray-200 dark:border-gray-800">
+                                <CardContent className="p-4">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm text-gray-600 dark:text-gray-400">Total de Tabelas</span>
+                                        <span className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</span>
                                     </div>
+                                </CardContent>
+                            </Card>
 
-                                    {/* Status */}
-                                    <div className="flex items-center justify-end gap-2 mt-4 text-lg font-semibold text-gray-800">
-                                        {outdated && (
-                                            <div className="flex items-center gap-1 text-orange-600">
-                                                <AlertTriangle size={20} />
+                            <Card className="border-gray-200 dark:border-gray-800">
+                                <CardContent className="p-4">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm text-gray-600 dark:text-gray-400">Manuais</span>
+                                        <span className="text-2xl font-bold text-slate-600 dark:text-slate-400">{stats.manuais}</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border-gray-200 dark:border-gray-800">
+                                <CardContent className="p-4">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm text-gray-600 dark:text-gray-400">Automáticas</span>
+                                        <span className="text-2xl font-bold text-violet-600 dark:text-violet-400">{stats.automaticas}</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border-gray-200 dark:border-gray-800">
+                                <CardContent className="p-4">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm text-gray-600 dark:text-gray-400">Desatualizadas</span>
+                                        <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">{stats.desatualizadas}</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* Tables Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            {data.map((dados, index) => {
+                                const { isManual, outdated, statusColor, statusBg } = getStatusInfo(
+                                    dados.tabela,
+                                    dados.ultima_atualizacao
+                                );
+
+                                return (
+                                    <Card
+                                        key={index}
+                                        className={`${statusBg} border-2 ${statusColor} hover:shadow-lg transition-all duration-200`}
+                                    >
+                                        <CardContent className="p-5">
+                                            <div className="flex flex-col gap-3">
+                                                {/* Table Name */}
+                                                <div className="flex items-start justify-between gap-2">
+                                                    <Badge variant="default" className="text-sm font-semibold truncate max-w-full">
+                                                        {dados.tabela}
+                                                    </Badge>
+                                                    {outdated && (
+                                                        <AlertTriangle className="h-5 w-5 text-orange-600 flex-shrink-0" />
+                                                    )}
+                                                </div>
+
+                                                {/* Last Update */}
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                                        Última Atualização
+                                                    </span>
+                                                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                        {formatarData(dados.ultima_atualizacao)}
+                                                    </span>
+                                                </div>
+
+                                                {/* Status Badge */}
+                                                <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                                                    {isManual ? (
+                                                        <div className="flex items-center gap-1.5">
+                                                            <Cog className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                                                            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                                                                Manual
+                                                            </span>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex items-center gap-1.5">
+                                                            <Bot className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+                                                            <span className="text-sm font-medium text-violet-600 dark:text-violet-400">
+                                                                Automática
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        )}
-                                        {status === "manual" ? (
-                                            <>
-                                                <Cog className="text-slate-600 shrink-0" size={20} />
-                                                <span className="text-slate-600">Manual</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Bot className="text-violet-500 shrink-0" size={20} />
-                                                <span className="text-violet-500">Automática</span>
-                                            </>
-                                        )}
+                                        </CardContent>
+                                    </Card>
+                                );
+                            })}
+                        </div>
+
+                        {/* Legend */}
+                        <Card className="border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+                            <CardContent className="p-4">
+                                <div className="flex flex-col gap-3">
+                                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Legenda
+                                    </h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                        <div className="flex items-center gap-2">
+                                            <Bot className="h-4 w-4 text-violet-600" />
+                                            <span className="text-gray-600 dark:text-gray-400">
+                                                Atualização automática
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Cog className="h-4 w-4 text-slate-600" />
+                                            <span className="text-gray-600 dark:text-gray-400">
+                                                Atualização manual
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <AlertTriangle className="h-4 w-4 text-orange-600" />
+                                            <span className="text-gray-600 dark:text-gray-400">
+                                                Necessita atualização
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            );
-                        })}
-                    </div>
-                </div>
+                            </CardContent>
+                        </Card>
+                    </>
+                )}
             </div>
-
         </>
     );
-};
+}

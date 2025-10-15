@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { api } from '@/lib/axios';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search, X } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
 import { AiFillFilePdf } from 'react-icons/ai';
 import { formatarData } from '@/lib/utils';
+import { SearchInput } from '@/components/SearchInput';
+import { FilterSection } from '@/components/FilterSection';
+import { EmptyState } from '@/components/EmptyState';
+import { CollapsibleSection } from '@/components/CollapsibleSection';
+import { DataCard, DataField } from '@/components/DataCard';
 
 interface DadosCadastrais {
     docformatado: string;
@@ -29,7 +33,6 @@ interface DadosCadastrais {
     telefone: string;
     jucepa_situacao: string;
     jucepa_status: string;
-
 }
 
 interface QuadroSocietario {
@@ -53,7 +56,6 @@ interface Debitos {
     qtdprazoprescr: string;
     qtdprescricao: string;
     qtdprestesprescr: string;
-
 }
 
 interface ParticipacaoProcessos {
@@ -112,7 +114,6 @@ interface Anac {
     nr_assentos: string;
     proprietario: string;
     sg_uf: string;
-
 }
 
 interface Contratos {
@@ -133,7 +134,6 @@ interface Faturamento {
     observacao: string;
 }
 
-
 interface PessoaJuridicaData {
     cnpj: string;
     vwcargaveiculos: Detran[];
@@ -148,19 +148,15 @@ interface PessoaJuridicaData {
     faturamento: Faturamento[];
 }
 
-
-
-
-export const ConsultaPessoaJuridica: React.FC = () => {
+export function ConsultaPessoaJuridica() {
     const [data, setData] = useState<{ cnpj: string; data: PessoaJuridicaData }[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [filters, setFilters] = useState({ cnpj: '', doc_raiz: '' });
     const [searched, setSearched] = useState(false);
-    const [expandedSections, setExpandedSections] = useState<{ [key: string]: { [key: string]: boolean } }>({});
-
-
-
+    const [expandedSections, setExpandedSections] = useState<{
+        [key: string]: { [key: string]: boolean };
+    }>({});
 
     const toggleSection = (cnpj: string, section: string) => {
         setExpandedSections((prev) => ({
@@ -172,32 +168,40 @@ export const ConsultaPessoaJuridica: React.FC = () => {
         }));
     };
 
+    const getRandomColor = () => {
+        const colors = [
+            '#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f59e0b',
+            '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#a855f7',
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+    };
 
     const handleDownloadPdf = () => {
         const token = localStorage.getItem('token');
-
         if (!token) {
             alert('Token de autenticação não encontrado!');
             return;
         }
 
         setLoading(true);
-
-        api.get('/indiciopatrimonial', {
-            headers: { Authorization: `Bearer ${token}` },
-            params: {
-                cnpj: filters.cnpj || undefined,
-                doc_raiz: filters.doc_raiz || undefined,
-                download: 'pdf',
-            },
-            responseType: 'blob',
-        })
+        api
+            .get('/indiciopatrimonial', {
+                headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    cnpj: filters.cnpj || undefined,
+                    doc_raiz: filters.doc_raiz || undefined,
+                    download: 'pdf',
+                },
+                responseType: 'blob',
+            })
             .then((response) => {
-
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `Indício Patrimonial_${filters.cnpj || filters.doc_raiz}.pdf`);
+                link.setAttribute(
+                    'download',
+                    `Indicio_Patrimonial_${filters.cnpj || filters.doc_raiz}.pdf`
+                );
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -217,27 +221,22 @@ export const ConsultaPessoaJuridica: React.FC = () => {
 
         const token = localStorage.getItem('token');
 
-        api.get('/indiciopatrimonial', {
-            headers: { Authorization: `Bearer ${token}` },
-            params: {
-                cnpj: filters.cnpj || undefined,
-                doc_raiz: filters.doc_raiz || undefined,
-            }
-        })
+        api
+            .get('/indiciopatrimonial', {
+                headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    cnpj: filters.cnpj || undefined,
+                    doc_raiz: filters.doc_raiz || undefined,
+                },
+            })
             .then((response) => {
-                console.log(response.data);
                 const resultados = Object.entries(response.data).map(([cnpj, data]) => ({
                     cnpj,
                     data: data as PessoaJuridicaData,
                 }));
-
-
                 setData(resultados);
                 setLoading(false);
                 setSearched(true);
-
-
-
             })
             .catch((error) => {
                 console.error(error);
@@ -254,844 +253,443 @@ export const ConsultaPessoaJuridica: React.FC = () => {
         setError(null);
     };
 
-    const getRandomColor = () => {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    };
-
-
-
     return (
         <>
             <Helmet title="Consulta Pessoa Jurídica" />
 
-            <div className="flex flex-col gap-4">
-                <h1 className="text-2xl font-bold text-slate-700">Consultar Índicio Patrimonial - CNPJ</h1>
+            <div className="flex flex-col gap-6 p-4 md:p-6 max-w-[1600px] mx-auto">
+                {/* Header */}
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                        Consulta de Indício Patrimonial - CNPJ
+                    </h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Consulte informações patrimoniais de pessoas jurídicas
+                    </p>
+                </div>
 
-                <form
-                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-2"
-                    onSubmit={handleSubmit}
-                >
-                    
-                    <div className="space-y-2">
-                        <Label className="font-semibold text-sm text-gray-800">Nº CNPJ:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder="Buscar por CNPJ"
-                                className='pl-10 col-span-1'
-                                value={filters.cnpj}
-                                onChange={(e) => setFilters({ ...filters, cnpj: e.target.value })}
-                            />
-                        </div>
+                {/* Filters Card */}
+                <Card className="shadow-lg border-gray-200 dark:border-gray-800">
+                    <CardHeader className="space-y-1">
+                        <CardTitle className="text-xl text-violet-700 dark:text-violet-400">
+                            Filtros de Pesquisa
+                        </CardTitle>
+                        <CardDescription className="text-gray-600 dark:text-gray-400">
+                            Informe o CNPJ ou CNPJ Raiz para consultar
+                        </CardDescription>
+                    </CardHeader>
 
-                    </div>
-                    <div className="space-y-2">
-                        <Label className="font-semibold text-sm text-gray-800">CNPJ/Raiz:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder="Buscar por CNPJ/Raiz"
-                                className='pl-10 col-span-1'
-                                value={filters.doc_raiz}
-                                onChange={(e) => setFilters({ ...filters, doc_raiz: e.target.value })}
-                            />
-                        </div>
+                    <CardContent>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <FilterSection label="CNPJ">
+                                    <SearchInput
+                                        placeholder="00.000.000/0000-00"
+                                        value={filters.cnpj}
+                                        onChange={(value) => setFilters({ ...filters, cnpj: value })}
+                                    />
+                                </FilterSection>
 
-                    </div>
+                                <FilterSection label="CNPJ Raiz">
+                                    <SearchInput
+                                        placeholder="00.000.000"
+                                        value={filters.doc_raiz}
+                                        onChange={(value) => setFilters({ ...filters, doc_raiz: value })}
+                                    />
+                                </FilterSection>
+                            </div>
 
+                            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <Button
+                                    type="submit"
+                                    className="flex-1 sm:flex-none bg-violet-600 hover:bg-violet-700 transition-colors"
+                                >
+                                    <Search className="h-4 w-4 mr-2" />
+                                    Pesquisar
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={handleClearFilters}
+                                    variant="outline"
+                                    className="flex-1 sm:flex-none"
+                                >
+                                    <X className="h-4 w-4 mr-2" />
+                                    Limpar Filtros
+                                </Button>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
 
-                    <Button type="submit" className="default mt-8">
-                        <Search className="h-4 w-4 mr-2" />
-                        Pesquisar
-                    </Button>
-
-                    <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full sm:w-auto mt-8">
-                        <X className="h-4 w-4 mr-2" />
-                        Remover filtros
-                    </Button>
-
-                </form>
-
-
-
-                {/* Renderize o título aqui */}
+                {/* Loading State */}
                 {loading && (
-                    <div className="flex justify-center h-screen mt-10">
-                        <GridLoader size={16} color="#6b25c7" />
+                    <div className="flex justify-center items-center py-20">
+                        <GridLoader size={16} color="#7c3aed" />
                     </div>
                 )}
 
-                {error && !loading && (
-                    <div className="text-center text-red-500">
-                        {error}
-                    </div>
-                )}
+                {/* Empty State */}
+                {!loading && searched && !data && <EmptyState error={error} />}
 
-                {searched && data && (
-                    <div>
-                        <div className='flex'>
-                            <Button onClick={handleDownloadPdf} className="w-full sm:w-auto mt-8" variant="outline">
-                                <AiFillFilePdf className="h-4 w-4 mr-2 text-rose-700" />
+                {/* Results */}
+                {searched && data && data.length > 0 && (
+                    <div className="space-y-6">
+                        {/* Download Button */}
+                        <div className="flex justify-end">
+                            <Button
+                                onClick={handleDownloadPdf}
+                                variant="outline"
+                                className="gap-2"
+                            >
+                                <AiFillFilePdf className="h-5 w-5 text-rose-600" />
                                 Download PDF
                             </Button>
                         </div>
 
+                        {/* Results for each CNPJ */}
                         {data.map(({ cnpj, data: cnpjData }, index) => (
-                            <div key={index} className="mb-8">
-                                <div className='flex flex-col gap-4 items-center mt-6'>
-                                    <h2 className="text-2xl font-bold text-slate-700 justify-center">{cnpj}</h2>
+                            <Card
+                                key={index}
+                                className="shadow-lg border-gray-200 dark:border-gray-800"
+                            >
+                                <CardHeader className="bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-950 dark:to-indigo-950">
+                                    <CardTitle className="text-2xl text-violet-700 dark:text-violet-400">
+                                        {cnpj}
+                                    </CardTitle>
+                                    {cnpjData.vwrfbjucepa?.[0] && (
+                                        <CardDescription className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                            {cnpjData.vwrfbjucepa[0].razaosocial}
+                                        </CardDescription>
+                                    )}
+                                </CardHeader>
 
-
-
-                                    <div className="w-full mx-auto p-2">
-
-                                        <div
-                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(cnpj, 'dadosCadastrais')}
-                                        >
-                                            <h2>Dados Cadastrais:</h2>
-                                            <span className="text-white text-xl">
-                                                {expandedSections[cnpj]?.dadosCadastrais ? '↑' : '↓'}
-                                            </span>
-                                        </div>
-
-                                        {expandedSections[cnpj]?.dadosCadastrais && (
-
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                {cnpjData.vwrfbjucepa && cnpjData.vwrfbjucepa.length > 0 ? (
-                                                    cnpjData.vwrfbjucepa.map((cadastro, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >
-                                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.docformatado}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Razão Social:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.razaosocial}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Porte:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.porte}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Natureza Jurídica:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.natjuridica}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Descrição:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.descricao}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data Início atividade:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.dtinicioatividade}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Capital Social:</span>
-                                                                    <span className="text-muted-foreground">
-                                                                        {Number(cadastro.capitalsocial).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Situação Cadastral:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.situacaocadastral}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data Situação Cadastral:</span>
-                                                                    <span className="text-muted-foreground">
-                                                                        {cadastro.dtsituacaocadastral}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Endereço:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.endereco}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Complemento:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.complemento}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Bairro:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.bairro}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">CEP:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.cep}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">UF:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.uf}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">E-mail:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.email}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Telefone:</span>
-                                                                    <span className="text-muted-foreground">({cadastro.ddd}) {cadastro.telefone}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Situação JUCEPA:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.jucepa_situacao}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Status JUCEPA:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.jucepa_status}</span>
-                                                                </div>
-
-
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div>Nenhum dado cadastral encontrado.</div>
-                                                )}
-                                            </div>
-
-                                        )}
-
-
-                                        <div>
-
-                                            <div
-                                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                                onClick={() => toggleSection(cnpj, 'socios')}
-                                            >
-                                                <h2>Quadro Societário:</h2>
-                                                <span className="text-white text-xl">
-                                                    {expandedSections[cnpj]?.socios ? '↑' : '↓'}
-                                                </span>
-                                            </div>
-
-                                            {expandedSections[cnpj]?.socios && (
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                    {cnpjData.vwjucepasocios && cnpjData.vwjucepasocios.length > 0 ? (
-                                                        cnpjData.vwjucepasocios.map((socio, index) => (
-                                                            <div
-                                                                key={index}
-                                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                            >
-                                                                <div
-                                                                    className="w-2 h-full mr-4 rounded-lg"
-                                                                    style={{ backgroundColor: getRandomColor() }}
-                                                                />
-                                                                <div className="flex flex-wrap gap-4">
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">CNPJ:</span>
-                                                                        <span className="text-muted-foreground">{socio.nr_cgc}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Razão Social:</span>
-                                                                        <span className="text-muted-foreground">{socio.razaosocial}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Pessoa:</span>
-                                                                        <span className="text-muted-foreground">{socio.no_pessoa}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Tipo Sócio:</span>
-                                                                        <span className="text-muted-foreground">{socio.tiposocio}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Doc. Sócio:</span>
-                                                                        <span className="text-muted-foreground">{socio.nr_docsocio}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Vínculo:</span>
-                                                                        <span className="text-muted-foreground">{socio.no_vinculo}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Entrada Sociedade:</span>
-                                                                        <span className="text-muted-foreground">{formatarData(socio.dt_entrada_sociedade)}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Saída Sociedade:</span>
-                                                                        <span className="text-muted-foreground">{formatarData(socio.dt_saida_sociedade)}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Status Sociedade:</span>
-                                                                        <span className="text-muted-foreground">{socio.statussociedade}</span>
-                                                                    </div>
-
-
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <div>
-                                                            <p className='text-muted-foreground p-4'>Nenhum sócio encontrado.</p>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                            )}
-
-
-                                        </div>
-
-                                        <div
-                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(cnpj, 'debitos')}
-                                        >
-                                            <h2>Débitos:</h2>
-                                            <span className="text-white text-xl">
-                                                {expandedSections[cnpj]?.debitos ? '↑' : '↓'}
-                                            </span>
-                                        </div>
-
-                                        {expandedSections[cnpj]?.debitos && (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                {cnpjData.vwdebitos && cnpjData.vwdebitos.length > 0 ? (
-                                                    cnpjData.vwdebitos.map((debito, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >
-                                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                                    <span className="text-muted-foreground">{debito.documento}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Qtd. CDAs:</span>
-                                                                    <span className="text-muted-foreground">{debito.qtdcdas}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Soma Valor CDAs:</span>
-                                                                    <span className="text-muted-foreground">
-
-                                                                        {Number(debito.somavlcdas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Qtd. Consolidado:</span>
-                                                                    <span className="text-muted-foreground">{debito.qtdconsolidado}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Valor Consolidado:</span>
-                                                                    <span className="text-muted-foreground">
-                                                                        {Number(debito.vlconsolidado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">CDAs dentro do prazo prescricional:</span>
-                                                                    <span className="text-muted-foreground">{debito.qtdprazoprescr}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">CDAs com provável prescrição:</span>
-                                                                    <span className="text-muted-foreground">{debito.qtdprescricao}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">CDAs prestres a prescever:</span>
-                                                                    <span className="text-muted-foreground">{debito.qtdprestesprescr}</span>
-                                                                </div>
-
-
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div>
-                                                        <p className='text-muted-foreground p-4'>Nenhum débito encontrado.</p>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                        )}
-
-
-                                        <div
-                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(cnpj, 'partesProcessos')}
-                                        >
-                                            <h2>Participação em processos:</h2>
-                                            <span className="text-white text-xl">
-                                                {expandedSections[cnpj]?.partesProcessos ? '↑' : '↓'}
-                                            </span>
-                                        </div>
-
-                                        {expandedSections[cnpj]?.partesProcessos && (
-
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                                {cnpjData.vwpartesprocesso && cnpjData.vwpartesprocesso.length > 0 ? (
-                                                    cnpjData.vwpartesprocesso.map((processo, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >
-                                                            
-
-                                                            <div className="flex flex-wrap gap-4">
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                                    <span className="text-muted-foreground">{processo.nudocumento}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Tipo Participação:</span>
-                                                                    <span className="text-muted-foreground">{processo.tpparte}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Processo:</span>
-                                                                    <span className="text-muted-foreground">{processo.processosaj}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Nº Judicial:</span>
-                                                                    <span className="text-muted-foreground">{processo.numjudicial}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Classe:</span>
-                                                                    <span className="text-muted-foreground">{processo.classe}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Assunto:</span>
-                                                                    <span className="text-muted-foreground">{processo.assuntoinstituicao}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Comarca:</span>
-                                                                    <span className="text-muted-foreground">{processo.comarca}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Vara Judicial:</span>
-                                                                    <span className="text-muted-foreground">{processo.vara}</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div>
-                                                        <p className='text-muted-foreground p-4'>Nenhum processo encontrado.</p>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                        )}
-
-                                        <div
-                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(cnpj, 'detran')}
-                                        >
-                                            <h2>DETRAN:</h2>
-                                            <span className="text-white text-xl">
-                                                {expandedSections[cnpj]?.detran ? '↑' : '↓'}
-                                            </span>
-                                        </div>
-
-                                        {expandedSections[cnpj]?.detran && (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                {cnpjData.vwcargaveiculos && cnpjData.vwcargaveiculos.length > 0 ? (
-                                                    cnpjData.vwcargaveiculos.map((veiculo, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >
-                                                            <div
-                                                                className="w-2 h-full mr-4 rounded-lg"
-                                                                style={{ backgroundColor: getRandomColor() }}
+                                <CardContent className="space-y-4 pt-6">
+                                    {/* Dados Cadastrais */}
+                                    <CollapsibleSection
+                                        title="Dados Cadastrais"
+                                        isExpanded={expandedSections[cnpj]?.dadosCadastrais}
+                                        onToggle={() => toggleSection(cnpj, 'dadosCadastrais')}
+                                        count={cnpjData.vwrfbjucepa?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.vwrfbjucepa && cnpjData.vwrfbjucepa.length > 0 ? (
+                                                cnpjData.vwrfbjucepa.map((cadastro, idx) => (
+                                                    <DataCard key={idx}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                                            <DataField label="Documento" value={cadastro.docformatado} />
+                                                            <DataField label="Razão Social" value={cadastro.razaosocial} />
+                                                            <DataField label="Porte" value={cadastro.porte} />
+                                                            <DataField label="Natureza Jurídica" value={cadastro.natjuridica} />
+                                                            <DataField label="Descrição" value={cadastro.descricao} className="col-span-full" />
+                                                            <DataField label="Início Atividade" value={cadastro.dtinicioatividade} />
+                                                            <DataField
+                                                                label="Capital Social"
+                                                                value={Number(cadastro.capitalsocial).toLocaleString('pt-BR', {
+                                                                    style: 'currency',
+                                                                    currency: 'BRL',
+                                                                })}
                                                             />
-                                                            <div className="flex flex-wrap gap-4">
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Placa:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.placa}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Renavam:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.renavam}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Doc. Proprietário:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.docproprietario}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Arrendatário:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.arrendatario}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Marca/Modelo:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.marcamodelo}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Ano Modelo:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.anomodelo}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Procedência:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.procedencia}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Obs. Licenciamento:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.licenciamento}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Ocorrência Policial:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.ocorr_policial}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Proprietário Anterior:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.proprietarioanterior}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 col-span-1">
-                                                                    <span className="font-semibold text-slate-700">Impedimento Judicial/Administrativo:</span>
-                                                                    <span className="text-muted-foreground">{veiculo.imped_judicial_admin}</span>
-                                                                </div>
-
-
-                                                            </div>
+                                                            <DataField label="Situação Cadastral" value={cadastro.situacaocadastral} />
+                                                            <DataField label="Data Situação" value={cadastro.dtsituacaocadastral} />
+                                                            <DataField label="Endereço" value={cadastro.endereco} className="col-span-full lg:col-span-2" />
+                                                            <DataField label="Complemento" value={cadastro.complemento} />
+                                                            <DataField label="Bairro" value={cadastro.bairro} />
+                                                            <DataField label="CEP" value={cadastro.cep} />
+                                                            <DataField label="UF" value={cadastro.uf} />
+                                                            <DataField label="E-mail" value={cadastro.email} className="col-span-full lg:col-span-2" />
+                                                            <DataField label="Telefone" value={`(${cadastro.ddd}) ${cadastro.telefone}`} />
+                                                            <DataField label="Situação JUCEPA" value={cadastro.jucepa_situacao} />
+                                                            <DataField label="Status JUCEPA" value={cadastro.jucepa_status} />
                                                         </div>
-                                                    ))
-                                                ) : (
-                                                    <div>
-                                                        <p className='text-muted-foreground p-4'>Nenhum veículo encontrado.</p>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                        )}
-
-                                        <div
-                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(cnpj, 'semas')}
-                                        >
-                                            <h2>SEMAS:</h2>
-                                            <span className="text-white text-xl">
-                                                {expandedSections[cnpj]?.semas ? '↑' : '↓'}
-                                            </span>
-                                        </div>
-
-                                        {expandedSections[cnpj]?.semas && (
-
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                {cnpjData.vwcarsemas && cnpjData.vwcarsemas.length > 0 ? (
-                                                    cnpjData.vwcarsemas.map((semas, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >                                                            
-
-                                                            <div className="flex flex-wrap gap-4">
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                                    <span className="text-muted-foreground">{semas.docproprietario}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Proprietário:</span>
-                                                                    <span className="text-muted-foreground">{semas.nomeproprietario}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Propriedade:</span>
-                                                                    <span className="text-muted-foreground">{semas.nomepropriedade}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Município:</span>
-                                                                    <span className="text-muted-foreground">{semas.municipio}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Área Total:</span>
-                                                                    <span className="text-muted-foreground">{semas.areatotal}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Situação:</span>
-                                                                    <span className="text-muted-foreground">{semas.situacao}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Nº CAR:</span>
-                                                                    <span className="text-muted-foreground">{semas.no_car}</span>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div>
-                                                        <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                        )}
-
-                                        <div
-                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(cnpj, 'adepara')}
-                                        >
-                                            <h2>ADEPARA:</h2>
-                                            <span className="text-white text-xl">
-                                                {expandedSections[cnpj]?.adepara ? '↑' : '↓'}
-                                            </span>
-                                        </div>
-
-                                        {expandedSections[cnpj]?.adepara && (
-
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                {cnpjData.vwadepara && cnpjData.vwadepara.length > 0 ? (
-                                                    cnpjData.vwadepara.map((adepara, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >                                                            
-
-                                                            <div className="flex flex-wrap gap-4">
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Documento:</span>
-                                                                    <span className="text-muted-foreground">{adepara.docprodutor}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Produtor:</span>
-                                                                    <span className="text-muted-foreground">{adepara.nomeprodutor}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Propriedade:</span>
-                                                                    <span className="text-muted-foreground">{adepara.nomepropriedade}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Município:</span>
-                                                                    <span className="text-muted-foreground">{adepara.municipio}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Área Total:</span>
-                                                                    <span className="text-muted-foreground">{adepara.aretotal}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Área Pasto Cultivado:</span>
-                                                                    <span className="text-muted-foreground">{adepara.areadepastocultivado}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                    <span className="font-semibold text-slate-700">Qtd. Bovinos:</span>
-                                                                    <span className="text-muted-foreground">{adepara.bov_total}</span>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div>
-                                                        <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                        )}
-
-                                        <div>
-
-                                            <div
-                                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                                onClick={() => toggleSection(cnpj, 'anac')}
-                                            >
-                                                <h2>ANAC:</h2>
-                                                <span className="text-white text-xl">
-                                                    {expandedSections[cnpj]?.anac ? '↑' : '↓'}
-                                                </span>
-                                            </div>
-
-                                            {expandedSections[cnpj]?.anac && (
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                    {cnpjData.anac && cnpjData.anac.length > 0 ? (
-                                                        cnpjData.anac.map((item, index) => (
-                                                            <div
-                                                                key={index}
-                                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                            >
-                                                                
-                                                                <div className="flex flex-wrap gap-4">
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Proprietário:</span>
-                                                                        <span className="text-muted-foreground">{item.proprietario}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Documento:</span>
-                                                                        <span className="text-muted-foreground">{item.docproprietario}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Marca/Modelo:</span>
-                                                                        <span className="text-muted-foreground">{item.marcamodelo}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Ano de Fabricação:</span>
-                                                                        <span className="text-muted-foreground text-center">{item.anofabricacao}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Gravame:</span>
-                                                                        <span className="text-muted-foreground">{item.ds_gravame}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Nº de Assentos:</span>
-                                                                        <span className="text-muted-foreground text-center">{item.nr_assentos}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">UF:</span>
-                                                                        <span className="text-muted-foreground">{item.sg_uf}</span>
-                                                                    </div>
-
-
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <div>
-                                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
-                                                        </div>
-                                                    )}
-                                                </div>
-
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum dado cadastral encontrado" description="" />
                                             )}
-
-
                                         </div>
+                                    </CollapsibleSection>
 
-                                        <div>
-
-                                            <div
-                                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                                onClick={() => toggleSection(cnpj, 'contratos')}
-                                            >
-                                                <h2>Contratos:</h2>
-                                                <span className="text-white text-xl">
-                                                    {expandedSections[cnpj]?.contratos ? '↑' : '↓'}
-                                                </span>
-                                            </div>
-
-                                            {expandedSections[cnpj]?.contratos && (
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                    {cnpjData.contratos && cnpjData.contratos.length > 0 ? (
-                                                        cnpjData.contratos.map((contrato, index) => (
-                                                            <div
-                                                                key={index}
-                                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                            >
-                                                               
-                                                                <div className="flex flex-wrap gap-4">
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Fornecedor:</span>
-                                                                        <span className="text-muted-foreground">{contrato.nomefornecedor}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Documento:</span>
-                                                                        <span className="text-muted-foreground">{contrato.dofornecedor}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Contratante:</span>
-                                                                        <span className="text-muted-foreground">{contrato.unidadegestora_contratante}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Assinatura do Contrato:</span>
-                                                                        <span className="text-muted-foreground text-center">{contrato.dt_assinaturacontrato}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Início da Vigência:</span>
-                                                                        <span className="text-muted-foreground">{contrato.dt_iniciovigencia}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Fim da Vigência:</span>
-                                                                        <span className="text-muted-foreground text-center">{contrato.dt_fimvigencia}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Forma de Contratação:</span>
-                                                                        <span className="text-muted-foreground">{contrato.formacontratacao}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Situação:</span>
-                                                                        <span className="text-muted-foreground">{contrato.situacao}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Valor do Contrato:</span>
-                                                                        <span className="text-muted-foreground">
-
-                                                                            {Number(contrato.vlcontratado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-
-                                                                        </span>
-                                                                    </div>
-
-
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <div>
-                                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
+                                    {/* Quadro Societário */}
+                                    <CollapsibleSection
+                                        title="Quadro Societário"
+                                        isExpanded={expandedSections[cnpj]?.socios}
+                                        onToggle={() => toggleSection(cnpj, 'socios')}
+                                        count={cnpjData.vwjucepasocios?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.vwjucepasocios && cnpjData.vwjucepasocios.length > 0 ? (
+                                                cnpjData.vwjucepasocios.map((socio, idx) => (
+                                                    <DataCard key={idx} colorBar={getRandomColor()}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            <DataField label="CNPJ" value={socio.nr_cgc} />
+                                                            <DataField label="Razão Social" value={socio.razaosocial} />
+                                                            <DataField label="Pessoa" value={socio.no_pessoa} />
+                                                            <DataField label="Tipo Sócio" value={socio.tiposocio} />
+                                                            <DataField label="Doc. Sócio" value={socio.nr_docsocio} />
+                                                            <DataField label="Vínculo" value={socio.no_vinculo} />
+                                                            <DataField label="Entrada Sociedade" value={formatarData(socio.dt_entrada_sociedade)} />
+                                                            <DataField label="Saída Sociedade" value={formatarData(socio.dt_saida_sociedade)} />
+                                                            <DataField label="Status Sociedade" value={socio.statussociedade} />
                                                         </div>
-                                                    )}
-                                                </div>
-
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum sócio encontrado" description="" />
                                             )}
-
-
                                         </div>
+                                    </CollapsibleSection>
 
-                                        <div>
-
-                                            <div
-                                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                                onClick={() => toggleSection(cnpj, 'faturamento')}
-                                            >
-                                                <h2>Faturamento:</h2>
-                                                <span className="text-white text-xl">
-                                                    {expandedSections[cnpj]?.faturamento ? '↑' : '↓'}
-                                                </span>
-                                            </div>
-
-                                            {expandedSections[cnpj]?.faturamento && (
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                    {cnpjData.faturamento && cnpjData.faturamento.length > 0 ? (
-                                                        cnpjData.faturamento.map((item, index) => (
-                                                            <div
-                                                                key={index}
-                                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                            >
-                                                                
-                                                                <div className="flex flex-wrap gap-4 items-start">
-                                                                    <div className="flex flex-col gap-1">
-                                                                        <span className="font-semibold text-slate-700">Documento:</span>
-                                                                        <span className="text-muted-foreground">{item.nudocumento}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1">
-                                                                        <span className="font-semibold text-slate-700">Observação:</span>
-                                                                        <span className="text-muted-foreground">{item.observacao}</span>
-                                                                    </div>                                                                   
-
-
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <div>
-                                                            <p className='text-muted-foreground p-4'>Nenhum registro encontrado.</p>
+                                    {/* Débitos */}
+                                    <CollapsibleSection
+                                        title="Débitos"
+                                        isExpanded={expandedSections[cnpj]?.debitos}
+                                        onToggle={() => toggleSection(cnpj, 'debitos')}
+                                        count={cnpjData.vwdebitos?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.vwdebitos && cnpjData.vwdebitos.length > 0 ? (
+                                                cnpjData.vwdebitos.map((debito, idx) => (
+                                                    <DataCard key={idx}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                                            <DataField label="Documento" value={debito.documento} />
+                                                            <DataField label="Qtd. CDAs" value={debito.qtdcdas} />
+                                                            <DataField
+                                                                label="Soma Valor CDAs"
+                                                                value={Number(debito.somavlcdas).toLocaleString('pt-BR', {
+                                                                    style: 'currency',
+                                                                    currency: 'BRL',
+                                                                })}
+                                                            />
+                                                            <DataField label="Qtd. Consolidado" value={debito.qtdconsolidado} />
+                                                            <DataField
+                                                                label="Valor Consolidado"
+                                                                value={Number(debito.vlconsolidado).toLocaleString('pt-BR', {
+                                                                    style: 'currency',
+                                                                    currency: 'BRL',
+                                                                })}
+                                                            />
+                                                            <DataField label="CDAs no Prazo" value={debito.qtdprazoprescr} />
+                                                            <DataField label="CDAs com Prescrição" value={debito.qtdprescricao} />
+                                                            <DataField label="CDAs Prestes a Prescrever" value={debito.qtdprestesprescr} />
                                                         </div>
-                                                    )}
-                                                </div>
-
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum débito encontrado" description="" />
                                             )}
-
-
                                         </div>
+                                    </CollapsibleSection>
 
+                                    {/* Participação em Processos */}
+                                    <CollapsibleSection
+                                        title="Participação em Processos"
+                                        isExpanded={expandedSections[cnpj]?.partesProcessos}
+                                        onToggle={() => toggleSection(cnpj, 'partesProcessos')}
+                                        count={cnpjData.vwpartesprocesso?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.vwpartesprocesso && cnpjData.vwpartesprocesso.length > 0 ? (
+                                                cnpjData.vwpartesprocesso.map((processo, idx) => (
+                                                    <DataCard key={idx} colorBar={getRandomColor()}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            <DataField label="Documento" value={processo.nudocumento} />
+                                                            <DataField label="Tipo Participação" value={processo.tpparte} />
+                                                            <DataField label="Processo" value={processo.processosaj} />
+                                                            <DataField label="Nº Judicial" value={processo.numjudicial} />
+                                                            <DataField label="Classe" value={processo.classe} />
+                                                            <DataField label="Assunto" value={processo.assuntoinstituicao} />
+                                                            <DataField label="Comarca" value={processo.comarca} />
+                                                            <DataField label="Vara Judicial" value={processo.vara} />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum processo encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
 
-                                    </div>
-                                </div>
-                            </div>
+                                    {/* DETRAN */}
+                                    <CollapsibleSection
+                                        title="DETRAN - Veículos"
+                                        isExpanded={expandedSections[cnpj]?.detran}
+                                        onToggle={() => toggleSection(cnpj, 'detran')}
+                                        count={cnpjData.vwcargaveiculos?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.vwcargaveiculos && cnpjData.vwcargaveiculos.length > 0 ? (
+                                                cnpjData.vwcargaveiculos.map((veiculo, idx) => (
+                                                    <DataCard key={idx} colorBar={getRandomColor()}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                                            <DataField label="Placa" value={veiculo.placa} />
+                                                            <DataField label="Renavam" value={veiculo.renavam} />
+                                                            <DataField label="Doc. Proprietário" value={veiculo.docproprietario} />
+                                                            <DataField label="Proprietário" value={veiculo.proprietario} />
+                                                            <DataField label="Arrendatário" value={veiculo.arrendatario} />
+                                                            <DataField label="Marca/Modelo" value={veiculo.marcamodelo} />
+                                                            <DataField label="Ano Modelo" value={veiculo.anomodelo} />
+                                                            <DataField label="Procedência" value={veiculo.procedencia} />
+                                                            <DataField label="Licenciamento" value={veiculo.licenciamento} />
+                                                            <DataField label="Ocorrência Policial" value={veiculo.ocorr_policial} />
+                                                            <DataField label="Proprietário Anterior" value={veiculo.proprietarioanterior} />
+                                                            <DataField label="Impedimento Judicial/Admin" value={veiculo.imped_judicial_admin} className="col-span-full" />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum veículo encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+
+                                    {/* SEMAS */}
+                                    <CollapsibleSection
+                                        title="SEMAS - Propriedades Rurais"
+                                        isExpanded={expandedSections[cnpj]?.semas}
+                                        onToggle={() => toggleSection(cnpj, 'semas')}
+                                        count={cnpjData.vwcarsemas?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.vwcarsemas && cnpjData.vwcarsemas.length > 0 ? (
+                                                cnpjData.vwcarsemas.map((semas, idx) => (
+                                                    <DataCard key={idx} colorBar={getRandomColor()}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            <DataField label="Documento" value={semas.docproprietario} />
+                                                            <DataField label="Proprietário" value={semas.nomeproprietario} />
+                                                            <DataField label="Propriedade" value={semas.nomepropriedade} />
+                                                            <DataField label="Município" value={semas.municipio} />
+                                                            <DataField label="Área Total" value={semas.areatotal} />
+                                                            <DataField label="Situação" value={semas.situacao} />
+                                                            <DataField label="Nº CAR" value={semas.no_car} />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum registro encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+
+                                    {/* ADEPARA */}
+                                    <CollapsibleSection
+                                        title="ADEPARA - Produção Agropecuária"
+                                        isExpanded={expandedSections[cnpj]?.adepara}
+                                        onToggle={() => toggleSection(cnpj, 'adepara')}
+                                        count={cnpjData.vwadepara?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.vwadepara && cnpjData.vwadepara.length > 0 ? (
+                                                cnpjData.vwadepara.map((adepara, idx) => (
+                                                    <DataCard key={idx} colorBar={getRandomColor()}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            <DataField label="Documento" value={adepara.docprodutor} />
+                                                            <DataField label="Produtor" value={adepara.nomeprodutor} />
+                                                            <DataField label="Propriedade" value={adepara.nomepropriedade} />
+                                                            <DataField label="Município" value={adepara.municipio} />
+                                                            <DataField label="Área Total" value={adepara.aretotal} />
+                                                            <DataField label="Área Pasto Cultivado" value={adepara.areadepastocultivado} />
+                                                            <DataField label="Qtd. Bovinos" value={adepara.bov_total} />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum registro encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+
+                                    {/* ANAC */}
+                                    <CollapsibleSection
+                                        title="ANAC - Aeronaves"
+                                        isExpanded={expandedSections[cnpj]?.anac}
+                                        onToggle={() => toggleSection(cnpj, 'anac')}
+                                        count={cnpjData.anac?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.anac && cnpjData.anac.length > 0 ? (
+                                                cnpjData.anac.map((item, idx) => (
+                                                    <DataCard key={idx} colorBar={getRandomColor()}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            <DataField label="Proprietário" value={item.proprietario} />
+                                                            <DataField label="Documento" value={item.docproprietario} />
+                                                            <DataField label="Marca/Modelo" value={item.marcamodelo} />
+                                                            <DataField label="Ano Fabricação" value={item.anofabricacao} />
+                                                            <DataField label="Gravame" value={item.ds_gravame} />
+                                                            <DataField label="Nº Assentos" value={item.nr_assentos} />
+                                                            <DataField label="UF" value={item.sg_uf} />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum registro encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+
+                                    {/* Contratos */}
+                                    <CollapsibleSection
+                                        title="Contratos Públicos"
+                                        isExpanded={expandedSections[cnpj]?.contratos}
+                                        onToggle={() => toggleSection(cnpj, 'contratos')}
+                                        count={cnpjData.contratos?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.contratos && cnpjData.contratos.length > 0 ? (
+                                                cnpjData.contratos.map((contrato, idx) => (
+                                                    <DataCard key={idx} colorBar={getRandomColor()}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            <DataField label="Fornecedor" value={contrato.nomefornecedor} />
+                                                            <DataField label="Documento" value={contrato.dofornecedor} />
+                                                            <DataField label="Contratante" value={contrato.unidadegestora_contratante} className="col-span-full" />
+                                                            <DataField label="Assinatura" value={contrato.dt_assinaturacontrato} />
+                                                            <DataField label="Início Vigência" value={contrato.dt_iniciovigencia} />
+                                                            <DataField label="Fim Vigência" value={contrato.dt_fimvigencia} />
+                                                            <DataField label="Forma Contratação" value={contrato.formacontratacao} />
+                                                            <DataField label="Situação" value={contrato.situacao} />
+                                                            <DataField
+                                                                label="Valor Contratado"
+                                                                value={Number(contrato.vlcontratado).toLocaleString('pt-BR', {
+                                                                    style: 'currency',
+                                                                    currency: 'BRL',
+                                                                })}
+                                                            />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum registro encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+
+                                    {/* Faturamento */}
+                                    <CollapsibleSection
+                                        title="Faturamento"
+                                        isExpanded={expandedSections[cnpj]?.faturamento}
+                                        onToggle={() => toggleSection(cnpj, 'faturamento')}
+                                        count={cnpjData.faturamento?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cnpjData.faturamento && cnpjData.faturamento.length > 0 ? (
+                                                cnpjData.faturamento.map((item, idx) => (
+                                                    <DataCard key={idx}>
+                                                        <div className="grid grid-cols-1 gap-4">
+                                                            <DataField label="Documento" value={item.nudocumento} />
+                                                            <DataField label="Observação" value={item.observacao} className="col-span-full" />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum registro encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+                                </CardContent>
+                            </Card>
                         ))}
-
                     </div>
                 )}
-
-
             </div>
         </>
     );
-};
+}

@@ -1,74 +1,83 @@
 import {
-    House, ChevronFirst, ChevronDown, PcCase, UserRoundSearch,
-    HandCoins, UserRound, X,
+    House, ChevronFirst, PcCase, UserRoundSearch, HandCoins,
+    UserRound, X
 } from 'lucide-react';
-import { useState as useStateSidebar } from 'react';
-import { Link, useLocation as useLocationSidebar } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
+import { SidebarLink } from './sidebar/SidebarLink';
+import { SidebarGroup } from './sidebar/SidebarGroup';
+import { SidebarSubLink } from './sidebar/SidebarSubLink';
+import { cn } from '@/lib/utils';
 
 export function SidebarEstagiario({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
-    const location = useLocationSidebar();    
-    const [pessoasOpen, setPessoasOpen] = useStateSidebar(false);
+    const location = useLocation();
 
     return (
         <>
             {isOpen && (
                 <div
                     onClick={() => setIsOpen(false)}
-                    className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-                ></div>
+                    className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm"
+                />
             )}
 
-            <aside className={`thin-scrollbar fixed top-0 lg:top-16 left-0 h-full bg-gray-200 z-40 transition-transform duration-300 ease-in-out
-                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-                md:translate-x-0
-                ${isOpen ? 'w-72' : 'md:w-20'}
-            `}>
+            <aside
+                className={cn(
+                    'thin-scrollbar fixed top-0 lg:top-16 left-0 h-full z-40',
+                    'bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800',
+                    'transition-all duration-300 ease-in-out',
+                    isOpen ? 'translate-x-0' : '-translate-x-full',
+                    'md:translate-x-0',
+                    isOpen ? 'w-72' : 'md:w-20'
+                )}
+            >
                 <div className="p-3 h-full flex flex-col">
                     <button
-                        className={`absolute hidden md:block cursor-pointer -right-6 top-2 rounded-full w-7 border-3 text-gray-700 hover:text-gray-500 transition-transform ${isOpen ? '' : 'rotate-180'}`}
+                        className={cn(
+                            'absolute hidden md:flex items-center justify-center',
+                            '-right-3 top-4 w-6 h-6 rounded-full',
+                            'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700',
+                            'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400',
+                            'shadow-md hover:shadow-lg transition-all duration-200',
+                            !isOpen && 'rotate-180'
+                        )}
                         onClick={() => setIsOpen(!isOpen)}
                     >
-                        <ChevronFirst />
+                        <ChevronFirst className="h-4 w-4" />
                     </button>
 
                     <button
-                        className="md:hidden text-gray-700 self-end mb-4"
+                        className="md:hidden text-gray-700 dark:text-gray-300 self-end mb-4 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                         onClick={() => setIsOpen(false)}
                     >
                         <X className="h-6 w-6" />
                     </button>
 
-                    <nav className="space-y-2 mt-4 flex-grow overflow-y-auto">
+                    <nav className="space-y-1 mt-4 flex-grow overflow-y-auto">
+                        <SidebarLink
+                            to="/homeestagiario"
+                            icon={House}
+                            label="Home"
+                            isActive={location.pathname === "/homeestagiario"}
+                            isOpen={isOpen}
+                        />
 
-                        {/* HOME*/}
-                        <Link to="/homeestagiario" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/homeestagiario" ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                            <House className="h-6 w-6" />
-                            {isOpen && <span className='font-medium'>Home</span>}
-                        </Link>
+                        <SidebarGroup
+                            icon={UserRound}
+                            label="Pessoas"
+                            isActive={location.pathname.startsWith("/estagiario/pessoas")}
+                            isOpen={isOpen}
+                        >
+                            <SidebarSubLink to="/estagiario/pessoas/cnpj" icon={PcCase} label="Pessoa Jurídica" isActive={location.pathname === "/estagiario/pessoas/cnpj"} />
+                            <SidebarSubLink to="/estagiario/pessoas/cpf" icon={UserRoundSearch} label="Pessoa Física" isActive={location.pathname === "/estagiario/pessoas/cpf"} />
+                        </SidebarGroup>
 
-                        {/* Pessoas */}
-                        <div className="relative">
-                            <button onClick={() => setPessoasOpen(!pessoasOpen)} className={`flex items-center gap-2 p-2 w-full text-left rounded hover:bg-gray-300 ${location.pathname.startsWith("/estagiario/pessoas") ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                                <UserRound className="h-6 w-6" />
-                                {isOpen && <span className='font-medium'>Pessoas</span>}
-                                {isOpen && <ChevronDown className={`ml-auto transition-transform ${pessoasOpen ? "rotate-180" : ""}`} />}
-                            </button>
-                            {pessoasOpen && isOpen && (
-                                <div className="ml-6 space-y-1">
-                                    <Link to="/estagiario/pessoas/cnpj" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/estagiario/pessoas/cnpj" ? "font-bold text-indigo-700" : "text-gray-500"}`}><PcCase className="h-5 w-5" /> Pessoa Jurídica</Link>
-                                    <Link to="/estagiario/pessoas/cpf" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/estagiario/pessoas/cpf" ? "font-bold text-indigo-700" : "text-gray-500"}`}><UserRoundSearch className="h-5 w-5" /> Pessoa Física</Link>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Consulta de Débitos */}
-
-                        <Link to="/estagiario/consultadebitos" className={`flex items-center gap-2 p-2 rounded hover:bg-gray-300 ${location.pathname === "/estagiario/consultadebitos" ? "font-bold text-indigo-700" : "text-gray-500"}`}>
-                            <HandCoins className="h-6 w-6" />
-                            {isOpen && <span className='font-medium'>Consulta de Débitos</span>}
-                        </Link>
-
+                        <SidebarLink
+                            to="/estagiario/consultadebitos"
+                            icon={HandCoins}
+                            label="Consulta de Débitos"
+                            isActive={location.pathname === "/estagiario/consultadebitos"}
+                            isOpen={isOpen}
+                        />
                     </nav>
                 </div>
             </aside>

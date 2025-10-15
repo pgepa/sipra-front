@@ -1,69 +1,31 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { api } from '@/lib/axios';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Search, X } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Search, X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { AiFillFilePdf } from 'react-icons/ai';
 import { formatarData } from '@/lib/utils';
+import { SearchInput } from '@/components/SearchInput';
+import { FilterSection } from '@/components/FilterSection';
+import { EmptyState } from '@/components/EmptyState';
+import { CollapsibleSection } from '@/components/CollapsibleSection';
+import { DataCard, DataField } from '@/components/DataCard';
+import { DebitoData, DebitoFilterState } from './types/debitos.types';
 
-// Define your interfaces (não modificado, já está correto no original)
-interface DadosCDA {
-    cda: string;
-    dtinscricao: string;
-    dtreferencia: string;
-    contribuinte: string;
-    tipoimposto: string;
-    origemdivida: string;
-    fundamento: string;
-    statusdebito: string;
-    vlcdaatualizado: number;
-    dtatualizacaosaldo: string;
-    prescrito: string;
-    flajuizada: string;
-    dtajuizamento: string;
-    sit_protesto: string;
-    placa: string;
-}
-
-interface HistoricoCDA {
-    situacao: string;
-    dtsituacao: string;
-    cdusuinclusao: string;
-    observacao: string;
-    num_seq: string;
-}
-
-interface ParcelamentoCDA {
-    parcelamento: string;
-    dtparcelamento: string;
-    nuparcelas: string;
-    regraparcelamento: string;
-    observparcelamento: string;
-    sitparcelamento: string;
-    dtterminopar: string;
-    seqparc: string;
-}
-
-interface PessoaJuridicaData {
-    HistoricoCDA: HistoricoCDA[];
-    DadosCDA: DadosCDA[];
-    ParcelamentoCDA: ParcelamentoCDA[];
-}
-
-export const ConsultaDebitos: React.FC = () => {
-    const [data, setData] = useState<{ cda: string; contribuinte?: string; data: PessoaJuridicaData }[] | null>(null);
+export function ConsultaDebitos() {
+    const [data, setData] = useState<{ cda: string; contribuinte?: string; data: DebitoData }[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [filters, setFilters] = useState({ cda: '', documento: '' });
+    const [filters, setFilters] = useState<DebitoFilterState>({ cda: '', documento: '' });
     const [searched, setSearched] = useState(false);
-    const [expandedSections, setExpandedSections] = useState<{ [key: string]: { [key: string]: boolean } }>({});
-    const [page, setPage] = useState(1); // Página atual
-    const [totalPages, setTotalPages] = useState(1); // Total de páginas
-    const [totalCdas, setTotalCdas] = useState(1); // Total de páginas
+    const [expandedSections, setExpandedSections] = useState<{
+        [key: string]: { [key: string]: boolean };
+    }>({});
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalCdas, setTotalCdas] = useState(0);
 
     const toggleSection = (cda: string, section: string) => {
         setExpandedSections((prev) => ({
@@ -75,11 +37,6 @@ export const ConsultaDebitos: React.FC = () => {
         }));
     };
 
-    {/* FUNÇÃO DE DOWNLOAD
-        
-        
-        */}
-
     const handleDownloadPdf = () => {
         const token = localStorage.getItem('token');
 
@@ -90,48 +47,48 @@ export const ConsultaDebitos: React.FC = () => {
 
         setLoading(true);
 
-        api.get('/consultacda', {
-            headers: { Authorization: `Bearer ${token}` },
-            params: {
-                cda: filters.cda || undefined,
-                documento: filters.documento || undefined,
-                download: 'pdf',
-            },
-            responseType: 'blob',
-        })
+        api
+            .get('/consultacda', {
+                headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    cda: filters.cda || undefined,
+                    documento: filters.documento || undefined,
+                    download: 'pdf',
+                },
+                responseType: 'blob',
+            })
             .then((response) => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `Consulta de Débitos_${filters.cda || filters.documento}.pdf`);
+                link.setAttribute('download', `Consulta_Debitos_${filters.cda || filters.documento}.pdf`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
             })
             .catch((error) => {
-                console.error('Erro ao fazer download da planilha:', error);
-                alert('Erro ao fazer download da planilha.');
+                console.error('Erro ao fazer download do PDF:', error);
+                alert('Erro ao fazer download do PDF.');
             })
             .finally(() => setLoading(false));
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const fetchData = (currentPage: number) => {
         setLoading(true);
-        setSearched(false);
         setError(null);
 
         const token = localStorage.getItem('token');
 
-        api.get('/consultacda', {
-            headers: { Authorization: `Bearer ${token}` },
-            params: {
-                cda: filters.cda || undefined,
-                documento: filters.documento || undefined,
-                page, // Passando a página atual
-                per_page: 10, // Quantidade de itens por página
-            },
-        })
+        api
+            .get('/consultacda', {
+                headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    cda: filters.cda || undefined,
+                    documento: filters.documento || undefined,
+                    page: currentPage,
+                    per_page: 10,
+                },
+            })
             .then((response) => {
                 if (response.data?.DadosPorDocumento) {
                     const resultados = response.data.DadosPorDocumento.map((item: any) => ({
@@ -141,7 +98,7 @@ export const ConsultaDebitos: React.FC = () => {
                     }));
                     setData(resultados);
                     setTotalPages(Math.ceil(response.data.total_cdas / 10));
-                    setTotalCdas(Math.ceil(response.data.total_cdas));
+                    setTotalCdas(response.data.total_cdas);
                 } else if (response.data?.DadosCDA) {
                     const resultados = [
                         {
@@ -168,8 +125,10 @@ export const ConsultaDebitos: React.FC = () => {
             });
     };
 
-    const resetPagination = () => {
-        setPage(1); // Reseta a página para o início
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setPage(1);
+        fetchData(1);
     };
 
     const handleClearFilters = () => {
@@ -177,443 +136,283 @@ export const ConsultaDebitos: React.FC = () => {
         setData(null);
         setSearched(false);
         setError(null);
-        resetPagination();
+        setPage(1);
     };
 
     const handlePageChange = (newPage: number) => {
-        setPage(newPage); // Atualiza a página
-        setLoading(true);
-
-        const token = localStorage.getItem('token');
-
-        api.get('/consultacda', {
-            headers: { Authorization: `Bearer ${token}` },
-            params: {
-                cda: filters.cda || undefined,
-                documento: filters.documento || undefined,
-                page: newPage,
-                per_page: 10, // Quantidade de itens por página
-            },
-        })
-            .then((response) => {
-                if (response.data?.DadosPorDocumento) {
-                    const resultados = response.data.DadosPorDocumento.map((item: any) => ({
-                        contribuinte: response.data.Contribuinte || 'N/A',
-                        cda: item.CDA || 'N/A',
-                        data: item,
-                    }));
-                    setData(resultados);
-                    setTotalPages(Math.ceil(response.data.total_cdas / 10));
-                } else if (response.data?.DadosCDA) {
-                    setData([
-                        {
-                            contribuinte: response.data.DadosCDA?.[0]?.contribuinte || 'N/A',
-                            cda: response.data.cda || 'N/A',
-                            data: response.data,
-                        },
-                    ]);
-                    setTotalPages(1);
-                } else {
-                    setError('Formato de resposta desconhecido.');
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-                setError('Erro ao carregar os dados.');
-            })
-            .finally(() => setLoading(false));
+        if (newPage >= 1 && newPage <= totalPages) {
+            setPage(newPage);
+            fetchData(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
-
-    const renderPaginationItems = () => {
-        const items = [];
-        const startPage = Math.max(page - 2, 1);
-        const endPage = Math.min(page + 2, totalPages);
-
-        for (let i = startPage; i <= endPage; i++) {
-            items.push(
-                <PaginationItem key={i}>
-                    <PaginationLink
-                        size="sm"
-                        onClick={() => handlePageChange(i)}
-                        className={i === page ? "bg-blue-500 text-white" : "text-blue-500"}
-                    >
-                        {i}
-                    </PaginationLink>
-                </PaginationItem>
-            );
-        }
-        return items;
+    const formatarMoeda = (valor: number): string => {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     };
 
     return (
         <>
             <Helmet title="Consulta de Débitos" />
 
-            <div className="flex flex-col gap-4">
-                
+            <div className="flex flex-col gap-6 p-4 md:p-6 max-w-[1600px] mx-auto">
+                {/* Header */}
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                        Consulta de Débitos - CDA
+                    </h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Consulte informações detalhadas sobre CDAs
+                    </p>
+                </div>
 
-                <form
-                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-2"
-                    onSubmit={handleSubmit}
-                >
-                    
-                    <div className="space-y-2">
-                        <Label className="font-semibold text-sm text-gray-800">Nº CDA:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder="Busca por CDA"
-                                className='pl-10 col-span-1'
-                                value={filters.cda}
-                                onChange={(e) => setFilters({ ...filters, cda: e.target.value })}
-                            />
-                        </div>
+                {/* Filters Card */}
+                <Card className="shadow-lg border-gray-200 dark:border-gray-800">
+                    <CardHeader className="space-y-1">
+                        <CardTitle className="text-xl text-violet-700 dark:text-violet-400">
+                            Filtros de Pesquisa
+                        </CardTitle>
+                        <CardDescription className="text-gray-600 dark:text-gray-400">
+                            Informe o número da CDA ou documento para consultar
+                        </CardDescription>
+                    </CardHeader>
 
-                    </div>
-                    <div className="space-y-2">
-                        <Label className="font-semibold text-sm text-gray-800">Documento:</Label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Search className="h-4 w-4 text-gray-500" />
-                            </span>
-                            <Input
-                                placeholder="Busca por documento"
-                                className='pl-10 col-span-1'
-                                value={filters.documento}
-                                onChange={(e) => setFilters({ ...filters, documento: e.target.value })}
-                            />
-                        </div>
+                    <CardContent>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <FilterSection label="Nº CDA">
+                                    <SearchInput
+                                        placeholder="Buscar por CDA"
+                                        value={filters.cda}
+                                        onChange={(value) => setFilters({ ...filters, cda: value })}
+                                    />
+                                </FilterSection>
 
-                    </div>
-
-
-                    <Button type="submit" className="default mt-8">
-                        <Search className="h-4 w-4 mr-2" />
-                        Pesquisar
-                    </Button>
-
-                    <Button onClick={handleClearFilters} variant="outline" size="default" className="w-full sm:w-auto mt-8">
-                        <X className="h-4 w-4 mr-2" />
-                        Remover filtros
-                    </Button>
-
-                </form>
-
-
-
-                {/* Renderize o título aqui */}
-                {loading && <div className="flex justify-center h-screen mt-10">
-                    <GridLoader size={16} color="#6b25c7" />
-                </div>}
-                {error && <div className='text-red-500 text-center'><p className='text-muted-foreground text-lg font-semibold'>{error}</p></div>}
-                {data && (
-                    <div>
-                        {data.map((item) => (
-                            <div key={item.cda}>
-                                {/* Render your results */}
+                                <FilterSection label="Documento (CPF/CNPJ)">
+                                    <SearchInput
+                                        placeholder="Buscar por documento"
+                                        value={filters.documento}
+                                        onChange={(value) => setFilters({ ...filters, documento: value })}
+                                    />
+                                </FilterSection>
                             </div>
-                        ))}
 
-                        <Pagination className="bottom-0 dark:bg-transparent py-2 cursor-pointer">
-                            <PaginationContent>
-                                {page > 1 && (
-                                    <PaginationPrevious size="sm" onClick={() => handlePageChange(page - 1)}>
-                                        {page === 2 ? 'Primeira Página' : 'Anterior'}
-                                    </PaginationPrevious>
-                                )}
-                                {renderPaginationItems()}
-                                {page < totalPages && (
-                                    <PaginationNext size='sm' onClick={() => handlePageChange(page + 1)}>
-                                        Próxima
-                                    </PaginationNext>
-                                )}
-                            </PaginationContent>
-                            <div className="ml-2 text-base mt-2 text-gray-600">
-                                <span className='flex gap-2'>
-                                    <p>Página {page} de {totalPages} ||</p>
-                                    <p className='font-semibold text-indigo-600'> {totalCdas} CDA(s) encontrada(s)</p>
-
-                                </span>
-
+                            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <Button
+                                    type="submit"
+                                    className="flex-1 sm:flex-none bg-violet-600 hover:bg-violet-700 transition-colors"
+                                >
+                                    <Search className="h-4 w-4 mr-2" />
+                                    Pesquisar
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={handleClearFilters}
+                                    variant="outline"
+                                    className="flex-1 sm:flex-none"
+                                >
+                                    <X className="h-4 w-4 mr-2" />
+                                    Limpar Filtros
+                                </Button>
                             </div>
-                        </Pagination>
+                        </form>
+                    </CardContent>
+                </Card>
+
+                {/* Loading State */}
+                {loading && (
+                    <div className="flex justify-center items-center py-20">
+                        <GridLoader size={16} color="#7c3aed" />
                     </div>
-
-
                 )}
 
+                {/* Empty State */}
+                {!loading && searched && !data && <EmptyState error={error} />}
 
-                {searched && data && (
-                    <div>
+                {/* Results */}
+                {searched && data && data.length > 0 && (
+                    <div className="space-y-6">
+                        {/* Download Button and Pagination Info */}
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                    {totalCdas} CDA(s) encontrada(s)
+                                </p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    Página {page} de {totalPages}
+                                </p>
+                            </div>
 
-
-                        <div className='flex'>
-                            <Button onClick={handleDownloadPdf} className="w-full sm:w-auto mt-8" variant="outline">
-                                <AiFillFilePdf className="h-4 w-4 mr-2 text-rose-700" />
+                            <Button onClick={handleDownloadPdf} variant="outline" className="gap-2">
+                                <AiFillFilePdf className="h-5 w-5 text-rose-600" />
                                 Download PDF
                             </Button>
                         </div>
 
-
-
+                        {/* Results Cards */}
                         {data.map(({ cda, data: cdaData, contribuinte }, index) => (
-                            <div key={index} className="mb-8">
-                                <div className='flex flex-col gap-4 items-center mt-6'>
-                                    <h2 className="flex flex-col items-center text-2xl font-bold text-slate-700 justify-center">
-                                        {contribuinte !== 'N/A' ? contribuinte : 'Contribuinte não encontrado'}
-
+                            <Card key={index} className="shadow-lg border-gray-200 dark:border-gray-800">
+                                <CardHeader className="bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-950 dark:to-indigo-950">
+                                    <div className="flex flex-col gap-2">
+                                        <CardTitle className="text-2xl text-violet-700 dark:text-violet-400">
+                                            {contribuinte !== 'N/A' ? contribuinte : 'Contribuinte não encontrado'}
+                                        </CardTitle>
                                         {cdaData.DadosCDA && cdaData.DadosCDA.length > 0 && (
-                                            <span className="text-lg text-indigo-500 ml-2">
+                                            <CardDescription className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">
                                                 CDA: {cdaData.DadosCDA[0].cda}
-                                            </span>
+                                            </CardDescription>
                                         )}
-
-
-                                    </h2>
-
-
-
-                                    <div className="w-full mx-auto p-2">
-
-                                        <div
-                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(cda, 'dadosCDA')}
-                                        >
-                                            <h2>Dados CDA:</h2>
-                                            <span className="text-white text-xl">
-                                                {expandedSections[cda]?.dadosCDA ? '↑' : '↓'}
-                                            </span>
-                                        </div>
-
-                                        {expandedSections[cda]?.dadosCDA && (
-
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                {cdaData.DadosCDA && cdaData.DadosCDA.length > 0 ? (
-                                                    cdaData.DadosCDA.map((cadastro, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >
-                                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">CDA:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.cda}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data de Inscrição:</span>
-                                                                    <span className="text-muted-foreground">{formatarData(cadastro.dtinscricao)}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Tipo Débito:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.tipoimposto}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Status Débito:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.statusdebito}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data de Referência:</span>
-                                                                    <span className="text-muted-foreground">{formatarData(cadastro.dtreferencia)}</span>
-                                                                </div>
-                                                                
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Origem Débito:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.origemdivida}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Fundamento:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.fundamento}</span>
-                                                                </div>
-                                                                
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Valor:</span>
-                                                                    <span className="text-muted-foreground">
-                                                                        {Number(cadastro.vlcdaatualizado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                                                    </span>
-                                                                </div>
-
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data Atualização Saldo:</span>
-                                                                    <span className="text-muted-foreground">
-                                                                        {formatarData(cadastro.dtatualizacaosaldo)}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Placa:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.placa}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Ajuizada:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.flajuizada}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data Ajuizamento:</span>
-                                                                    <span className="text-muted-foreground">{formatarData(cadastro.dtajuizamento)}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Prescrição:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.prescrito}</span>
-                                                                </div>
-                                                                
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Observação:</span>
-                                                                    <span className="text-muted-foreground">{cadastro.sit_protesto}</span>
-                                                                </div>
-
-
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div>Nenhuma CDA encontrada.</div>
-                                                )}
-                                            </div>
-
-                                        )}
-
-
-                                        <div>
-
-                                            <div
-                                                className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                                onClick={() => toggleSection(cda, 'historico')}
-                                            >
-                                                <h2>Histórico:</h2>
-                                                <span className="text-white text-xl">
-                                                    {expandedSections[cda]?.historico ? '↑' : '↓'}
-                                                </span>
-                                            </div>
-
-                                            {expandedSections[cda]?.historico && (
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                    {cdaData.HistoricoCDA && cdaData.HistoricoCDA.length > 0 ? (
-                                                        cdaData.HistoricoCDA.map((historico, index) => (
-                                                            <div
-                                                                key={index}
-                                                                className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                            >
-
-                                                                <div className="flex flex-wrap gap-4">
-                                                                <div className="flex flex-col gap-1 min-w-[250px]">
-                                                                        <span className="font-semibold text-slate-700">Usuáro Situação:</span>
-                                                                        <span className="text-muted-foreground">{historico.cdusuinclusao}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[200px]">
-                                                                        <span className="font-semibold text-slate-700">Situação:</span>
-                                                                        <span className="text-muted-foreground">{historico.situacao}</span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[150px]">
-                                                                        <span className="font-semibold text-slate-700">Data Situação:</span>
-                                                                        <span className='text-muted-foreground'>
-                                                                            {new Date(historico.dtsituacao).toLocaleDateString('pt-BR')}
-                                                                        </span>
-
-                                                                    </div>
-                                                                    
-                                                                    
-                                                                    <div className="flex flex-col gap-1 min-w-[200px]">
-                                                                        <span className="font-semibold text-slate-700">Observação:</span>
-                                                                        <span className="text-muted-foreground">{historico.observacao}</span>
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <div>
-                                                            <p className='text-muted-foreground p-4'>Nenhum histórico encontrado.</p>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                            )}
-
-
-                                        </div>
-
-                                        <div
-                                            className="flex items-center gap-2 text-lg font-bold mt-4 mb-4 text-white p-3 bg-indigo-500 hover:bg-indigo-400 cursor-pointer rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-b border-gray-200"
-                                            onClick={() => toggleSection(cda, 'parcelamento')}
-                                        >
-                                            <h2>Parcelamento:</h2>
-                                            <span className="text-white text-xl">
-                                                {expandedSections[cda]?.parcelamento ? '↑' : '↓'}
-                                            </span>
-                                        </div>
-
-                                        {expandedSections[cda]?.parcelamento && (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                                {cdaData.ParcelamentoCDA && cdaData.ParcelamentoCDA.length > 0 ? (
-                                                    cdaData.ParcelamentoCDA.map((parcelamento, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="flex col-span-4 justify-between items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-b border-gray-200"
-                                                        >
-                                                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Nº Parcelamento:</span>
-                                                                    <span className="text-muted-foreground">{parcelamento.parcelamento}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data do Parcelamento:</span>
-                                                                    <span className="text-muted-foreground">{formatarData(parcelamento.dtparcelamento)}</span>
-                                                                </div>
-
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Nº de Parcelas:</span>
-                                                                    <span className="text-muted-foreground">{parseInt(parcelamento.nuparcelas, 10)}</span>
-                                                                </div>
-
-
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Regra de Parcelamento:</span>
-                                                                    <span className="text-muted-foreground">{parcelamento.regraparcelamento}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Observação Parcelamento:</span>
-                                                                    <span className="text-muted-foreground">{parcelamento.observparcelamento}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Status Parcelamento:</span>
-                                                                    <span className="text-muted-foreground">{parcelamento.sitparcelamento}</span>
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="font-semibold text-slate-700">Data Término Parcelamento:</span>
-
-                                                                    <span className="text-muted-foreground">
-                                                                        {formatarData(parcelamento.dtterminopar)}
-                                                                    </span>
-
-                                                                </div>
-
-
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div>
-                                                        <p className='text-muted-foreground p-4'>Nenhum parcelamento encontrado.</p>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                        )}
-
-
                                     </div>
-                                </div>
-                            </div>
+                                </CardHeader>
+
+                                <CardContent className="space-y-4 pt-6">
+                                    {/* Dados CDA */}
+                                    <CollapsibleSection
+                                        title="Dados da CDA"
+                                        isExpanded={expandedSections[cda]?.dadosCDA}
+                                        onToggle={() => toggleSection(cda, 'dadosCDA')}
+                                        count={cdaData.DadosCDA?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cdaData.DadosCDA && cdaData.DadosCDA.length > 0 ? (
+                                                cdaData.DadosCDA.map((cadastro, idx) => (
+                                                    <DataCard key={idx}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                                            <DataField label="CDA" value={cadastro.cda} />
+                                                            <DataField label="Data de Inscrição" value={formatarData(cadastro.dtinscricao)} />
+                                                            <DataField label="Tipo Débito" value={cadastro.tipoimposto} />
+                                                            <DataField label="Status Débito" value={cadastro.statusdebito} />
+                                                            <DataField label="Data de Referência" value={formatarData(cadastro.dtreferencia)} />
+                                                            <DataField label="Origem Débito" value={cadastro.origemdivida} />
+                                                            <DataField label="Fundamento" value={cadastro.fundamento} className="col-span-full lg:col-span-2" />
+                                                            <DataField label="Valor" value={formatarMoeda(cadastro.vlcdaatualizado)} />
+                                                            <DataField label="Data Atualização Saldo" value={formatarData(cadastro.dtatualizacaosaldo)} />
+                                                            <DataField label="Placa" value={cadastro.placa} />
+                                                            <DataField label="Ajuizada" value={cadastro.flajuizada} />
+                                                            <DataField label="Data Ajuizamento" value={formatarData(cadastro.dtajuizamento)} />
+                                                            <DataField label="Prescrição" value={cadastro.prescrito} />
+                                                            <DataField label="Situação Protesto" value={cadastro.sit_protesto} className="col-span-full" />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhuma CDA encontrada" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+
+                                    {/* Histórico */}
+                                    <CollapsibleSection
+                                        title="Histórico"
+                                        isExpanded={expandedSections[cda]?.historico}
+                                        onToggle={() => toggleSection(cda, 'historico')}
+                                        count={cdaData.HistoricoCDA?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cdaData.HistoricoCDA && cdaData.HistoricoCDA.length > 0 ? (
+                                                cdaData.HistoricoCDA.map((historico, idx) => (
+                                                    <DataCard key={idx}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                                            <DataField label="Usuário Situação" value={historico.cdusuinclusao} />
+                                                            <DataField label="Situação" value={historico.situacao} />
+                                                            <DataField
+                                                                label="Data Situação"
+                                                                value={new Date(historico.dtsituacao).toLocaleDateString('pt-BR')}
+                                                            />
+                                                            <DataField label="Observação" value={historico.observacao} className="col-span-full" />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum histórico encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+
+                                    {/* Parcelamento */}
+                                    <CollapsibleSection
+                                        title="Parcelamento"
+                                        isExpanded={expandedSections[cda]?.parcelamento}
+                                        onToggle={() => toggleSection(cda, 'parcelamento')}
+                                        count={cdaData.ParcelamentoCDA?.length}
+                                    >
+                                        <div className="space-y-3">
+                                            {cdaData.ParcelamentoCDA && cdaData.ParcelamentoCDA.length > 0 ? (
+                                                cdaData.ParcelamentoCDA.map((parcelamento, idx) => (
+                                                    <DataCard key={idx}>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            <DataField label="Nº Parcelamento" value={parcelamento.parcelamento} />
+                                                            <DataField label="Data do Parcelamento" value={formatarData(parcelamento.dtparcelamento)} />
+                                                            <DataField label="Nº de Parcelas" value={parseInt(parcelamento.nuparcelas, 10)} />
+                                                            <DataField label="Regra de Parcelamento" value={parcelamento.regraparcelamento} />
+                                                            <DataField label="Observação Parcelamento" value={parcelamento.observparcelamento} className="col-span-full" />
+                                                            <DataField label="Status Parcelamento" value={parcelamento.sitparcelamento} />
+                                                            <DataField label="Data Término" value={formatarData(parcelamento.dtterminopar)} />
+                                                        </div>
+                                                    </DataCard>
+                                                ))
+                                            ) : (
+                                                <EmptyState title="Nenhum parcelamento encontrado" description="" />
+                                            )}
+                                        </div>
+                                    </CollapsibleSection>
+                                </CardContent>
+                            </Card>
                         ))}
 
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    Página {page} de {totalPages}
+                                </p>
+
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handlePageChange(page - 1)}
+                                        disabled={page === 1}
+                                        className="gap-1"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" />
+                                        Anterior
+                                    </Button>
+
+                                    <div className="hidden sm:flex items-center gap-1">
+                                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                            const pageNum = Math.max(1, Math.min(page - 2, totalPages - 4)) + i;
+                                            if (pageNum > totalPages) return null;
+                                            return (
+                                                <Button
+                                                    key={pageNum}
+                                                    variant={page === pageNum ? 'default' : 'outline'}
+                                                    size="sm"
+                                                    onClick={() => handlePageChange(pageNum)}
+                                                    className={page === pageNum ? 'bg-violet-600' : ''}
+                                                >
+                                                    {pageNum}
+                                                </Button>
+                                            );
+                                        })}
+                                    </div>
+
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handlePageChange(page + 1)}
+                                        disabled={page === totalPages}
+                                        className="gap-1"
+                                    >
+                                        Próxima
+                                        <ChevronRight className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
-
-
             </div>
         </>
     );
-};
+}
