@@ -3,7 +3,7 @@ import { api } from '@/lib/axios';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
 import { AiFillFilePdf } from 'react-icons/ai';
 import { formatarData } from '@/lib/utils';

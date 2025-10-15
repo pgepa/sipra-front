@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Building2, User, FileText, SquareArrowOutUpRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { Building2, User, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import { formatarBooleano, formatarData, formatarMoeda } from '@/lib/utils';
 import { ProtestoData } from '../types/ajuizamento.types';
 
