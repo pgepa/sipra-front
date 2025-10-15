@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { api } from '@/lib/axios';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
@@ -91,6 +92,7 @@ export function ConsultaDebitos() {
             })
             .then((response) => {
                 if (response.data?.DadosPorDocumento) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const resultados = response.data.DadosPorDocumento.map((item: any) => ({
                         contribuinte: response.data.Contribuinte || 'N/A',
                         cda: item.CDA || 'N/A',
@@ -149,6 +151,30 @@ export function ConsultaDebitos() {
 
     const formatarMoeda = (valor: number): string => {
         return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
+    const getStatusColor = (status: string) => {
+        const statusMap: Record<string, string> = {
+            Ativo: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 border-green-200',
+            Extinto: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 border-gray-200',
+            Suspenso: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 border-yellow-200',
+            Cancelado: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 border-red-200',
+        };
+        return statusMap[status] || 'bg-gray-100 text-gray-800 border-gray-200';
+    };
+
+    const getProtestoStatusColor = (status: string) => {
+        const statusMap: Record<string, string> = {
+            'Aguardando envio': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 border-blue-200',
+            'Aguardando recebimento': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300 border-cyan-200',
+            Cancelado: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 border-red-200',
+            Devolvido: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300 border-orange-200',
+            Enviado: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300 border-indigo-200',
+            Gerado: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300 border-purple-200',
+            Retirado: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 border-gray-200',
+            Sustado: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 border-yellow-200',
+        };
+        return statusMap[status] || 'bg-gray-100 text-gray-800 border-gray-200';
     };
 
     return (
@@ -253,14 +279,42 @@ export function ConsultaDebitos() {
                         {data.map(({ cda, data: cdaData, contribuinte }, index) => (
                             <Card key={index} className="shadow-lg border-gray-200 dark:border-gray-800">
                                 <CardHeader className="bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-950 dark:to-indigo-950">
-                                    <div className="flex flex-col gap-2">
-                                        <CardTitle className="text-2xl text-violet-700 dark:text-violet-400">
-                                            {contribuinte !== 'N/A' ? contribuinte : 'Contribuinte não encontrado'}
-                                        </CardTitle>
+                                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                                        <div className="flex-1 min-w-0">
+                                            <CardTitle className="text-2xl text-violet-700 dark:text-violet-400">
+                                                {contribuinte !== 'N/A' ? contribuinte : 'Contribuinte não encontrado'}
+                                            </CardTitle>
+                                            {cdaData.DadosCDA && cdaData.DadosCDA.length > 0 && (
+                                                <CardDescription className="text-lg font-semibold text-indigo-600 dark:text-indigo-400 mt-2">
+                                                    CDA: {cdaData.DadosCDA[0].cda}
+                                                </CardDescription>
+                                            )}
+                                        </div>
+
+                                        {/* Status Badges */}
                                         {cdaData.DadosCDA && cdaData.DadosCDA.length > 0 && (
-                                            <CardDescription className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">
-                                                CDA: {cdaData.DadosCDA[0].cda}
-                                            </CardDescription>
+                                            <div className="flex flex-wrap gap-2">
+                                                {cdaData.DadosCDA[0].statusdebito && (
+                                                    <Badge className={getStatusColor(cdaData.DadosCDA[0].statusdebito)}>
+                                                        {cdaData.DadosCDA[0].statusdebito}
+                                                    </Badge>
+                                                )}
+                                                {cdaData.DadosCDA[0].sit_protesto && (
+                                                    <Badge className={getProtestoStatusColor(cdaData.DadosCDA[0].sit_protesto)}>
+                                                        {cdaData.DadosCDA[0].sit_protesto}
+                                                    </Badge>
+                                                )}
+                                                {cdaData.DadosCDA[0].flajuizada === 'S' && (
+                                                    <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 border-blue-200">
+                                                        Ajuizada
+                                                    </Badge>
+                                                )}
+                                                {cdaData.DadosCDA[0].prescrito && cdaData.DadosCDA[0].prescrito !== 'Não' && (
+                                                    <Badge className="bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-300 border-rose-200">
+                                                        {cdaData.DadosCDA[0].prescrito}
+                                                    </Badge>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
                                 </CardHeader>
