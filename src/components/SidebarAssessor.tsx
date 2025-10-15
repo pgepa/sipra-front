@@ -22,15 +22,16 @@ export function SidebarAssessor({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
 
             <aside
                 className={cn(
-                    'thin-scrollbar fixed top-0 lg:top-16 left-0 h-full z-40',
+                    'fixed top-0 lg:top-16 left-0 h-full lg:h-[calc(100vh-4rem)] z-40',
                     'bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800',
                     'transition-all duration-300 ease-in-out',
                     isOpen ? 'translate-x-0' : '-translate-x-full',
                     'md:translate-x-0',
-                    isOpen ? 'w-72' : 'md:w-20'
+                    isOpen ? 'w-72' : 'md:w-20',
+                    'flex flex-col'
                 )}
             >
-                <div className="p-3 h-full flex flex-col">
+                <div className="flex-shrink-0 p-3 relative">
                     <button
                         className={cn(
                             'absolute hidden md:flex items-center justify-center',
@@ -46,49 +47,49 @@ export function SidebarAssessor({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                     </button>
 
                     <button
-                        className="md:hidden text-gray-700 dark:text-gray-300 self-end mb-4 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                        className="md:hidden text-gray-700 dark:text-gray-300 ml-auto hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                         onClick={() => setIsOpen(false)}
                     >
                         <X className="h-6 w-6" />
                     </button>
-
-                    <nav className="space-y-1 mt-4 flex-grow overflow-y-auto">
-                        <SidebarLink
-                            to="/homeassessor"
-                            icon={House}
-                            label="Home"
-                            isActive={location.pathname === "/homeassessor"}
-                            isOpen={isOpen}
-                        />
-
-                        <SidebarGroup
-                            icon={UserRound}
-                            label="Pessoas"
-                            isActive={location.pathname.startsWith("/assessor/pessoas")}
-                            isOpen={isOpen}
-                        >
-                            <SidebarSubLink to="/assessor/pessoas/cnpj" icon={PcCase} label="Pessoa Jurídica" isActive={location.pathname === "/assessor/pessoas/cnpj"} />
-                            <SidebarSubLink to="/assessor/pessoas/cpf" icon={UserRoundSearch} label="Pessoa Física" isActive={location.pathname === "/assessor/pessoas/cpf"} />
-                        </SidebarGroup>
-
-                        <SidebarLink
-                            to="/assessor/consultadebitos"
-                            icon={HandCoins}
-                            label="Consulta de Débitos"
-                            isActive={location.pathname === "/assessor/consultadebitos"}
-                            isOpen={isOpen}
-                        />
-
-                        <SidebarGroup
-                            icon={Gavel}
-                            label="Execução Fiscal"
-                            isActive={location.pathname.startsWith("/assessor/recc")}
-                            isOpen={isOpen}
-                        >
-                            <SidebarSubLink to="/assessor/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/assessor/recc/acompanhamentoespecial"} />
-                        </SidebarGroup>
-                    </nav>
                 </div>
+
+                <nav className="flex-1 overflow-y-auto px-3 pb-4 space-y-1 thin-scrollbar">
+                    <SidebarLink
+                        to="/homeassessor"
+                        icon={House}
+                        label="Home"
+                        isActive={location.pathname === "/homeassessor"}
+                        isOpen={isOpen}
+                    />
+
+                    <SidebarGroup
+                        icon={UserRound}
+                        label="Pessoas"
+                        isActive={location.pathname.startsWith("/assessor/pessoas")}
+                        isOpen={isOpen}
+                    >
+                        <SidebarSubLink to="/assessor/pessoas/cnpj" icon={PcCase} label="Pessoa Jurídica" isActive={location.pathname === "/assessor/pessoas/cnpj"} />
+                        <SidebarSubLink to="/assessor/pessoas/cpf" icon={UserRoundSearch} label="Pessoa Física" isActive={location.pathname === "/assessor/pessoas/cpf"} />
+                    </SidebarGroup>
+
+                    <SidebarLink
+                        to="/assessor/consultadebitos"
+                        icon={HandCoins}
+                        label="Consulta de Débitos"
+                        isActive={location.pathname === "/assessor/consultadebitos"}
+                        isOpen={isOpen}
+                    />
+
+                    <SidebarGroup
+                        icon={Gavel}
+                        label="Execução Fiscal"
+                        isActive={location.pathname.startsWith("/assessor/recc")}
+                        isOpen={isOpen}
+                    >
+                        <SidebarSubLink to="/assessor/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/assessor/recc/acompanhamentoespecial"} />
+                    </SidebarGroup>
+                </nav>
             </aside>
         </>
     );
