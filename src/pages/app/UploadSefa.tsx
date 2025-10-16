@@ -20,7 +20,6 @@ export function UploadSefa() {
                     description="Selecione o arquivo CSV ou Excel contendo os dados da SEFA para importação"
                     endpoint="/upload/sefa"
                     acceptedFormats=".csv,.xlsx,.xls"
-                    maxSizeMB={50}
                 />
             </div>
         </>

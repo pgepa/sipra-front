@@ -17,7 +17,7 @@ export function UploadFile({
     description,
     endpoint,
     acceptedFormats = '.csv,.xlsx,.xls',
-    maxSizeMB = 10,
+    maxSizeMB,
 }: UploadFileProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
@@ -30,10 +30,12 @@ export function UploadFile({
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            const fileSizeMB = file.size / (1024 * 1024);
-            if (fileSizeMB > maxSizeMB) {
-                setUploadError(`O arquivo deve ter no máximo ${maxSizeMB}MB`);
-                return;
+            if (maxSizeMB) {
+                const fileSizeMB = file.size / (1024 * 1024);
+                if (fileSizeMB > maxSizeMB) {
+                    setUploadError(`O arquivo deve ter no máximo ${maxSizeMB}MB`);
+                    return;
+                }
             }
             setSelectedFile(file);
             setFileName(file.name);
@@ -100,7 +102,8 @@ export function UploadFile({
                                     <span className="font-semibold">Clique para selecionar</span> ou arraste o arquivo
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    Formatos aceitos: {acceptedFormats} (máx. {maxSizeMB}MB)
+                                    Formatos aceitos: {acceptedFormats}
+                                    {maxSizeMB && ` (máx. ${maxSizeMB}MB)`}
                                 </p>
                             </div>
                             <input
