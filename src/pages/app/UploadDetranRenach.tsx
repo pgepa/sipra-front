@@ -18,7 +18,7 @@ export function UploadDetranRenach() {
                 <UploadFile
                     title="Importar Arquivo DETRAN RENACH"
                     description="Selecione o arquivo CSV ou Excel contendo os dados RENACH do DETRAN para importação"
-                    endpoint="/upload/detranrenach"
+                    endpoint="/uploaddetranrenach"
                     acceptedFormats=".csv,.xlsx,.xls"
                     maxSizeMB={50}
                 />

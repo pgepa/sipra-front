@@ -18,7 +18,7 @@ export function UploadAdepara() {
                 <UploadFile
                     title="Importar Arquivo ADEPARA"
                     description="Selecione o arquivo CSV ou Excel contendo os dados da ADEPARA para importação"
-                    endpoint="/upload/adepara"
+                    endpoint="/uploadadepa"
                     acceptedFormats=".csv,.xlsx,.xls"
                     maxSizeMB={50}
                 />

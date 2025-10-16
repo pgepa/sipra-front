@@ -18,7 +18,7 @@ export function UploadSemas() {
                 <UploadFile
                     title="Importar Arquivo SEMAS"
                     description="Selecione o arquivo CSV ou Excel contendo os dados da SEMAS para importação"
-                    endpoint="/upload/semas"
+                    endpoint="/uploadsemas"
                     acceptedFormats=".csv,.xlsx,.xls"
                     maxSizeMB={50}
                 />

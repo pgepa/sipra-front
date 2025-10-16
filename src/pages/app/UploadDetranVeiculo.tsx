@@ -18,7 +18,7 @@ export function UploadDetranCargaVeiculo() {
                 <UploadFile
                     title="Importar Arquivo DETRAN Veículo"
                     description="Selecione o arquivo CSV ou Excel contendo os dados de veículos do DETRAN para importação"
-                    endpoint="/upload/detrancargaveiculo"
+                    endpoint="/uploaddetrancargaveiculo"
                     acceptedFormats=".csv,.xlsx,.xls"
                     maxSizeMB={50}
                 />

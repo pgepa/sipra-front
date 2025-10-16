@@ -18,7 +18,7 @@ export function UploadJucepaPj() {
                 <UploadFile
                     title="Importar Arquivo JUCEPA PJ"
                     description="Selecione o arquivo CSV ou Excel contendo os dados de Pessoa Jurídica da JUCEPA para importação"
-                    endpoint="/upload/jucepapj"
+                    endpoint="/uploadjucepapj"
                     acceptedFormats=".csv,.xlsx,.xls"
                     maxSizeMB={50}
                 />

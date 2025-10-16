@@ -18,7 +18,7 @@ export function UploadDetranModelo() {
                 <UploadFile
                     title="Importar Arquivo DETRAN Modelo"
                     description="Selecione o arquivo CSV ou Excel contendo os dados de modelos do DETRAN para importação"
-                    endpoint="/upload/detranmodelo"
+                    endpoint="/uploaddetranmarcamodelo"
                     acceptedFormats=".csv,.xlsx,.xls"
                     maxSizeMB={50}
                 />

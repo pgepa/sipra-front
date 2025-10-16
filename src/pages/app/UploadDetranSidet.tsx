@@ -18,7 +18,7 @@ export function UploadDetranSidet() {
                 <UploadFile
                     title="Importar Arquivo DETRAN SIDET"
                     description="Selecione o arquivo CSV ou Excel contendo os dados SIDET do DETRAN para importação"
-                    endpoint="/upload/detransidet"
+                    endpoint="/uploaddetransidet"
                     acceptedFormats=".csv,.xlsx,.xls"
                     maxSizeMB={50}
                 />

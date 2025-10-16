@@ -18,7 +18,7 @@ export function UploadJucepaVinculo() {
                 <UploadFile
                     title="Importar Arquivo JUCEPA Vínculo"
                     description="Selecione o arquivo CSV ou Excel contendo os dados de vínculos da JUCEPA para importação"
-                    endpoint="/upload/jucepavinculo"
+                    endpoint="/uploadjucepavinculo"
                     acceptedFormats=".csv,.xlsx,.xls"
                     maxSizeMB={50}
                 />
