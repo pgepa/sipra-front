@@ -18,7 +18,7 @@ export function UploadSefa() {
                 <UploadFile
                     title="Importar Arquivo SEFA"
                     description="Selecione o arquivo CSV ou Excel contendo os dados da SEFA para importação"
-                    endpoint="/upload/sefa"
+                    endpoint="/uploadsefapgto"
                     acceptedFormats=".csv,.xlsx,.xls"
                 />
             </div>
