@@ -123,7 +123,9 @@ export function Home() {
     const orderedCards = [
         cards.find((c) => c.card.includes('EFs')),
         cards.find((c) => c.card.includes('Demandas')),
-        cards.find((c) => c.card.includes('Qtd. CDAs')),
+        cards.find((c) => c.card.includes('Qtd. CDAs Ajuizadas')),
+        cards.find((c) => c.card.includes('Qtd. CDAs Protestadas')),
+        cards.find((c) => c.card.includes('Qtd. CDAs') && !c.card.includes('Ajuizadas') && !c.card.includes('Protestadas')),
         cards.find((c) => c.card.includes('Soma Valor CDAs')),
         cards.find((c) => c.card.includes('Pagamentos')),
         cards.find((c) => c.card.includes('Repasse')),
@@ -148,12 +150,14 @@ export function Home() {
                                 </linearGradient>
                             </defs>
                             {/* Lines from center to cards */}
-                            <line x1="50%" y1="50%" x2="20%" y2="25%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
-                            <line x1="50%" y1="50%" x2="80%" y2="25%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
-                            <line x1="50%" y1="50%" x2="20%" y2="50%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
-                            <line x1="50%" y1="50%" x2="80%" y2="50%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
-                            <line x1="50%" y1="50%" x2="20%" y2="75%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
-                            <line x1="50%" y1="50%" x2="80%" y2="75%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="50%" y1="50%" x2="15%" y2="15%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="50%" y1="50%" x2="50%" y2="8%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="50%" y1="50%" x2="85%" y2="15%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="50%" y1="50%" x2="92%" y2="50%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="50%" y1="50%" x2="85%" y2="85%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="50%" y1="50%" x2="50%" y2="92%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="50%" y1="50%" x2="15%" y2="85%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="50%" y1="50%" x2="8%" y2="50%" stroke="url(#lineGradient)" strokeWidth="2" strokeDasharray="5,5" />
                         </svg>
 
                         {/* Center Logo */}
@@ -176,16 +180,20 @@ export function Home() {
                                 card.card.toLowerCase().includes('pagamento') ||
                                 card.card.toLowerCase().includes('repasse');
                             const showYearDescription = card.card.toLowerCase().includes('pagamento') ||
-                                card.card.toLowerCase().includes('repasse');
+                                card.card.toLowerCase().includes('repasse') ||
+                                card.card.toLowerCase().includes('ajuizadas') ||
+                                card.card.toLowerCase().includes('protestadas');
 
-                            // Position cards in a circle around the center
+                            // Position cards in a circle around the center (8 cards)
                             const positions = [
-                                'top-[8%] left-[8%]',      // Top-left
-                                'top-[8%] right-[8%]',     // Top-right
-                                'top-1/2 left-[3%] -translate-y-1/2',  // Middle-left
-                                'top-1/2 right-[3%] -translate-y-1/2', // Middle-right
-                                'bottom-[8%] left-[8%]',   // Bottom-left
-                                'bottom-[8%] right-[8%]',  // Bottom-right
+                                'top-[5%] left-[5%]',                    // Top-left (EFs)
+                                'top-[5%] left-1/2 -translate-x-1/2',   // Top-center (Demandas)
+                                'top-[5%] right-[5%]',                   // Top-right (CDAs Ajuizadas)
+                                'top-1/2 right-[2%] -translate-y-1/2',  // Middle-right (CDAs Protestadas)
+                                'bottom-[5%] right-[5%]',                // Bottom-right (Qtd CDAs)
+                                'bottom-[5%] left-1/2 -translate-x-1/2', // Bottom-center (Soma CDAs)
+                                'bottom-[5%] left-[5%]',                 // Bottom-left (Pagamentos)
+                                'top-1/2 left-[2%] -translate-y-1/2',   // Middle-left (Repasse)
                             ];
 
                             return (
@@ -228,7 +236,9 @@ export function Home() {
                                 card.card.toLowerCase().includes('pagamento') ||
                                 card.card.toLowerCase().includes('repasse');
                             const showYearDescription = card.card.toLowerCase().includes('pagamento') ||
-                                card.card.toLowerCase().includes('repasse');
+                                card.card.toLowerCase().includes('repasse') ||
+                                card.card.toLowerCase().includes('ajuizadas') ||
+                                card.card.toLowerCase().includes('protestadas');
                             return (
                                 <div key={index} className="w-full">
                                     <StatCard
