@@ -7,6 +7,7 @@ interface FluxogramaItem {
     id: string;
     title: string;
     filename: string;
+    updatedAt: string;
 }
 
 const fluxogramas: FluxogramaItem[] = [
@@ -14,11 +15,13 @@ const fluxogramas: FluxogramaItem[] = [
         id: 'ngd',
         title: 'Fluxograma - Citação Frustada',
         filename: 'Fluxograma-NGD.pdf',
+        updatedAt: '28/10/2025',
     },
     {
         id: 'ngd-constricao',
         title: 'Fluxograma - Constrição Frustrada',
         filename: 'Fluxograma-NGD-Constricao-Frustrada.pdf',
+        updatedAt: '28/10/2025',
     },
 ];
 
@@ -64,10 +67,16 @@ export function Fluxogramas() {
                                         <FileText className="h-5 w-5 text-violet-600 dark:text-violet-400" />
                                     </div>
                                 </CardHeader>
+
                                 <CardContent>
-                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                        <ExternalLink className="h-4 w-4" />
-                                        <span>Clique para visualizar</span>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                            <ExternalLink className="h-4 w-4" />
+                                            <span>Clique para visualizar</span>
+                                        </div>
+                                        <p className="text-xs text-gray-500 dark:text-gray-500">
+                                            Atualizado em: {fluxograma.updatedAt}
+                                        </p>
                                     </div>
                                 </CardContent>
                             </Card>

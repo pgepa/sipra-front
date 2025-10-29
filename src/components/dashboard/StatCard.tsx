@@ -14,6 +14,7 @@ interface StatCardProps {
     };
     loading?: boolean;
     formatAsCurrency?: boolean;
+    description?: string;
 }
 
 export function StatCard({
@@ -25,6 +26,7 @@ export function StatCard({
     trend,
     loading = false,
     formatAsCurrency = false,
+    description,
 }: StatCardProps) {
     const formatValue = (val: string | number): string => {
         if (typeof val === 'number') {
@@ -75,6 +77,11 @@ export function StatCard({
                         <div className="text-2xl font-bold text-gray-900 dark:text-white">
                             {formatValue(value)}
                         </div>
+                        {description && (
+                            <p className="text-xs mt-1 text-gray-500 dark:text-gray-400">
+                                {description}
+                            </p>
+                        )}
                         {trend && (
                             <p
                                 className={cn(

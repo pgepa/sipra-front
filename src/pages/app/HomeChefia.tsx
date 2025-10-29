@@ -124,6 +124,8 @@ export function HomeChefia() {
                             const isCurrency = card.card.toLowerCase().includes('soma') ||
                                 card.card.toLowerCase().includes('pagamento') ||
                                 card.card.toLowerCase().includes('repasse');
+                            const showYearDescription = card.card.toLowerCase().includes('pagamento') ||
+                                card.card.toLowerCase().includes('repasse');
                             const positions = [
                                 'top-[8%] left-[8%]',
                                 'top-[8%] right-[8%]',
@@ -134,7 +136,15 @@ export function HomeChefia() {
                             ];
                             return (
                                 <div key={index} className={`absolute ${positions[index]} w-[300px] z-20 transform hover:scale-105 transition-transform duration-300`}>
-                                    <StatCard title={card.card} value={card.valor} icon={Icon} iconColor={colors.iconColor} iconBgColor={colors.iconBgColor} formatAsCurrency={isCurrency} />
+                                    <StatCard
+                                        title={card.card}
+                                        value={card.valor}
+                                        icon={Icon}
+                                        iconColor={colors.iconColor}
+                                        iconBgColor={colors.iconBgColor}
+                                        formatAsCurrency={isCurrency}
+                                        description={showYearDescription ? 'Ano Vigente' : undefined}
+                                    />
                                 </div>
                             );
                         })}
@@ -153,9 +163,19 @@ export function HomeChefia() {
                             const isCurrency = card.card.toLowerCase().includes('soma') ||
                                 card.card.toLowerCase().includes('pagamento') ||
                                 card.card.toLowerCase().includes('repasse');
+                            const showYearDescription = card.card.toLowerCase().includes('pagamento') ||
+                                card.card.toLowerCase().includes('repasse');
                             return (
                                 <div key={index} className="w-full">
-                                    <StatCard title={card.card} value={card.valor} icon={Icon} iconColor={colors.iconColor} iconBgColor={colors.iconBgColor} formatAsCurrency={isCurrency} />
+                                    <StatCard
+                                        title={card.card}
+                                        value={card.valor}
+                                        icon={Icon}
+                                        iconColor={colors.iconColor}
+                                        iconBgColor={colors.iconBgColor}
+                                        formatAsCurrency={isCurrency}
+                                        description={showYearDescription ? 'Ano Vigente' : undefined}
+                                    />
                                 </div>
                             );
                         })}

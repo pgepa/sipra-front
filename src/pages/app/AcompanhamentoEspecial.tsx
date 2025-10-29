@@ -238,14 +238,14 @@ export function AcompanhamentoEspecial() {
                                 {/* Acompanhamento Especial */}
                                 <div className="space-y-2">
                                     <Label className="font-semibold text-sm text-gray-700 dark:text-gray-300">
-                                        Acompanhamento Especial
+                                        RECC
                                     </Label>
                                     <div className="flex items-center justify-between h-10 px-3 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900">
                                         <Label
                                             htmlFor="acompanhamento"
                                             className="text-sm font-medium text-gray-800 dark:text-gray-200 cursor-pointer"
                                         >
-                                            Filtrar por AE
+                                            Filtrar por RECC
                                         </Label>
                                         <Switch
                                             id="acompanhamento"

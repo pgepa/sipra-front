@@ -175,6 +175,8 @@ export function Home() {
                             const isCurrency = card.card.toLowerCase().includes('soma') ||
                                 card.card.toLowerCase().includes('pagamento') ||
                                 card.card.toLowerCase().includes('repasse');
+                            const showYearDescription = card.card.toLowerCase().includes('pagamento') ||
+                                card.card.toLowerCase().includes('repasse');
 
                             // Position cards in a circle around the center
                             const positions = [
@@ -198,6 +200,7 @@ export function Home() {
                                         iconColor={colors.iconColor}
                                         iconBgColor={colors.iconBgColor}
                                         formatAsCurrency={isCurrency}
+                                        description={showYearDescription ? 'Ano Vigente' : undefined}
                                     />
                                 </div>
                             );
@@ -224,6 +227,8 @@ export function Home() {
                             const isCurrency = card.card.toLowerCase().includes('soma') ||
                                 card.card.toLowerCase().includes('pagamento') ||
                                 card.card.toLowerCase().includes('repasse');
+                            const showYearDescription = card.card.toLowerCase().includes('pagamento') ||
+                                card.card.toLowerCase().includes('repasse');
                             return (
                                 <div key={index} className="w-full">
                                     <StatCard
@@ -233,6 +238,7 @@ export function Home() {
                                         iconColor={colors.iconColor}
                                         iconBgColor={colors.iconBgColor}
                                         formatAsCurrency={isCurrency}
+                                        description={showYearDescription ? 'Ano Vigente' : undefined}
                                     />
                                 </div>
                             );
