@@ -36,6 +36,8 @@ import { ConsultaDebitos } from '@/pages/app/ConsultaDebitos';
 import { UploadCentrot } from '@/pages/app/UploadCenprot';
 import { AcompanhamentoEspecial } from '@/pages/app/AcompanhamentoEspecial';
 import { AppLayoutEstagiario } from '@/pages/_layouts/appEstagiario';
+import { Fluxogramas } from '@/pages/app/Fluxogramas';
+import { FluxogramaViewer } from '@/pages/app/FluxogramaViewer';
 
 
 
@@ -45,7 +47,7 @@ export const Router = createHashRouter([
     {
         path: '/',
         element: <AuthLayout />,
-        errorElement: <NotFound/>,
+        errorElement: <NotFound />,
         children: [
             { path: '/', element: <SignIn /> },
         ],
@@ -55,7 +57,7 @@ export const Router = createHashRouter([
     {
         path: '/',
         element: <AppLayout />,
-        errorElement: <NotFound/>,
+        errorElement: <NotFound />,
         children: [
             { path: '/home', element: <PrivateRoute allowedProfiles={['Administrador']}><Home /></PrivateRoute> },
             { path: '/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Administrador']}><Protesto /></PrivateRoute> },
@@ -82,14 +84,16 @@ export const Router = createHashRouter([
             { path: '/dashboard/pagamentossiat', element: <PrivateRoute allowedProfiles={['Administrador']}><PagamentosSiat /></PrivateRoute> },
             { path: '/consultadebitos', element: <PrivateRoute allowedProfiles={['Administrador']}><ConsultaDebitos /></PrivateRoute> },
             { path: '/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Administrador']}><AcompanhamentoEspecial /></PrivateRoute> },
-             
+            { path: '/fluxogramas', element: <PrivateRoute allowedProfiles={['Administrador']}><Fluxogramas /></PrivateRoute> },
+            { path: '/fluxogramas/:id', element: <PrivateRoute allowedProfiles={['Administrador']}><FluxogramaViewer /></PrivateRoute> },
+
         ],
     },
 
     {
         path: '/',
         element: <AppLayoutChefia />,
-        errorElement: <NotFound/>,
+        errorElement: <NotFound />,
         children: [
             { path: '/homechefia', element: <PrivateRoute allowedProfiles={['Chefia']}><HomeChefia /></PrivateRoute> },
             { path: 'chefia/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Chefia']}><Protesto /></PrivateRoute> },
@@ -105,16 +109,18 @@ export const Router = createHashRouter([
             { path: 'chefia/consultadebitos', element: <PrivateRoute allowedProfiles={['Chefia']}><ConsultaDebitos /></PrivateRoute> },
             { path: 'chefia/statusdatabase', element: <PrivateRoute allowedProfiles={['Chefia']}><UltimaAtualizacaoDatabase /></PrivateRoute> },
             { path: 'chefia/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Chefia']}><AcompanhamentoEspecial /></PrivateRoute> },
-            
-            
-            
+            { path: 'chefia/fluxogramas', element: <PrivateRoute allowedProfiles={['Chefia']}><Fluxogramas /></PrivateRoute> },
+            { path: 'chefia/fluxogramas/:id', element: <PrivateRoute allowedProfiles={['Chefia']}><FluxogramaViewer /></PrivateRoute> },
+
+
+
         ],
     },
 
     {
         path: '/',
         element: <AppLayoutProcurador />,
-        errorElement: <NotFound/>,
+        errorElement: <NotFound />,
         children: [
             { path: '/homeprocurador', element: <PrivateRoute allowedProfiles={['Procurador']}><HomeProcurador /></PrivateRoute> },
             { path: 'procurador/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Procurador']}><Protesto /></PrivateRoute> },
@@ -128,16 +134,18 @@ export const Router = createHashRouter([
             { path: 'procurador/dashboard/acompanhamentoprotesto', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoProtesto /></PrivateRoute> },
             { path: 'procurador/consultadebitos', element: <PrivateRoute allowedProfiles={['Procurador']}><ConsultaDebitos /></PrivateRoute> },
             { path: 'procurador/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Procurador']}><AcompanhamentoEspecial /></PrivateRoute> },
-            
-            
-            
+            { path: 'procurador/fluxogramas', element: <PrivateRoute allowedProfiles={['Procurador']}><Fluxogramas /></PrivateRoute> },
+            { path: 'procurador/fluxogramas/:id', element: <PrivateRoute allowedProfiles={['Procurador']}><FluxogramaViewer /></PrivateRoute> },
+
+
+
         ],
     },
 
     {
         path: '/',
         element: <AppLayoutAssessor />,
-        errorElement: <NotFound/>,
+        errorElement: <NotFound />,
         children: [
             { path: '/homeassessor', element: <PrivateRoute allowedProfiles={['Assessor']}><HomeAssessor /></PrivateRoute> },
             { path: 'assessor/reguacobranca/protesto', element: <PrivateRoute allowedProfiles={['Assessor']}><Protesto /></PrivateRoute> },
@@ -145,30 +153,34 @@ export const Router = createHashRouter([
             { path: 'assessor/reguacobranca/ajuizamento', element: <PrivateRoute allowedProfiles={['Assessor']}><Ajuizamento /></PrivateRoute> },
             { path: 'assessor/reguacobranca/ajuizadas', element: <PrivateRoute allowedProfiles={['Assessor']}><Ajuizadas /></PrivateRoute> },
             { path: 'assessor/pessoas/cnpj', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaJuridica /></PrivateRoute> },
-            { path: 'assessor/pessoas/cpf', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaFisica /></PrivateRoute> },        
-            { path: 'assessor/consultadebitos', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaDebitos /></PrivateRoute> },        
-            { path: 'assessor/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Assessor']}><AcompanhamentoEspecial /></PrivateRoute> },        
-            
-            
+            { path: 'assessor/pessoas/cpf', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaPessoaFisica /></PrivateRoute> },
+            { path: 'assessor/consultadebitos', element: <PrivateRoute allowedProfiles={['Assessor']}><ConsultaDebitos /></PrivateRoute> },
+            { path: 'assessor/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Assessor']}><AcompanhamentoEspecial /></PrivateRoute> },
+            { path: 'assessor/fluxogramas', element: <PrivateRoute allowedProfiles={['Assessor']}><Fluxogramas /></PrivateRoute> },
+            { path: 'assessor/fluxogramas/:id', element: <PrivateRoute allowedProfiles={['Assessor']}><FluxogramaViewer /></PrivateRoute> },
+
+
         ],
     },
 
     {
         path: '/',
         element: <AppLayoutEstagiario />,
-        errorElement: <NotFound/>,
+        errorElement: <NotFound />,
         children: [
-            { path: '/homeestagiario', element: <PrivateRoute allowedProfiles={['Estagiario']}><HomeAssessor /></PrivateRoute> },        
+            { path: '/homeestagiario', element: <PrivateRoute allowedProfiles={['Estagiario']}><HomeAssessor /></PrivateRoute> },
             { path: 'estagiario/pessoas/cnpj', element: <PrivateRoute allowedProfiles={['Estagiario']}><ConsultaPessoaJuridica /></PrivateRoute> },
-            { path: 'estagiario/pessoas/cpf', element: <PrivateRoute allowedProfiles={['Estagiario']}><ConsultaPessoaFisica /></PrivateRoute> },        
-            { path: 'estagiario/consultadebitos', element: <PrivateRoute allowedProfiles={['Estagiario']}><ConsultaDebitos /></PrivateRoute> },        
-            { path: 'estagiario/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Estagiario']}><AcompanhamentoEspecial /></PrivateRoute> },        
-            
-            
+            { path: 'estagiario/pessoas/cpf', element: <PrivateRoute allowedProfiles={['Estagiario']}><ConsultaPessoaFisica /></PrivateRoute> },
+            { path: 'estagiario/consultadebitos', element: <PrivateRoute allowedProfiles={['Estagiario']}><ConsultaDebitos /></PrivateRoute> },
+            { path: 'estagiario/recc/acompanhamentoespecial', element: <PrivateRoute allowedProfiles={['Estagiario']}><AcompanhamentoEspecial /></PrivateRoute> },
+            { path: 'estagiario/fluxogramas', element: <PrivateRoute allowedProfiles={['Estagiario']}><Fluxogramas /></PrivateRoute> },
+            { path: 'estagiario/fluxogramas/:id', element: <PrivateRoute allowedProfiles={['Estagiario']}><FluxogramaViewer /></PrivateRoute> },
+
+
         ],
     },
 
 
 
-    
+
 ]);

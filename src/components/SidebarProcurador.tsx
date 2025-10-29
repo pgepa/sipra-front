@@ -1,7 +1,7 @@
 import {
     FileSearch, House, ChevronFirst, Ruler, Gavel, Scale, ChartArea,
     ChartScatter, ChartNoAxesCombined, PcCase, UserRoundSearch, ChartPie,
-    HandCoins, UserRound, X, ShieldCheck
+    HandCoins, UserRound, X, ShieldCheck, Workflow
 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { SidebarLink } from './sidebar/SidebarLink';
@@ -112,6 +112,14 @@ export function SidebarProcurador({ isOpen, setIsOpen }: { isOpen: boolean; setI
                     >
                         <SidebarSubLink to="/procurador/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/procurador/recc/acompanhamentoespecial"} />
                     </SidebarGroup>
+
+                    <SidebarLink
+                        to="/procurador/fluxogramas"
+                        icon={Workflow}
+                        label="Fluxogramas"
+                        isActive={location.pathname.startsWith("/procurador/fluxogramas")}
+                        isOpen={isOpen}
+                    />
                 </nav>
             </aside>
         </>

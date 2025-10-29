@@ -1,6 +1,6 @@
 import {
     House, ChevronFirst, PcCase, UserRoundSearch, HandCoins,
-    UserRound, X
+    UserRound, X, Workflow
 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { SidebarLink } from './sidebar/SidebarLink';
@@ -78,6 +78,14 @@ export function SidebarEstagiario({ isOpen, setIsOpen }: { isOpen: boolean; setI
                         icon={HandCoins}
                         label="Consulta de Débitos"
                         isActive={location.pathname === "/estagiario/consultadebitos"}
+                        isOpen={isOpen}
+                    />
+
+                    <SidebarLink
+                        to="/estagiario/fluxogramas"
+                        icon={Workflow}
+                        label="Fluxogramas"
+                        isActive={location.pathname.startsWith("/estagiario/fluxogramas")}
                         isOpen={isOpen}
                     />
                 </nav>

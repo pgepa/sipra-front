@@ -2,7 +2,7 @@ import {
     FileSearch, House, ChevronFirst, History, CloudUpload,
     DatabaseBackup, Ruler, Gavel, Users, Scale, ChartArea, ChartScatter,
     ChartNoAxesCombined, PcCase, UserRoundSearch, ChartPie, Handshake,
-    HandCoins, UserRound, X, ShieldCheck
+    HandCoins, UserRound, X, ShieldCheck, Workflow
 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { SidebarLink } from './sidebar/SidebarLink';
@@ -112,6 +112,14 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (op
                         icon={HandCoins}
                         label="Consulta de Débitos"
                         isActive={location.pathname === "/consultadebitos"}
+                        isOpen={isOpen}
+                    />
+
+                    <SidebarLink
+                        to="/fluxogramas"
+                        icon={Workflow}
+                        label="Fluxogramas"
+                        isActive={location.pathname.startsWith("/fluxogramas")}
                         isOpen={isOpen}
                     />
 

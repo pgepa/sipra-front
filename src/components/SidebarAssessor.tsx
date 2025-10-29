@@ -1,6 +1,6 @@
 import {
     House, ChevronFirst, PcCase, UserRoundSearch, HandCoins,
-    UserRound, X, Gavel, ShieldCheck
+    UserRound, X, Gavel, ShieldCheck, Workflow
 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { SidebarLink } from './sidebar/SidebarLink';
@@ -89,6 +89,14 @@ export function SidebarAssessor({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                     >
                         <SidebarSubLink to="/assessor/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/assessor/recc/acompanhamentoespecial"} />
                     </SidebarGroup>
+
+                    <SidebarLink
+                        to="/assessor/fluxogramas"
+                        icon={Workflow}
+                        label="Fluxogramas"
+                        isActive={location.pathname.startsWith("/assessor/fluxogramas")}
+                        isOpen={isOpen}
+                    />
                 </nav>
             </aside>
         </>

@@ -1,7 +1,7 @@
 import {
     FileSearch, House, ChevronFirst, DatabaseBackup, Ruler, Gavel, Scale,
     ChartArea, ChartScatter, ChartNoAxesCombined, PcCase, UserRoundSearch,
-    ChartPie, Handshake, HandCoins, UserRound, X, ShieldCheck
+    ChartPie, Handshake, HandCoins, UserRound, X, ShieldCheck, Workflow
 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { SidebarLink } from './sidebar/SidebarLink';
@@ -113,6 +113,14 @@ export function SidebarChefia({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
                     >
                         <SidebarSubLink to="/chefia/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/chefia/recc/acompanhamentoespecial"} />
                     </SidebarGroup>
+
+                    <SidebarLink
+                        to="/chefia/fluxogramas"
+                        icon={Workflow}
+                        label="Fluxogramas"
+                        isActive={location.pathname.startsWith("/chefia/fluxogramas")}
+                        isOpen={isOpen}
+                    />
 
                     <SidebarLink
                         to="/chefia/statusdatabase"
