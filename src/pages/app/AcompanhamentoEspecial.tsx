@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { api } from '@/lib/axios';
 import { Button } from '@/components/ui/button';
-import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import GridLoader from 'react-spinners/GridLoader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -30,6 +30,8 @@ export function AcompanhamentoEspecial() {
         vlprocesso_min: '',
         vlprocesso_max: '',
         indicio: ' ',
+        falenciarecuperacao: '',
+        flembargos: '',
     });
 
     const token = localStorage.getItem('token');
@@ -53,6 +55,8 @@ export function AcompanhamentoEspecial() {
                         comarca: filters.comarca || undefined,
                         vlprocesso_min: filters.vlprocesso_min || undefined,
                         vlprocesso_max: filters.vlprocesso_max || undefined,
+                        falenciarecuperacao: filters.falenciarecuperacao || undefined,
+                        flembargos: filters.flembargos || undefined,
                     },
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -103,9 +107,15 @@ export function AcompanhamentoEspecial() {
             vlprocesso_min: '',
             vlprocesso_max: '',
             indicio: ' ',
+            falenciarecuperacao: '',
+            flembargos: '',
         });
         setAcompanhamentoEspecial(false);
         setPage(1);
+    };
+
+    const handleDownloadCsv = () => {
+        fetchProcessos(page, sortOrder, 'csv');
     };
 
     const handleDownloadPdf = async (url: string) => {
@@ -235,6 +245,42 @@ export function AcompanhamentoEspecial() {
                                     </Select>
                                 </FilterSection>
 
+                              
+
+                                {/* Embargos */}
+                                <FilterSection label="Embargos">
+                                    <Select
+                                        value={filters.flembargos}
+                                        onValueChange={(value) => setFilters({ ...filters, flembargos: value })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Escolha uma opção" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value=" ">Todos</SelectItem>
+                                            <SelectItem value="S">SIM</SelectItem>
+                                            <SelectItem value="N">NÃO</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FilterSection>
+
+                                  {/* Falência/Recuperação */}
+                                <FilterSection label="Falência/Recuperação">
+                                    <Select
+                                        value={filters.falenciarecuperacao}
+                                        onValueChange={(value) => setFilters({ ...filters, falenciarecuperacao: value })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Escolha uma opção" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value=" ">Todos</SelectItem>
+                                            <SelectItem value="Falência declarada">Falência declarada</SelectItem>
+                                            <SelectItem value="Em Recuperação Judicial">Em Recuperação Judicial</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FilterSection>
+
                                 {/* Acompanhamento Especial */}
                                 <div className="space-y-2">
                                     <Label className="font-semibold text-sm text-gray-700 dark:text-gray-300">
@@ -287,19 +333,32 @@ export function AcompanhamentoEspecial() {
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                            Ordenar por:
-                        </Label>
-                        <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')}>
-                            <SelectTrigger className="w-full sm:w-[180px]">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="desc">Maior Valor</SelectItem>
-                                <SelectItem value="asc">Menor Valor</SelectItem>
-                            </SelectContent>
-                        </Select>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        
+                        <div className="flex items-center gap-2">
+                            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                Ordenar por:
+                            </Label>
+                            <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as 'asc' | 'desc')}>
+                                <SelectTrigger className="w-full sm:w-[180px]">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="desc">Maior Valor</SelectItem>
+                                    <SelectItem value="asc">Menor Valor</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <Button
+                            type="button"
+                            onClick={handleDownloadCsv}
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                            size="sm"
+                        >
+                            <Download className="h-4 w-4 mr-2" />
+                            Exportar CSV
+                        </Button>
                     </div>
                 </div>
 

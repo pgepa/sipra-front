@@ -42,4 +42,6 @@ export interface AcompanhamentoFilterState {
     vlprocesso_min: string;
     vlprocesso_max: string;
     indicio: string;
+    falenciarecuperacao: string;
+    flembargos: string;
 }
