@@ -100,11 +100,11 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (op
 
                     <SidebarGroup
                         icon={Gavel}
-                        label="Execução Fiscal"
+                        label="Gestão de Processos"
                         isActive={location.pathname.startsWith("/recc")}
                         isOpen={isOpen}
                     >
-                        <SidebarSubLink to="/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/recc/acompanhamentoespecial"} />
+                        <SidebarSubLink to="/recc/acompanhamentoespecial" icon={ShieldCheck} label="Execução Fiscal" isActive={location.pathname === "/recc/acompanhamentoespecial"} />
                     </SidebarGroup>
 
                     <SidebarLink

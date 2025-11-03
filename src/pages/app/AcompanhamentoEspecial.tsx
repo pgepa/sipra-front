@@ -149,7 +149,7 @@ export function AcompanhamentoEspecial() {
                 {/* Header */}
                 <div className="flex flex-col gap-2">
                     <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                        Regime Especial
+                        Execução Fiscal
                     </h1>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                         Consulte e acompanhe processos judiciais

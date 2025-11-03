@@ -106,11 +106,11 @@ export function SidebarProcurador({ isOpen, setIsOpen }: { isOpen: boolean; setI
 
                     <SidebarGroup
                         icon={Gavel}
-                        label="Execução Fiscal"
+                        label="Gestão de Processos"
                         isActive={location.pathname.startsWith("/procurador/recc")}
                         isOpen={isOpen}
                     >
-                        <SidebarSubLink to="/procurador/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/procurador/recc/acompanhamentoespecial"} />
+                        <SidebarSubLink to="/procurador/recc/acompanhamentoespecial" icon={ShieldCheck} label="Execução Fiscal" isActive={location.pathname === "/procurador/recc/acompanhamentoespecial"} />
                     </SidebarGroup>
 
                     <SidebarLink

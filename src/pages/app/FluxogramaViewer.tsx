@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 // Importar os PDFs
 import fluxogramaNGD from '@/assets/Fluxograma-NGD.pdf';
 import fluxogramaNGDConstricao from '@/assets/Fluxograma-NGD-Constricao-Frustrada.pdf';
+import fluxogramaNGDConstricaoFrutifera from '@/assets/Fluxograma-NGD-Constricao-Frutifera.pdf';
 
 interface FluxogramaData {
     title: string;
@@ -20,6 +21,10 @@ const fluxogramas: Record<string, FluxogramaData> = {
     'ngd-constricao': {
         title: 'Fluxograma NGD - Constrição Frustrada',
         file: fluxogramaNGDConstricao,
+    },
+    'ngd-constricao-frutifera': {
+        title: 'Fluxograma NGD - Constrição Frutífera',
+        file: fluxogramaNGDConstricaoFrutifera,
     },
 };
 

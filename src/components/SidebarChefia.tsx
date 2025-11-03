@@ -107,11 +107,11 @@ export function SidebarChefia({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
 
                     <SidebarGroup
                         icon={Gavel}
-                        label="Execução Fiscal"
+                        label="Gestão de Processos"
                         isActive={location.pathname.startsWith("/chefia/recc")}
                         isOpen={isOpen}
                     >
-                        <SidebarSubLink to="/chefia/recc/acompanhamentoespecial" icon={ShieldCheck} label="Regime Especial" isActive={location.pathname === "/chefia/recc/acompanhamentoespecial"} />
+                        <SidebarSubLink to="/chefia/recc/acompanhamentoespecial" icon={ShieldCheck} label="Execução Fiscal" isActive={location.pathname === "/chefia/recc/acompanhamentoespecial"} />
                     </SidebarGroup>
 
                     <SidebarLink

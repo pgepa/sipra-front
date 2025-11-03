@@ -15,13 +15,19 @@ const fluxogramas: FluxogramaItem[] = [
         id: 'ngd',
         title: 'Fluxograma - Citação Frustada',
         filename: 'Fluxograma-NGD.pdf',
-        updatedAt: '28/10/2025',
+        updatedAt: '29/10/2025',
     },
     {
         id: 'ngd-constricao',
         title: 'Fluxograma - Constrição Frustrada',
         filename: 'Fluxograma-NGD-Constricao-Frustrada.pdf',
-        updatedAt: '28/10/2025',
+        updatedAt: '29/10/2025',
+    },
+    {
+        id: 'ngd-constricao-frutifera',
+        title: 'Fluxograma - Constrição Frutífera',
+        filename: 'Fluxograma-NGD-Constricao-Frutifera.pdf',
+        updatedAt: '29/10/2025',
     },
 ];
 
