@@ -34,6 +34,9 @@ export interface AcompanhamentoData {
     demandaaberta: string;
     comarca: string;
     vlprocesso: string;
+    flembargos?: string;
+    flfalenciarecupera?: string;
+    status_jucepa?: string | null;
 }
 
 export interface AcompanhamentoFilterState {

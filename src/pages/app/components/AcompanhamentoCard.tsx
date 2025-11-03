@@ -81,6 +81,22 @@ export function AcompanhamentoCard({ processo, onDownloadPdf }: AcompanhamentoCa
                                 <span className="text-xs text-gray-500 dark:text-gray-400">Ajuizamento</span>
                                 <span className="font-medium text-gray-900 dark:text-gray-100">{formatarData(processo.data_ajuizamento)}</span>
                             </div>
+                            <div className="flex flex-col">
+                                <span className="text-xs text-gray-500 dark:text-gray-400">Embargos</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">
+                                    {processo.flembargos === 'S' ? 'SIM' : processo.flembargos === 'N' ? 'NÃO' : '-'}
+                                </span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-xs text-gray-500 dark:text-gray-400">Falência/Recuperação</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">
+                                    {processo.flfalenciarecupera === 'S' ? 'SIM' : processo.flfalenciarecupera === 'N' ? 'NÃO' : '-'}
+                                </span>
+                            </div>
+                            <div className="flex flex-col col-span-full">
+                                <span className="text-xs text-gray-500 dark:text-gray-400">Status JUCEPA</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">{processo.status_jucepa || '-'}</span>
+                            </div>
                             <div className="flex flex-col col-span-full">
                                 <span className="text-xs text-gray-500 dark:text-gray-400">Assunto Instituição</span>
                                 <span className="font-medium text-gray-900 dark:text-gray-100">{processo.assuntoinstituicao || '-'}</span>
@@ -142,6 +158,22 @@ export function AcompanhamentoCard({ processo, onDownloadPdf }: AcompanhamentoCa
                                     <TableRow>
                                         <TableCell className="font-medium text-gray-500">Ajuizamento</TableCell>
                                         <TableCell className="text-right">{formatarData(processo.data_ajuizamento)}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className="font-medium text-gray-500">Embargos</TableCell>
+                                        <TableCell className="text-right">
+                                            {processo.flembargos === 'S' ? 'SIM' : processo.flembargos === 'N' ? 'NÃO' : '-'}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className="font-medium text-gray-500">Falência/Recuperação</TableCell>
+                                        <TableCell className="text-right">
+                                            {processo.flfalenciarecupera === 'S' ? 'SIM' : processo.flfalenciarecupera === 'N' ? 'NÃO' : '-'}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className="font-medium text-gray-500">Status JUCEPA</TableCell>
+                                        <TableCell className="text-right">{processo.status_jucepa || '-'}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell className="font-medium text-gray-500">Assunto Instituição</TableCell>
