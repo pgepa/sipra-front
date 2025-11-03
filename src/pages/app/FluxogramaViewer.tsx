@@ -4,9 +4,9 @@ import { ArrowLeft, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Importar os PDFs
-import fluxogramaNGD from '@/assets/Fluxograma-NGD.pdf';
-import fluxogramaNGDConstricao from '@/assets/Fluxograma-NGD-Constricao-Frustrada.pdf';
-import fluxogramaNGDConstricaoFrutifera from '@/assets/Fluxograma-NGD-Constricao-Frutifera.pdf';
+import fluxogramaPDACitacaoFrustrada from '@/assets/Fluxograma-PDA-Citacao-Frustrada.pdf';
+import fluxogramaPDAConstricaoFrustrada from '@/assets/Fluxograma-PDA-Constricao-Frustrada.pdf';
+import fluxogramaPDAConstricaoFrutifera from '@/assets/Fluxograma-PDA-Constricao-Frutifera.pdf';
 
 interface FluxogramaData {
     title: string;
@@ -15,16 +15,16 @@ interface FluxogramaData {
 
 const fluxogramas: Record<string, FluxogramaData> = {
     'ngd': {
-        title: 'Fluxograma NGD',
-        file: fluxogramaNGD,
+        title: 'Fluxograma PDA - Citação Frustrada',
+        file: fluxogramaPDACitacaoFrustrada,
     },
     'ngd-constricao': {
-        title: 'Fluxograma NGD - Constrição Frustrada',
-        file: fluxogramaNGDConstricao,
+        title: 'Fluxograma PDA - Constrição Frustrada',
+        file: fluxogramaPDAConstricaoFrustrada,
     },
     'ngd-constricao-frutifera': {
-        title: 'Fluxograma NGD - Constrição Frutífera',
-        file: fluxogramaNGDConstricaoFrutifera,
+        title: 'Fluxograma PDA - Constrição Frutífera',
+        file: fluxogramaPDAConstricaoFrutifera,
     },
 };
 
