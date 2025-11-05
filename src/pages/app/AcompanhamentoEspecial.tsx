@@ -275,8 +275,8 @@ export function AcompanhamentoEspecial() {
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value=" ">Todos</SelectItem>
-                                            <SelectItem value="Falência declarada">Falência declarada</SelectItem>
-                                            <SelectItem value="Em Recuperação Judicial">Em Recuperação Judicial</SelectItem>
+                                            <SelectItem value="S">SIM</SelectItem>
+                                            <SelectItem value="N">NÃO</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </FilterSection>
