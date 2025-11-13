@@ -20,7 +20,6 @@ export function UploadCentrot() {
                     description="Selecione o arquivo CSV ou Excel contendo os dados do CENPROT para importação"
                     endpoint="/uploadcenprot"
                     acceptedFormats=".csv,.xlsx,.xls"
-                    maxSizeMB={50}
                 />
             </div>
         </>
