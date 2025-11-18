@@ -9,10 +9,10 @@ export function AcompanhamentoCda() {
                  <div className=" flex flex-1">
                     
                     <iframe 
-                        title="Acompanhamento de Protesto" 
+                        title="Acompanhamento de CDAs" 
                         width="100%" 
                         height="100%" 
-                        src="https://app.powerbi.com/view?r=eyJrIjoiMTY1MTU0MGQtYzY2NS00YjlhLWExMGYtOWExNzM0Y2E3MDYzIiwidCI6IjA2YjQ3Y2UyLWZmN2UtNDRjOS05M2ExLTEwZDVhYTE4M2RlNCJ9"
+                        src="https://app.powerbi.com/view?r=eyJrIjoiZjJiZmI3ZWItZTE2Ni00NTc0LThjNDMtMDQ0NWI0NDYyYTAwIiwidCI6ImIwYmUwNjYzLTkxNWUtNDczZS1hNTU2LWExNmVmOWRmZTQxNCJ9"
                         style={{ border: 'none' }}
                         allowFullScreen={true}                        
                         >

@@ -12,7 +12,7 @@ export function AcompanhamentoProtesto() {
                         title="Acompanhamento de Protesto" 
                         width="100%" 
                         height="100%" 
-                        src="https://app.powerbi.com/view?r=eyJrIjoiMDJkYWQ3MWEtOTVkMi00NmYxLWIxY2QtMDczNWIxZDkxNDVmIiwidCI6IjA2YjQ3Y2UyLWZmN2UtNDRjOS05M2ExLTEwZDVhYTE4M2RlNCJ9"
+                        src="https://app.powerbi.com/view?r=eyJrIjoiNmYwMWExZWMtODA4OS00NjRlLWE2MGUtM2JlZjljZTIyMmQ3IiwidCI6ImIwYmUwNjYzLTkxNWUtNDczZS1hNTU2LWExNmVmOWRmZTQxNCJ9"
                         style={{ border: 'none' }}
                         allowFullScreen={true}                        
                         >

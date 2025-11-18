@@ -12,7 +12,7 @@ export function PagamentosSiat() {
                         title="SEFA Pagamentos SIAT" 
                         width="100%" 
                         height="100%" 
-                        src="https://app.powerbi.com/view?r=eyJrIjoiYWU4NWQ5MWQtOWZmNC00Y2VlLThlYjAtOTRkOWRlY2I5ODUyIiwidCI6IjA2YjQ3Y2UyLWZmN2UtNDRjOS05M2ExLTEwZDVhYTE4M2RlNCJ9"
+                        src="https://app.powerbi.com/view?r=eyJrIjoiNDZmMDlhM2QtOWFiYy00MDcxLTg1NTMtYWNlZTNiNjkzNjNlIiwidCI6ImIwYmUwNjYzLTkxNWUtNDczZS1hNTU2LWExNmVmOWRmZTQxNCJ9"
                         style={{ border: 'none' }}
                         allowFullScreen={true}                        
                         >

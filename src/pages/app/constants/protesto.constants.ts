@@ -51,6 +51,9 @@ export const PROTESTO_FILTER_OPTIONS = {
     ],
     statusDebito: ['Ativo', 'Cancelado', 'Extinto', 'Suspenso'],
     prescritos: [
+        'CDA Cancelada',
+        'CDA Extinta',
+        'CDA Suspensa',
         'Dentro do prazo prescricional',
         'Possível Prescrição',
         'Prestes a prescrever',

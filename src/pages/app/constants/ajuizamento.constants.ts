@@ -25,6 +25,9 @@ export const FILTER_OPTIONS = {
     ],
     statusDebito: ['Ativo', 'Extinto', 'Suspenso', 'Cancelado'],
     prescritos: [
+        'CDA Cancelada',
+        'CDA Extinta',
+        'CDA Suspensa',
         'Dentro do prazo prescricional',
         'Possível Prescrição',
         'Prestes a prescrever',
