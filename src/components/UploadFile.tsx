@@ -10,6 +10,7 @@ interface UploadFileProps {
     endpoint: string;
     acceptedFormats?: string;
     maxSizeMB?: number;
+    renderAfterUploadButton?: React.ReactNode;
 }
 
 export function UploadFile({
@@ -18,6 +19,7 @@ export function UploadFile({
     endpoint,
     acceptedFormats = '.csv,.xlsx,.xls',
     maxSizeMB,
+    renderAfterUploadButton,
 }: UploadFileProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
@@ -146,6 +148,13 @@ export function UploadFile({
                         </>
                     )}
                 </Button>
+
+                {/* Additional content after upload button */}
+                {renderAfterUploadButton && (
+                    <div className="space-y-0">
+                        {renderAfterUploadButton}
+                    </div>
+                )}
 
                 {/* Success Message */}
                 {uploadSuccess && (
